@@ -1,0 +1,37 @@
+{
+  "status": "PASS",
+  "originalDocuments": 1116,
+  "changedOriginalDocuments": [
+    {
+      "fileID": "550918844",
+      "authorized": true
+    },
+    {
+      "fileID": "550918845",
+      "authorized": true
+    },
+    {
+      "fileID": "1277377968",
+      "authorized": true
+    },
+    {
+      "fileID": "1277377970",
+      "authorized": true
+    },
+    {
+      "fileID": "1664474127",
+      "authorized": true
+    },
+    {
+      "fileID": "1973946901",
+      "authorized": true
+    },
+    {
+      "fileID": "1999109299",
+      "authorized": true
+    }
+  ],
+  "unexpected": [],
+  "newDocuments": 1194,
+  "method": "Exact original YAML document bytes after newline normalization. Manager permits only two new skillTree reference lines. Upgrades subtree IDs derived from live baseline."
+}

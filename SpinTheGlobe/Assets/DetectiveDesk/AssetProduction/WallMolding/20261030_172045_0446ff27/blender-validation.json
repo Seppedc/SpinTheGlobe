@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "blend": "ProductionLogs/AssetQueue/BuildStaging/20261030_172045_0446ff27/WallMolding/WallMolding.blend",
+  "blend_sha256": "0f43c7e74314e72e77ba0b7d8e66f35d5254b193693af18b5f72cdb7eba8c433",
+  "fbx": "ProductionLogs/AssetQueue/BuildStaging/20261030_172045_0446ff27/WallMolding/WallMolding.fbx",
+  "fbx_sha256": "380b1f20f1984213523fbd10dd4e28c285b54153527f5f4a9b36c53732bc893f",
+  "generator": "ProductionLogs/AssetQueue/BuildStaging/20261030_172045_0446ff27/WallMolding/build_asset.py",
+  "generator_sha256": "33ccb491988216b24164125dde0ddd45f5d493932e0e77a7c871c7d2b50ab203",
+  "embedded_source_exact": true,
+  "mesh_count": 8,
+  "triangles": 2448,
+  "dimensions_m": [
+    4.400000095367432,
+    0.1599999964237213,
+    2.700000047683716
+  ],
+  "root_at_origin": true,
+  "minimum_m": [
+    -2.200000047683716,
+    -0.07999999821186066,
+    0.0
+  ],
+  "maximum_m": [
+    2.200000047683716,
+    0.07999999821186066,
+    2.700000047683716
+  ],
+  "materials": [
+    "WM_AgedBrass",
+    "WM_Mahogany"
+  ],
+  "moving_part_candidates": [],
+  "expected_dimensions_review": "Actual dimensions recorded; asset-specific fit remains reviewable, no visual approval implied."
+}

@@ -1,0 +1,13 @@
+{
+    "status": "PASS",
+    "source_sha256": "81c0e3114b26fcbb7f2b318ef5497e04b8b014cc56a93d57aea07a8267fe1a44",
+    "prefab_path": "Assets/DetectiveDesk/AssetProduction/AtmosphereFX/20261031_020108_ba47aaf2/AtmosphereFX_Review.prefab",
+    "screenshot_path": "Assets/DetectiveDesk/AssetProduction/AtmosphereFX/20261031_020108_ba47aaf2/preview.png",
+    "screenshot_sha256": "07259e57da726baeeeca99a1d17f495ba4b74d252d22e09bc43eea8f30ee5ea3",
+    "review_scene": "Assets/DetectiveDesk/AssetReview/AssetReview.unity",
+    "protected_scene_unchanged": true,
+    "console_errors": 0,
+    "mesh_count": 0,
+    "renderer_count": 3,
+    "missing_materials": 0
+}

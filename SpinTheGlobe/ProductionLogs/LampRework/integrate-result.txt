@@ -1,0 +1,5 @@
+Lamp integrated and scene saved: 127 meshes, ten URP materials, one warm downward spotlight.
+
+Preservation passed for all 1,336 original objects and 3,930 components; only the authorized 41 renderer flags changed. Console: zero warnings/errors. Screenshots inspected; writer guard released. Play Mode was not run.
+
+[Report](Assets/DetectiveDesk/LampRework/asset-report.md) · [Validation](Assets/DetectiveDesk/LampRework/unity-validation.json) · [Game view](Assets/DetectiveDesk/LampRework/final-game-camera.png) · [Close-up](Assets/DetectiveDesk/LampRework/unity-lamp-closeup.png)

@@ -1,0 +1,13 @@
+{
+    "status": "PASS",
+    "source_sha256": "9bc8cce052533014a233b92900c090125fe4ae4b98e5223ca48976b9a8196692",
+    "prefab_path": "Assets/DetectiveDesk/AssetProduction/BackWall/20261030_164949_9b5cb7a5/BackWall_Review.prefab",
+    "screenshot_path": "Assets/DetectiveDesk/AssetProduction/BackWall/20261030_164949_9b5cb7a5/preview.png",
+    "screenshot_sha256": "dbbec8a7e3ae491bb55ebb38d1dd67cc5428595a11dd0246aff1c942eb203747",
+    "review_scene": "Assets/DetectiveDesk/AssetReview/AssetReview.unity",
+    "protected_scene_unchanged": true,
+    "console_errors": 0,
+    "mesh_count": 51,
+    "renderer_count": 51,
+    "missing_materials": 0
+}

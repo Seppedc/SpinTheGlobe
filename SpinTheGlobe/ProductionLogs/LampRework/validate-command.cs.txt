@@ -1,0 +1,41 @@
+using System;using System.IO;using System.Linq;using UnityEngine;using UnityEditor;using UnityEngine.SceneManagement;using UnityEditor.SceneManagement;using Newtonsoft.Json.Linq;using DetectiveDesk.Editor;
+internal class CommandScript:IRunCommand {
+public void Execute(ExecutionResult result) {
+var root=GameObject.Find("DetectiveOffice/Environment/Generated_BankersLamp").transform;var visual=root.Find("DetectiveBankersLamp_Visual");var model=visual.Find("BankersLamp");
+var renderers=visual.GetComponentsInChildren<MeshRenderer>(true);var meshes=visual.GetComponentsInChildren<MeshFilter>(true);
+var materials=new JArray();int missing=0; bool materialsPass=true;
+var spec=(JObject)JObject.Parse(File.ReadAllText("Assets/DetectiveDesk/LampRework/generation-validation.json"))["materials"];
+foreach(var item in spec.Properties()){
+var path="Assets/DetectiveDesk/LampRework/Materials/"+item.Name+".mat";var m=AssetDatabase.LoadAssetAtPath<Material>(path);if(!m){missing++;materialsPass=false;continue;}
+var maps=new JArray();bool pass=m.shader.name=="Universal Render Pipeline/Lit"&&m.shader.isSupported;
+foreach(var t in ((JObject)item.Value["textures"]).Properties().Where(t=>t.Name!="Roughness")){
+var prop=t.Name=="BaseColor"?"_BaseMap":t.Name=="Normal"?"_BumpMap":"_MetallicGlossMap";var tex=m.GetTexture(prop);var tp=tex?AssetDatabase.GetAssetPath(tex):"";var importer=AssetImporter.GetAtPath(tp) as TextureImporter;
+bool good=tp=="Assets/DetectiveDesk/ArtSource/Props/BankersLamp/"+(string)t.Value&&importer&&importer.sRGBTexture==(t.Name=="BaseColor")&&importer.textureType==(t.Name=="Normal"?TextureImporterType.NormalMap:TextureImporterType.Default);
+if(t.Name=="Normal")good&=m.IsKeywordEnabled("_NORMALMAP");if(t.Name=="MetallicSmoothness")good&=m.IsKeywordEnabled("_METALLICSPECGLOSSMAP")&&m.GetFloat("_Smoothness")==1;
+maps.Add(new JObject{["role"]=t.Name,["path"]=tp,["sRGB"]=importer?importer.sRGBTexture:false,["importer_type"]=importer?importer.textureType.ToString():"missing",["pass"]=good});pass&=good;
+}
+bool emissive=item.Value["emission_linear"]!=null;pass&=m.IsKeywordEnabled("_EMISSION")==emissive;
+var bc=item.Value["base_color_linear"];var actual=m.GetColor("_BaseColor");pass&=Mathf.Abs(actual.r-(float)bc[0])<.0001f&&Mathf.Abs(actual.g-(float)bc[1])<.0001f&&Mathf.Abs(actual.b-(float)bc[2])<.0001f;
+if(((JObject)item.Value["textures"]).Count==0)pass&=Mathf.Abs(m.GetFloat("_Smoothness")-(1-(float)item.Value["roughness"]))<.0001f;
+materials.Add(new JObject{["name"]=item.Name,["path"]=path,["shader"]=m.shader.name,["maps"]=maps,["keywords"]=JArray.FromObject(m.shaderKeywords),["smoothness"]=m.GetFloat("_Smoothness"),["emission"]=JArray.FromObject(new[]{m.GetColor("_EmissionColor").r,m.GetColor("_EmissionColor").g,m.GetColor("_EmissionColor").b}),["pass"]=pass});materialsPass&=pass;
+}
+foreach(var r in renderers){if(r.sharedMaterials.Any(m=>!m))missing+=r.sharedMaterials.Count(m=>!m);if(r.sharedMaterials.Length!=r.GetComponent<MeshFilter>().sharedMesh.subMeshCount)materialsPass=false;}
+var bounds=renderers.Select(r=>r.bounds).Aggregate((a,b)=>{a.Encapsulate(b);return a;});var transforms=model.GetComponentsInChildren<Transform>(true);
+var shade=transforms.Single(t=>t.name=="Shade_Pivot");var chain=transforms.Single(t=>t.name=="PullChain_Pivot");var socket=transforms.Single(t=>t.name=="BulbSocket_Pivot");
+var hood=renderers.Single(r=>r.name=="Shade_GreenGlass");var light=visual.GetComponentsInChildren<Light>(true).Single();
+var scene=SceneManager.GetActiveScene();var all=scene.GetRootGameObjects().SelectMany(r=>r.GetComponentsInChildren<Transform>(true)).ToArray();
+int missingScripts=all.Sum(t=>GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(t.gameObject));
+int missingPrefabs=all.Count(t=>PrefabUtility.GetPrefabInstanceStatus(t.gameObject)==PrefabInstanceStatus.MissingAsset);
+int oldEnabled=root.GetComponentsInChildren<MeshRenderer>(true).Count(r=>!r.transform.IsChildOf(visual)&&r.enabled);
+bool pivots=chain.parent==model&&socket.parent==model&&shade.parent==model&&Mathf.Abs(Mathf.DeltaAngle(shade.localEulerAngles.x,10))<.001f;
+bool axes=Quaternion.Angle(visual.localRotation*model.localRotation,Quaternion.identity)<.001f&&Vector3.Dot(root.TransformDirection(Vector3.up).normalized,Vector3.back)>.9999f;
+bool placement=Mathf.Abs(bounds.min.y-.815f)<.0002f&&Mathf.Abs(bounds.size.y-1.5749123f)<.002f;
+bool lampLight=light.type==LightType.Spot&&Vector3.Dot(light.transform.forward,Vector3.down)>.9999f&&light.intensity==.8f&&light.range==2.3f&&light.spotAngle==80&&light.innerSpotAngle==55&&light.useColorTemperature&&light.colorTemperature==3200&&light.color==Color.white&&light.shadows==LightShadows.None&&Vector3.Distance(light.transform.position,transforms.Single(t=>t.name=="LampLightOrigin").position)<.0001f;
+LampReworkIntegration.Preservation();
+var data=new JObject{["mesh_count"]=meshes.Length,["triangles"]=meshes.Sum(m=>m.sharedMesh.triangles.Length/3),["nonempty_meshes"]=meshes.All(m=>m.sharedMesh&&m.sharedMesh.vertexCount>0),["missing_materials"]=missing,["materials"]=materials,["materials_pass"]=materialsPass,["shade_slots"]=JArray.FromObject(hood.sharedMaterials.Select(m=>m.name).ToArray()),["shade_three_slots_pass"]=hood.sharedMaterials.Length==3,["pivot_tests_pass"]=pivots,["axis_compensation_pass"]=axes,["placement_pass"]=placement,["bounds_min"]=JArray.FromObject(new[]{bounds.min.x,bounds.min.y,bounds.min.z}),["bounds_max"]=JArray.FromObject(new[]{bounds.max.x,bounds.max.y,bounds.max.z}),["old_active_renderers"]=oldEnabled,["new_active_renderers"]=renderers.Count(r=>r.enabled&&r.gameObject.activeInHierarchy),["missing_scripts"]=missingScripts,["missing_prefab_assets"]=missingPrefabs,["scene_light_count"]=all.Sum(t=>t.GetComponents<Light>().Length),["new_light_pass"]=lampLight,["new_light"]=new JObject{["type"]=light.type.ToString(),["intensity"]=light.intensity,["range"]=light.range,["spot_angle"]=light.spotAngle,["inner_angle"]=light.innerSpotAngle,["temperature"]=light.colorTemperature,["use_temperature"]=light.useColorTemperature,["shadows"]=light.shadows.ToString(),["world_position"]=JArray.FromObject(new[]{light.transform.position.x,light.transform.position.y,light.transform.position.z}),["world_direction"]=JArray.FromObject(new[]{light.transform.forward.x,light.transform.forward.y,light.transform.forward.z})},["root_position"]=JArray.FromObject(new[]{root.localPosition.x,root.localPosition.y,root.localPosition.z}),["root_euler"]=JArray.FromObject(new[]{root.localEulerAngles.x,root.localEulerAngles.y,root.localEulerAngles.z}),["root_scale"]=JArray.FromObject(new[]{root.localScale.x,root.localScale.y,root.localScale.z})};
+bool pass=materialsPass&&missing==0&&pivots&&axes&&placement&&lampLight&&missingScripts==0&&missingPrefabs==0&&oldEnabled==0&&meshes.Length==127;
+data["pass"]=pass;File.WriteAllText("ProductionLogs/LampRework/unity-checks.json",data.ToString());
+if(!pass)throw new Exception("Lamp checks failed; see unity-checks.json");
+AssetDatabase.SaveAssets();if(!EditorSceneManager.SaveScene(scene))throw new Exception("Scene save failed");
+LampReworkIntegration.Preservation();result.Log("All lamp mesh/material/pivot/light/bounds/preservation checks passed. Scene saved after temporary state restoration. No Play Mode entered.");
+}}

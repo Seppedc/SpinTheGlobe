@@ -1,0 +1,463 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b94ccc4a63d61d4885d693e55713ab2, type: 3}
+  m_Name: DefaultSkillTree
+  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeDefinition
+  nodes:
+  - id: speed_01
+    title: Momentum 1
+    description: Raise the mechanical globe's speed ceiling.
+    effect: 0
+    upgrade: 0
+    figurineIndex: 0
+    rank: 1
+    prerequisites: []
+    position: {x: -260, y: -190}
+    tab: 0
+  - id: speed_02
+    title: Momentum 2
+    description: Raise the mechanical globe's speed ceiling.
+    effect: 0
+    upgrade: 0
+    figurineIndex: 0
+    rank: 2
+    prerequisites:
+    - speed_01
+    position: {x: -260, y: -330}
+    tab: 0
+  - id: speed_03
+    title: Momentum 3
+    description: Raise the mechanical globe's speed ceiling.
+    effect: 0
+    upgrade: 0
+    figurineIndex: 0
+    rank: 3
+    prerequisites:
+    - speed_02
+    position: {x: -260, y: -470}
+    tab: 0
+  - id: speed_04
+    title: Momentum 4
+    description: Raise the mechanical globe's speed ceiling.
+    effect: 0
+    upgrade: 0
+    figurineIndex: 0
+    rank: 4
+    prerequisites:
+    - speed_03
+    position: {x: -260, y: -610}
+    tab: 0
+  - id: speed_05
+    title: Momentum 5
+    description: Raise the mechanical globe's speed ceiling.
+    effect: 0
+    upgrade: 0
+    figurineIndex: 0
+    rank: 5
+    prerequisites:
+    - speed_04
+    position: {x: -260, y: -750}
+    tab: 0
+  - id: speed_06
+    title: Momentum 6
+    description: Raise the mechanical globe's speed ceiling.
+    effect: 0
+    upgrade: 0
+    figurineIndex: 0
+    rank: 6
+    prerequisites:
+    - speed_05
+    position: {x: -260, y: -890}
+    tab: 0
+  - id: speed_07
+    title: Momentum 7
+    description: Raise the mechanical globe's speed ceiling.
+    effect: 0
+    upgrade: 0
+    figurineIndex: 0
+    rank: 7
+    prerequisites:
+    - speed_06
+    position: {x: -260, y: -1030}
+    tab: 0
+  - id: speed_08
+    title: Momentum 8
+    description: Raise the mechanical globe's speed ceiling.
+    effect: 0
+    upgrade: 0
+    figurineIndex: 0
+    rank: 8
+    prerequisites:
+    - speed_07
+    position: {x: -260, y: -1170}
+    tab: 0
+  - id: speed_09
+    title: Momentum 9
+    description: Raise the mechanical globe's speed ceiling.
+    effect: 0
+    upgrade: 0
+    figurineIndex: 0
+    rank: 9
+    prerequisites:
+    - speed_08
+    position: {x: -260, y: -1310}
+    tab: 0
+  - id: speed_10
+    title: Momentum 10
+    description: Raise the mechanical globe's speed ceiling.
+    effect: 0
+    upgrade: 0
+    figurineIndex: 0
+    rank: 10
+    prerequisites:
+    - speed_09
+    position: {x: -260, y: -1450}
+    tab: 0
+  - id: motor_01
+    title: Auto-Motor 1
+    description: Build a motor that sustains forward rotation.
+    effect: 0
+    upgrade: 1
+    figurineIndex: 0
+    rank: 1
+    prerequisites: []
+    position: {x: 0, y: -190}
+    tab: 0
+  - id: motor_02
+    title: Auto-Motor 2
+    description: Build a motor that sustains forward rotation.
+    effect: 0
+    upgrade: 1
+    figurineIndex: 0
+    rank: 2
+    prerequisites:
+    - motor_01
+    position: {x: 0, y: -330}
+    tab: 0
+  - id: motor_03
+    title: Auto-Motor 3
+    description: Build a motor that sustains forward rotation.
+    effect: 0
+    upgrade: 1
+    figurineIndex: 0
+    rank: 3
+    prerequisites:
+    - motor_02
+    - speed_01
+    position: {x: 0, y: -470}
+    tab: 0
+  - id: motor_04
+    title: Auto-Motor 4
+    description: Build a motor that sustains forward rotation.
+    effect: 0
+    upgrade: 1
+    figurineIndex: 0
+    rank: 4
+    prerequisites:
+    - motor_03
+    - speed_01
+    position: {x: 0, y: -610}
+    tab: 0
+  - id: motor_05
+    title: Auto-Motor 5
+    description: Build a motor that sustains forward rotation.
+    effect: 0
+    upgrade: 1
+    figurineIndex: 0
+    rank: 5
+    prerequisites:
+    - motor_04
+    - speed_02
+    position: {x: 0, y: -750}
+    tab: 0
+  - id: motor_06
+    title: Auto-Motor 6
+    description: Build a motor that sustains forward rotation.
+    effect: 0
+    upgrade: 1
+    figurineIndex: 0
+    rank: 6
+    prerequisites:
+    - motor_05
+    - speed_02
+    position: {x: 0, y: -890}
+    tab: 0
+  - id: motor_07
+    title: Auto-Motor 7
+    description: Build a motor that sustains forward rotation.
+    effect: 0
+    upgrade: 1
+    figurineIndex: 0
+    rank: 7
+    prerequisites:
+    - motor_06
+    - speed_03
+    position: {x: 0, y: -1030}
+    tab: 0
+  - id: motor_08
+    title: Auto-Motor 8
+    description: Build a motor that sustains forward rotation.
+    effect: 0
+    upgrade: 1
+    figurineIndex: 0
+    rank: 8
+    prerequisites:
+    - motor_07
+    - speed_03
+    position: {x: 0, y: -1170}
+    tab: 0
+  - id: motor_09
+    title: Auto-Motor 9
+    description: Build a motor that sustains forward rotation.
+    effect: 0
+    upgrade: 1
+    figurineIndex: 0
+    rank: 9
+    prerequisites:
+    - motor_08
+    - speed_04
+    position: {x: 0, y: -1310}
+    tab: 0
+  - id: motor_10
+    title: Auto-Motor 10
+    description: Build a motor that sustains forward rotation.
+    effect: 0
+    upgrade: 1
+    figurineIndex: 0
+    rank: 10
+    prerequisites:
+    - motor_09
+    - speed_04
+    position: {x: 0, y: -1450}
+    tab: 0
+  - id: durability_01
+    title: Pincraft 1
+    description: Keep each country pin earning for more revolutions.
+    effect: 0
+    upgrade: 2
+    figurineIndex: 0
+    rank: 1
+    prerequisites: []
+    position: {x: 260, y: -190}
+    tab: 0
+  - id: durability_02
+    title: Pincraft 2
+    description: Keep each country pin earning for more revolutions.
+    effect: 0
+    upgrade: 2
+    figurineIndex: 0
+    rank: 2
+    prerequisites:
+    - durability_01
+    position: {x: 260, y: -330}
+    tab: 0
+  - id: durability_03
+    title: Pincraft 3
+    description: Keep each country pin earning for more revolutions.
+    effect: 0
+    upgrade: 2
+    figurineIndex: 0
+    rank: 3
+    prerequisites:
+    - durability_02
+    - motor_01
+    position: {x: 260, y: -470}
+    tab: 0
+  - id: durability_04
+    title: Pincraft 4
+    description: Keep each country pin earning for more revolutions.
+    effect: 0
+    upgrade: 2
+    figurineIndex: 0
+    rank: 4
+    prerequisites:
+    - durability_03
+    - motor_01
+    position: {x: 260, y: -610}
+    tab: 0
+  - id: durability_05
+    title: Pincraft 5
+    description: Keep each country pin earning for more revolutions.
+    effect: 0
+    upgrade: 2
+    figurineIndex: 0
+    rank: 5
+    prerequisites:
+    - durability_04
+    - motor_01
+    position: {x: 260, y: -750}
+    tab: 0
+  - id: durability_06
+    title: Pincraft 6
+    description: Keep each country pin earning for more revolutions.
+    effect: 0
+    upgrade: 2
+    figurineIndex: 0
+    rank: 6
+    prerequisites:
+    - durability_05
+    - motor_02
+    position: {x: 260, y: -890}
+    tab: 0
+  - id: durability_07
+    title: Pincraft 7
+    description: Keep each country pin earning for more revolutions.
+    effect: 0
+    upgrade: 2
+    figurineIndex: 0
+    rank: 7
+    prerequisites:
+    - durability_06
+    - motor_02
+    position: {x: 260, y: -1030}
+    tab: 0
+  - id: durability_08
+    title: Pincraft 8
+    description: Keep each country pin earning for more revolutions.
+    effect: 0
+    upgrade: 2
+    figurineIndex: 0
+    rank: 8
+    prerequisites:
+    - durability_07
+    - motor_02
+    position: {x: 260, y: -1170}
+    tab: 0
+  - id: durability_09
+    title: Pincraft 9
+    description: Keep each country pin earning for more revolutions.
+    effect: 0
+    upgrade: 2
+    figurineIndex: 0
+    rank: 9
+    prerequisites:
+    - durability_08
+    - motor_03
+    position: {x: 260, y: -1310}
+    tab: 0
+  - id: durability_10
+    title: Pincraft 10
+    description: Keep each country pin earning for more revolutions.
+    effect: 0
+    upgrade: 2
+    figurineIndex: 0
+    rank: 10
+    prerequisites:
+    - durability_09
+    - motor_03
+    position: {x: 260, y: -1450}
+    tab: 0
+  - id: figure_0_1
+    title: 'Detective: Reassembly'
+    description: Restore this collectible without altering the other figurines.
+    effect: 1
+    upgrade: 0
+    figurineIndex: 0
+    rank: 1
+    prerequisites:
+    - durability_01
+    position: {x: -260, y: -190}
+    tab: 1
+  - id: figure_0_2
+    title: 'Detective: Kintsugi'
+    description: Restore this collectible without altering the other figurines.
+    effect: 1
+    upgrade: 0
+    figurineIndex: 0
+    rank: 2
+    prerequisites:
+    - figure_0_1
+    - motor_01
+    position: {x: -260, y: -355}
+    tab: 1
+  - id: figure_0_3
+    title: 'Detective: Masterpiece'
+    description: Restore this collectible without altering the other figurines.
+    effect: 1
+    upgrade: 0
+    figurineIndex: 0
+    rank: 3
+    prerequisites:
+    - figure_0_2
+    - speed_03
+    position: {x: -260, y: -520}
+    tab: 1
+  - id: figure_1_1
+    title: 'Archivist: Reassembly'
+    description: Restore this collectible without altering the other figurines.
+    effect: 1
+    upgrade: 0
+    figurineIndex: 1
+    rank: 1
+    prerequisites:
+    - durability_01
+    position: {x: 0, y: -190}
+    tab: 1
+  - id: figure_1_2
+    title: 'Archivist: Kintsugi'
+    description: Restore this collectible without altering the other figurines.
+    effect: 1
+    upgrade: 0
+    figurineIndex: 1
+    rank: 2
+    prerequisites:
+    - figure_1_1
+    - motor_01
+    position: {x: 0, y: -355}
+    tab: 1
+  - id: figure_1_3
+    title: 'Archivist: Masterpiece'
+    description: Restore this collectible without altering the other figurines.
+    effect: 1
+    upgrade: 0
+    figurineIndex: 1
+    rank: 3
+    prerequisites:
+    - figure_1_2
+    - speed_03
+    position: {x: 0, y: -520}
+    tab: 1
+  - id: figure_2_1
+    title: 'Commissioner: Reassembly'
+    description: Restore this collectible without altering the other figurines.
+    effect: 1
+    upgrade: 0
+    figurineIndex: 2
+    rank: 1
+    prerequisites:
+    - durability_01
+    position: {x: 260, y: -190}
+    tab: 1
+  - id: figure_2_2
+    title: 'Commissioner: Kintsugi'
+    description: Restore this collectible without altering the other figurines.
+    effect: 1
+    upgrade: 0
+    figurineIndex: 2
+    rank: 2
+    prerequisites:
+    - figure_2_1
+    - motor_01
+    position: {x: 260, y: -355}
+    tab: 1
+  - id: figure_2_3
+    title: 'Commissioner: Masterpiece'
+    description: Restore this collectible without altering the other figurines.
+    effect: 1
+    upgrade: 0
+    figurineIndex: 2
+    rank: 3
+    prerequisites:
+    - figure_2_2
+    - speed_03
+    position: {x: 260, y: -520}
+    tab: 1

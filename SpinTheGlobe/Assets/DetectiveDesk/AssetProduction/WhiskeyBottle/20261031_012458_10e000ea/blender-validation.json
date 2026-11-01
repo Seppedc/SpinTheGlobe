@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "blend": "ProductionLogs/AssetQueue/BuildStaging/20261031_012458_10e000ea/WhiskeyBottle/WhiskeyBottle.blend",
+  "blend_sha256": "c58fe182058b173aee9de8a46c1fd7291ff5c51064a20eba08741501cfe99a1a",
+  "fbx": "ProductionLogs/AssetQueue/BuildStaging/20261031_012458_10e000ea/WhiskeyBottle/WhiskeyBottle.fbx",
+  "fbx_sha256": "977aab264779ea3ea3fd52302de473d49d4a878c318ff9350498ce86b75eb3bd",
+  "generator": "ProductionLogs/AssetQueue/BuildStaging/20261031_012458_10e000ea/WhiskeyBottle/build_asset.py",
+  "generator_sha256": "b94d5f12560cd803458ae2b571897ddd5e7358a9874ed0ec9b074fd12e14fe3e",
+  "embedded_source_exact": true,
+  "mesh_count": 2,
+  "triangles": 14592,
+  "dimensions_m": [
+    0.10400000214576721,
+    0.10400000214576721,
+    0.257999986410141
+  ],
+  "root_at_origin": true,
+  "minimum_m": [
+    -0.052000001072883606,
+    -0.052000001072883606,
+    0.0
+  ],
+  "maximum_m": [
+    0.052000001072883606,
+    0.052000001072883606,
+    0.257999986410141
+  ],
+  "materials": [
+    "Crystal_Clear"
+  ],
+  "moving_part_candidates": [],
+  "expected_dimensions_review": "Actual dimensions recorded; asset-specific fit remains reviewable, no visual approval implied."
+}

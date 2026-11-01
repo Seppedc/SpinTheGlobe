@@ -1,0 +1,29 @@
+{
+  "status": "BLOCKED",
+  "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+  "wiringSaved": true,
+  "countries": 8,
+  "figurines": 3,
+  "pinSlots": 12,
+  "math": "PASS 31 assertions",
+  "preservation": "PASS 4324 original components",
+  "assetFiles": "PASS 546 files, 13 spheres, 9 globe materials",
+  "runtime": "FAIL physical drop; 88 checks completed in latest run; earlier 101-check logical run passed",
+  "blockingFailure": "Motionless rigidbodies and inert collider queries; backend identity unconfirmed",
+  "stopReason": "User requires stopping on permissions errors; Unity MCP rejected diagnostic namespaces before execution",
+  "exactToolError": "UNEXPECTED_ERROR: Script uses one or more unauthorized namespaces: System.Reflection.BindingFlags.Public is used at line 16., System.Reflection.BindingFlags.NonPublic is used at line 16., System.Reflection.BindingFlags.Static is used at line 16., System.Reflection.MemberTypes.Method is used at line 16., System.Reflection.MemberTypes.Property is used at line 16., System.Reflection.BindingFlags.Public is used at line 20., System.Reflection.BindingFlags.NonPublic is used at line 20., System.Reflection.BindingFlags.Static is used at line 20.. Remove this usage and retry.",
+  "noBypassAttempted": true,
+  "physicsSettingsModified": false,
+  "latestVerifiedSceneState": "One clean Edit Mode scene; money 422, runInBackground false before final diagnostic Play runs. Final harness wrote failure and requested Edit Mode; no subsequent state query after mandatory stop.",
+  "screenshotsViewed": [
+    "final-game.png",
+    "runtime-game.png",
+    "upgrades-panel.png"
+  ],
+  "remaining": [
+    "Resolve installed physics backend via an allowed path",
+    "Revalidate actual collider drag, obstruction and pin falling",
+    "Final post-blocker clean scene/Console verification"
+  ],
+  "report": "ProductionLogs/Gameplay/implementation-report.md"
+}

@@ -1,0 +1,289 @@
+{
+  "mesh_count": 127,
+  "triangles": 80000,
+  "nonempty_meshes": true,
+  "missing_materials": 0,
+  "materials": [
+    {
+      "name": "Lamp_AgedBrass",
+      "path": "Assets/DetectiveDesk/LampRework/Materials/Lamp_AgedBrass.mat",
+      "shader": "Universal Render Pipeline/Lit",
+      "maps": [
+        {
+          "role": "BaseColor",
+          "path": "Assets/DetectiveDesk/ArtSource/Props/BankersLamp/Textures/Lamp_AgedBrass_BaseColor.png",
+          "sRGB": true,
+          "importer_type": "Default",
+          "pass": true
+        },
+        {
+          "role": "MetallicSmoothness",
+          "path": "Assets/DetectiveDesk/ArtSource/Props/BankersLamp/Textures/Lamp_AgedBrass_MetallicSmoothness.png",
+          "sRGB": false,
+          "importer_type": "Default",
+          "pass": true
+        },
+        {
+          "role": "Normal",
+          "path": "Assets/DetectiveDesk/ArtSource/Props/BankersLamp/Textures/Lamp_AgedBrass_Normal.png",
+          "sRGB": false,
+          "importer_type": "NormalMap",
+          "pass": true
+        }
+      ],
+      "keywords": [
+        "_METALLICSPECGLOSSMAP",
+        "_NORMALMAP"
+      ],
+      "smoothness": 1.0,
+      "emission": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pass": true
+    },
+    {
+      "name": "Lamp_PolishedBrass",
+      "path": "Assets/DetectiveDesk/LampRework/Materials/Lamp_PolishedBrass.mat",
+      "shader": "Universal Render Pipeline/Lit",
+      "maps": [
+        {
+          "role": "BaseColor",
+          "path": "Assets/DetectiveDesk/ArtSource/Props/BankersLamp/Textures/Lamp_PolishedBrass_BaseColor.png",
+          "sRGB": true,
+          "importer_type": "Default",
+          "pass": true
+        },
+        {
+          "role": "MetallicSmoothness",
+          "path": "Assets/DetectiveDesk/ArtSource/Props/BankersLamp/Textures/Lamp_PolishedBrass_MetallicSmoothness.png",
+          "sRGB": false,
+          "importer_type": "Default",
+          "pass": true
+        },
+        {
+          "role": "Normal",
+          "path": "Assets/DetectiveDesk/ArtSource/Props/BankersLamp/Textures/Lamp_PolishedBrass_Normal.png",
+          "sRGB": false,
+          "importer_type": "NormalMap",
+          "pass": true
+        }
+      ],
+      "keywords": [
+        "_METALLICSPECGLOSSMAP",
+        "_NORMALMAP"
+      ],
+      "smoothness": 1.0,
+      "emission": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pass": true
+    },
+    {
+      "name": "Lamp_EmeraldGlass",
+      "path": "Assets/DetectiveDesk/LampRework/Materials/Lamp_EmeraldGlass.mat",
+      "shader": "Universal Render Pipeline/Lit",
+      "maps": [
+        {
+          "role": "BaseColor",
+          "path": "Assets/DetectiveDesk/ArtSource/Props/BankersLamp/Textures/Lamp_EmeraldGlass_BaseColor.png",
+          "sRGB": true,
+          "importer_type": "Default",
+          "pass": true
+        },
+        {
+          "role": "MetallicSmoothness",
+          "path": "Assets/DetectiveDesk/ArtSource/Props/BankersLamp/Textures/Lamp_EmeraldGlass_MetallicSmoothness.png",
+          "sRGB": false,
+          "importer_type": "Default",
+          "pass": true
+        },
+        {
+          "role": "Normal",
+          "path": "Assets/DetectiveDesk/ArtSource/Props/BankersLamp/Textures/Lamp_EmeraldGlass_Normal.png",
+          "sRGB": false,
+          "importer_type": "NormalMap",
+          "pass": true
+        }
+      ],
+      "keywords": [
+        "_METALLICSPECGLOSSMAP",
+        "_NORMALMAP"
+      ],
+      "smoothness": 1.0,
+      "emission": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pass": true
+    },
+    {
+      "name": "Lamp_GreenGlassEdge",
+      "path": "Assets/DetectiveDesk/LampRework/Materials/Lamp_GreenGlassEdge.mat",
+      "shader": "Universal Render Pipeline/Lit",
+      "maps": [],
+      "keywords": [],
+      "smoothness": 0.9,
+      "emission": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pass": true
+    },
+    {
+      "name": "Lamp_OpalLiner",
+      "path": "Assets/DetectiveDesk/LampRework/Materials/Lamp_OpalLiner.mat",
+      "shader": "Universal Render Pipeline/Lit",
+      "maps": [],
+      "keywords": [
+        "_EMISSION"
+      ],
+      "smoothness": 0.55,
+      "emission": [
+        0.055,
+        0.042,
+        0.02
+      ],
+      "pass": true
+    },
+    {
+      "name": "Lamp_BulbWarm",
+      "path": "Assets/DetectiveDesk/LampRework/Materials/Lamp_BulbWarm.mat",
+      "shader": "Universal Render Pipeline/Lit",
+      "maps": [],
+      "keywords": [
+        "_EMISSION"
+      ],
+      "smoothness": 0.73,
+      "emission": [
+        1.4,
+        1.0,
+        0.55
+      ],
+      "pass": true
+    },
+    {
+      "name": "Lamp_CeramicSocket",
+      "path": "Assets/DetectiveDesk/LampRework/Materials/Lamp_CeramicSocket.mat",
+      "shader": "Universal Render Pipeline/Lit",
+      "maps": [],
+      "keywords": [],
+      "smoothness": 0.68,
+      "emission": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pass": true
+    },
+    {
+      "name": "Lamp_Felt",
+      "path": "Assets/DetectiveDesk/LampRework/Materials/Lamp_Felt.mat",
+      "shader": "Universal Render Pipeline/Lit",
+      "maps": [],
+      "keywords": [],
+      "smoothness": 0.0600000024,
+      "emission": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pass": true
+    },
+    {
+      "name": "Lamp_CordRubber",
+      "path": "Assets/DetectiveDesk/LampRework/Materials/Lamp_CordRubber.mat",
+      "shader": "Universal Render Pipeline/Lit",
+      "maps": [],
+      "keywords": [],
+      "smoothness": 0.32,
+      "emission": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pass": true
+    },
+    {
+      "name": "Lamp_DarkInlay",
+      "path": "Assets/DetectiveDesk/LampRework/Materials/Lamp_DarkInlay.mat",
+      "shader": "Universal Render Pipeline/Lit",
+      "maps": [],
+      "keywords": [],
+      "smoothness": 0.459999979,
+      "emission": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "pass": true
+    }
+  ],
+  "materials_pass": true,
+  "shade_slots": [
+    "Lamp_EmeraldGlass",
+    "Lamp_OpalLiner",
+    "Lamp_GreenGlassEdge"
+  ],
+  "shade_three_slots_pass": true,
+  "pivot_tests_pass": true,
+  "axis_compensation_pass": true,
+  "placement_pass": true,
+  "bounds_min": [
+    3.67081261,
+    0.815000057,
+    0.1686225
+  ],
+  "bounds_max": [
+    4.82918739,
+    2.38991213,
+    1.01314831
+  ],
+  "old_active_renderers": 0,
+  "new_active_renderers": 127,
+  "missing_scripts": 0,
+  "missing_prefab_assets": 0,
+  "scene_light_count": 5,
+  "new_light_pass": true,
+  "new_light": {
+    "type": "Spot",
+    "intensity": 0.8,
+    "range": 2.3,
+    "spot_angle": 80.0,
+    "inner_angle": 55.0,
+    "temperature": 3200.0,
+    "use_temperature": true,
+    "shadows": "None",
+    "world_position": [
+      4.34375,
+      1.8499999,
+      0.3390625
+    ],
+    "world_direction": [
+      0.0,
+      -1.00000012,
+      5.96046448E-08
+    ]
+  },
+  "root_position": [
+    4.25,
+    0.815,
+    0.5153126
+  ],
+  "root_euler": [
+    270.0,
+    0.0,
+    0.0
+  ],
+  "root_scale": [
+    3.75,
+    3.75,
+    3.75
+  ],
+  "pass": true
+}

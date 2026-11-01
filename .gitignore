@@ -1,0 +1,48 @@
+# ---- Unity ----
+/SpinTheGlobe/[Ll]ibrary/
+/SpinTheGlobe/[Tt]emp/
+/SpinTheGlobe/[Oo]bj/
+/SpinTheGlobe/[Bb]uild/
+/SpinTheGlobe/[Bb]uilds/
+/SpinTheGlobe/[Ll]ogs/
+/SpinTheGlobe/[Uu]ser[Ss]ettings/
+/SpinTheGlobe/[Mm]emoryCaptures/
+/SpinTheGlobe/[Rr]ecordings/
+/SpinTheGlobe/Assets/_Recovery/
+/SpinTheGlobe/Assets/_Recovery.meta
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+sysinfo.txt
+crashlytics-buildid.txt
+.vs/
+.vscode/
+.idea/
+.utmp/
+
+# ---- Blender autosaves ----
+*.blend1
+*.blend2
+
+# ---- Pipeline checkpoints (huge, regenerable) ----
+/SpinTheGlobe/ProductionLogs/**/checkpoint*.zip
+__pycache__/
+*.pyc
+
+# ---- Web prototype tooling ----
+node_modules/
+dist/
+*.local
+.DS_Store
+Thumbs.db

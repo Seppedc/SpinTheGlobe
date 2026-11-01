@@ -1,0 +1,9 @@
+Integration passed and the scene is saved in clean Edit Mode. Writer guard released.
+
+- Left half-holder only; gauge at base; exposed gears hidden.
+- All 4,324 components passed preservation checks.
+- Sphere files, materials and runtime scripts remain byte-identical.
+- Runtime motion, needle calibration and HUD callback passed.
+- Current Console: 0 errors/warnings; historical tooling failures recorded separately.
+
+[Report](C:/Users/decra/source/Antigravity/SpinTheGlobe/SpinTheGlobe/Assets/DetectiveDesk/GlobeHolderRevision/asset-report.md) · [Final screenshot](C:/Users/decra/source/Antigravity/SpinTheGlobe/SpinTheGlobe/Assets/DetectiveDesk/GlobeHolderRevision/final-game-camera.png)

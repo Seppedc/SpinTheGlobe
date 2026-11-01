@@ -1,0 +1,196 @@
+{
+  "source_sha256": "b9a5360119c4ca758a506e5061b51d540a898a28129f7b839a4cdc08db40e318",
+  "prefab_path": "Assets/DetectiveDesk/PinLauncherRework/DetectivePinLauncher_Visual.prefab",
+  "screenshot_path": "Assets/DetectiveDesk/PinLauncherRework/preview.png",
+  "screenshot_sha256": "61a846db01367afc03b5256faaa78d06a6fe43082870476f40032c04bbe84221",
+  "protected_scene_unchanged": true,
+  "console_errors": 0,
+  "mesh_count": 168,
+  "renderer_count": 168,
+  "missing_materials": 0,
+  "status": "PASS",
+  "scope": "Executed final scoped source refresh, fixed-camera capture and preservation checks; human visual approval pending",
+  "timestamp_utc": "2026-10-31T21:48:27.848597+00:00",
+  "facts": {
+    "scene_path": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+    "scene_dirty": false,
+    "scene_count": 1,
+    "mesh_count": 168,
+    "renderer_count": 168,
+    "triangles": 73960,
+    "material_count": 8,
+    "missing_materials": 0,
+    "texture_import_settings_valid": true,
+    "URP_Lit_supported": true,
+    "bakeAxisConversion": false,
+    "is_compiling": false,
+    "is_updating": false,
+    "is_playing": false,
+    "zero_area_triangles": 0,
+    "missing_texture_references": 0,
+    "authored_child_transforms_match_source": true,
+    "console_warnings": 0
+  },
+  "original_objects_checked": 1069,
+  "original_components_checked": 3167,
+  "old_renderer_changes": 28,
+  "new_visual_children": 1,
+  "pin_slots_preserved": [
+    "DetectiveOffice/GameplayObjects/DetectivePinCoffer/PinSlots/PinSlot_01",
+    "DetectiveOffice/GameplayObjects/DetectivePinCoffer/PinSlots/PinSlot_02",
+    "DetectiveOffice/GameplayObjects/DetectivePinCoffer/PinSlots/PinSlot_03",
+    "DetectiveOffice/GameplayObjects/DetectivePinCoffer/PinSlots/PinSlot_04",
+    "DetectiveOffice/GameplayObjects/DetectivePinCoffer/PinSlots/PinSlot_05",
+    "DetectiveOffice/GameplayObjects/DetectivePinCoffer/PinSlots/PinSlot_06",
+    "DetectiveOffice/GameplayObjects/DetectivePinCoffer/PinSlots/PinSlot_07",
+    "DetectiveOffice/GameplayObjects/DetectivePinCoffer/PinSlots/PinSlot_08",
+    "DetectiveOffice/GameplayObjects/DetectivePinCoffer/PinSlots/PinSlot_09",
+    "DetectiveOffice/GameplayObjects/DetectivePinCoffer/PinSlots/PinSlot_10",
+    "DetectiveOffice/GameplayObjects/DetectivePinCoffer/PinSlots/PinSlot_11",
+    "DetectiveOffice/GameplayObjects/DetectivePinCoffer/PinSlots/PinSlot_12"
+  ],
+  "original_review_prefab_unchanged": true,
+  "callback_test": {
+    "status": "PASS",
+    "play_mode": true,
+    "launcher_action_binding": true,
+    "FirePin_invoked": true,
+    "expected_hint_verified": true,
+    "mouse_click_tested": false
+  },
+  "limitations": [
+    "Human aesthetic approval remains pending; parent owns tracker and queue updates.",
+    "Previous Play Mode FirePin callback/action-binding PASS reused; no behavior changed. Physical mouse clicks and hover were not tested.",
+    "No new projectile gameplay was added.",
+    "No exact mesh intersection test was performed; final camera render shows no obvious overlap with neighboring desk props.",
+    "Blender generation and embedded-source/packed-map validation are supplied parent evidence; this refresh did not run Blender."
+  ],
+  "integration_status": "INTEGRATED_NEEDS_VISUAL_REVIEW",
+  "placement": {
+    "position": {
+      "x": 3.049999952316284,
+      "y": 0.815000057220459,
+      "z": 0.6000000238418579
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 146.78477478027344,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 3.5,
+      "y": 3.5,
+      "z": 3.5
+    },
+    "boundsMin": {
+      "x": 2.5128908157348633,
+      "y": 0.815000057220459,
+      "z": 0.027508974075317383
+    },
+    "boundsMax": {
+      "x": 3.587109088897705,
+      "y": 1.8226780891418457,
+      "z": 1.1724910736083984
+    },
+    "aimDirection": {
+      "x": -0.4374811351299286,
+      "y": 0.6018149256706238,
+      "z": 0.6681534647941589
+    },
+    "muzzle": {
+      "x": 2.765225887298584,
+      "y": 1.7598450183868408,
+      "z": 1.0349278450012207
+    },
+    "breech": {
+      "x": 3.236830472946167,
+      "y": 1.1110886335372925,
+      "z": 0.3146585524082184
+    },
+    "handwheel": {
+      "x": 2.851582,
+      "y": 1.347,
+      "z": 0.436616
+    },
+    "prefab": "Assets/DetectiveDesk/PinLauncherRework/DetectivePinLauncher_Visual.prefab",
+    "modelRotation": "(270.019800, 0.000000, 0.000000)",
+    "meshes": 168,
+    "renderers": 168,
+    "missingMaterials": 0,
+    "oldRenderersDisabled": 28,
+    "sceneWasDirty": false,
+    "reduction_gear": {
+      "x": 2.956229,
+      "y": 1.2245,
+      "z": 0.295959
+    },
+    "scale_zero": {
+      "x": 2.801873,
+      "y": 1.347,
+      "z": 0.646711
+    }
+  },
+  "horizontal_aim": {
+    "x": -0.5477856783081885,
+    "y": 0,
+    "z": 0.8366187008670305
+  },
+  "height_world": 1.0076780319213867,
+  "desk_surface_y": 0.815,
+  "handwheel_visibility": "Near-side wheel clearly visible and readable from unchanged fixed Game camera",
+  "preserved_references": "All original component object-reference identities match baseline, except one appended Transform child reference on the launcher root.",
+  "preservation_evidence": "ProductionLogs\\PinLauncherRework\\preservation-comparison.json",
+  "after_snapshot": "ProductionLogs\\PinLauncherRework\\preservation-after.json",
+  "scene_saved_only": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+  "original_prefab_sha256": "7cdd4877459214a1a3eae669cca4d93369a83a64351fa5c27062c214b0dcb9bc",
+  "screenshot_production_path": "ProductionLogs\\PinLauncherRework\\after-game-camera.png",
+  "screenshot_production_sha256": "61a846db01367afc03b5256faaa78d06a6fe43082870476f40032c04bbe84221",
+  "console_warnings": 0,
+  "final_refresh_status": "PASS",
+  "prefab_child_transform_mismatches": 0,
+  "source_transform_overrides_removed": 0,
+  "scene_or_prefab_saved_this_refresh": false,
+  "zero_area_triangles": 0,
+  "missing_texture_references": 0,
+  "final_refresh_evidence": "ProductionLogs/PinLauncherRework/final-refresh-executed-checks.json",
+  "final_transforms": [
+    "PinLauncher_ReworkedVisuals localPosition=(3.050000, 0.815000, 0.600000) localRotation=(0.000000, 146.784800, 0.000000) scale=(3.500000, 3.500000, 3.500000) worldPosition=(3.050000, 0.815000, 0.600000)",
+    "PinLauncher localPosition=(0.000000, 0.000000, 0.000000) localRotation=(270.019800, 0.000000, 0.000000) scale=(1.000000, 1.000000, 1.000000) worldPosition=(3.050000, 0.815000, 0.600000)",
+    "BreechOrigin localPosition=(0.000000, -0.112000, 0.000000) localRotation=(0.000000, 0.000000, 0.000000) scale=(1.000000, 1.000000, 1.000000) worldPosition=(3.236830, 1.111089, 0.314659)",
+    "MuzzleTip localPosition=(0.000000, 0.196000, 0.000000) localRotation=(0.000000, 0.000000, 0.000000) scale=(1.000000, 1.000000, 1.000000) worldPosition=(2.765226, 1.759845, 1.034928)",
+    "ElevationScale_Zero localPosition=(0.052000, 0.050000, 0.087000) localRotation=(0.000000, 0.000000, 0.000000) scale=(1.000000, 1.000000, 1.000000) worldPosition=(2.801873, 1.347000, 0.646711)",
+    "Handwheel_Rotation_Pivot localPosition=(0.073000, -0.008000, 0.087000) localRotation=(0.000000, 0.000000, 180.000000) scale=(1.000000, 1.000000, 1.000000) worldPosition=(2.851582, 1.347000, 0.436616)",
+    "ReductionGear_Axle localPosition=(0.070000, -0.058000, 0.052000) localRotation=(0.000000, 0.000000, 0.000000) scale=(1.000000, 1.000000, 1.000000) worldPosition=(2.956229, 1.224500, 0.295959)"
+  ],
+  "callback_test_reused": true,
+  "resolution_history": [
+    {
+      "issue": "Handwheel is on the far side at the required aim direction and is partly visible/occluded in the Game camera. Full open-side silhouette is not achieved. Canonical generator revision is needed; no geometry was mirrored.",
+      "resolution": "Canonical source moved handwheel/reduction/scale to player-facing side. Forced only canonical FBX reimport; scene and prefab authored child transforms match source without override removal. Fixed-camera final render visually inspected; near-side wheel readable."
+    },
+    {
+      "issue": "Unity imported triangles total 73960; supplied Blender validation totals 74472. Mesh count is 168 in both. The triangle discrepancy was observed but not resolved by source regeneration.",
+      "resolution": "Parent welded lathe poles and removed zero-area cap triangles in canonical generator. Supplied independent Blender/FBX source validation and executed Unity mesh inspection now agree: 168 meshes, exactly 73,960 triangles, zero zero-area triangles."
+    },
+    {
+      "history": [
+        "Initial dynamic callback registration did not survive the Play Mode domain reload. The successful test used the opt-in precompiled Editor helper.",
+        "Two initial writer snapshots serialized as empty objects and are invalid evidence. Preservation uses the supplied full original baseline and corrected explicit after export.",
+        "Initial capture reported a render-target release warning. Final capture explicitly restored the camera target before disposal and completed without that warning; Console was never cleared."
+      ]
+    },
+    {
+      "refresh_helper_note": "An initial transient relay verification command failed compilation because Mesh resolved to Unity.AI.Mesh. Corrected to UnityEngine.Mesh; rerun succeeded. No project script was changed; dedicated final Console query returned zero warnings/errors."
+    }
+  ],
+  "final_refresh_actions": [
+    "Read AGENTS.md and Unity_GetUserGuidelines; used Unity MCP relay as sole writer.",
+    "Force reimported only canonical PinLauncher.fbx; retained nested instance, hierarchy, GUIDs, materials, placement and references.",
+    "Verified scene and prefab authored child transforms match canonical source. Removed no overrides and inserted no objects.",
+    "Verified all eight supported URP/Lit materials, nine assigned maps and importer settings; five constant-surface materials intentionally have no maps. No dangling serialized texture references.",
+    "Captured 1920x1080 fixed Game camera to both requested paths; camera/canvas/RectTransform properties restored exactly.",
+    "Compared complete original baseline: 1069 objects, 3167 components; only parent child-list addition and 28 Renderer.enabled changes.",
+    "Dedicated Unity_ReadConsole final query returned zero warnings/errors; no global Console clear, Play Mode, Blender, tracker or material edits.",
+    "Scene and prefab stayed clean, so no scene/prefab save was needed."
+  ]
+}

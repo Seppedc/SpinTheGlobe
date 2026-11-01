@@ -1,0 +1,1 @@
+{"outcome":"project_error","summary":"Preflight and writer guard passed. Recorded failure details in the job output’s asset-report.md; no UI assets or review screenshot were created.","error":"Unity relay Unity_RunCommand returned UNEXPECTED_ERROR: Execution failed: No logs available. Required creation and isolated review evidence could not be completed."}

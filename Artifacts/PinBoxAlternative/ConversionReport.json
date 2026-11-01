@@ -1,0 +1,25 @@
+{
+  "source": "C:\\Users\\decra\\Downloads\\image_20k (4).glb",
+  "blender_version": "5.2.3 LTS",
+  "source_bounds_min": [
+    -0.45431965589523315,
+    -0.23807348310947418,
+    -0.37673863768577576
+  ],
+  "source_bounds_max": [
+    0.4694429337978363,
+    0.4242125451564789,
+    0.42190003395080566
+  ],
+  "normalized_dimensions": [
+    0.9237625598907471,
+    0.6622860431671143,
+    0.7986387014389038
+  ],
+  "vertices": 17580,
+  "faces": 20000,
+  "pivot": "bottom center",
+  "material_names": [
+    "RETOPO_MAT"
+  ]
+}

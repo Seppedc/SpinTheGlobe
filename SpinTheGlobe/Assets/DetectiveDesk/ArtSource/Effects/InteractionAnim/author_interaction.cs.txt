@@ -1,0 +1,43 @@
+using System;
+using System.IO;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
+internal class CommandScript:IRunCommand {
+ const string F="Assets/DetectiveDesk/AssetProduction/InteractionAnim/20261031_010617_08d3f30f";
+ void Curve(AnimationClip c,string path,string prop,params float[] pairs) { var keys=new Keyframe[pairs.Length/2]; for(int i=0;i<keys.Length;i++) keys[i]=new Keyframe(pairs[i*2],pairs[i*2+1],0,0); c.SetCurve(path,typeof(Transform),prop,new AnimationCurve(keys)); }
+ void Label(Transform parent,string text,Vector2 pos,int size) {var g=new GameObject("Caption",typeof(RectTransform),typeof(Text));g.transform.SetParent(parent,false); var rt=g.GetComponent<RectTransform>();rt.sizeDelta=new Vector2(860,100);rt.anchoredPosition=pos;var t=g.GetComponent<Text>(); t.font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");t.text=text;t.fontSize=size;t.alignment=TextAnchor.MiddleCenter;t.color=new Color(.83f,.72f,.47f);}
+ public void Execute(ExecutionResult result) {
+ var original=SceneManager.GetActiveScene(); bool dirty=original.isDirty; var temporary=default(Scene);
+ try {
+ temporary=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Additive); SceneManager.SetActiveScene(temporary);
+ var root=new GameObject("InteractionAnim_StandaloneBindings");
+ foreach(var n in new[]{"LidPivot","PinVisual","StatueVisual"}) {var g=new GameObject(n);g.transform.SetParent(root.transform,false);}
+ var lid=new AnimationClip{name="BoxLid_Open",legacy=true,frameRate=60,wrapMode=WrapMode.ClampForever};
+ Curve(lid,"LidPivot","localRotation.x",0,0,.85f,Mathf.Sin(-52.5f*Mathf.Deg2Rad));
+ Curve(lid,"LidPivot","localRotation.y",0,0,.85f,0);Curve(lid,"LidPivot","localRotation.z",0,0,.85f,0);Curve(lid,"LidPivot","localRotation.w",0,1,.85f,Mathf.Cos(-52.5f*Mathf.Deg2Rad));lid.EnsureQuaternionContinuity();
+ var pin=new AnimationClip{name="Pin_Pickup",legacy=true,frameRate=60,wrapMode=WrapMode.ClampForever};Curve(pin,"PinVisual","localPosition.y",0,0,.12f,.012f,.48f,.16f,.62f,.16f);
+ var statue=new AnimationClip{name="Statue_Placement",legacy=true,frameRate=60,wrapMode=WrapMode.ClampForever};Curve(statue,"StatueVisual","localPosition.y",0,.12f,.44f,0,.54f,.008f,.7f,0);
+ var clips=new[]{lid,pin,statue};var anim=root.AddComponent<Animation>();anim.playAutomatically=false;
+ foreach(var c in clips){AssetDatabase.CreateAsset(c,F+"/"+c.name+".anim");anim.AddClip(c,c.name);}
+ lid.SampleAnimation(root,.85f);if(Quaternion.Angle(root.transform.Find("LidPivot").localRotation,Quaternion.Euler(-105,0,0))>.1f)throw new Exception("Lid endpoint mismatch");
+ pin.SampleAnimation(root,.62f);if(Mathf.Abs(root.transform.Find("PinVisual").localPosition.y-.16f)>.0001f)throw new Exception("Pin endpoint mismatch");
+ statue.SampleAnimation(root,.7f);if(Mathf.Abs(root.transform.Find("StatueVisual").localPosition.y)>.0001f)throw new Exception("Statue endpoint mismatch");
+ foreach(var c in clips){foreach(var t in new[]{0f,c.length*.25f,c.length*.5f,c.length*.75f,c.length}) {c.SampleAnimation(root,t);foreach(var tr in root.GetComponentsInChildren<Transform>())if(float.IsNaN(tr.localPosition.y)||float.IsNaN(tr.localRotation.x))throw new Exception("Nonfinite pose");}}
+ foreach(var n in new[]{"LidPivot","PinVisual","StatueVisual"}) {var t=root.transform.Find(n);t.localPosition=Vector3.zero;t.localRotation=Quaternion.identity;}
+ PrefabUtility.SaveAsPrefabAsset(root,F+"/InteractionBindings.prefab");
+ var board=new GameObject("AnimationReviewBoard",typeof(RectTransform),typeof(Canvas),typeof(CanvasScaler));board.GetComponent<Canvas>().renderMode=RenderMode.ScreenSpaceOverlay;var scaler=board.GetComponent<CanvasScaler>();scaler.uiScaleMode=CanvasScaler.ScaleMode.ScaleWithScreenSize;scaler.referenceResolution=new Vector2(1200,900);
+ Label(board.transform,"DETECTIVE DESK  /  INTERACTION MOTION",new Vector2(0,300),30);
+ Label(board.transform,"BOX LID OPEN   /   0.85 s\nHinge X   0 to -105 degrees",new Vector2(0,140),28);
+ Label(board.transform,"PIN PICKUP   /   0.62 s\nLocal Y   0 to 0.16 m",new Vector2(0,-20),28);
+ Label(board.transform,"STATUE PLACEMENT   /   0.70 s\nLocal Y   0.12 m to contact + settle",new Vector2(0,-180),28);
+ Label(board.transform,"STANDALONE CLIPS  /  SCHEMATIC REVIEW\nProduction binding and timing approval pending",new Vector2(0,-340),21);
+ PrefabUtility.SaveAsPrefabAsset(board,F+"/AnimationReviewBoard.prefab");
+ File.WriteAllText(F+"/review_manifest.json","{\"kind\":\"animation\",\"asset_paths\":[\""+F+"/AnimationReviewBoard.prefab\",\""+F+"/InteractionBindings.prefab\",\""+F+"/BoxLid_Open.anim\",\""+F+"/Pin_Pickup.anim\",\""+F+"/Statue_Placement.anim\"],\"prefab_path\":\""+F+"/InteractionAnim_Review.prefab\"}");
+ File.WriteAllText(F+"/animation-validation.json","{\"status\":\"PASS\",\"clip_count\":3,\"sampled_poses\":15,\"endpoint_assertions\":3,\"play_mode_used\":false,\"production_binding_tested\":false}");
+ result.Log("Created three clips, binding prefab and schematic review board; endpoint and finite pose tests PASS.");
+ } finally {if(original.IsValid())SceneManager.SetActiveScene(original);if(temporary.IsValid()&&temporary.isLoaded)EditorSceneManager.CloseScene(temporary,true);if(original.isDirty!=dirty)throw new Exception("Original scene dirty state changed");}
+ }
+}

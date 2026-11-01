@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "blend": "ProductionLogs/AssetQueue/BuildStaging/20261031_010939_114b6b8a/FloorBackground/FloorBackground.blend",
+  "blend_sha256": "8d87830ded061241ae9c6393f6aabfabab03ebed3f8d805f2182e3f1c18bb17d",
+  "fbx": "ProductionLogs/AssetQueue/BuildStaging/20261031_010939_114b6b8a/FloorBackground/FloorBackground.fbx",
+  "fbx_sha256": "9345a8562b1716c0cdf32e63b2bd8c5db1daf71595b6f8c59c6bb0ec79e084d0",
+  "generator": "ProductionLogs/AssetQueue/BuildStaging/20261031_010939_114b6b8a/FloorBackground/build_asset.py",
+  "generator_sha256": "151b5a8640608aab3f976d64244a1aeda8c514ffecf5d5c77f79280ed48b4002",
+  "embedded_source_exact": true,
+  "mesh_count": 75,
+  "triangles": 8004,
+  "dimensions_m": [
+    5.0,
+    3.1000001430511475,
+    0.07999999821186066
+  ],
+  "root_at_origin": true,
+  "minimum_m": [
+    -2.5,
+    -1.5500000715255737,
+    0.0
+  ],
+  "maximum_m": [
+    2.5,
+    1.5500000715255737,
+    0.07999999821186066
+  ],
+  "materials": [
+    "Floor_MahoganyBorder",
+    "Floor_Mahogany_00",
+    "Floor_Mahogany_01",
+    "Floor_Mahogany_02",
+    "Floor_Mahogany_03",
+    "Floor_Mahogany_04",
+    "Floor_Mahogany_05",
+    "Floor_RecessedSeams"
+  ],
+  "moving_part_candidates": [],
+  "expected_dimensions_review": "Actual dimensions recorded; asset-specific fit remains reviewable, no visual approval implied."
+}

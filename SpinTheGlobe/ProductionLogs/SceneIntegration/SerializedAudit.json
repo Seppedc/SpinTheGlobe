@@ -1,0 +1,35 @@
+{
+  "Camera": {
+    "original_count": 1,
+    "unchanged": 1,
+    "changed_ids": []
+  },
+  "BoxCollider": {
+    "original_count": 30,
+    "unchanged": 30,
+    "changed_ids": []
+  },
+  "SphereCollider": {
+    "original_count": 6,
+    "unchanged": 6,
+    "changed_ids": []
+  },
+  "CapsuleCollider": {
+    "original_count": 14,
+    "unchanged": 14,
+    "changed_ids": []
+  },
+  "MeshCollider": {
+    "original_count": 0,
+    "unchanged": 0,
+    "changed_ids": []
+  },
+  "changed_original_MonoBehaviour_ids": [
+    "107391404",
+    "529614473",
+    "1165019663",
+    "1664474128"
+  ],
+  "scene": "Assets\\DetectiveDesk\\Generated\\DetectiveOffice.unity",
+  "backup": "Assets\\DetectiveDesk\\Backups\\SceneIntegration_20261031_013748\\DetectiveOffice_BeforeIntegration.unity"
+}

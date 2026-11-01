@@ -1,0 +1,1 @@
+PASS: three imported 512x512 textures; repeat wrap; base color sRGB; metallic/smoothness and normal linear; normal-map importer; supported URP/Lit material; metallic-map and normal keywords enabled. Read-only inspection after isolated review.

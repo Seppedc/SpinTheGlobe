@@ -1,0 +1,11 @@
+Globe integration is saved; Unity is clean in Edit Mode.
+
+- 80 meshes, nine URP/Lit materials, six reusable visual prefabs.
+- Camera image inspected: geography and brass holder are readable.
+- Runtime rotation, gear ratios, needle and HUD callback passed.
+- All 3,684 existing components preserved within authorized changes; Console has zero warnings/errors.
+- No Blender, gameplay script, queue or tracker changes. Physical mouse clicking was not tested.
+
+[Preview](Assets/DetectiveDesk/GlobeRework/preview.png) · [Report](Assets/DetectiveDesk/GlobeRework/asset-report.md) · [Validation](Assets/DetectiveDesk/GlobeRework/unity-validation.json)
+
+Visual status remains **Needs Review**. Unity writer released.

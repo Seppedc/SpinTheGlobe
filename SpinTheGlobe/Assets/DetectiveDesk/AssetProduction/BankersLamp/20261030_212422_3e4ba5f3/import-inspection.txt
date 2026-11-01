@@ -1,0 +1,12 @@
+Read-only imported FBX transform and renderer checks
+Shade_Axle localPosition=(0.000000, 0.000000, 0.000000) localScale=(1.000000, 1.000000, 1.000000)
+Shade_EndRim_-0.13 localPosition=(0.000000, 0.000000, 0.000000) localScale=(1.000000, 1.000000, 1.000000)
+Shade_EndRim_0.13 localPosition=(0.000000, 0.000000, 0.000000) localScale=(1.000000, 1.000000, 1.000000)
+Shade_Pivot localPosition=(0.000000, -0.020000, 0.361000) localScale=(1.000000, 1.000000, 1.000000)
+Shade_GreenGlass localPosition=(0.000000, 0.000000, 0.000000) localScale=(1.000000, 1.000000, 1.000000)
+Shade_PivotCap_-0.13 localPosition=(0.130000, -0.020000, 0.361000) localScale=(1.000000, 1.000000, 1.000000)
+Shade_PivotCap_0.13 localPosition=(-0.130000, -0.020000, 0.361000) localScale=(1.000000, 1.000000, 1.000000)
+Shade_Rim_-0.1 localPosition=(0.000000, 0.000000, 0.000000) localScale=(1.000000, 1.000000, 1.000000)
+Shade_Rim_0.054 localPosition=(0.000000, 0.000000, 0.000000) localScale=(1.000000, 1.000000, 1.000000)
+Base_SpunBrass bounds=Center: (0.000000, 0.037500, 0.000000), Extents: (0.083000, 0.034500, 0.083000)
+Shade_GreenGlass bounds=Center: (0.000000, 0.366500, 0.023000), Extents: (0.128000, 0.038500, 0.077000)

@@ -1,0 +1,22 @@
+{
+  "executable": "c:\\Users\\decra\\.vscode\\extensions\\openai.chatgpt-26.1021.22027-win32-x64\\bin\\windows-x86_64\\codex.EXE",
+  "args": [
+    "exec",
+    "--skip-git-repo-check",
+    "--json",
+    "--color",
+    "never",
+    "-C",
+    "C:\\Users\\decra\\source\\Antigravity\\SpinTheGlobe\\SpinTheGlobe",
+    "-c",
+    "mcp_servers.unitymcp.enabled=false",
+    "--output-schema",
+    "C:\\Users\\decra\\source\\Antigravity\\SpinTheGlobe\\SpinTheGlobe\\Tools\\AssetQueue\\worker-result.schema.json",
+    "--output-last-message",
+    "C:\\Users\\decra\\source\\Antigravity\\SpinTheGlobe\\SpinTheGlobe\\ProductionLogs\\AssetQueue\\runs\\20261031_011441_91ecff05\\result.json",
+    "--approve-for-me",
+    "-"
+  ],
+  "permissions": "workspace-write",
+  "automatic_review": true
+}

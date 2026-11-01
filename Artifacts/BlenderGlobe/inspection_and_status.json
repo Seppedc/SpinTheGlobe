@@ -1,0 +1,79 @@
+{
+  "unity_inspection_completed": true,
+  "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+  "existing_prefab": "Assets/DetectiveDesk/Globe/Prefabs/MechanicalGlobe_Modular.prefab",
+  "root": "DetectiveOffice/GameplayObjects/MechanicalGlobe",
+  "root_local_position": [
+    0.13400006294250488,
+    0.06879997253417969,
+    0.023600000888109207
+  ],
+  "root_local_rotation_degrees": [
+    0,
+    0,
+    0
+  ],
+  "root_local_scale": [
+    0.9200000166893005,
+    0.9200000166893005,
+    0.9200000166893005
+  ],
+  "root_box_collider_center": [
+    -1.2300000190734863,
+    1.8934999704360962,
+    -0.32999998331069946
+  ],
+  "root_box_collider_size": [
+    1.820000171661377,
+    2.0870001316070557,
+    1.3799999952316284
+  ],
+  "gameplay_scripts": [
+    "DetectiveDesk.DetectiveGame",
+    "DetectiveDesk.DeskInteractable",
+    "DetectiveDesk.DetectiveGlobeMechanism"
+  ],
+  "actual_click_game_binding_valid": true,
+  "actual_original_sphere_rotor_binding_valid": true,
+  "actual_gear_bindings_valid": true,
+  "actual_rpm_needle_binding_valid": true,
+  "globe_speed_degrees_per_second": 7,
+  "expected_rpm": 1.1666666667,
+  "urp_lit_supported": true,
+  "urp_lit_shader_errors": false,
+  "final_console_errors": 0,
+  "scene_dirty_at_final_check": false,
+  "blender_executable_found": true,
+  "blender_script_python_syntax_checked": true,
+  "standard_library_texture_generation_executed": true,
+  "generated_png_maps": 18,
+  "embedded_natural_earth_polygons_validated": 127,
+  "blender_geometry_execution_completed": true,
+  "fbx_export_completed": true,
+  "blend_file_created": true,
+  "unity_model_import_completed": true,
+  "new_unity_prefab_created": true,
+  "replacement_model_pivots_verified_in_blender_or_unity": true,
+  "replacement_model_urp_rendering_verified": true,
+  "original_globe_modified": true,
+  "original_scene_assets_modified": true,
+  "pending": [],
+  "blender_version": "5.2.3 LTS",
+  "blender_executable": "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe",
+  "original_gameplay_scripts_modified": false,
+  "original_gameplay_parent_preserved": true,
+  "original_meshes_retained_inactive": true,
+  "unrelated_scene_objects_changed": false,
+  "runtime_frame_validation_passed": true,
+  "scene_saved": true,
+  "active_mesh_renderers": 81,
+  "triangle_count": 155186,
+  "new_prefab": "Assets/DetectiveDesk/GlobeBlender/Prefabs/MechanicalGlobe_Blender.prefab",
+  "backup_scene": "Assets/DetectiveDesk/Generated/DetectiveOffice_PreBlenderSwap.unity",
+  "runtime_validation_report": "UnityRuntimeValidation.txt",
+  "screenshot": "BlenderGlobe_GameCamera.png",
+  "limitations": [
+    "Initial detailed mesh has 155186 triangles and 81 renderers; no LOD chain.",
+    "Unity-native pivot-normalized meshes must be regenerated after future FBX edits."
+  ]
+}

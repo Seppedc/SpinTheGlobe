@@ -1,0 +1,1 @@
+PASS: Blender visual replacement retains original 7 deg/s sphere rotation, moving layered gears, 1.17 RPM gauge, existing click/HUD interaction and reversible hover emission.

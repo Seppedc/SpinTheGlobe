@@ -1,0 +1,13 @@
+{
+    "status": "PASS",
+    "source_sha256": "538242e2fdf44534163bbe954ccf2a2a2e4720a8f7d336196fe9df5816d21323",
+    "prefab_path": "Assets/DetectiveDesk/AssetProduction/WhiskeyGlass/20261031_012255_d0b59e21/WhiskeyGlass_Review.prefab",
+    "screenshot_path": "Assets/DetectiveDesk/AssetProduction/WhiskeyGlass/20261031_012255_d0b59e21/preview.png",
+    "screenshot_sha256": "f0b7f719aae56957da7d58eca2fd4b6b3c7d29c4ba7e351a920d2e7ac8325833",
+    "review_scene": "Assets/DetectiveDesk/AssetReview/AssetReview.unity",
+    "protected_scene_unchanged": true,
+    "console_errors": 0,
+    "mesh_count": 5,
+    "renderer_count": 5,
+    "missing_materials": 0
+}

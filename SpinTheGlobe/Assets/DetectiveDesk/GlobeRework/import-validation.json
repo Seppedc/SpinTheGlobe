@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "anchors": {
+    "Sphere_RotationPivot": {
+      "error": 8.046627E-07,
+      "position": "(-1.4500000, 2.1500000, -0.3299992)"
+    },
+    "Pedestal_Assembly": {
+      "error": 3.27825546E-07,
+      "position": "(-1.4500000, 0.8600000, -0.3299997)"
+    },
+    "RPMGauge_Assembly": {
+      "error": 3.81655951E-07,
+      "position": "(-0.4900001, 1.4300000, -0.7499996)"
+    }
+  },
+  "mesh_count": 80,
+  "triangles": 272684,
+  "normal_transform": "inverse transpose; determinant checked; tangent handedness retained",
+  "material_count": 9,
+  "additive_scene_validation": true
+}

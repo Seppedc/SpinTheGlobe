@@ -1,0 +1,364 @@
+{
+  "status": "PASS",
+  "baseline_components": 4324,
+  "current_components": 4324,
+  "changed_components": [
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-4425091211219467380-2572629444254392148",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe",
+      "type": "DetectiveDesk.DetectiveGlobeMechanism",
+      "fields": [
+        "json.MonoBehaviour.feedbackRenderers",
+        "references.feedbackRenderers.Array.data[5]",
+        "references.feedbackRenderers.Array.data[6]",
+        "references.feedbackRenderers.Array.data[7]",
+        "references.feedbackRenderers.Array.data[8]",
+        "references.feedbackRenderers.Array.data[9]",
+        "references.feedbackRenderers.Array.data[10]",
+        "references.feedbackRenderers.Array.data[11]",
+        "references.feedbackRenderers.Array.data[12]",
+        "references.feedbackRenderers.Array.data[13]",
+        "references.feedbackRenderers.Array.data[14]",
+        "references.feedbackRenderers.Array.data[15]",
+        "references.feedbackRenderers.Array.data[16]",
+        "references.feedbackRenderers.Array.data[17]",
+        "references.feedbackRenderers.Array.data[18]",
+        "references.feedbackRenderers.Array.data[19]",
+        "references.feedbackRenderers.Array.data[20]",
+        "references.feedbackRenderers.Array.data[21]",
+        "references.feedbackRenderers.Array.data[22]",
+        "references.feedbackRenderers.Array.data[23]",
+        "references.feedbackRenderers.Array.data[24]",
+        "references.feedbackRenderers.Array.data[25]",
+        "references.feedbackRenderers.Array.data[26]",
+        "references.feedbackRenderers.Array.data[27]",
+        "references.feedbackRenderers.Array.data[28]",
+        "references.feedbackRenderers.Array.data[29]",
+        "references.feedbackRenderers.Array.data[30]",
+        "references.feedbackRenderers.Array.data[31]",
+        "references.feedbackRenderers.Array.data[32]",
+        "references.feedbackRenderers.Array.data[33]",
+        "references.feedbackRenderers.Array.data[34]",
+        "references.feedbackRenderers.Array.data[35]",
+        "references.feedbackRenderers.Array.data[36]",
+        "references.feedbackRenderers.Array.data[37]",
+        "references.feedbackRenderers.Array.data[38]",
+        "references.feedbackRenderers.Array.data[39]",
+        "references.feedbackRenderers.Array.data[40]",
+        "references.feedbackRenderers.Array.data[41]",
+        "references.feedbackRenderers.Array.data[42]",
+        "references.feedbackRenderers.Array.data[43]",
+        "references.feedbackRenderers.Array.data[44]",
+        "references.feedbackRenderers.Array.data[45]",
+        "references.feedbackRenderers.Array.data[46]",
+        "references.feedbackRenderers.Array.data[47]",
+        "references.feedbackRenderers.Array.data[48]",
+        "references.feedbackRenderers.Array.data[49]",
+        "references.feedbackRenderers.Array.data[50]",
+        "references.feedbackRenderers.Array.data[51]",
+        "references.feedbackRenderers.Array.data[52]",
+        "references.feedbackRenderers.Array.data[53]",
+        "references.feedbackRenderers.Array.data[54]",
+        "references.feedbackRenderers.Array.data[55]",
+        "references.feedbackRenderers.Array.data[56]",
+        "references.feedbackRenderers.Array.data[57]",
+        "references.feedbackRenderers.Array.data[58]",
+        "references.feedbackRenderers.Array.data[59]",
+        "references.feedbackRenderers.Array.data[60]",
+        "references.feedbackRenderers.Array.data[61]",
+        "references.feedbackRenderers.Array.data[62]",
+        "references.feedbackRenderers.Array.data[63]",
+        "references.feedbackRenderers.Array.data[64]",
+        "references.feedbackRenderers.Array.data[65]",
+        "references.feedbackRenderers.Array.data[66]",
+        "references.feedbackRenderers.Array.data[67]",
+        "references.feedbackRenderers.Array.data[68]",
+        "references.feedbackRenderers.Array.data[69]",
+        "references.feedbackRenderers.Array.data[70]",
+        "references.feedbackRenderers.Array.data[71]",
+        "references.feedbackRenderers.Array.data[72]",
+        "references.feedbackRenderers.Array.data[73]",
+        "references.feedbackRenderers.Array.data[74]",
+        "references.feedbackRenderers.Array.data[75]",
+        "references.feedbackRenderers.Array.data[76]",
+        "references.feedbackRenderers.Array.data[77]",
+        "references.feedbackRenderers.Array.data[78]",
+        "references.feedbackRenderers.Array.data[79]"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-7452603603210464167-900596972",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_12T_Pivot/GlobeRework_Gear_12T_Pivot/Gear_12T_AmberHub",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-1577754216756898892-900596972",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_12T_Pivot/GlobeRework_Gear_12T_Pivot/Gear_12T_RearLayer_AmberHub",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-2937852803063706878-900596972",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_12T_Pivot/GlobeRework_Gear_12T_Pivot/Gear_12T_RearLayer_Spoke_0",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-4912400672567328001-900596972",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_12T_Pivot/GlobeRework_Gear_12T_Pivot/Gear_12T_RearLayer_Spoke_1",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-5768391271525063810-900596972",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_12T_Pivot/GlobeRework_Gear_12T_Pivot/Gear_12T_RearLayer_ToothedWheel",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-283251526520836829-900596972",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_12T_Pivot/GlobeRework_Gear_12T_Pivot/Gear_12T_Spoke_0",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-6432968648197977684-900596972",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_12T_Pivot/GlobeRework_Gear_12T_Pivot/Gear_12T_Spoke_1",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-6901258751867125329-900596972",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_12T_Pivot/GlobeRework_Gear_12T_Pivot/Gear_12T_ToothedWheel",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-2521525311923113697-849517747",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_14T_Pivot/GlobeRework_Gear_14T_Pivot/Gear_14T_AmberHub",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-2010274640028546971-849517747",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_14T_Pivot/GlobeRework_Gear_14T_Pivot/Gear_14T_RearLayer_AmberHub",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-3895833195242963741-849517747",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_14T_Pivot/GlobeRework_Gear_14T_Pivot/Gear_14T_RearLayer_Spoke_0",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-5290302811931781223-849517747",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_14T_Pivot/GlobeRework_Gear_14T_Pivot/Gear_14T_RearLayer_Spoke_1",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-5288751166462790850-849517747",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_14T_Pivot/GlobeRework_Gear_14T_Pivot/Gear_14T_RearLayer_ToothedWheel",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-4740036783463003588-849517747",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_14T_Pivot/GlobeRework_Gear_14T_Pivot/Gear_14T_Spoke_0",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-3465767114480256515-849517747",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_14T_Pivot/GlobeRework_Gear_14T_Pivot/Gear_14T_Spoke_1",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-3399310003345066710-849517747",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_14T_Pivot/GlobeRework_Gear_14T_Pivot/Gear_14T_ToothedWheel",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-2082922264183884077-503687693",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_16T_Pivot/GlobeRework_Gear_16T_Pivot/Gear_16T_AmberHub",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-5071977430565532162-503687693",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_16T_Pivot/GlobeRework_Gear_16T_Pivot/Gear_16T_RearLayer_AmberHub",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-6299545117842520444-503687693",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_16T_Pivot/GlobeRework_Gear_16T_Pivot/Gear_16T_RearLayer_Spoke_0",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-4962028818293064479-503687693",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_16T_Pivot/GlobeRework_Gear_16T_Pivot/Gear_16T_RearLayer_Spoke_1",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-8648649931249148252-503687693",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_16T_Pivot/GlobeRework_Gear_16T_Pivot/Gear_16T_RearLayer_ToothedWheel",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-5096377337828984334-503687693",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_16T_Pivot/GlobeRework_Gear_16T_Pivot/Gear_16T_Spoke_0",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-3783387240856953701-503687693",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_16T_Pivot/GlobeRework_Gear_16T_Pivot/Gear_16T_Spoke_1",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-5825241433758685779-503687693",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_16T_Pivot/GlobeRework_Gear_16T_Pivot/Gear_16T_ToothedWheel",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-4961249215361868791-2572629444254392148",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/RPMGauge_Assembly/RPMGauge_NeedlePivot",
+      "type": "UnityEngine.Transform",
+      "fields": [
+        "json.Transform.m_LocalPosition.x",
+        "json.Transform.m_LocalPosition.y",
+        "json.Transform.m_LocalPosition.z"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-581488490773006730-413394206",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/GlobeRework_Static/Meridian_DegreeLabel_000",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-3801945013152777110-413394206",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/GlobeRework_Static/Meridian_DegreeLabel_030",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-639229504771619261-413394206",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/GlobeRework_Static/Meridian_DegreeLabel_060",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-3123586407660536695-413394206",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/GlobeRework_Static/Meridian_DegreeLabel_300",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    },
+    {
+      "id": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-192916995548293988-413394206",
+      "path": "DetectiveOffice/GameplayObjects/MechanicalGlobe/GlobeRework_Static/Meridian_DegreeLabel_330",
+      "type": "UnityEngine.MeshRenderer",
+      "fields": [
+        "json.MeshRenderer.m_Enabled"
+      ],
+      "authorized": true
+    }
+  ],
+  "failures": []
+}

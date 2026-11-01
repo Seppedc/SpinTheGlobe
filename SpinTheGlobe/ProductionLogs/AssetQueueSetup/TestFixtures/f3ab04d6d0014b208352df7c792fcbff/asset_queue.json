@@ -1,0 +1,26 @@
+{
+  "run_state": "Stopped",
+  "active_worker": null,
+  "last_error": "",
+  "assets": [
+    {
+      "id": "DD-01",
+      "slug": "Asset1",
+      "priority": "P1",
+      "pipeline": "Blender",
+      "dependencies": [],
+      "protected_existing": false,
+      "status": "Blocked",
+      "validated": false,
+      "dependency_available": false,
+      "attempt_count": 3,
+      "last_error": "Interrupted attempt; checkpoint and logs retained.",
+      "last_updated": "2026-10-30T15:36:32.680284+00:00",
+      "test_runs": [],
+      "history": [],
+      "notes": ""
+    }
+  ],
+  "updated_at": "2026-10-30T15:36:32.699478+00:00",
+  "max_assets_per_run": 3
+}

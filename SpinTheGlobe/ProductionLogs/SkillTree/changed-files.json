@@ -1,0 +1,141 @@
+{
+  "files": [
+    {
+      "path": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+      "change": "modified",
+      "before": "58283a8be945861f820da702588dcb83026f8c3c88ab3db4618a1973ea386e91",
+      "after": "1379bc73161ec0e5dd516c45a8c12e528f61c469344beef79bf47b0dd1d7e7c9"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Scripts/Gameplay/GameManager.cs",
+      "change": "modified",
+      "before": "5ecf6c366c18a97ef7409fc06ccc111d9f06aa35d925c36a0fc1ea646f3eb8b4",
+      "after": "ed6d0c4cad7884cea13c941fc9e84603168d2ef19dde6041af7d0f07132c9669"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Scripts/Gameplay/SkillTreeDefinition.cs",
+      "change": "added",
+      "after": "83529cf9abc15afc84c284b565abd5637c0e408dc04c57641336b6ebea374a88"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Scripts/Gameplay/SkillTreeDefinition.cs.meta",
+      "change": "added",
+      "after": "d6960a1465cac3d6acc1794fcc3c0083a368506037ead5f7c159736fce3b9c5d"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Scripts/Gameplay/SkillTreeLinkGraphic.cs",
+      "change": "added",
+      "after": "b7d4ed4ab723cae864800d96218cb2cb52e4a52d0d5aad104ea5099b33680c60"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Scripts/Gameplay/SkillTreeLinkGraphic.cs.meta",
+      "change": "added",
+      "after": "0e7d3b707ff76edce5ea679c08189ba266a570dde92bcc17a80fde3a93c742eb"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Scripts/Gameplay/SkillTreeNodeView.cs",
+      "change": "added",
+      "after": "1383d2dbda62c681f368527c8e7b26a5f7052308171f42d5b43d096b1e1494fc"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Scripts/Gameplay/SkillTreeNodeView.cs.meta",
+      "change": "added",
+      "after": "cc81e3716ed3d851e176edb251bc0282a75569783c5d1ca9974a4b481f5e5ece"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Scripts/Gameplay/SkillTreePanel.cs",
+      "change": "added",
+      "after": "e91a8fa2686a92afe4463f11c92a526ab6f7e43babc6be74718171df38a7ae65"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Scripts/Gameplay/SkillTreePanel.cs.meta",
+      "change": "added",
+      "after": "d2f2ed91cfaa0bc47ccc1c498128514ccac9045136fd54d4562abb382ae6f7c3"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Scripts/Editor/Gameplay/SkillTreeGraphValidation.cs",
+      "change": "added",
+      "after": "7fa1017ba10f702888206e92469537986ccd0e5ea0b93a244bf537eea6dab225"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Scripts/Editor/Gameplay/SkillTreeGraphValidation.cs.meta",
+      "change": "added",
+      "after": "e81a2720950f454e151688a5a86c0005cee1657e50294b459661dcaba476ae4a"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Scripts/Editor/Gameplay/SkillTreeIntegration.cs",
+      "change": "added",
+      "after": "a157bb51e9d1a3b4aa15e8e4f983f46689151ce4dc71181045ea59ce9a7b0f72"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Scripts/Editor/Gameplay/SkillTreeIntegration.cs.meta",
+      "change": "added",
+      "after": "22847c33e745bac355d39cf6cba78b1cc628a2ad55e2229027be983e558c997a"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Scripts/Editor/Gameplay/SkillTreePreservationValidation.cs",
+      "change": "added",
+      "after": "53efd24528f259db9d943ffd14cf121abaf60e07622f566121d4210cc7b4251b"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Scripts/Editor/Gameplay/SkillTreePreservationValidation.cs.meta",
+      "change": "added",
+      "after": "ee9c751f834d80151fbbab8d93b7ca3d94680b3f1d15859b5c8e4a2543d7c6fc"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Scripts/Editor/Gameplay/SkillTreeRuntimeValidation.cs",
+      "change": "added",
+      "after": "08476007fc4757d81d9c603094148b0470d78130dea3d7ed661debcca409a96d"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Scripts/Editor/Gameplay/SkillTreeRuntimeValidation.cs.meta",
+      "change": "added",
+      "after": "3119192fc7fdd479db2757e533bbbc09b6c3fb6b83bc603b79c16faf9da983e2"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Gameplay/SkillTree/DefaultSkillTree.asset",
+      "change": "added",
+      "after": "86da8cbf6fd6c6caaaebd8deb43e1c1c9df863f10a910d9ff3233b79d3d6ef65"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Gameplay/SkillTree/DefaultSkillTree.asset.meta",
+      "change": "added",
+      "after": "ef6afde2bb5d10f5df8ef46908133ba294557418f4a01e974e9796bdc67ccd32"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Gameplay/SkillTree/README.md",
+      "change": "added",
+      "after": "f456ddb76d2a49163c5983fd747da76a6acf97714e7a31ca477ed729208b7303"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Gameplay/SkillTree/README.md.meta",
+      "change": "added",
+      "after": "7819cad1e44ec13e3ec0c6edcac5b0352e12f83ce65ded0baeb59ad66ffb355a"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Gameplay/SkillTree/SkillTreePanel.prefab",
+      "change": "added",
+      "after": "4e9839f0da403525733f39eb346b2ded709f4498eafc2faa592a6d8dccba6a86"
+    },
+    {
+      "path": "Assets/DetectiveDesk/Gameplay/SkillTree/SkillTreePanel.prefab.meta",
+      "change": "added",
+      "after": "42326132fb46153e52464b3c0edf6b1c43d7ed1d9c6be0a58f8d866081598721"
+    }
+  ],
+  "logs": "ProductionLogs/SkillTree contains new evidence/scripts/captures; original full regression also refreshed ProductionLogs/Gameplay runtime-validation.json and its two standard captures.",
+  "parentAdditions": [
+    "Assets/DetectiveDesk/Scripts/Editor/Gameplay/SkillTreeEntryIntegration.cs",
+    "Assets/DetectiveDesk/Gameplay/SkillTree/preview.png",
+    "Assets/DetectiveDesk/Gameplay/SkillTree/unity-validation.json",
+    "Assets/DetectiveDesk/Gameplay/SkillTree/asset-report.md"
+  ],
+  "parentSceneAddition": "GameUI/UpgradesButton only; original HUD positions retained",
+  "parentMetadataUpdates": [
+    "AGENTS.md",
+    "asset_queue.json",
+    "asset_registry.json",
+    "assets.csv",
+    "Asset_Tracker.xlsx"
+  ]
+}

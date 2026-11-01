@@ -1,0 +1,10 @@
+2026-10-30T15:36:32.769917+00:00 Asset attempt failed: Asset1: Asset-specific test failure
+2026-10-30T15:36:32.772732+00:00 Asset attempt failed: Asset1: Asset-specific test failure
+2026-10-30T15:36:32.776345+00:00 Asset attempt failed: Asset1: Asset-specific test failure
+2026-10-30T15:36:32.778994+00:00 Asset attempt failed: Asset2: Asset-specific test failure
+2026-10-30T15:36:32.781408+00:00 Asset attempt failed: Asset2: Asset-specific test failure
+2026-10-30T15:36:32.785295+00:00 Asset attempt failed: Asset2: Asset-specific test failure
+2026-10-30T15:36:32.788851+00:00 Asset attempt failed: Asset3: Asset-specific test failure
+2026-10-30T15:36:32.791211+00:00 Asset attempt failed: Asset3: Asset-specific test failure
+2026-10-30T15:36:32.793714+00:00 Asset attempt failed: Asset3: Asset-specific test failure
+2026-10-30T15:36:32.797889+00:00 Bounded run ended; processed 3 asset(s). No overnight run is active.

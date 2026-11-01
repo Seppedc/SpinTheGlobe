@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "mesh_count": 80,
+  "triangles": 272684,
+  "zero_area_triangles": 0,
+  "uv_and_materials_all_meshes": true,
+  "unit_mesh_scales": true,
+  "dimensions_blender_m": [
+    1.8382746279239655,
+    1.360011249780655,
+    2.1739131212234497
+  ],
+  "embedded_entry_legacy_and_revision_exact": true,
+  "packed_images": 24,
+  "relative_texture_paths": true,
+  "cartography_size": [
+    2048,
+    1024
+  ],
+  "sphere_center_and_radius_preserved": true,
+  "pedestal_assembly_origin_preserved": true,
+  "base_seated_at_world_y": 0.815,
+  "semantic_pivots": [
+    "BlenderMechanicalGlobe_Visuals",
+    "Sphere_RotationPivot",
+    "Meridian_Assembly",
+    "Meridian_BroadGraduatedBrassBand",
+    "Pedestal_SteppedSculptedBrass",
+    "Pedestal_GaugeSupportArch",
+    "Gear_12T_Pivot",
+    "Gear_16T_Pivot",
+    "Gear_14T_Pivot",
+    "RPMGauge_NeedlePivot"
+  ],
+  "fbx_reimport_mesh_count": 80,
+  "fbx_dimensions_m": [
+    1.8382746279239655,
+    1.360011488199234,
+    2.1739131212234497
+  ],
+  "fbx_pivots_uv_materials_retained": true
+}

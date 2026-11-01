@@ -1,0 +1,13 @@
+{
+    "status": "PASS",
+    "source_sha256": "a5accdc759d5aa934b61b456afab2b07a3b0cd7656db953eec12271d4b331fdb",
+    "prefab_path": "Assets/DetectiveDesk/AssetProduction/InteractionAnim/20261031_010617_08d3f30f/InteractionAnim_Review.prefab",
+    "screenshot_path": "Assets/DetectiveDesk/AssetProduction/InteractionAnim/20261031_010617_08d3f30f/preview.png",
+    "screenshot_sha256": "77072d6ff0c893ddb6ec833bfa59b0249e97d0709a11639c937803900c94e289",
+    "review_scene": "Assets/DetectiveDesk/AssetReview/AssetReview.unity",
+    "protected_scene_unchanged": true,
+    "console_errors": 0,
+    "mesh_count": 0,
+    "renderer_count": 0,
+    "missing_materials": 0
+}

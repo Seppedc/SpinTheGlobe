@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "embedded_source_exact": true,
+  "embedded_helper_exact": true,
+  "mesh_count": 168,
+  "triangles": 73960,
+  "zero_area_triangles": 0,
+  "blend": "Assets/DetectiveDesk/ArtSource/Gameplay/PinLauncher/PinLauncher.blend",
+  "blend_sha256": "49d5bcd71e423f5df576fd39626a39fe2de4a94e81c289f78b11636ac95e94e5",
+  "fbx": "Assets/DetectiveDesk/ArtSource/Gameplay/PinLauncher/PinLauncher.fbx",
+  "fbx_sha256": "b9a5360119c4ca758a506e5061b51d540a898a28129f7b839a4cdc08db40e318",
+  "generator": "Assets/DetectiveDesk/ArtSource/Gameplay/PinLauncher/build_asset.py",
+  "generator_sha256": "8293504bba5a9f350a62653f7d020abf351df7aeb8cfb3ef9cacbd8a880288e5",
+  "helper": "Assets/DetectiveDesk/ArtSource/Gameplay/PinLauncher/pinlauncher_detail.py",
+  "helper_sha256": "40351272e736b4cdf9b5dc107170b1a37b997e5e11f18c7ca5396bdc13d9c14f",
+  "independent_validation": "Assets/DetectiveDesk/PinLauncherRework/source-validation.json"
+}

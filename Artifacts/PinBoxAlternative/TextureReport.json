@@ -1,0 +1,18 @@
+{
+  "source_maps": {
+    "detail_normal": [
+      2048,
+      2048
+    ],
+    "retopo_albedo": [
+      2048,
+      2048
+    ],
+    "detail_mr": [
+      1024,
+      1024
+    ]
+  },
+  "packing": "glTF B metallic -> URP R; 1 - glTF G roughness -> URP A; no albedo/normal repainting",
+  "missing_textures": []
+}

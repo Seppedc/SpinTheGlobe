@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "scope": "Final read-only Unity MCP check",
+  "checked_utc": "2026-10-31T22:44:41.642Z",
+  "editor": {
+    "IsPlaying": false,
+    "IsPaused": false,
+    "IsCompiling": false,
+    "IsUpdating": false,
+    "ApplicationPath": "C:/Program Files/Unity/Hub/Editor/6000.4.7f1/Editor/Unity.exe",
+    "ApplicationContentsPath": "C:/Program Files/Unity/Hub/Editor/6000.4.7f1/Editor/Data",
+    "TimeSinceStartup": 5561.2080759
+  },
+  "console": {
+    "success": true,
+    "message": "Retrieved 0 log entries.",
+    "data": []
+  },
+  "preservation": "[Log] Scene: Assets/DetectiveDesk/Generated/DetectiveOffice.unity dirty=False loaded=True\n[Log] Prefab stage: none\n[Log] Camera: 93784 MainCamera position=(0.0000000, 2.3800000, -5.8000000) rotation=(0.0434973, 0.0000000, 0.0000000, 0.9990536) scale=(1.0000000, 1.0000000, 1.0000000) fov=52 ortho=False size=5 enabled=True depth=0",
+  "automatic_compilation": "Assembly-CSharp-Editor.dll timestamp is newer than GlobeIntegration.cs; no refresh required.",
+  "scene_camera_unchanged_during_check": true,
+  "prefab_stage": "none",
+  "asset_mutations": false,
+  "integration_methods_called": false,
+  "runtime_tests_repeated": false,
+  "limitations": [
+    "Initial transient inspection snippet failed to compile due to unavailable Newtonsoft reference; subsequent query succeeded. Intermediate query reported obsolete API diagnostics; final query compiled without diagnostics. Dedicated Unity console remained empty; never cleared.",
+    "Prefab assets were not edited or loaded for mutation. No full prefab structural revalidation performed."
+  ]
+}

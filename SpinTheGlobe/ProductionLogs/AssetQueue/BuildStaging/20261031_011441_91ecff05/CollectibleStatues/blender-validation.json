@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "blend": "ProductionLogs/AssetQueue/BuildStaging/20261031_011441_91ecff05/CollectibleStatues/CollectibleStatues.blend",
+  "blend_sha256": "a2874bed4b693a98f83676697d14ef5c91ea0a2ce1d826a8855251ecec2f8b43",
+  "fbx": "ProductionLogs/AssetQueue/BuildStaging/20261031_011441_91ecff05/CollectibleStatues/CollectibleStatues.fbx",
+  "fbx_sha256": "d3f5e65e6cb57ea103c5a34592aa3ede3502d32f3a70b69360d972d32c818b05",
+  "generator": "ProductionLogs/AssetQueue/BuildStaging/20261031_011441_91ecff05/CollectibleStatues/build_asset.py",
+  "generator_sha256": "f25ba0fcc0771c1b072e82193af0d3d30c9e6f48119c2ae46804045f4190ea0a",
+  "embedded_source_exact": true,
+  "mesh_count": 72,
+  "triangles": 60832,
+  "dimensions_m": [
+    0.2839999794960022,
+    0.07400000095367432,
+    0.1274999976158142
+  ],
+  "root_at_origin": true,
+  "minimum_m": [
+    -0.1419999897480011,
+    -0.03700000047683716,
+    0.0
+  ],
+  "maximum_m": [
+    0.1419999897480011,
+    0.03700000047683716,
+    0.1274999976158142
+  ],
+  "materials": [
+    "Statues_AgedBronze",
+    "Statues_BurgundyPlinth",
+    "Statues_DarkPatina",
+    "Statues_PolishedBrass"
+  ],
+  "moving_part_candidates": [],
+  "expected_dimensions_review": "Actual dimensions recorded; asset-specific fit remains reviewable, no visual approval implied."
+}

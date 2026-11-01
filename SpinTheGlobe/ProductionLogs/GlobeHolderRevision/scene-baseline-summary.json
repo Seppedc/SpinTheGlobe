@@ -1,0 +1,12 @@
+{
+  "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+  "components": 4324,
+  "needle_identity": "GlobalObjectId_V1-2-de62bb745eb8dd44c93d66a6d4b694f1-4961249215361868791-2572629444254392148",
+  "needle_parent": "DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/RPMGauge_Assembly",
+  "needle_position": [
+    0.0,
+    1.1920929E-07,
+    -0.09399998
+  ],
+  "root_prefab": "Assets/DetectiveDesk/GlobeBlender/Prefabs/MechanicalGlobe_Blender.prefab"
+}

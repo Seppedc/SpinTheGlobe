@@ -1,0 +1,13 @@
+{
+    "status": "PASS",
+    "source_sha256": "9b56cdc0e352d42e9fc63859d28e0f834113d7ede73f628b3f983b2b79dad6b2",
+    "prefab_path": "Assets/DetectiveDesk/AssetProduction/StatueSlots/20261030_191201_78b848b4/StatueSlots_Review.prefab",
+    "screenshot_path": "Assets/DetectiveDesk/AssetProduction/StatueSlots/20261030_191201_78b848b4/preview.png",
+    "screenshot_sha256": "d544546522f6d5782245ff2989568e897add43951f4d2eac84b71bc6ba7727fd",
+    "review_scene": "Assets/DetectiveDesk/AssetReview/AssetReview.unity",
+    "protected_scene_unchanged": true,
+    "console_errors": 0,
+    "mesh_count": 24,
+    "renderer_count": 24,
+    "missing_materials": 0
+}

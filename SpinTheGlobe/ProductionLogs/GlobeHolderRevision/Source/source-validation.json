@@ -1,0 +1,50 @@
+{
+  "status": "PASS",
+  "scope": "Blender/FBX only; Unity integration pending",
+  "mesh_count": 51,
+  "triangles": 235110,
+  "zero_area_triangles": 0,
+  "holder_span_degrees": 180,
+  "holder_on_player_left_only": true,
+  "holder_closed_cut_faces": true,
+  "exposed_gear_meshes": 0,
+  "gauge_pivot_unity": [
+    -1.23,
+    1.18,
+    -0.8
+  ],
+  "gauge_original_radius_m": 0.16,
+  "dimensions_blender_m": [
+    1.3969745635986328,
+    1.360011249780655,
+    2.1739131212234497
+  ],
+  "sphere_mesh_hashes": {
+    "Sphere_DarkMetalShell": "85d6dc41100286ec5e2bc9d062df7d6ed3114bab52f8e88bd0e58562b2453e90",
+    "Sphere_EngravedContinentSections_0": "31e27815e71bed5fbac37d469bcf1b86e996c6627c1f9dfaa4de95fe8759025c",
+    "Sphere_EngravedContinentSections_1": "b75d44db061992a0d6ac24923fce3597cd268c0f1323582d9284f163fa11d166",
+    "Sphere_EngravedContinentSections_2": "45e5c96ff79606fdfbe29718b6d52252f85360978c97d557fb8e8aa09343ad5c",
+    "Sphere_EngravedContinentSections_3": "a12a7da88d67f5c50c08b3c4e94955ff27894c316d7c6d14e0a1506a3b3d9534",
+    "Sphere_EngravedContinentSections_4": "ca27e9d7a11f2d840d0924cc19cb5aa2064ba17268a693bf9509aa44f57c8665",
+    "Sphere_EngravedContinentSections_5": "dbc8461bbebf672c113844255eb4cbb45d5c00b85f8b4035dbe1b3d6279612e6",
+    "Sphere_EngravedContinentSections_6": "cc0deb4c723515acecc61593d46a96ac512f5851e86b4a7f8568684139b2f6ad",
+    "Sphere_EngravedContinentSections_7": "89e45b435e3936b8813761dca07ba78388d15aa8882cc84d335d847d4be5bbad",
+    "Sphere_RaisedCoastlineInlay_00": "2d1e3b4b4525473dbb01d917a07f5df958d8cc874affb8c8c46aac042852f41a",
+    "Sphere_RaisedCoastlineInlay_01": "33d348aeed8950c49ad42702817718439071e10a25d471537aa2c214c07ed0a8",
+    "Sphere_RaisedCoastlineInlay_02": "e8f17b00dc525edde4247afa426b6ef7542fa8343a7f5ec15f303cfdd07a2ddd",
+    "Sphere_RaisedCoastlineInlay_03": "07236459f041e8053d8f9a626b78ac732f9c44a5d61e0ffa9d597198b1fa4a5c"
+  },
+  "embedded_sources_exact": true,
+  "uv_and_materials_all_meshes": true,
+  "packed_images": 24,
+  "unity_applied": false,
+  "approved_sphere_geometry_uv_material_names_transforms_exact": true,
+  "all_original_packed_texture_payloads_exact": true,
+  "fbx_reimport_mesh_count": 51,
+  "fbx_dimensions_m": [
+    1.3969745635986328,
+    1.360011488199234,
+    2.1739131212234497
+  ],
+  "fbx_uv_materials_retained": true
+}

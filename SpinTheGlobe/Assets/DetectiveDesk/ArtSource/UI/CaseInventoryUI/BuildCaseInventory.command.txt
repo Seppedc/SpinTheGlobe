@@ -1,0 +1,50 @@
+using System;
+using System.IO;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+internal class CommandScript : IRunCommand {
+ const string Out="Assets/DetectiveDesk/AssetProduction/CaseInventoryUI/20261031_015725_aad613fe";
+ Color ink=new Color(.075f,.087f,.083f), panel=new Color(.12f,.135f,.12f), brass=new Color(.66f,.53f,.31f), paper=new Color(.87f,.83f,.71f), muted=new Color(.60f,.63f,.56f);
+ Font font;
+ GameObject Box(string name, Transform parent,float x,float y,float w,float h,Color c) {
+ var g=new GameObject(name,typeof(RectTransform),typeof(CanvasRenderer),typeof(UnityEngine.UI.Image)); g.transform.SetParent(parent,false);
+ var r=(RectTransform)g.transform;r.anchorMin=r.anchorMax=new Vector2(0,1);r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(w,h);g.GetComponent<UnityEngine.UI.Image>().color=c;g.GetComponent<UnityEngine.UI.Image>().raycastTarget=false;return g;
+ }
+ void Label(string name,Transform p,string text,float x,float y,float w,float h,int size,Color color) {
+ var g=new GameObject(name,typeof(RectTransform),typeof(CanvasRenderer),typeof(Text));g.transform.SetParent(p,false);var r=(RectTransform)g.transform;r.anchorMin=r.anchorMax=new Vector2(0,1);r.pivot=new Vector2(0,1);r.anchoredPosition=new Vector2(x,-y);r.sizeDelta=new Vector2(w,h);
+ var t=g.GetComponent<Text>();t.font=font;t.text=text;t.fontSize=size;t.color=color;t.alignment=TextAnchor.UpperLeft;t.raycastTarget=false;t.horizontalOverflow=HorizontalWrapMode.Wrap;t.verticalOverflow=VerticalWrapMode.Truncate;
+ }
+ void Row(Transform p,string id,string title,string meta,float y,bool selected) {
+ var g=Box(id,p,24,y,292,94,selected?new Color(.28f,.20f,.18f):panel);if(selected)Box("SelectedAccent",g.transform,0,0,3,94,brass);
+ Label("CaseNumber",g.transform,id,16,12,255,20,12,brass);Label("Title",g.transform,title,16,34,260,26,19,paper);Label("Metadata",g.transform,meta,16,67,260,20,12,muted);
+ }
+ public void Execute(ExecutionResult result) {
+ var original=SceneManager.GetActiveScene();bool dirty=original.isDirty;Scene temp=default(Scene);
+ try { Directory.CreateDirectory(Out);font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");if(!font)throw new Exception("Built-in font unavailable");
+ temp=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Additive);SceneManager.SetActiveScene(temp);
+ var root=new GameObject("CaseInventoryUI",typeof(RectTransform),typeof(Canvas),typeof(CanvasScaler),typeof(GraphicRaycaster));
+ root.GetComponent<Canvas>().renderMode=RenderMode.ScreenSpaceOverlay;var scaler=root.GetComponent<CanvasScaler>();scaler.uiScaleMode=CanvasScaler.ScaleMode.ScaleWithScreenSize;scaler.referenceResolution=new Vector2(1200,900);scaler.matchWidthOrHeight=.5f;
+ var bg=Box("CaseDesk",root.transform,0,0,1200,900,ink);var p=bg.transform;
+ Box("TopRule",p,24,70,1152,1,brass);Label("Brand",p,"DETECTIVE DESK   /   CASE ARCHIVE",24,27,850,30,18,paper);Label("PreviewState",p,"SAMPLE RECORDS",990,30,185,22,12,brass);
+ Label("CaseHeading",p,"CASE FILES",24,103,290,25,15,brass);Label("CaseCount",p,"03 records  /  01 active",24,135,292,23,13,muted);
+ Row(p,"CASE 014","The missing courier","ACTIVE  /  3 evidence items",184,true);Row(p,"CASE 009","A letter from Antwerp","OPEN  /  awaiting review",290,false);Row(p,"CASE 003","The silent platform","ARCHIVED  /  resolved",396,false);
+ Box("ColumnRule",p,340,102,1,734,new Color(.26f,.28f,.24f));
+ Label("CaseCode",p,"ACTIVE CASE   /   014",372,103,750,24,14,brass);Label("CaseTitle",p,"The missing courier",372,140,780,52,36,paper);Label("CaseSummary",p,"A sealed dispatch never reached the station. Review the collected\nevidence and trace the courier's final route.",372,204,770,62,18,muted);
+ Box("EvidencePanel",p,372,296,804,278,panel);Label("EvidenceHeader",p,"EVIDENCE   /   01 OF 03",394,314,740,22,13,brass);
+ var folder=Box("FolderIcon",p,400,369,130,147,new Color(.64f,.55f,.37f));Box("FolderTab",folder.transform,0,-12,55,12,new Color(.64f,.55f,.37f));Label("FolderStamp",folder.transform,"014\n\nDISPATCH",12,22,110,100,17,ink);
+ Label("EvidenceTitle",p,"Sealed dispatch",558,360,585,35,26,paper);Label("EvidenceBody",p,"DOCUMENT  /  STATION OFFICE\n\nThe envelope carries a broken wax seal.\nA departure time is underlined: 21:40.",558,410,590,116,17,paper);
+ Label("PinsHeader",p,"PIN INVENTORY",372,612,550,28,15,brass);Label("PinsHint",p,"Collected markers for your investigation",372,646,750,28,15,muted);
+ string[] names={"COURIER","STATION","DISPATCH","EMPTY SLOT"};string[] marks={"01","02","03","--"};
+ for(int i=0;i<4;i++){var g=Box("PinSlot_"+i,p,372+i*206,694,186,120,panel);Box("PinHead",g.transform,16,18,36,36,i==3?new Color(.23f,.26f,.23f):brass);Label("PinNumber",g.transform,marks[i],23,25,32,28,17,ink);Label("PinName",g.transform,names[i],16,78,164,24,13,i==3?muted:paper);}
+ Box("FooterRule",p,24,843,1152,1,brass);Label("Footer",p,"ARCHIVE VIEW   /   DETECTIVE DESK                                    Evidence preserved. Every detail matters.",24,862,1130,24,13,muted);
+ Canvas.ForceUpdateCanvases();string path=Out+"/CaseInventoryUI.prefab";PrefabUtility.SaveAsPrefabAsset(root,path);
+ File.WriteAllText(Out+"/review_manifest.json","{\"kind\":\"ui\",\"asset_paths\":[\""+path+"\"],\"prefab_path\":\""+Out+"/CaseInventoryUI_Review.prefab\"}");
+ File.WriteAllText(Out+"/ui-authoring-validation.json","{\"status\":\"PASS\",\"reference_width\":1200,\"reference_height\":900,\"canvas_count\":1,\"text_count\":"+root.GetComponentsInChildren<Text>(true).Length+",\"image_count\":"+root.GetComponentsInChildren<UnityEngine.UI.Image>(true).Length+",\"interactive\":false,\"original_dirty_before\":"+dirty.ToString().ToLowerInvariant()+"}");
+ result.Log("Saved standalone UI with {0} text labels; no runtime handlers or dependency edits.",root.GetComponentsInChildren<Text>(true).Length);
+ } finally {if(original.IsValid())SceneManager.SetActiveScene(original);if(temp.IsValid())EditorSceneManager.CloseScene(temp,true);}
+ if(original.isDirty!=dirty)throw new Exception("Original scene dirty state changed");result.Log("Original scene and dirty state restored.");
+ }
+}

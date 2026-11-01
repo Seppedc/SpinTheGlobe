@@ -1,0 +1,13 @@
+{
+    "status": "PASS",
+    "source_sha256": "019f3669eb9f11b3a60a912c07bebac880c73b1d9c95a43fea9e90c5e57cbaab",
+    "prefab_path": "Assets/DetectiveDesk/AssetProduction/WhiskeyBottle/20261031_012732_edb92053/WhiskeyBottle_Review.prefab",
+    "screenshot_path": "Assets/DetectiveDesk/AssetProduction/WhiskeyBottle/20261031_012732_edb92053/preview.png",
+    "screenshot_sha256": "ebb81862094eda7ede1aba86df1b3a1c5c7f3b41268c3f8eb82f72f907202aee",
+    "review_scene": "Assets/DetectiveDesk/AssetReview/AssetReview.unity",
+    "protected_scene_unchanged": true,
+    "console_errors": 0,
+    "mesh_count": 2,
+    "renderer_count": 2,
+    "missing_materials": 0
+}

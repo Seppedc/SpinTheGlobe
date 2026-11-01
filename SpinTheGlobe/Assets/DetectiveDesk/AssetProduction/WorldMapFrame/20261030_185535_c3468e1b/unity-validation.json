@@ -1,0 +1,13 @@
+{
+    "status": "PASS",
+    "source_sha256": "31f0300877a8ef92b18c8e9414be892a4b4f0dbf1c72ceba37849bc5c1fc1e8a",
+    "prefab_path": "Assets/DetectiveDesk/AssetProduction/WorldMapFrame/20261030_185535_c3468e1b/WorldMapFrame_Review.prefab",
+    "screenshot_path": "Assets/DetectiveDesk/AssetProduction/WorldMapFrame/20261030_185535_c3468e1b/preview.png",
+    "screenshot_sha256": "b2ce91149a63a23cadd7e3e9a9800d7b716251e4bf4eaab3461d4ac6a6818c72",
+    "review_scene": "Assets/DetectiveDesk/AssetReview/AssetReview.unity",
+    "protected_scene_unchanged": true,
+    "console_errors": 0,
+    "mesh_count": 4,
+    "renderer_count": 4,
+    "missing_materials": 0
+}

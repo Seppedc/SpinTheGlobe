@@ -1,0 +1,43 @@
+using UnityEngine;
+
+namespace DetectiveDesk
+{
+    public class DeskInteractable : MonoBehaviour
+    {
+        public enum Action { Globe, Statue, PinBox, Launcher, Files, Stamp }
+        public Action action;
+        public DetectiveGame game;
+        Renderer[] renderers;
+        MaterialPropertyBlock block;
+        bool hover;
+        void Awake() { renderers = GetComponentsInChildren<Renderer>(); block = new MaterialPropertyBlock(); }
+        void OnMouseEnter() { hover = true; SetGlow(true); }
+        void OnMouseExit() { hover = false; SetGlow(false); }
+        void OnDisable() { if (hover) SetGlow(false); }
+        void SetGlow(bool value)
+        {
+            if (renderers == null) return;
+            foreach (var r in renderers)
+            {
+                if (!r || r is ParticleSystemRenderer) continue;
+                r.GetPropertyBlock(block);
+                block.SetColor("_EmissionColor", value ? new Color(.15f, .10f, .025f) : Color.black);
+                r.SetPropertyBlock(block);
+            }
+        }
+        void OnMouseDown()
+        {
+            if (UnityEngine.EventSystems.EventSystem.current && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return;
+            if (!game) return;
+            switch (action)
+            {
+                case Action.Globe: game.InspectGlobe(); break;
+                case Action.Statue: game.InspectStatue(); break;
+                case Action.PinBox: game.SelectPin(); break;
+                case Action.Launcher: game.FirePin(); break;
+                case Action.Files: game.OpenFiles(); break;
+                case Action.Stamp: game.SolveCase(); break;
+            }
+        }
+    }
+}

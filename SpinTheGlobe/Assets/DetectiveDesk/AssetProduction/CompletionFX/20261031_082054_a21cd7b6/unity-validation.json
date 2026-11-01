@@ -1,0 +1,13 @@
+{
+    "status": "PASS",
+    "source_sha256": "1cbbb6379475549689bb3dcf21e5aae2d01b5c3829ceaeb2af51aecf23a35ca9",
+    "prefab_path": "Assets/DetectiveDesk/AssetProduction/CompletionFX/20261031_082054_a21cd7b6/CompletionFX_Review.prefab",
+    "screenshot_path": "Assets/DetectiveDesk/AssetProduction/CompletionFX/20261031_082054_a21cd7b6/preview.png",
+    "screenshot_sha256": "92cbfb6d9c8cce85495c2bf643092375ae5aace40141123e2379a98a98e65911",
+    "review_scene": "Assets/DetectiveDesk/AssetReview/AssetReview.unity",
+    "protected_scene_unchanged": true,
+    "console_errors": 0,
+    "mesh_count": 0,
+    "renderer_count": 0,
+    "missing_materials": 0
+}

@@ -1,0 +1,13 @@
+{
+    "status": "PASS",
+    "source_sha256": "05ee1b3e1090ef83ebed4461217863943c7fbd21811db22810a1659194264e37",
+    "prefab_path": "Assets/DetectiveDesk/AssetProduction/BankersLamp/20261030_211921_9b8024e2/BankersLamp_Review.prefab",
+    "screenshot_path": "Assets/DetectiveDesk/AssetProduction/BankersLamp/20261030_211921_9b8024e2/preview.png",
+    "screenshot_sha256": "e3dd61adfe447a4f5aaef5b2a1448512dfaf7c1413b5889b869791df05a32a0b",
+    "review_scene": "Assets/DetectiveDesk/AssetReview/AssetReview.unity",
+    "protected_scene_unchanged": true,
+    "console_errors": 0,
+    "mesh_count": 41,
+    "renderer_count": 41,
+    "missing_materials": 0
+}

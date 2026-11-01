@@ -1,0 +1,14 @@
+{
+  "source": "Unity_ReadConsole",
+  "action": "Get",
+  "types": [
+    "Warning",
+    "Error"
+  ],
+  "returnedEntries": 0,
+  "clearedByWorker": false,
+  "historicalNoSubscriptionObservedThisWorker": false,
+  "bridgeAuthenticatedAndWorking": true,
+  "temporaryCommandAdvisory": "Unity 6000.4.7f1: Object.FindFirstObjectByType<GameManager> obsolete; prefer FindAnyObjectByType. Command succeeded.",
+  "correctedEarlierFailure": "SkillTreeLinkGraphic missing CanvasRenderer; fixed and 77 checks passed."
+}

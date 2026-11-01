@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "blend": "ProductionLogs/AssetQueue/BuildStaging/20261030_164251_1c1ef7d2/DetectiveDesk/DetectiveDesk.blend",
+  "blend_sha256": "d5b5d4134e993b93e79a15034e564279fefef66e9a010784c868cafabf8c5a9a",
+  "fbx": "ProductionLogs/AssetQueue/BuildStaging/20261030_164251_1c1ef7d2/DetectiveDesk/DetectiveDesk.fbx",
+  "fbx_sha256": "b5a1dcbb35b16f29964b1ae492e5bffc40483a0bd239f6c975cfd372307888da",
+  "generator": "ProductionLogs/AssetQueue/BuildStaging/20261030_164251_1c1ef7d2/DetectiveDesk/build_asset.py",
+  "generator_sha256": "8fb0722e00dfd5eee8b78fa5f33ab2c634988e675077f9e8088e37d525aefbb5",
+  "embedded_source_exact": true,
+  "mesh_count": 8,
+  "triangles": 2400,
+  "dimensions_m": [
+    2.799999952316284,
+    1.149999976158142,
+    0.10599999874830246
+  ],
+  "root_at_origin": true,
+  "minimum_m": [
+    -1.399999976158142,
+    -0.574999988079071,
+    0.0
+  ],
+  "maximum_m": [
+    1.399999976158142,
+    0.574999988079071,
+    0.10599999874830246
+  ],
+  "materials": [
+    "DD01_AgedBrass",
+    "DD01_Endgrain",
+    "DD01_Walnut"
+  ],
+  "moving_part_candidates": [],
+  "expected_dimensions_review": "Actual dimensions recorded; asset-specific fit remains reviewable, no visual approval implied."
+}

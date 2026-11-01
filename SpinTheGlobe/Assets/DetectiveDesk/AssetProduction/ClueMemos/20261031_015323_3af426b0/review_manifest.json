@@ -1,0 +1,13 @@
+{
+    "prefab_path":  "Assets/DetectiveDesk/AssetProduction/ClueMemos/20261031_015323_3af426b0/ClueMemosReview.prefab",
+    "asset_paths":  [
+                        "Assets/DetectiveDesk/AssetProduction/ClueMemos/20261031_015323_3af426b0/ContactSheet.png",
+                        "Assets/DetectiveDesk/AssetProduction/ClueMemos/20261031_015323_3af426b0/01_Appointment.png",
+                        "Assets/DetectiveDesk/AssetProduction/ClueMemos/20261031_015323_3af426b0/02_Timetable.png",
+                        "Assets/DetectiveDesk/AssetProduction/ClueMemos/20261031_015323_3af426b0/03_Reminder.png",
+                        "Assets/DetectiveDesk/AssetProduction/ClueMemos/20261031_015323_3af426b0/01_Appointment.mat",
+                        "Assets/DetectiveDesk/AssetProduction/ClueMemos/20261031_015323_3af426b0/02_Timetable.mat",
+                        "Assets/DetectiveDesk/AssetProduction/ClueMemos/20261031_015323_3af426b0/03_Reminder.mat"
+                    ],
+    "kind":  "texture"
+}

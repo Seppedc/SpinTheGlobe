@@ -1,0 +1,84 @@
+using System;
+using System.IO;
+using System.Linq;
+using UnityEngine;
+using UnityEditor;
+using UnityEditor.Animations;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
+internal class CommandScript:IRunCommand {
+ const string F="Assets/DetectiveDesk/AssetProduction/MechanicalAnim/20261031_010433_ee07414a";
+ AnimationClip Clip(string name,bool loop) {var c=new AnimationClip{name=name,frameRate=60};var s=AnimationUtility.GetAnimationClipSettings(c);s.loopTime=loop;AnimationUtility.SetAnimationClipSettings(c,s);return c;}
+ void Curve(AnimationClip c,string path,string prop,AnimationCurve curve){AnimationUtility.SetEditorCurve(c,EditorCurveBinding.FloatCurve(path,typeof(Transform),prop),curve);}
+ public void Execute(ExecutionResult result){
+ var original=SceneManager.GetActiveScene();bool dirty=original.isDirty;var temp=default(Scene);
+ try{
+ temp=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Additive);SceneManager.SetActiveScene(temp);
+ var root=new GameObject("MechanicalAnim_Standalone");
+ var globeAsset=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/DetectiveDesk/GlobeBlender/Prefabs/MechanicalGlobe_Blender_Visuals.prefab");
+ var launcherAsset=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/DetectiveDesk/AssetProduction/PinLauncher/20261030_190710_5307019b/PinLauncher_Review.prefab");
+ if(!globeAsset||!launcherAsset)throw new Exception("Missing inspected review visual source");
+ var globe=(GameObject)PrefabUtility.InstantiatePrefab(globeAsset,temp);globe.transform.SetParent(root.transform,false);globe.name="Globe";
+ var launcher=(GameObject)PrefabUtility.InstantiatePrefab(launcherAsset,temp);launcher.transform.SetParent(root.transform,false);launcher.name="Launcher";launcher.transform.localPosition=new Vector3(.58f,0,0);
+ foreach(var b in root.GetComponentsInChildren<MonoBehaviour>(true))UnityEngine.Object.DestroyImmediate(b);
+ foreach(var a in root.GetComponentsInChildren<Animator>(true))UnityEngine.Object.DestroyImmediate(a);
+ var gears=Clip("Clockwork_28s_Seamless",true);
+ var all=root.GetComponentsInChildren<Transform>(true);
+ var teeth=new[]{12,16,14};var turns=new[]{28f,-21f,-24f};
+ for(int i=0;i<3;i++){
+ var t=all.Single(x=>x.name=="Gear_"+teeth[i]+"T_Pivot");
+ var p=AnimationUtility.CalculateTransformPath(t,root.transform);
+ // Rotation is around the source axle, local Z; preserve the other rest Euler angles.
+ var e=t.localEulerAngles;
+ Curve(gears,p,"localEulerAnglesRaw.x",AnimationCurve.Constant(0,28,e.x));
+ Curve(gears,p,"localEulerAnglesRaw.y",AnimationCurve.Constant(0,28,e.y));
+ Curve(gears,p,"localEulerAnglesRaw.z",AnimationCurve.Linear(0,e.z,28,e.z+360*turns[i]));
+ }
+ var needle=all.Single(x=>x.name=="RPMGauge_NeedlePivot");
+ var np=AnimationUtility.CalculateTransformPath(needle,root.transform);var ne=needle.localEulerAngles;
+ var gauge=Clip("RPM_Sweep_Demonstration",true);
+ Curve(gauge,np,"localEulerAnglesRaw.x",AnimationCurve.Constant(0,4,ne.x));
+ Curve(gauge,np,"localEulerAnglesRaw.y",AnimationCurve.Constant(0,4,ne.y));
+ Curve(gauge,np,"localEulerAnglesRaw.z",new AnimationCurve(new Keyframe(0,ne.z-50),new Keyframe(1.6f,ne.z+50),new Keyframe(2.1f,ne.z+46),new Keyframe(4,ne.z-50)));
+ var plunger=all.Single(x=>x.name=="Plunger_Translation_Pivot");
+ var pp=AnimationUtility.CalculateTransformPath(plunger,root.transform);var pos=plunger.localPosition;
+ var recoil=Clip("Launcher_Recoil_OneShot",false);
+ Curve(recoil,pp,"m_LocalPosition.x",AnimationCurve.Constant(0,.45f,pos.x));
+ Curve(recoil,pp,"m_LocalPosition.y",AnimationCurve.Constant(0,.45f,pos.y));
+ Curve(recoil,pp,"m_LocalPosition.z",new AnimationCurve(new Keyframe(0,pos.z),new Keyframe(.055f,pos.z-.035f),new Keyframe(.11f,pos.z+.004f),new Keyframe(.32f,pos.z),new Keyframe(.45f,pos.z)));
+ foreach(var c in new[]{gears,gauge,recoil})AssetDatabase.CreateAsset(c,F+"/"+c.name+".anim");
+ var controller=AnimatorController.CreateAnimatorControllerAtPath(F+"/MechanicalAnim_Demo.controller");
+ var clips=new[]{gears,gauge,recoil};
+ for(int i=0;i<3;i++){
+ if(i>0)controller.AddLayer(clips[i].name);
+ var layers=controller.layers;layers[i].defaultWeight=1;controller.layers=layers;
+ var state=controller.layers[i].stateMachine.AddState(clips[i].name);state.motion=clips[i];state.writeDefaultValues=false;controller.layers[i].stateMachine.defaultState=state;
+ }
+ // Attach Animator after direct clip validation to avoid competing default poses.
+ int bindings=0;
+ foreach(var c in clips){
+ foreach(var binding in AnimationUtility.GetCurveBindings(c)){
+ if(!root.transform.Find(binding.path))throw new Exception("Unresolved binding "+binding.path);
+ bindings++;var curve=AnimationUtility.GetEditorCurve(c,binding);
+ foreach(var k in curve.keys)if(float.IsNaN(k.value)||float.IsInfinity(k.value))throw new Exception("Non-finite key");
+ }
+ c.SampleAnimation(root,0);c.SampleAnimation(root,c.length*.5f);c.SampleAnimation(root,c.length);
+ }
+ recoil.SampleAnimation(root,.055f);
+ if(Mathf.Abs(plunger.localPosition.z-(pos.z-.035f))>.0001f)throw new Exception("Recoil sample failed");
+ recoil.SampleAnimation(root,.45f);
+ if((plunger.localPosition-pos).sqrMagnitude>1e-8)throw new Exception("Recoil does not return to rest");
+ result.Log("Recoil rest="+pos.ToString("F6")+" sampled return="+plunger.localPosition.ToString("F6"));
+ var animator=root.AddComponent<Animator>();animator.runtimeAnimatorController=controller;animator.applyRootMotion=false;
+ // Reset all demonstration poses before saving.
+ gears.SampleAnimation(root,0);gauge.SampleAnimation(root,0);recoil.SampleAnimation(root,0);
+ PrefabUtility.SaveAsPrefabAsset(root,F+"/MechanicalAnim_Standalone.prefab");
+ AssetDatabase.SaveAssetIfDirty(controller);foreach(var c in clips)AssetDatabase.SaveAssetIfDirty(c);
+ File.WriteAllText(F+"/animation-validation.json","{\"status\":\"PASS\",\"clips\":3,\"resolved_curve_bindings\":"+bindings+",\"sampled_start_mid_end\":true,\"recoil_peak_m\":0.035,\"recoil_return_to_rest\":true,\"play_mode_used\":false,\"production_integrated\":false}");
+ File.WriteAllText(F+"/review_manifest.json","{\"kind\":\"animation\",\"asset_paths\":[\""+F+"/MechanicalAnim_Standalone.prefab\",\""+F+"/"+gears.name+".anim\",\""+F+"/"+gauge.name+".anim\",\""+F+"/"+recoil.name+".anim\",\""+F+"/MechanicalAnim_Demo.controller\"],\"prefab_path\":\""+F+"/MechanicalAnim_Review.prefab\"}");
+ result.Log("Authored 3 clips; resolved "+bindings+" curve bindings; sampled clips and verified recoil return.");
+ }finally{SceneManager.SetActiveScene(original);if(temp.IsValid()&&temp.isLoaded)EditorSceneManager.CloseScene(temp,true);}
+ if(original.isDirty!=dirty)throw new Exception("Original scene dirty state changed");
+ result.Log("Original active scene and dirty state preserved.");
+ }
+}

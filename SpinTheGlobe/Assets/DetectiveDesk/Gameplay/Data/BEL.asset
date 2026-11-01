@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45c6e84b4b565a346b0daf69287afccb, type: 3}
+  m_Name: BEL
+  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.CountryData
+  id: BEL
+  displayName: Belgium
+  latitude: 50.8
+  longitude: 4.5
+  baseValue: 12
+  boundaries:
+  - points:
+    - {x: 6.156658, y: 50.803722}
+    - {x: 6.043073, y: 50.12805}
+    - {x: 5.782417, y: 50.09033}
+    - {x: 5.674052, y: 49.529484}
+    - {x: 4.799222, y: 49.985374}
+    - {x: 4.286023, y: 49.907497}
+    - {x: 3.588184, y: 50.37899}
+    - {x: 3.123252, y: 50.78036}
+    - {x: 2.658422, y: 50.79685}
+    - {x: 2.513573, y: 51.148506}
+    - {x: 3.314971, y: 51.34578}
+    - {x: 3.315011, y: 51.345776}
+    - {x: 3.314971, y: 51.345757}
+    - {x: 4.047071, y: 51.267258}
+    - {x: 4.973991, y: 51.475025}
+    - {x: 5.606976, y: 51.037296}
+    - {x: 6.156658, y: 50.803722}
+    hole: 0
+    polygon: 0

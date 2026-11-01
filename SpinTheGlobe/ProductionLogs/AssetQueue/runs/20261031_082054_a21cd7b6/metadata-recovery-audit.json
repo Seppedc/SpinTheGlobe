@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "single_addition": "Assets/DetectiveDesk/AssetProduction/CompletionFX/20261031_020322_2b7a1560.meta",
+  "sha256": "12522b98b61ea4a3e631fc42774111d37c7b8995f558a874681c5b2840b4994b",
+  "old_attempt_files_verified": [
+    "Assets/DetectiveDesk/AssetProduction/CompletionFX/20261031_020322_2b7a1560/protected-scene-before.txt",
+    "Assets/DetectiveDesk/AssetProduction/CompletionFX/20261031_020322_2b7a1560/unity-preflight.json"
+  ],
+  "original_checkpoint_preserved": true,
+  "all_other_protected_files_verified": true,
+  "final_dedicated_console_errors": 0,
+  "at": "2026-10-31T07:23:42.751086+00:00"
+}

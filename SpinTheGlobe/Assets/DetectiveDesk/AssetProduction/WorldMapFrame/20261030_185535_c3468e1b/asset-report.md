@@ -1,0 +1,19 @@
+﻿# DD-06 WorldMapFrame asset report
+
+Prepared 2026-10-30; Needs Review, no human approval or completion implied.
+
+Provenance: inspected AGENTS.md, BLENDER_ASSET_STANDARD.md, blender-unity-assets/SKILL.md, registry DD-06 and Excel tracker rows (read via ZIP/XML; openpyxl unavailable), source README, References/REFERENCE_BRIEF.md, References/SceneLayout.png and existing build_asset.py plus its shared helper. Existing source was a generic shared-library starter, with no prior detailed model in this asset folder. Reference image used only for direction and wide, slim frame proportions; no photograph/map was embedded.
+
+Changed only this asset's build_asset.py in the source tree. It now builds four independently named mitered rails (BottomRail, RightStile, TopRail, LeftStile), a multi-step wooden molding profile, beveled inner trim, recessed rear rebate and fine edge easing. No fake map insert or corner decorations. Generator is self-contained with no helper dependencies. Stable ROOT_WorldMapFrame at origin, Z up, front -Y, bottom-center mounting pivot; static frame has no moving parts.
+
+Executed isolated Blender 5.2.3 build and same-source FBX export in ProductionLogs/AssetQueue/BuildStaging/20261030_185535_c3468e1b/WorldMapFrame. First validation caught a source BOM mismatch; normalized generator encoding, rebuilt and reran validator successfully. Both Blender processes fully exited before promotion. All coordinator guards passed. Editable WorldMapFrame.blend, exact external build_asset.py and embedded GENERATE_WorldMapFrame.py are present in this output folder. No shared helper changes or tracker/queue edits.
+
+blender-validation.json: PASS; exact embedded source, 4 nonempty meshes, 864 evaluated triangles, three named Principled materials, applied scale, valid hierarchy, root origin, metric units and base Z=0. Dimensions: 1.600 x 0.040899 x 0.650 m (X/Y/Z). Nominal aperture 1.528 x 0.578 m. No external textures. Exported FBX hash matches Unity review source hash. See blender-preview.png (inspected).
+
+Unity relay guidelines and required preflight executed successfully. Promotion occurred only after Blender exit. AssetQueueReview.Review executed successfully with isolated review assets; unity-validation.json reports PASS, 4 meshes/renderers, zero missing materials, zero Console errors, protected_scene_unchanged=true. New URP materials and WorldMapFrame_Review.prefab are isolated here. Review scene was managed exclusively by helper. No gameplay replacement or integration performed. Screenshot preview.png was inspected: open rectangular frame and inner trim visible, no pink materials.
+
+Console inspection: zero Error entries. Existing warnings include deprecated Input Manager and relay executable signature collection; shadow atlas downscaling was logged during review. Existing Unity AI NoSubscription message is informational and did not block relay commands or import. Blender printed a thumbnail-cache write warning and future node API deprecations; saved blend, FBX and validator render succeeded. No permissions were broadened.
+
+Limitations: this is an asset-specific modeled review candidate, not a photorealistic hero completion. Flat mahogany/bevel/rebate colors lack wood grain, UV texture authoring and wear. WorldMap dependency unavailable; final aperture fit, wall mounting, scale and production camera appearance are unverified. Reference proportion is approximate and requires human visual approval. No active gameplay camera or scene was modified. Remaining review: approve proportions, wood appearance and map fit before any integration or Complete decision.
+
+Evidence in this directory: WorldMapFrame.blend, WorldMapFrame.fbx, build_asset.py, blender-validation.json, blender-preview.png, unity-preflight.json, unity-validation.json, review_manifest.json, WorldMapFrame_Review.prefab, Materials/, preview.png and protected-scene-before.txt.

@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "source_mesh_count": 168,
+  "dimensions_m": [
+    0.21300000697374344,
+    0.29959049820899963,
+    0.28790798783302307
+  ],
+  "uv_and_materials_all_meshes": true,
+  "unit_mesh_scales": true,
+  "root_at_base_origin": true,
+  "embedded_entry_and_helper_exact": true,
+  "packed_exported_maps": 12,
+  "semantic_pivots": [
+    "ROOT_PinLauncher",
+    "Turret_Yaw_Pivot",
+    "Elevation_Pivot",
+    "Recoil_Slide_Pivot",
+    "Handwheel_Rotation_Pivot",
+    "MuzzleTip",
+    "BreechOrigin",
+    "Plunger_Translation_Pivot"
+  ],
+  "fbx_reimport_mesh_count": 168,
+  "fbx_dimensions_m": [
+    0.21300000697374344,
+    0.2995905429124832,
+    0.2879080065518771
+  ],
+  "fbx_semantic_pivots_retained": true
+}

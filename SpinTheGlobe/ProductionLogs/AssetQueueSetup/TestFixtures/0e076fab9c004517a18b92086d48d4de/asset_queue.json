@@ -1,0 +1,60 @@
+{
+  "run_state": "Stopped",
+  "active_worker": null,
+  "last_error": "",
+  "assets": [
+    {
+      "id": "DD-01",
+      "slug": "Asset1",
+      "priority": "P1",
+      "pipeline": "Blender",
+      "dependencies": [],
+      "protected_existing": false,
+      "status": "Blocked",
+      "validated": false,
+      "dependency_available": false,
+      "attempt_count": 3,
+      "last_error": "Asset-specific test failure",
+      "last_updated": "2026-10-30T15:41:01.366969+00:00",
+      "test_runs": [],
+      "history": [],
+      "notes": ""
+    },
+    {
+      "id": "DD-02",
+      "slug": "Asset2",
+      "priority": "P1",
+      "pipeline": "Blender",
+      "dependencies": [],
+      "protected_existing": false,
+      "status": "Blocked",
+      "validated": false,
+      "dependency_available": false,
+      "attempt_count": 3,
+      "last_error": "Asset-specific test failure",
+      "last_updated": "2026-10-30T15:41:01.374413+00:00",
+      "test_runs": [],
+      "history": [],
+      "notes": ""
+    },
+    {
+      "id": "DD-03",
+      "slug": "Asset3",
+      "priority": "P1",
+      "pipeline": "Blender",
+      "dependencies": [],
+      "protected_existing": false,
+      "status": "Blocked",
+      "validated": false,
+      "dependency_available": false,
+      "attempt_count": 3,
+      "last_error": "Asset-specific test failure",
+      "last_updated": "2026-10-30T15:41:01.381694+00:00",
+      "test_runs": [],
+      "history": [],
+      "notes": ""
+    }
+  ],
+  "max_assets_per_run": 3,
+  "updated_at": "2026-10-30T15:41:01.384026+00:00"
+}

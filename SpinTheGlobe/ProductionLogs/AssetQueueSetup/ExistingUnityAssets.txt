@@ -1,0 +1,8 @@
+Assets/DetectiveDesk/AssetFurnaceStamp/AssetFurnace_SOLVED_Stamp_Visual.prefab | meshes=1 | materials=1 | missing shaders/materials=0 | components=3
+Assets/DetectiveDesk/Globe/Prefabs/MechanicalGlobe_Modular.prefab | meshes=42 | materials=6 | missing shaders/materials=0 | components=141
+Assets/DetectiveDesk/GlobeBlender/Prefabs/MechanicalGlobe_Blender.prefab | meshes=123 | materials=12 | missing shaders/materials=0 | components=398
+Assets/DetectiveDesk/GlobeBlender/Prefabs/MechanicalGlobe_Blender_Visuals.prefab | meshes=81 | materials=6 | missing shaders/materials=0 | components=257
+Assets/DetectiveDesk/ImportedPinBox/ImportedPinBox_Visual.prefab | meshes=1 | materials=1 | missing shaders/materials=0 | components=3
+Assets/DetectiveDesk/PinBoxAlternative/PinBoxAlternative_Visual.prefab | meshes=1 | materials=1 | missing shaders/materials=0 | components=3
+Assets/DetectiveDesk/PinCoffer/DetectivePinCoffer.prefab | meshes=107 | materials=16 | missing shaders/materials=0 | components=402
+Assets/DetectiveDesk/Prefabs/CollectiblePin.prefab | meshes=8 | materials=5 | missing shaders/materials=0 | components=26

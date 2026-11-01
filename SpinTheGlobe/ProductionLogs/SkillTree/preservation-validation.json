@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "checkedObjects": 1579,
+  "checkedComponents": 4601,
+  "checkedFields": 172018,
+  "differences": [],
+  "missingScripts": 0,
+  "missingRefs": 0,
+  "prefabInternalReferencesValid": true,
+  "progressRestored": true,
+  "objectCount": 1857,
+  "componentCount": 5517,
+  "sceneCount": 1,
+  "dirty": false,
+  "editMode": true,
+  "physics": "PhysX",
+  "defaultGraphValid": true,
+  "nodes": 39,
+  "limitations": "Baseline stores curve/gradient/mask values as type labels; scalar children compared where serialized. Authorized Upgrades subtree excluded from field comparison; all original identities still required."
+}

@@ -1,0 +1,13 @@
+{
+    "status": "PASS",
+    "source_sha256": "b13f997dc229c0e1a010949476fe3ef19d948c14d62da79be65bef8a6420c562",
+    "prefab_path": "Assets/DetectiveDesk/AssetProduction/DeskStructure/20261030_164602_c30cb534/DeskStructure_Review.prefab",
+    "screenshot_path": "Assets/DetectiveDesk/AssetProduction/DeskStructure/20261030_164602_c30cb534/preview.png",
+    "screenshot_sha256": "11a0f44354e846276171ecd065ba81cd16b7d627dbddf8e512338883802e0597",
+    "review_scene": "Assets/DetectiveDesk/AssetReview/AssetReview.unity",
+    "protected_scene_unchanged": true,
+    "console_errors": 0,
+    "mesh_count": 78,
+    "renderer_count": 78,
+    "missing_materials": 0
+}

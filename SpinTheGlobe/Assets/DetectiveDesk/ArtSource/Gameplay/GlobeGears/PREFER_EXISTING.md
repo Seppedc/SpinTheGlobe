@@ -1,0 +1,3 @@
+The current globe mechanisms are part of the original-derived MechanicalGlobe pipeline. Read `../MechanicalGlobe/README.md`, update its detailed generator, and preserve original driven pivot identities/ratios. The local generic `build_asset.py` remains historical starter content; do not use it to replace the completed mechanisms.
+
+Current Unity gear visual modules: `Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_12T_Pivot.prefab`, `GlobeRework_Gear_16T_Pivot.prefab`, and `GlobeRework_Gear_14T_Pivot.prefab`. Refer to the new globe report and actual scene bindings. Original legacy assets remain preserved.

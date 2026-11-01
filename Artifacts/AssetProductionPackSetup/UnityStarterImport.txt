@@ -1,0 +1,2 @@
+.blend imported: 8 meshes, 1504 triangles, zero missing/incompatible materials; no scene instantiation.
+.fbx imported: 8 meshes, 1504 triangles, zero missing/incompatible materials; no scene instantiation.

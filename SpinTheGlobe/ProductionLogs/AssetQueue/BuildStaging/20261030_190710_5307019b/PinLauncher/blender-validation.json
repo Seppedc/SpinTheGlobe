@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "blend": "ProductionLogs/AssetQueue/BuildStaging/20261030_190710_5307019b/PinLauncher/PinLauncher.blend",
+  "blend_sha256": "5ddd50917d87d8b6b104f02a619001bdccb1314c458b75e112c3fd2337b3447f",
+  "fbx": "ProductionLogs/AssetQueue/BuildStaging/20261030_190710_5307019b/PinLauncher/PinLauncher.fbx",
+  "fbx_sha256": "18dea6a8ed778e733d1565752378fbc68d3004c26cad974bfc228901ac1ec556",
+  "generator": "ProductionLogs/AssetQueue/BuildStaging/20261030_190710_5307019b/PinLauncher/build_asset.py",
+  "generator_sha256": "66e1d85c208400857ca9c7a9c6e2e0c9d86d43a611f1e879632bdea0fbc82cfd",
+  "embedded_source_exact": true,
+  "mesh_count": 28,
+  "triangles": 39456,
+  "dimensions_m": [
+    0.18000000715255737,
+    0.2800000011920929,
+    0.09549999982118607
+  ],
+  "root_at_origin": true,
+  "minimum_m": [
+    -0.09000000357627869,
+    -0.14000000059604645,
+    0.0
+  ],
+  "maximum_m": [
+    0.09000000357627869,
+    0.14000000059604645,
+    0.09549999982118607
+  ],
+  "materials": [
+    "PL_AgedBrass",
+    "PL_GreenEnamel",
+    "PL_IvoryMarks",
+    "PL_Mahogany",
+    "PL_RubberFeet",
+    "PL_SpringSteel"
+  ],
+  "moving_part_candidates": [
+    "Plunger_Translation_Pivot"
+  ],
+  "expected_dimensions_review": "Actual dimensions recorded; asset-specific fit remains reviewable, no visual approval implied."
+}

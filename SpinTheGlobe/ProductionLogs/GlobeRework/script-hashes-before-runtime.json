@@ -1,0 +1,17 @@
+{
+  "Assets\\TutorialInfo\\Scripts\\Readme.cs": "c09c93844f93eb252a6fb39c222d169c63a63e96008fd040b9e7628c3e7ccc2e",
+  "Assets\\TutorialInfo\\Scripts\\Editor\\ReadmeEditor.cs": "d2023934bc2be23af69cd930ade85eff41c5db0a6f6666b05324b975befdb5b5",
+  "Assets\\DetectiveDeskUnityStarter\\Assets\\DetectiveDesk\\Scripts\\Editor\\DetectiveSceneBuilder.cs": "6f01fa2f0d080a0a97610bb306abcd79469cd7a1352048ed1676f882c5717a8b",
+  "Assets\\DetectiveDeskUnityStarter\\Assets\\DetectiveDesk\\Scripts\\Runtime\\DeskInteractable.cs": "6431c8ad3fdda2a434c6b9bdc93be4d1e55aeb9f55a748f08534fd96c2e1f1bd",
+  "Assets\\DetectiveDeskUnityStarter\\Assets\\DetectiveDesk\\Scripts\\Runtime\\DetectiveGame.cs": "fe83688ba70867b1f8759f13fc0a08389faadef33b3c88323151a329d518db02",
+  "Assets\\DetectiveDeskUnityStarter\\Assets\\DetectiveDesk\\Scripts\\Runtime\\DetectiveGlobeMechanism.cs": "e86152e3011ae825a4211f0550e628c4c86a02517cb41d13c7a6153461d4adc5",
+  "Assets\\DetectiveDesk\\Scripts\\Editor\\AssetQueueReview.cs": "176c89094b8e0822a2e6ceb06ad8f51b45493ac18c1c27969606842a4bc85d1e",
+  "Assets\\DetectiveDesk\\Scripts\\Editor\\PinCofferPopulationTools.cs": "b3cbec44d5e1abaa3163575b0f58576664e5f607d03fbcb0660963838d6e2a45",
+  "Assets\\DetectiveDesk\\Scripts\\Editor\\PinCofferProductionPipeline.cs": "bed07e23bbae9736448daa2d30bc0048f8f14d3cc79ea23b16d14abff3c82c2b",
+  "Assets\\DetectiveDesk\\Scripts\\Editor\\PinSkinEditor.cs": "b9ea052b49570afc45f58690ae74768c3b9b663a0390f96c0926a4724e8dbd57",
+  "Assets\\DetectiveDesk\\Scripts\\Runtime\\DeskAssetPresentation.cs": "95a966c218a0294399b0cad74040d4e7c2fb601e64f689b8eb7b3cc5f1e4a41a",
+  "Assets\\DetectiveDesk\\Scripts\\Runtime\\DeskEvidenceInteraction.cs": "f8fa9c04a2c79924c0d8931f9fa49285fb88f34ce220c84b926e3aec614a262f",
+  "Assets\\DetectiveDesk\\Scripts\\Runtime\\PinCofferSlot.cs": "040395af43a8c5fa3a68a05f1c6ffe648df3c82a4b6851d016ca0fb8febe67ab",
+  "Assets\\DetectiveDesk\\Scripts\\Runtime\\PinSkin.cs": "13bdcf443f2130a70ffb88b4387033c8048ca851f0a2c9e33e2122fa74ec0b3c",
+  "Assets\\DetectiveDesk\\PinLauncherRework\\Editor\\PinLauncherCallbackSmoke.cs": "82e2ea4db93c85760f5fa6e87098a2665fc57afdc3ec843a3b5a0542b0f5809c"
+}

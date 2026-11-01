@@ -1,0 +1,3 @@
+The current RPM gauge and controls are generated with the original-derived MechanicalGlobe. Read `../MechanicalGlobe/README.md`; preserve the original RPM needle target, local Z axis, calibration and controller. The local generic `build_asset.py` is historical starter content, not the production source.
+
+Current Unity visual modules: `Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Static.prefab` (housing, dial and support) and `GlobeRework_Needle.prefab`. Original gameplay component and references remain in the existing globe scene root. See `Assets/DetectiveDesk/GlobeRework/asset-report.md` and the runtime/preservation evidence before editing.

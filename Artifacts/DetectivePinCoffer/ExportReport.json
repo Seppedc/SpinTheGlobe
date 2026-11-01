@@ -1,0 +1,21 @@
+{
+  "source": "C:\\Users\\decra\\source\\Antigravity\\SpinTheGlobe\\SpinTheGlobe\\Assets\\Objects\\Pinbox.blend",
+  "export": "C:\\Users\\decra\\source\\Antigravity\\SpinTheGlobe\\Artifacts\\DetectivePinCoffer\\DetectivePinCoffer.fbx",
+  "blender_version": "5.2.3 LTS",
+  "mesh_count": 74,
+  "authored_slots": [
+    "PinSlot_01 | row_1_col_1",
+    "PinSlot_02 | row_1_col_2",
+    "PinSlot_03 | row_1_col_3",
+    "PinSlot_04 | row_1_col_4",
+    "PinSlot_05 | row_2_col_1",
+    "PinSlot_06 | row_2_col_2",
+    "PinSlot_07 | row_2_col_3",
+    "PinSlot_08 | row_2_col_4",
+    "PinSlot_09 | row_3_col_1",
+    "PinSlot_10 | row_3_col_2",
+    "PinSlot_11 | row_3_col_3",
+    "PinSlot_12 | row_3_col_4"
+  ],
+  "source_file_modified": false
+}

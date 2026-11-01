@@ -1,0 +1,112 @@
+{
+  "status": "PASS",
+  "mesh_count": 51,
+  "triangles": 235110,
+  "zero_area_triangles": 0,
+  "bounds_blender_m": [
+    [
+      -2.1682746410369873,
+      -0.7713000774383545
+    ],
+    [
+      -1.0113112926483154,
+      0.3486999571323395
+    ],
+    [
+      0.8110870122909546,
+      2.9850001335144043
+    ]
+  ],
+  "sphere_pivot_unity": [
+    -1.45,
+    2.15,
+    -0.33
+  ],
+  "sphere_radius": 0.683,
+  "base_bottom_unity_y": 0.8110869716623327,
+  "desk_world_y": 0.815,
+  "geographic_polygons": 127,
+  "world_texture_size": [
+    2048,
+    1024
+  ],
+  "geography_source": "https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_land.geojson",
+  "source_provenance": "Original ../Artifacts/BlenderGlobe/build_mechanical_globe.py reused as legacy_globe.py; original file preserved",
+  "embedded_sources_exact": true,
+  "materials": {
+    "DarkShell": {
+      "BaseColor": "Textures/WorldCartography_BaseColor.png",
+      "Normal": "Textures/WorldCartography_Normal.png",
+      "MetallicSmoothness": "Textures/WorldCartography_MetallicSmoothness.png"
+    },
+    "AntiqueBrass": {
+      "BaseColor": "Textures/AntiqueBrass_BaseColor.png",
+      "Normal": "Textures/AntiqueBrass_Normal.png",
+      "MetallicSmoothness": "Textures/AntiqueBrass_MetallicSmoothness.png"
+    },
+    "EngravedLand": {
+      "BaseColor": "Textures/WorldCartography_BaseColor.png",
+      "Normal": "Textures/WorldCartography_Normal.png",
+      "MetallicSmoothness": "Textures/WorldCartography_MetallicSmoothness.png"
+    },
+    "AmberAccent": {
+      "BaseColor": "Textures/AmberAccent_BaseColor.png",
+      "Normal": "Textures/AmberAccent_Normal.png",
+      "MetallicSmoothness": "Textures/AmberAccent_MetallicSmoothness.png"
+    },
+    "GaugeFace": {
+      "BaseColor": "Textures/GaugeFace_BaseColor.png",
+      "Normal": "Textures/GaugeFace_Normal.png",
+      "MetallicSmoothness": "Textures/GaugeFace_MetallicSmoothness.png"
+    },
+    "GaugeNeedle": {
+      "BaseColor": "Textures/GaugeNeedle_BaseColor.png",
+      "Normal": "Textures/GaugeNeedle_Normal.png",
+      "MetallicSmoothness": "Textures/GaugeNeedle_MetallicSmoothness.png"
+    },
+    "PolishedBrass": {
+      "BaseColor": "Textures/PolishedBrass_BaseColor.png",
+      "Normal": "Textures/PolishedBrass_Normal.png",
+      "MetallicSmoothness": "Textures/PolishedBrass_MetallicSmoothness.png"
+    },
+    "EngravingInlay": {
+      "BaseColor": "Textures/EngravingInlay_BaseColor.png",
+      "Normal": "Textures/EngravingInlay_Normal.png",
+      "MetallicSmoothness": "Textures/EngravingInlay_MetallicSmoothness.png"
+    },
+    "DarkMechanism": {
+      "BaseColor": "Textures/DarkMechanism_BaseColor.png",
+      "Normal": "Textures/DarkMechanism_Normal.png",
+      "MetallicSmoothness": "Textures/DarkMechanism_MetallicSmoothness.png"
+    }
+  },
+  "packed_images": 24,
+  "holder_span_degrees": 180,
+  "exposed_gear_meshes": 0,
+  "gauge_pivot_unity": [
+    -1.23,
+    1.18,
+    -0.8
+  ],
+  "unity_integration": "PENDING - Unity MCP bridge usage limit; staged only",
+  "gear_specs": [
+    {
+      "pivot": "Gear_12T_Pivot",
+      "ratio": -1.6
+    },
+    {
+      "pivot": "Gear_16T_Pivot",
+      "ratio": 1.2
+    },
+    {
+      "pivot": "Gear_14T_Pivot",
+      "ratio": -1.37142857
+    }
+  ],
+  "needle": "RPMGauge_NeedlePivot",
+  "uv_meshes": 51,
+  "limits": [
+    "Stylized Natural Earth 1:110m coastline data, not survey/terrain detail",
+    "Original gameplay motion and lighting require separate Unity binding validation"
+  ]
+}

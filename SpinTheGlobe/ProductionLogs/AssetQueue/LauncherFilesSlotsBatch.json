@@ -1,0 +1,29 @@
+{
+  "state": "Stopped",
+  "assets": [
+    {
+      "slug": "PinLauncher",
+      "status": "Needs Review",
+      "meshes": 28,
+      "triangles": 39456,
+      "preview": "Assets/DetectiveDesk/AssetProduction/PinLauncher/20261030_190710_5307019b/preview.png",
+      "report": "Assets/DetectiveDesk/AssetProduction/PinLauncher/20261030_190710_5307019b/asset-report.md"
+    },
+    {
+      "slug": "CaseFiles",
+      "status": "Needs Review",
+      "meshes": 26,
+      "triangles": 12660,
+      "preview": "Assets/DetectiveDesk/AssetProduction/CaseFiles/20261030_190951_a7461063/preview.png",
+      "report": "Assets/DetectiveDesk/AssetProduction/CaseFiles/20261030_190951_a7461063/asset-report.md"
+    },
+    {
+      "slug": "StatueSlots",
+      "status": "Needs Review",
+      "meshes": 24,
+      "triangles": 49056,
+      "preview": "Assets/DetectiveDesk/AssetProduction/StatueSlots/20261030_191201_78b848b4/preview.png",
+      "report": "Assets/DetectiveDesk/AssetProduction/StatueSlots/20261030_191201_78b848b4/asset-report.md"
+    }
+  ]
+}

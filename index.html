@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spin the Globe - Detective Desk</title>
+</head>
+<body>
+
+<div id="hud">
+  <div class="hud-left">
+    <div>FUNDS: <span id="val-funds" class="stat-badge">€0.00</span></div>
+    <div>GOLD: <span id="val-coins" class="stat-badge" style="color: #ffd700;">🪙 0</span></div>
+    <div>ROTATION: <span id="val-revs" class="stat-badge">0° (Rev 0)</span></div>
+    <div>SPEED: <span id="val-rpm" class="stat-badge">0 RPM</span></div>
+    <div>PINS: <span id="val-pins" class="stat-badge">0</span></div>
+  </div>
+  
+  <div class="hud-right">
+    <button id="btn-open-skills" class="hud-blueprint-btn" title="Open Investigation Blueprint Constellation">
+      <span class="blueprint-icon">🌳</span> SKILL TREE
+    </button>
+  </div>
+</div>
+
+<div id="main-viewport">
+  <canvas id="gameCanvas"></canvas>
+
+  <!-- Fallen Order Style Radial Constellation Skill Tree Modal -->
+  <div id="skill-tree-modal" class="modal-overlay">
+    <div class="modal-backdrop"></div>
+
+    <div class="modal-content">
+      <!-- Top-Left Blueprint Inspection Card -->
+      <div id="skill-details-panel" class="details-panel">
+        <!-- Dynamically populated by SkillTreeModal -->
+      </div>
+
+      <!-- Close Button -->
+      <button id="btn-close-skills" class="modal-close-btn" title="Close (Escape)">✕</button>
+
+      <!-- SVG Radial Constellation Canvas -->
+      <div class="svg-container">
+        <svg id="constellation-svg" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
+          <!-- Dynamically populated by SkillTreeModal -->
+        </svg>
+      </div>
+
+      <!-- Bottom Constellation Status Bar -->
+      <div id="tree-bottom-bar" class="tree-bottom-bar">
+        <div class="bottom-currency-group">
+          <div class="bottom-stat">FUNDS: <span id="tree-val-funds" class="gold-text">€0.00</span></div>
+          <div class="bottom-stat">GOLD: <span id="tree-val-gold" class="gold-coin-text">🪙 0</span></div>
+        </div>
+        <div class="bottom-center-status">
+          <span id="tree-val-progress" class="status-badge">0 / 24 BLUEPRINTS</span>
+        </div>
+        <div class="bottom-hint">CLICK NODE TO SELECT • PRESS ESC OR ✕ TO CLOSE</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

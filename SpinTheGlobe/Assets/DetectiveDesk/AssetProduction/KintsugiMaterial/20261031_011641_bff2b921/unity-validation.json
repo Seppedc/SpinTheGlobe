@@ -1,0 +1,13 @@
+{
+    "status": "PASS",
+    "source_sha256": "5df42301bf7d6111144c833622174bf22e7b9e50645c1844ce0e6697be7f8782",
+    "prefab_path": "Assets/DetectiveDesk/AssetProduction/KintsugiMaterial/20261031_011641_bff2b921/Kintsugi_Review.prefab",
+    "screenshot_path": "Assets/DetectiveDesk/AssetProduction/KintsugiMaterial/20261031_011641_bff2b921/preview.png",
+    "screenshot_sha256": "cd39c540ba479b7fdd61df64843280adb4f708304f007eedf567bb71c62dcf0e",
+    "review_scene": "Assets/DetectiveDesk/AssetReview/AssetReview.unity",
+    "protected_scene_unchanged": true,
+    "console_errors": 0,
+    "mesh_count": 1,
+    "renderer_count": 1,
+    "missing_materials": 0
+}

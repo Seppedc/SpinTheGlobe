@@ -1,0 +1,13 @@
+{
+    "status": "PASS",
+    "source_sha256": "5f52892816a1293bd58aa17a77ec731721cca9c83652a0105a01233e903151cc",
+    "prefab_path": "Assets/DetectiveDesk/AssetProduction/_Tests/WallMolding/20261030_163124_74e8d266/WallMolding_Review.prefab",
+    "screenshot_path": "Assets/DetectiveDesk/AssetProduction/_Tests/WallMolding/20261030_163124_74e8d266/preview.png",
+    "screenshot_sha256": "f86e6033621935d01cb48dc637421e2d9ff11a4d1a310f9f3280ee63b6e3f0cb",
+    "review_scene": "Assets/DetectiveDesk/AssetReview/AssetReview.unity",
+    "protected_scene_unchanged": true,
+    "console_errors": 0,
+    "mesh_count": 8,
+    "renderer_count": 8,
+    "missing_materials": 0
+}

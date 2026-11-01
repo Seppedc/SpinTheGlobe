@@ -1,0 +1,26 @@
+{
+  "status": "FAIL",
+  "checks": [
+    "Single active manager owns legacy adapter",
+    "Installed PhysX backend active, not fallback",
+    "Actual physics camera ray acquires original globe drag collider",
+    "No duplicate controllers",
+    "Three figurines start at SUM multiplier 3",
+    "Twelve empty coffer sockets populated with all independent colors",
+    "At rest: no auto power, hidden rotation or passive cash over actual frames",
+    "Reverse swipe ignored",
+    "Positive swipe caps at 30 deg/s redline",
+    "Redline ignores further acceleration",
+    "Actual Update rotates negative Unity Y for west-east",
+    "Original relocated gauge and actual RPM label update",
+    "Tachometer owns original mechanism pivot reference",
+    "Needle visual module retains baseline identity pose"
+  ],
+  "failure": "System.Exception: Original pivot angle matches physical RPM ratio\r\n  at DetectiveDesk.Editor.GameplayValidationRunner.Check (System.Boolean ok, System.String message) [0x00009] in C:\\Users\\decra\\source\\Antigravity\\SpinTheGlobe\\SpinTheGlobe\\Assets\\DetectiveDesk\\Scripts\\Editor\\Gameplay\\GameplayRuntimeValidation.cs:36 \r\n  at DetectiveDesk.Editor.GameplayValidationRunner+<Run>d__10.MoveNext () [0x0072b] in C:\\Users\\decra\\source\\Antigravity\\SpinTheGlobe\\SpinTheGlobe\\Assets\\DetectiveDesk\\Scripts\\Editor\\Gameplay\\GameplayRuntimeValidation.cs:78 \r\n  at DetectiveDesk.Editor.GameplayValidationRunner+<Guard>d__9.MoveNext () [0x00050] in C:\\Users\\decra\\source\\Antigravity\\SpinTheGlobe\\SpinTheGlobe\\Assets\\DetectiveDesk\\Scripts\\Editor\\Gameplay\\GameplayRuntimeValidation.cs:45 ",
+  "physicalMouseEvents": "Not simulated; production callbacks, polygon camera rays and UI guards tested",
+  "actualPlayMode": true,
+  "actualFrames": true,
+  "configAssetMutated": false,
+  "testMoneyPersisted": false,
+  "deterministicCrossings": "Production GlobeController.Advance called between actual coroutine frames with automatic Update temporarily disabled"
+}

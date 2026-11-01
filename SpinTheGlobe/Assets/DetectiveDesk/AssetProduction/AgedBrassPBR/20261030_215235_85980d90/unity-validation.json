@@ -1,0 +1,13 @@
+{
+    "status": "PASS",
+    "source_sha256": "eb7b1d9fd6a6cf129e1eacbc655c39da055ab67188659ff87d905c3603b037dd",
+    "prefab_path": "Assets/DetectiveDesk/AssetProduction/AgedBrassPBR/20261030_215235_85980d90/AgedBrassPBR_Review.prefab",
+    "screenshot_path": "Assets/DetectiveDesk/AssetProduction/AgedBrassPBR/20261030_215235_85980d90/preview.png",
+    "screenshot_sha256": "c7754b8cd224367eb682d25afbb8cc5dff8d2f7157455da075942a9f13e53564",
+    "review_scene": "Assets/DetectiveDesk/AssetReview/AssetReview.unity",
+    "protected_scene_unchanged": true,
+    "console_errors": 0,
+    "mesh_count": 1,
+    "renderer_count": 1,
+    "missing_materials": 0
+}

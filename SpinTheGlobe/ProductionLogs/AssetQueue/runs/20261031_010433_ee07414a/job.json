@@ -1,0 +1,42 @@
+{
+  "id": "DD-40",
+  "slug": "MechanicalAnim",
+  "category": "Effects",
+  "name": "Mechanical animations",
+  "pipeline": "Unity animation",
+  "priority": "P1",
+  "dependencies": [
+    "MechanicalGlobe"
+  ],
+  "status": "Not Started",
+  "protected_existing": false,
+  "existing_binding": "",
+  "dependency_available": false,
+  "source_path": "Assets/DetectiveDesk/ArtSource/Effects/MechanicalAnim/",
+  "generator_path": "— Unity/texture work",
+  "output_path": "Assets/DetectiveDesk/AssetProduction/MechanicalAnim/20261031_010433_ee07414a",
+  "reference_path": "Assets/DetectiveDesk/ArtSource/Effects/MechanicalAnim/References/",
+  "requirements": "Globe gears, RPM needle, launcher recoil",
+  "attempt_count": 2,
+  "last_error": "Project-wide usage/auth/permission failure; see ProductionLogs/AssetQueue/runs/20261030_221148_ceed259f",
+  "screenshot_path": "",
+  "report_path": "",
+  "validated": false,
+  "human_approved": false,
+  "last_updated": "2026-10-31T00:04:31.390033+00:00",
+  "history": [
+    {
+      "at": "2026-10-31T00:04:31.390042+00:00",
+      "status": "Not Started",
+      "reason": "Authorized continuation after usage reset; latest unvalidated partial controller retained."
+    }
+  ],
+  "test_runs": [],
+  "notes": "The preceding asset-local recoil validation failed; preserve and inspect its partial clip/source files. Unity MCP and its supported Unity_ReadConsole tool are verified healthy with zero warnings/errors. Do NOT use System.Reflection or internal Console APIs in dynamic commands; call Unity_ReadConsole/Unity_GetConsoleLogs instead. No permission change or bypass is authorized. Fix actual return-to-rest validation, accounting for authored rest pose, then use the unchanged review helper. Dependencies: existing globe prefabs under Assets/DetectiveDesk/GlobeBlender/Prefabs; inspect actual pivots. Preserve originals. Resume context: prior attempt stopped at CLI usage limit BEFORE Unity preflight. Usage availability now verified. Reuse/inspect retained partial clips/controller at Assets/DetectiveDesk/AssetProduction/MechanicalAnim/20261030_220810_dbc0b1ef; its source authoring command is preserved in ProductionLogs/AssetQueue/runs/20261030_220810_dbc0b1ef/events.jsonl. Latest controller serialization retained and checkpointed, never restored to older bytes. Use supported Console tools only. This is the final permitted asset attempt; if motion validation cannot be fixed, return asset_error and continue independent work.",
+  "last_job_file": "ProductionLogs/AssetQueue/runs/20261030_221148_ceed259f/job.json",
+  "smoke_test": false,
+  "run_id": "20261031_010433_ee07414a",
+  "blender_executable": "C:/Program Files/Blender Foundation/Blender 5.2/blender.exe",
+  "build_output_path": "ProductionLogs/AssetQueue/BuildStaging/20261031_010433_ee07414a/MechanicalAnim",
+  "job_file": "ProductionLogs/AssetQueue/runs/20261031_010433_ee07414a/job.json"
+}

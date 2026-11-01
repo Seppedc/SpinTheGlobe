@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "blend": "ProductionLogs/AssetQueue/BuildStaging/20261030_211921_9b8024e2/BankersLamp/BankersLamp.blend",
+  "blend_sha256": "7cc5a7150671e8bb3559451fcb2505a7b091e277b4ec4c2b60cf76f9ddbe935b",
+  "fbx": "ProductionLogs/AssetQueue/BuildStaging/20261030_211921_9b8024e2/BankersLamp/BankersLamp.fbx",
+  "fbx_sha256": "05ee1b3e1090ef83ebed4461217863943c7fbd21811db22810a1659194264e37",
+  "generator": "ProductionLogs/AssetQueue/BuildStaging/20261030_211921_9b8024e2/BankersLamp/build_asset.py",
+  "generator_sha256": "45408dd06ddd95a62cb5b622c3c88b8bc0068b411f5ea2c95cc31d6ada804160",
+  "embedded_source_exact": true,
+  "mesh_count": 41,
+  "triangles": 20744,
+  "dimensions_m": [
+    0.2759999930858612,
+    0.18450000882148743,
+    0.4050000011920929
+  ],
+  "root_at_origin": true,
+  "minimum_m": [
+    -0.1379999965429306,
+    -0.101500004529953,
+    0.0
+  ],
+  "maximum_m": [
+    0.1379999965429306,
+    0.08299999684095383,
+    0.4050000011920929
+  ],
+  "materials": [
+    "Lamp_AgedBrass",
+    "Lamp_EmeraldGlass",
+    "Lamp_Felt",
+    "Lamp_OpalLiner"
+  ],
+  "moving_part_candidates": [
+    "Shade_Pivot",
+    "Shade_PivotCap_-0.13",
+    "Shade_PivotCap_0.13"
+  ],
+  "expected_dimensions_review": "Actual dimensions recorded; asset-specific fit remains reviewable, no visual approval implied."
+}

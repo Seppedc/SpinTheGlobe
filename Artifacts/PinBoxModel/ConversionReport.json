@@ -1,0 +1,14 @@
+{
+  "source": "C:\\Users\\decra\\Downloads\\image__pixal3d__20261030-000307.glb",
+  "source_triangles": 959978,
+  "unity_triangles": 48000,
+  "source_dimensions": [
+    0.926723837852478,
+    0.7189575433731079,
+    0.7932373285293579
+  ],
+  "pivot": "bottom center",
+  "materials": [
+    "Material_0"
+  ]
+}

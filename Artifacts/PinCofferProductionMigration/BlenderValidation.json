@@ -1,0 +1,158 @@
+{
+  "status": "PASS",
+  "embedded_source_exact": true,
+  "mesh_count": 74,
+  "evaluated_triangles": 19168,
+  "rows": 3,
+  "columns": 4,
+  "recessed_socket_checks": [
+    {
+      "slot": 1,
+      "row": 1,
+      "column": 1,
+      "center": [
+        -0.051375001668930054,
+        0.02866666577756405,
+        0.01600000075995922
+      ],
+      "recess_depth": 0.0069999973773956295
+    },
+    {
+      "slot": 2,
+      "row": 1,
+      "column": 2,
+      "center": [
+        -0.017124999314546585,
+        0.02866666577756405,
+        0.01600000075995922
+      ],
+      "recess_depth": 0.007000001102685928
+    },
+    {
+      "slot": 3,
+      "row": 1,
+      "column": 3,
+      "center": [
+        0.017124999314546585,
+        0.02866666577756405,
+        0.01600000075995922
+      ],
+      "recess_depth": 0.007000001102685928
+    },
+    {
+      "slot": 4,
+      "row": 1,
+      "column": 4,
+      "center": [
+        0.051375001668930054,
+        0.02866666577756405,
+        0.01600000075995922
+      ],
+      "recess_depth": 0.0069999973773956295
+    },
+    {
+      "slot": 5,
+      "row": 2,
+      "column": 1,
+      "center": [
+        -0.051375001668930054,
+        0.0,
+        0.01600000075995922
+      ],
+      "recess_depth": 0.0069999973773956295
+    },
+    {
+      "slot": 6,
+      "row": 2,
+      "column": 2,
+      "center": [
+        -0.017124999314546585,
+        0.0,
+        0.01600000075995922
+      ],
+      "recess_depth": 0.007000001102685928
+    },
+    {
+      "slot": 7,
+      "row": 2,
+      "column": 3,
+      "center": [
+        0.017124999314546585,
+        0.0,
+        0.01600000075995922
+      ],
+      "recess_depth": 0.007000001102685928
+    },
+    {
+      "slot": 8,
+      "row": 2,
+      "column": 4,
+      "center": [
+        0.051375001668930054,
+        0.0,
+        0.01600000075995922
+      ],
+      "recess_depth": 0.0069999973773956295
+    },
+    {
+      "slot": 9,
+      "row": 3,
+      "column": 1,
+      "center": [
+        -0.051375001668930054,
+        -0.02866666577756405,
+        0.01600000075995922
+      ],
+      "recess_depth": 0.0069999973773956295
+    },
+    {
+      "slot": 10,
+      "row": 3,
+      "column": 2,
+      "center": [
+        -0.017124999314546585,
+        -0.02866666577756405,
+        0.01600000075995922
+      ],
+      "recess_depth": 0.007000001102685928
+    },
+    {
+      "slot": 11,
+      "row": 3,
+      "column": 3,
+      "center": [
+        0.017124999314546585,
+        -0.02866666577756405,
+        0.01600000075995922
+      ],
+      "recess_depth": 0.007000001102685928
+    },
+    {
+      "slot": 12,
+      "row": 3,
+      "column": 4,
+      "center": [
+        0.051375001668930054,
+        -0.02866666577756405,
+        0.01600000075995922
+      ],
+      "recess_depth": 0.0069999973773956295
+    }
+  ],
+  "lid_matches_base": true,
+  "lid_hinge_degrees": 108,
+  "materials": [
+    "PBR | Antique brass",
+    "PBR | Blackened steel",
+    "PBR | Brass polished edges",
+    "PBR | Dark scratched mahogany",
+    "PBR | Deep crimson velvet",
+    "PBR | Deep mahogany end-grain",
+    "PBR | Shadowed velvet recess"
+  ],
+  "packed_images": [
+    "//crimson_velvet_color.png",
+    "//mahogany_color.png",
+    "//mahogany_dark_color.png"
+  ]
+}

@@ -1,0 +1,349 @@
+MechanicalGlobe inspection and backup
+Scene: Assets/DetectiveDesk/Generated/DetectiveOffice.unity; Edit Mode; clean before and after. Original active scene was not saved.
+Snapshot: 1250 objects / 3684 components, meaningful serialized values plus explicit live references.
+Backups:
+Assets/DetectiveDesk/Backups/GlobeRework_20261031_225517/DetectiveOffice.unity
+Assets/DetectiveDesk/Backups/GlobeRework_20261031_225517/MechanicalGlobe_Blender.prefab
+Assets/DetectiveDesk/Backups/GlobeRework_20261031_225517/MechanicalGlobe_Modular.prefab
+Assets/DetectiveDesk/Backups/GlobeRework_20261031_225517/MechanicalGlobe_Blender_Visuals.prefab
+
+Connected bindings (all targets, IDs and exact transforms/axes in unity-inspection.json):
+DetectiveDesk.DetectiveGame.globeRotor -> DetectiveOffice/GameplayObjects/MechanicalGlobe/RotatingSphere [UnityEngine.Transform]; id=93954; connected=True; transform={'position': {'x': -1.2000000476837158, 'y': 2.046800136566162, 'z': -0.2800000011920929}, 'localPosition': {'x': -1.4500000476837158, 'y': 2.1500000953674316, 'z': -0.33000001311302185}, 'localScale': {'x': 1.0, 'y': 1.0, 'z': 1.0}, 'rotation': {'x': 0.0, 'y': 0.00041158319800160825, 'z': 0.0, 'w': 0.9999999403953552}, 'localRotation': {'x': 0.0, 'y': 0.00041158319800160825, 'z': 0.0, 'w': 0.9999999403953552}, 'right': {'x': 0.9999996423721313, 'y': 0.0, 'z': -0.0008231663377955556}, 'up': {'x': 0.0, 'y': 1.0, 'z': 0.0}, 'forward': {'x': 0.0008231663377955556, 'y': 0.0, 'z': 0.9999996423721313}}
+DetectiveDesk.DetectiveGlobeMechanism.rotatingSphere -> DetectiveOffice/GameplayObjects/MechanicalGlobe/RotatingSphere [UnityEngine.Transform]; id=93954; connected=True; transform={'position': {'x': -1.2000000476837158, 'y': 2.046800136566162, 'z': -0.2800000011920929}, 'localPosition': {'x': -1.4500000476837158, 'y': 2.1500000953674316, 'z': -0.33000001311302185}, 'localScale': {'x': 1.0, 'y': 1.0, 'z': 1.0}, 'rotation': {'x': 0.0, 'y': 0.00041158319800160825, 'z': 0.0, 'w': 0.9999999403953552}, 'localRotation': {'x': 0.0, 'y': 0.00041158319800160825, 'z': 0.0, 'w': 0.9999999403953552}, 'right': {'x': 0.9999996423721313, 'y': 0.0, 'z': -0.0008231663377955556}, 'up': {'x': 0.0, 'y': 1.0, 'z': 0.0}, 'forward': {'x': 0.0008231663377955556, 'y': 0.0, 'z': 0.9999996423721313}}
+DetectiveDesk.DetectiveGlobeMechanism.gears.Array.data[0] -> DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_12T_Pivot [UnityEngine.Transform]; id=-5120; connected=True; transform={'position': {'x': -1.4484000205993652, 'y': 1.614400029182434, 'z': -0.8365997672080994}, 'localPosition': {'x': -1.7200000286102295, 'y': 1.6800000667572021, 'z': -0.9349997043609619}, 'localScale': {'x': 1.0, 'y': 1.0, 'z': 1.0}, 'rotation': {'x': 0.0, 'y': 0.0, 'z': 0.0, 'w': 1.0}, 'localRotation': {'x': 0.0, 'y': 0.0, 'z': 0.0, 'w': 1.0}, 'right': {'x': 1.0, 'y': 0.0, 'z': 0.0}, 'up': {'x': 0.0, 'y': 1.0, 'z': 0.0}, 'forward': {'x': 0.0, 'y': 0.0, 'z': 1.0}}
+DetectiveDesk.DetectiveGlobeMechanism.gears.Array.data[1] -> DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_16T_Pivot [UnityEngine.Transform]; id=-5264; connected=True; transform={'position': {'x': -1.2000000476837158, 'y': 1.5131999254226685, 'z': -0.8411997556686401}, 'localPosition': {'x': -1.4500000476837158, 'y': 1.5699999332427979, 'z': -0.9399996995925903}, 'localScale': {'x': 1.0, 'y': 1.0, 'z': 1.0}, 'rotation': {'x': 0.0, 'y': 0.0, 'z': 0.0, 'w': 1.0}, 'localRotation': {'x': 0.0, 'y': 0.0, 'z': 0.0, 'w': 1.0}, 'right': {'x': 1.0, 'y': 0.0, 'z': 0.0}, 'up': {'x': 0.0, 'y': 1.0, 'z': 0.0}, 'forward': {'x': 0.0, 'y': 0.0, 'z': 1.0}}
+DetectiveDesk.DetectiveGlobeMechanism.gears.Array.data[2] -> DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/Clockwork_Assembly/Gear_14T_Pivot [UnityEngine.Transform]; id=-5192; connected=True; transform={'position': {'x': -0.9423998594284058, 'y': 1.6236000061035156, 'z': -0.8365997672080994}, 'localPosition': {'x': -1.1699999570846558, 'y': 1.690000057220459, 'z': -0.9349997043609619}, 'localScale': {'x': 1.0, 'y': 1.0, 'z': 1.0}, 'rotation': {'x': 0.0, 'y': 0.0, 'z': 0.0, 'w': 1.0}, 'localRotation': {'x': 0.0, 'y': 0.0, 'z': 0.0, 'w': 1.0}, 'right': {'x': 1.0, 'y': 0.0, 'z': 0.0}, 'up': {'x': 0.0, 'y': 1.0, 'z': 0.0}, 'forward': {'x': 0.0, 'y': 0.0, 'z': 1.0}}
+DetectiveDesk.DetectiveGlobeMechanism.rpmNeedle -> DetectiveOffice/GameplayObjects/MechanicalGlobe/MechanicalGlobe_Blender_Visuals/MechanicalGlobe_Blender/RPMGauge_Assembly/RPMGauge_NeedlePivot [UnityEngine.Transform]; id=-5716; connected=True; transform={'position': {'x': -0.31679996848106384, 'y': 1.3843998908996582, 'z': -0.7528798580169678}, 'localPosition': {'x': 0.0, 'y': 1.1920928955078125e-07, 'z': -0.09399998188018799}, 'localScale': {'x': 1.0, 'y': 1.0, 'z': 1.0}, 'rotation': {'x': 0.0, 'y': 0.0, 'z': 0.5877852439880371, 'w': 0.80901700258255}, 'localRotation': {'x': 0.0, 'y': 0.0, 'z': 0.5877852439880371, 'w': 0.80901700258255}, 'right': {'x': 0.30901700258255005, 'y': 0.9510565400123596, 'z': 0.0}, 'up': {'x': -0.9510565400123596, 'y': 0.30901700258255005, 'z': 0.0}, 'forward': {'x': 0.0, 'y': 0.0, 'z': 1.0}}
+feedbackRenderers: 81 targets, 81 connected, complete mapping retained in JSON.
+gearRatios: [-1.600000023841858, 1.2000000476837158, -1.3714286088943481]
+
+Behavior: DetectiveGame rotates globeRotor at globeSpeed=7 degrees/sec around WORLD up. Mechanism rotatingSphere references the same transform, so its fallback rotation is suppressed when DeskInteractable.game is connected. Gears rotate around local Z with ratios [-1.6, 1.2, -1.3714286]. Needle local rotation is replaced by Euler(0,0,angle); angle goes from 135 to -135 across 0..5 RPM (7 deg/sec = 1.1667 RPM, angle 72 degrees). Hover feedback uses a MaterialPropertyBlock emission addition (0.045,0.028,0.008); resting emission restored. No runtime behavior was exercised.
+
+Scripts and colliders:
+DetectiveOffice/GameplayObjects/MechanicalGlobe DetectiveDesk.DeskInteractable {
+    "MonoBehaviour": {
+        "m_Enabled": true,
+        "m_EditorHideFlags": 0,
+        "m_Name": "",
+        "m_EditorClassIdentifier": "Assembly-CSharp::DetectiveDesk.DeskInteractable",
+        "action": 0,
+        "game": {
+            "instanceID": 0
+        }
+    }
+}
+DetectiveOffice/GameplayObjects/MechanicalGlobe DetectiveDesk.DetectiveGlobeMechanism {
+    "MonoBehaviour": {
+        "m_Enabled": true,
+        "m_EditorHideFlags": 0,
+        "m_Name": "",
+        "m_EditorClassIdentifier": "Assembly-CSharp::DetectiveDesk.DetectiveGlobeMechanism",
+        "rotatingSphere": {
+            "instanceID": 0
+        },
+        "gears": [
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            }
+        ],
+        "gearRatios": [
+            -1.600000023841858,
+            1.2000000476837159,
+            -1.3714286088943482
+        ],
+        "rpmNeedle": {
+            "instanceID": 0
+        },
+        "gaugeMaximumRpm": 5.0,
+        "standaloneDegreesPerSecond": 7.0,
+        "feedbackRenderers": [
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            },
+            {
+                "instanceID": 0
+            }
+        ]
+    }
+}
+DetectiveOffice/GameplayObjects/MechanicalGlobe UnityEngine.BoxCollider {
+    "BoxCollider": {
+        "m_Material": {
+            "instanceID": 0
+        },
+        "m_IncludeLayers": {
+            "serializedVersion": "2",
+            "m_Bits": 0
+        },
+        "m_ExcludeLayers": {
+            "serializedVersion": "2",
+            "m_Bits": 0
+        },
+        "m_LayerOverridePriority": 0,
+        "m_IsTrigger": false,
+        "m_ProvidesContacts": false,
+        "m_Enabled": true,
+        "serializedVersion": "3",
+        "m_Size": {
+            "x": 1.820000171661377,
+            "y": 2.0870001316070558,
+            "z": 1.3799999952316285
+        },
+        "m_Center": {
+            "x": -1.2300000190734864,
+            "y": 1.8934999704360963,
+            "z": -0.32999998331069949
+        }
+    }
+}
+
+All globe transforms, materials/shaders, renderer bounds, active/enabled state, meridian/pedestal/gears/gauge and incoming references are retained in JSON. Old modular children coexist with Blender visuals; preserve their states and gameplay roots.
+Visual comparison: current continents are filled brass against a dark shell, with strong highlights; meridian reads as a thin hoop and pedestal as a narrow small foot. Approved reference calls for broad engraved brass meridian, substantial stepped base and readable continent outlines. Preserve existing placement, camera framing and unrelated objects.
+Source exists at ../Artifacts/BlenderGlobe/build_mechanical_globe.py (93115 bytes); not executed or modified; embedded land data not printed.
+Screenshot: before-game-camera.png; camera properties restored in finally. Canvas and RectTransform untouched. Overlay UI is absent from camera-only render.
+Dedicated Unity_ReadConsole: zero warnings/errors at read. Compilation-only failed diagnostic noted in JSON; no project-wide compile failure or source modification.
+No models, scripts, components or trackers changed. No Play Mode, Blender, workers, installations, security changes or process inspection.
+Unity writer released.

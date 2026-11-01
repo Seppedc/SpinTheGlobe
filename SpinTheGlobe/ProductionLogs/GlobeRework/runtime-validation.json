@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "elapsed_seconds": 2.07275,
+  "frames": 424,
+  "rotation_degrees": [
+    14.509161,
+    23.214756,
+    17.4111252,
+    19.8983574
+  ],
+  "expected_abs_ratios": [
+    1.0,
+    1.6,
+    1.2,
+    1.37142861
+  ],
+  "needle_angle": 71.99999,
+  "game_sphere_binding": true,
+  "InspectGlobe_callback": true,
+  "hud_text": "Mechanical globe • spinning at 7°/s",
+  "physical_mouse_click_tested": false
+}

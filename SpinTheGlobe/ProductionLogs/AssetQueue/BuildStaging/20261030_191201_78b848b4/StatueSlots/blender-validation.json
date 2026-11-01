@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "blend": "ProductionLogs/AssetQueue/BuildStaging/20261030_191201_78b848b4/StatueSlots/StatueSlots.blend",
+  "blend_sha256": "1bca1b1d13b26633f5499b28ff3b93fabfbc6e5d203330cbeb976dfbd67232b5",
+  "fbx": "ProductionLogs/AssetQueue/BuildStaging/20261030_191201_78b848b4/StatueSlots/StatueSlots.fbx",
+  "fbx_sha256": "9b56cdc0e352d42e9fc63859d28e0f834113d7ede73f628b3f983b2b79dad6b2",
+  "generator": "ProductionLogs/AssetQueue/BuildStaging/20261030_191201_78b848b4/StatueSlots/build_asset.py",
+  "generator_sha256": "f939185d8f94db0c257453875cfb23cd93e0413d10c3461c82a40ad6bc9c4331",
+  "embedded_source_exact": true,
+  "mesh_count": 24,
+  "triangles": 49056,
+  "dimensions_m": [
+    0.48399996757507324,
+    0.09399999678134918,
+    0.039000000804662704
+  ],
+  "root_at_origin": true,
+  "minimum_m": [
+    -0.24199998378753662,
+    -0.04699999839067459,
+    0.0
+  ],
+  "maximum_m": [
+    0.24199998378753662,
+    0.04699999839067459,
+    0.039000000804662704
+  ],
+  "materials": [
+    "StatueSlots_AgedBrass",
+    "StatueSlots_BurgundyPad",
+    "StatueSlots_Mahogany",
+    "StatueSlots_Recess"
+  ],
+  "moving_part_candidates": [],
+  "expected_dimensions_review": "Actual dimensions recorded; asset-specific fit remains reviewable, no visual approval implied."
+}

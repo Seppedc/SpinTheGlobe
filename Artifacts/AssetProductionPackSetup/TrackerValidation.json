@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "groups": 42,
+  "verified_entries": [
+    {
+      "slug": "WallMolding",
+      "progress": "Not Started",
+      "builder": "Assets/DetectiveDesk/ArtSource/Environment/WallMolding/build_asset.py"
+    },
+    {
+      "slug": "PinCoffer",
+      "progress": "Review",
+      "builder": "Assets/DetectiveDesk/ArtSource/PinCoffer/build_pincoffer.py"
+    },
+    {
+      "slug": "CollectiblePin",
+      "progress": "Review",
+      "builder": "Assets/DetectiveDesk/ArtSource/Gameplay/CollectiblePin/build_collectible_pin.py"
+    }
+  ]
+}

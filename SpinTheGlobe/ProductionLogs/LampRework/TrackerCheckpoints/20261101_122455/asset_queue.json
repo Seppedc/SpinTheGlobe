@@ -1,0 +1,2432 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-10-30T15:26:54.772863+00:00",
+  "updated_at": "2026-10-31T22:45:31.335031+00:00",
+  "run_state": "Stopped",
+  "max_assets_per_run": 1,
+  "active_worker": null,
+  "last_error": "",
+  "assets": [
+    {
+      "id": "DD-01",
+      "slug": "DetectiveDesk",
+      "category": "Environment",
+      "name": "Detective desk",
+      "pipeline": "Blender",
+      "priority": "P1",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Environment/DetectiveDesk/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Environment/DetectiveDesk/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/DetectiveDesk/20261030_164251_1c1ef7d2",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Environment/DetectiveDesk/References/",
+      "requirements": "Thick top, beveled perimeter, scratch-ready walnut, brass border",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/DetectiveDesk/20261030_164251_1c1ef7d2/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/DetectiveDesk/20261030_164251_1c1ef7d2/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.948963+00:00",
+      "history": [
+        {
+          "at": "2026-10-30T15:46:01.315593+00:00",
+          "status": "Generated",
+          "run_id": "20261030_164251_1c1ef7d2",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/DetectiveDesk/20261030_164251_1c1ef7d2"
+        },
+        {
+          "at": "2026-10-30T15:46:01.336493+00:00",
+          "status": "Imported",
+          "run_id": "20261030_164251_1c1ef7d2",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/DetectiveDesk/20261030_164251_1c1ef7d2"
+        },
+        {
+          "at": "2026-10-30T15:46:01.361290+00:00",
+          "status": "Validated",
+          "run_id": "20261030_164251_1c1ef7d2",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/DetectiveDesk/20261030_164251_1c1ef7d2"
+        },
+        {
+          "at": "2026-10-30T15:46:01.385069+00:00",
+          "status": "Needs Review",
+          "run_id": "20261030_164251_1c1ef7d2",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/DetectiveDesk/20261030_164251_1c1ef7d2"
+        },
+        {
+          "at": "2026-10-31T00:41:20.948965+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.948950+00:00"
+      }
+    },
+    {
+      "id": "DD-02",
+      "slug": "DeskStructure",
+      "category": "Environment",
+      "name": "Desk structure",
+      "pipeline": "Blender",
+      "priority": "P1",
+      "dependencies": [
+        "DetectiveDesk"
+      ],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Environment/DeskStructure/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Environment/DeskStructure/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/DeskStructure/20261030_164602_c30cb534",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Environment/DeskStructure/References/",
+      "requirements": "Four feet, legs, carved apron and paneling",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/DeskStructure/20261030_164602_c30cb534/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/DeskStructure/20261030_164602_c30cb534/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.948989+00:00",
+      "history": [
+        {
+          "at": "2026-10-30T15:49:47.401761+00:00",
+          "status": "Needs Review",
+          "run_id": "20261030_164602_c30cb534",
+          "recovered": true,
+          "evidence": "Assets/DetectiveDesk/AssetProduction/DeskStructure/20261030_164602_c30cb534"
+        },
+        {
+          "at": "2026-10-31T00:41:20.948990+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Recovered after delayed metadata guard fix; technical checks passed, human approval and tabletop fit remain pending. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.948987+00:00"
+      }
+    },
+    {
+      "id": "DD-03",
+      "slug": "BackWall",
+      "category": "Environment",
+      "name": "Back wall",
+      "pipeline": "Blender",
+      "priority": "P1",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Environment/BackWall/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Environment/BackWall/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/BackWall/20261030_164949_9b5cb7a5",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Environment/BackWall/References/",
+      "requirements": "Straight wall segments, inset wood panels, no angled room",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/BackWall/20261030_164949_9b5cb7a5/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/BackWall/20261030_164949_9b5cb7a5/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949006+00:00",
+      "history": [
+        {
+          "at": "2026-10-30T15:52:34.633535+00:00",
+          "status": "Generated",
+          "run_id": "20261030_164949_9b5cb7a5",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/BackWall/20261030_164949_9b5cb7a5"
+        },
+        {
+          "at": "2026-10-30T15:52:34.653244+00:00",
+          "status": "Imported",
+          "run_id": "20261030_164949_9b5cb7a5",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/BackWall/20261030_164949_9b5cb7a5"
+        },
+        {
+          "at": "2026-10-30T15:52:34.678915+00:00",
+          "status": "Validated",
+          "run_id": "20261030_164949_9b5cb7a5",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/BackWall/20261030_164949_9b5cb7a5"
+        },
+        {
+          "at": "2026-10-30T15:52:34.703670+00:00",
+          "status": "Needs Review",
+          "run_id": "20261030_164949_9b5cb7a5",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/BackWall/20261030_164949_9b5cb7a5"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949006+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261030_164949_9b5cb7a5/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949004+00:00"
+      }
+    },
+    {
+      "id": "DD-04",
+      "slug": "WallMolding",
+      "category": "Environment",
+      "name": "Wall molding",
+      "pipeline": "Blender",
+      "priority": "P1",
+      "dependencies": [
+        "BackWall"
+      ],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Environment/WallMolding/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Environment/WallMolding/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/WallMolding/20261030_172045_0446ff27",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Environment/WallMolding/References/",
+      "requirements": "Crown trim, baseboards and panel rails",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/WallMolding/20261030_172045_0446ff27/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/WallMolding/20261030_172045_0446ff27/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949020+00:00",
+      "history": [
+        {
+          "at": "2026-10-30T16:23:12.321457+00:00",
+          "status": "Generated",
+          "run_id": "20261030_172045_0446ff27",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WallMolding/20261030_172045_0446ff27"
+        },
+        {
+          "at": "2026-10-30T16:23:12.339073+00:00",
+          "status": "Imported",
+          "run_id": "20261030_172045_0446ff27",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WallMolding/20261030_172045_0446ff27"
+        },
+        {
+          "at": "2026-10-30T16:23:12.368152+00:00",
+          "status": "Validated",
+          "run_id": "20261030_172045_0446ff27",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WallMolding/20261030_172045_0446ff27"
+        },
+        {
+          "at": "2026-10-30T16:23:12.393889+00:00",
+          "status": "Needs Review",
+          "run_id": "20261030_172045_0446ff27",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WallMolding/20261030_172045_0446ff27"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949021+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [
+        {
+          "at": "2026-10-30T15:33:18.160100+00:00",
+          "status": "Needs Review",
+          "validated": true,
+          "job_file": "ProductionLogs/AssetQueue/runs/20261030_163124_74e8d266/job.json",
+          "output_path": "Assets/DetectiveDesk/AssetProduction/_Tests/WallMolding/20261030_163124_74e8d266",
+          "screenshot_path": "Assets/DetectiveDesk/AssetProduction/_Tests/WallMolding/20261030_163124_74e8d266/preview.png"
+        }
+      ],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261030_172045_0446ff27/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949019+00:00"
+      }
+    },
+    {
+      "id": "DD-05",
+      "slug": "WorldMap",
+      "category": "Environment",
+      "name": "World map",
+      "pipeline": "Texture / Unity",
+      "priority": "P1",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Environment/WorldMap/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/WorldMap/20261030_185346_fb7b14cb",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Environment/WorldMap/References/",
+      "requirements": "Only clean parchment geographic map; no clues/strings/pins",
+      "attempt_count": 2,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/WorldMap/20261030_185346_fb7b14cb/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/WorldMap/20261030_185346_fb7b14cb/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949035+00:00",
+      "history": [
+        {
+          "at": "2026-10-30T17:53:45.141633+00:00",
+          "status": "Not Started",
+          "reason": "Fresh retry authorized after Unity restart; old partial output and original checkpoint retained."
+        },
+        {
+          "at": "2026-10-30T17:55:35.158272+00:00",
+          "status": "Generated",
+          "run_id": "20261030_185346_fb7b14cb",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WorldMap/20261030_185346_fb7b14cb"
+        },
+        {
+          "at": "2026-10-30T17:55:35.179716+00:00",
+          "status": "Imported",
+          "run_id": "20261030_185346_fb7b14cb",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WorldMap/20261030_185346_fb7b14cb"
+        },
+        {
+          "at": "2026-10-30T17:55:35.207660+00:00",
+          "status": "Validated",
+          "run_id": "20261030_185346_fb7b14cb",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WorldMap/20261030_185346_fb7b14cb"
+        },
+        {
+          "at": "2026-10-30T17:55:35.232761+00:00",
+          "status": "Needs Review",
+          "run_id": "20261030_185346_fb7b14cb",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WorldMap/20261030_185346_fb7b14cb"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949036+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261030_185346_fb7b14cb/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949034+00:00"
+      }
+    },
+    {
+      "id": "DD-06",
+      "slug": "WorldMapFrame",
+      "category": "Environment",
+      "name": "Map frame",
+      "pipeline": "Blender",
+      "priority": "P1",
+      "dependencies": [
+        "WorldMap"
+      ],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Environment/WorldMapFrame/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Environment/WorldMapFrame/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/WorldMapFrame/20261030_185535_c3468e1b",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Environment/WorldMapFrame/References/",
+      "requirements": "Rectangular wooden rim with beveled inner trim",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/WorldMapFrame/20261030_185535_c3468e1b/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/WorldMapFrame/20261030_185535_c3468e1b/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949048+00:00",
+      "history": [
+        {
+          "at": "2026-10-30T17:58:07.039538+00:00",
+          "status": "Generated",
+          "run_id": "20261030_185535_c3468e1b",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WorldMapFrame/20261030_185535_c3468e1b"
+        },
+        {
+          "at": "2026-10-30T17:58:07.062186+00:00",
+          "status": "Imported",
+          "run_id": "20261030_185535_c3468e1b",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WorldMapFrame/20261030_185535_c3468e1b"
+        },
+        {
+          "at": "2026-10-30T17:58:07.088420+00:00",
+          "status": "Validated",
+          "run_id": "20261030_185535_c3468e1b",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WorldMapFrame/20261030_185535_c3468e1b"
+        },
+        {
+          "at": "2026-10-30T17:58:07.114075+00:00",
+          "status": "Needs Review",
+          "run_id": "20261030_185535_c3468e1b",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WorldMapFrame/20261030_185535_c3468e1b"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949049+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261030_185535_c3468e1b/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949047+00:00"
+      }
+    },
+    {
+      "id": "DD-07",
+      "slug": "RainyWindow",
+      "category": "Environment",
+      "name": "Rainy window",
+      "pipeline": "Blender",
+      "priority": "P1",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Environment/RainyWindow/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Environment/RainyWindow/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/RainyWindow/20261030_185807_f932ec71",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Environment/RainyWindow/References/",
+      "requirements": "Frame/mullions only; rain shader in Unity",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/RainyWindow/20261030_185807_f932ec71/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/RainyWindow/20261030_185807_f932ec71/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949062+00:00",
+      "history": [
+        {
+          "at": "2026-10-30T18:00:33.623094+00:00",
+          "status": "Generated",
+          "run_id": "20261030_185807_f932ec71",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/RainyWindow/20261030_185807_f932ec71"
+        },
+        {
+          "at": "2026-10-30T18:00:33.644395+00:00",
+          "status": "Imported",
+          "run_id": "20261030_185807_f932ec71",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/RainyWindow/20261030_185807_f932ec71"
+        },
+        {
+          "at": "2026-10-30T18:00:33.670291+00:00",
+          "status": "Validated",
+          "run_id": "20261030_185807_f932ec71",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/RainyWindow/20261030_185807_f932ec71"
+        },
+        {
+          "at": "2026-10-30T18:00:33.696233+00:00",
+          "status": "Needs Review",
+          "run_id": "20261030_185807_f932ec71",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/RainyWindow/20261030_185807_f932ec71"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949063+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261030_185807_f932ec71/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949061+00:00"
+      }
+    },
+    {
+      "id": "DD-08",
+      "slug": "CityBackdrop",
+      "category": "Environment",
+      "name": "Exterior city backdrop",
+      "pipeline": "Texture / Unity",
+      "priority": "P2",
+      "dependencies": [
+        "RainyWindow"
+      ],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Environment/CityBackdrop/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/CityBackdrop/20261031_010809_59d80bc2",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Environment/CityBackdrop/References/",
+      "requirements": "Nighttime blurred amber city lights outside window",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/CityBackdrop/20261031_010809_59d80bc2/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/CityBackdrop/20261031_010809_59d80bc2/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949076+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T00:09:38.322984+00:00",
+          "status": "Generated",
+          "run_id": "20261031_010809_59d80bc2",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/CityBackdrop/20261031_010809_59d80bc2"
+        },
+        {
+          "at": "2026-10-31T00:09:38.344516+00:00",
+          "status": "Imported",
+          "run_id": "20261031_010809_59d80bc2",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/CityBackdrop/20261031_010809_59d80bc2"
+        },
+        {
+          "at": "2026-10-31T00:09:38.370769+00:00",
+          "status": "Validated",
+          "run_id": "20261031_010809_59d80bc2",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/CityBackdrop/20261031_010809_59d80bc2"
+        },
+        {
+          "at": "2026-10-31T00:09:38.396550+00:00",
+          "status": "Needs Review",
+          "run_id": "20261031_010809_59d80bc2",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/CityBackdrop/20261031_010809_59d80bc2"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949076+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261031_010809_59d80bc2/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949074+00:00"
+      }
+    },
+    {
+      "id": "DD-09",
+      "slug": "FloorBackground",
+      "category": "Environment",
+      "name": "Floor / background",
+      "pipeline": "Blender",
+      "priority": "P2",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Environment/FloorBackground/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Environment/FloorBackground/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/FloorBackground/20261031_010939_114b6b8a",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Environment/FloorBackground/References/",
+      "requirements": "Small amount of room depth beneath and behind desk",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/FloorBackground/20261031_010939_114b6b8a/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/FloorBackground/20261031_010939_114b6b8a/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949089+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T00:11:46.386187+00:00",
+          "status": "Generated",
+          "run_id": "20261031_010939_114b6b8a",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/FloorBackground/20261031_010939_114b6b8a"
+        },
+        {
+          "at": "2026-10-31T00:11:46.404991+00:00",
+          "status": "Imported",
+          "run_id": "20261031_010939_114b6b8a",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/FloorBackground/20261031_010939_114b6b8a"
+        },
+        {
+          "at": "2026-10-31T00:11:46.430078+00:00",
+          "status": "Validated",
+          "run_id": "20261031_010939_114b6b8a",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/FloorBackground/20261031_010939_114b6b8a"
+        },
+        {
+          "at": "2026-10-31T00:11:46.454991+00:00",
+          "status": "Needs Review",
+          "run_id": "20261031_010939_114b6b8a",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/FloorBackground/20261031_010939_114b6b8a"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949090+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261031_010939_114b6b8a/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949088+00:00"
+      }
+    },
+    {
+      "id": "DD-10",
+      "slug": "MechanicalGlobe",
+      "category": "Gameplay",
+      "name": "Mechanical globe",
+      "pipeline": "Blender",
+      "priority": "P1",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": true,
+      "existing_binding": "Assets/DetectiveDesk/GlobeBlender/Prefabs/MechanicalGlobe_Blender.prefab",
+      "dependency_available": true,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Gameplay/MechanicalGlobe/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Gameplay/MechanicalGlobe/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/GlobeRework",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Gameplay/MechanicalGlobe/References/",
+      "requirements": "Sphere, meridian band, engravings; left of center",
+      "attempt_count": 0,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/GlobeRework/preview.png",
+      "report_path": "Assets/DetectiveDesk/GlobeRework/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T22:45:31.331982+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T22:45:31.332002+00:00",
+          "status": "Needs Review",
+          "event": "original_derived_reference_globe_rework",
+          "previous": {
+            "source_path": "Assets/DetectiveDesk/ArtSource/Gameplay/MechanicalGlobe/",
+            "generator_path": "Assets/DetectiveDesk/ArtSource/Gameplay/MechanicalGlobe/build_asset.py",
+            "output_path": "",
+            "report_path": "",
+            "screenshot_path": ""
+          },
+          "evidence": {
+            "source": "Assets/DetectiveDesk/GlobeRework/blender-validation.json",
+            "unity": "Assets/DetectiveDesk/GlobeRework/unity-validation.json",
+            "runtime": "ProductionLogs/GlobeRework/runtime-validation.json",
+            "preservation": "ProductionLogs/GlobeRework/preservation-comparison.json",
+            "modules": [
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_12T_Pivot.prefab",
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_14T_Pivot.prefab",
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_16T_Pivot.prefab",
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Needle.prefab",
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Sphere.prefab",
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Static.prefab"
+            ],
+            "original_root_prefab_preserved": "Assets/DetectiveDesk/GlobeBlender/Prefabs/MechanicalGlobe_Blender.prefab"
+          }
+        }
+      ],
+      "test_runs": [],
+      "notes": "Original detailed globe reused and reference rework installed: readable 2048x1024 geographic map/coastlines, broad engraved brass meridian, stepped base and supported gauge. Original root, sphere/gear/needle targets, ratios, camera, colliders and unrelated components preserved. Runtime rotation/ratios/needle/HUD passed. New URP world-only readability preset; zero missing maps/materials/Console errors. Human visual approval pending; physical mouse/performance not exhaustively tested.",
+      "rework_evidence": {
+        "source": "Assets/DetectiveDesk/GlobeRework/blender-validation.json",
+        "unity": "Assets/DetectiveDesk/GlobeRework/unity-validation.json",
+        "runtime": "ProductionLogs/GlobeRework/runtime-validation.json",
+        "preservation": "ProductionLogs/GlobeRework/preservation-comparison.json",
+        "modules": [
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_12T_Pivot.prefab",
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_14T_Pivot.prefab",
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_16T_Pivot.prefab",
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Needle.prefab",
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Sphere.prefab",
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Static.prefab"
+        ],
+        "original_root_prefab_preserved": "Assets/DetectiveDesk/GlobeBlender/Prefabs/MechanicalGlobe_Blender.prefab"
+      },
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "Assets/DetectiveDesk/GlobeRework/asset-report.md",
+        "screenshot": "Assets/DetectiveDesk/GlobeRework/preview.png",
+        "at": "2026-10-31T22:45:31.331999+00:00"
+      }
+    },
+    {
+      "id": "DD-11",
+      "slug": "GlobeGears",
+      "category": "Gameplay",
+      "name": "Globe mechanisms",
+      "pipeline": "Blender",
+      "priority": "P1",
+      "dependencies": [
+        "MechanicalGlobe"
+      ],
+      "status": "Needs Review",
+      "protected_existing": true,
+      "existing_binding": "Assets/DetectiveDesk/GlobeBlender/Prefabs/MechanicalGlobe_Blender_Visuals.prefab",
+      "dependency_available": true,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Gameplay/MechanicalGlobe/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Gameplay/MechanicalGlobe/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/GlobeRework",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Gameplay/GlobeGears/References/",
+      "requirements": "Exposed gear teeth, axles and brass internals",
+      "attempt_count": 0,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/GlobeRework/preview.png",
+      "report_path": "Assets/DetectiveDesk/GlobeRework/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T22:45:31.332010+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T22:45:31.332014+00:00",
+          "status": "Needs Review",
+          "event": "original_derived_reference_globe_rework",
+          "previous": {
+            "source_path": "Assets/DetectiveDesk/ArtSource/Gameplay/GlobeGears/",
+            "generator_path": "Assets/DetectiveDesk/ArtSource/Gameplay/GlobeGears/build_asset.py",
+            "output_path": "",
+            "report_path": "",
+            "screenshot_path": ""
+          },
+          "evidence": {
+            "source": "Assets/DetectiveDesk/GlobeRework/blender-validation.json",
+            "unity": "Assets/DetectiveDesk/GlobeRework/unity-validation.json",
+            "runtime": "ProductionLogs/GlobeRework/runtime-validation.json",
+            "preservation": "ProductionLogs/GlobeRework/preservation-comparison.json",
+            "modules": [
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_12T_Pivot.prefab",
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_14T_Pivot.prefab",
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_16T_Pivot.prefab",
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Needle.prefab",
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Sphere.prefab",
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Static.prefab"
+            ],
+            "original_root_prefab_preserved": "Assets/DetectiveDesk/GlobeBlender/Prefabs/MechanicalGlobe_Blender_Visuals.prefab"
+          }
+        }
+      ],
+      "test_runs": [],
+      "notes": "Original detailed globe reused and reference rework installed: readable 2048x1024 geographic map/coastlines, broad engraved brass meridian, stepped base and supported gauge. Original root, sphere/gear/needle targets, ratios, camera, colliders and unrelated components preserved. Runtime rotation/ratios/needle/HUD passed. New URP world-only readability preset; zero missing maps/materials/Console errors. Human visual approval pending; physical mouse/performance not exhaustively tested.",
+      "rework_evidence": {
+        "source": "Assets/DetectiveDesk/GlobeRework/blender-validation.json",
+        "unity": "Assets/DetectiveDesk/GlobeRework/unity-validation.json",
+        "runtime": "ProductionLogs/GlobeRework/runtime-validation.json",
+        "preservation": "ProductionLogs/GlobeRework/preservation-comparison.json",
+        "modules": [
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_12T_Pivot.prefab",
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_14T_Pivot.prefab",
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_16T_Pivot.prefab",
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Needle.prefab",
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Sphere.prefab",
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Static.prefab"
+        ],
+        "original_root_prefab_preserved": "Assets/DetectiveDesk/GlobeBlender/Prefabs/MechanicalGlobe_Blender_Visuals.prefab"
+      },
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "Assets/DetectiveDesk/GlobeRework/asset-report.md",
+        "screenshot": "Assets/DetectiveDesk/GlobeRework/preview.png",
+        "at": "2026-10-31T22:45:31.332013+00:00"
+      }
+    },
+    {
+      "id": "DD-12",
+      "slug": "GlobeControl",
+      "category": "Gameplay",
+      "name": "Globe controls / RPM gauge",
+      "pipeline": "Blender",
+      "priority": "P1",
+      "dependencies": [
+        "MechanicalGlobe"
+      ],
+      "status": "Needs Review",
+      "protected_existing": true,
+      "existing_binding": "Assets/DetectiveDesk/GlobeBlender/Prefabs/MechanicalGlobe_Blender.prefab",
+      "dependency_available": true,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Gameplay/MechanicalGlobe/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Gameplay/MechanicalGlobe/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/GlobeRework",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Gameplay/GlobeControl/References/",
+      "requirements": "Pedestal, clear gauge needle and control discs",
+      "attempt_count": 0,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/GlobeRework/preview.png",
+      "report_path": "Assets/DetectiveDesk/GlobeRework/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T22:45:31.332018+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T22:45:31.332021+00:00",
+          "status": "Needs Review",
+          "event": "original_derived_reference_globe_rework",
+          "previous": {
+            "source_path": "Assets/DetectiveDesk/ArtSource/Gameplay/GlobeControl/",
+            "generator_path": "Assets/DetectiveDesk/ArtSource/Gameplay/GlobeControl/build_asset.py",
+            "output_path": "",
+            "report_path": "",
+            "screenshot_path": ""
+          },
+          "evidence": {
+            "source": "Assets/DetectiveDesk/GlobeRework/blender-validation.json",
+            "unity": "Assets/DetectiveDesk/GlobeRework/unity-validation.json",
+            "runtime": "ProductionLogs/GlobeRework/runtime-validation.json",
+            "preservation": "ProductionLogs/GlobeRework/preservation-comparison.json",
+            "modules": [
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_12T_Pivot.prefab",
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_14T_Pivot.prefab",
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_16T_Pivot.prefab",
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Needle.prefab",
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Sphere.prefab",
+              "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Static.prefab"
+            ],
+            "original_root_prefab_preserved": "Assets/DetectiveDesk/GlobeBlender/Prefabs/MechanicalGlobe_Blender.prefab"
+          }
+        }
+      ],
+      "test_runs": [],
+      "notes": "Original detailed globe reused and reference rework installed: readable 2048x1024 geographic map/coastlines, broad engraved brass meridian, stepped base and supported gauge. Original root, sphere/gear/needle targets, ratios, camera, colliders and unrelated components preserved. Runtime rotation/ratios/needle/HUD passed. New URP world-only readability preset; zero missing maps/materials/Console errors. Human visual approval pending; physical mouse/performance not exhaustively tested.",
+      "rework_evidence": {
+        "source": "Assets/DetectiveDesk/GlobeRework/blender-validation.json",
+        "unity": "Assets/DetectiveDesk/GlobeRework/unity-validation.json",
+        "runtime": "ProductionLogs/GlobeRework/runtime-validation.json",
+        "preservation": "ProductionLogs/GlobeRework/preservation-comparison.json",
+        "modules": [
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_12T_Pivot.prefab",
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_14T_Pivot.prefab",
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_16T_Pivot.prefab",
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Needle.prefab",
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Sphere.prefab",
+          "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Static.prefab"
+        ],
+        "original_root_prefab_preserved": "Assets/DetectiveDesk/GlobeBlender/Prefabs/MechanicalGlobe_Blender.prefab"
+      },
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "Assets/DetectiveDesk/GlobeRework/asset-report.md",
+        "screenshot": "Assets/DetectiveDesk/GlobeRework/preview.png",
+        "at": "2026-10-31T22:45:31.332020+00:00"
+      }
+    },
+    {
+      "id": "DD-13",
+      "slug": "PinCoffer",
+      "category": "Gameplay",
+      "name": "12-slot pin coffer",
+      "pipeline": "Blender",
+      "priority": "P1",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": true,
+      "existing_binding": "Assets/DetectiveDesk/PinCoffer/DetectivePinCoffer.prefab",
+      "dependency_available": true,
+      "source_path": "Assets/DetectiveDesk/ArtSource/PinCoffer/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/PinCoffer/build_pincoffer.py",
+      "output_path": "",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Gameplay/PinCoffer/References/",
+      "requirements": "Re-use previous precision generator; 12 true 3x4 pockets",
+      "attempt_count": 0,
+      "last_error": "",
+      "screenshot_path": "",
+      "report_path": "",
+      "validated": false,
+      "human_approved": false,
+      "last_updated": "2026-10-30T15:26:54.771837+00:00",
+      "history": [],
+      "test_runs": [],
+      "notes": "Existing work protected; inspected inventory, no new visual approval."
+    },
+    {
+      "id": "DD-14",
+      "slug": "CollectiblePin",
+      "category": "Gameplay",
+      "name": "Collectible pin",
+      "pipeline": "Blender",
+      "priority": "P1",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": true,
+      "existing_binding": "Assets/DetectiveDesk/Prefabs/CollectiblePin.prefab",
+      "dependency_available": true,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Gameplay/CollectiblePin/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Gameplay/CollectiblePin/build_collectible_pin.py",
+      "output_path": "",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Gameplay/CollectiblePin/References/",
+      "requirements": "Re-use existing pin generator; separate enamel and brass",
+      "attempt_count": 0,
+      "last_error": "",
+      "screenshot_path": "",
+      "report_path": "",
+      "validated": false,
+      "human_approved": false,
+      "last_updated": "2026-10-30T15:26:54.771962+00:00",
+      "history": [],
+      "test_runs": [],
+      "notes": "Existing work protected; inspected inventory, no new visual approval."
+    },
+    {
+      "id": "DD-15",
+      "slug": "PinSkins",
+      "category": "Gameplay",
+      "name": "Pin skins (12)",
+      "pipeline": "Unity materials",
+      "priority": "P1",
+      "dependencies": [
+        "CollectiblePin"
+      ],
+      "status": "Needs Review",
+      "protected_existing": true,
+      "existing_binding": "Assets/DetectiveDesk/Materials/PinSkins",
+      "dependency_available": true,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Gameplay/PinSkins/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Gameplay/PinSkins/References/",
+      "requirements": "12 color variants; material assets not separate geometry",
+      "attempt_count": 0,
+      "last_error": "",
+      "screenshot_path": "",
+      "report_path": "",
+      "validated": false,
+      "human_approved": false,
+      "last_updated": "2026-10-30T15:26:54.772079+00:00",
+      "history": [],
+      "test_runs": [],
+      "notes": "Existing work protected; inspected inventory, no new visual approval."
+    },
+    {
+      "id": "DD-16",
+      "slug": "PinLauncher",
+      "category": "Gameplay",
+      "name": "Toy pin launcher",
+      "pipeline": "Blender",
+      "priority": "P1",
+      "dependencies": [
+        "CollectiblePin"
+      ],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Gameplay/PinLauncher/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Gameplay/PinLauncher/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/PinLauncherRework",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Gameplay/PinLauncher/References/",
+      "requirements": "Not a firearm: playful pin-launch mechanism",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/PinLauncherRework/preview.png",
+      "report_path": "Assets/DetectiveDesk/PinLauncherRework/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T21:51:09.055163+00:00",
+      "history": [
+        {
+          "at": "2026-10-30T18:09:50.835272+00:00",
+          "status": "Generated",
+          "run_id": "20261030_190710_5307019b",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/PinLauncher/20261030_190710_5307019b"
+        },
+        {
+          "at": "2026-10-30T18:09:50.852973+00:00",
+          "status": "Imported",
+          "run_id": "20261030_190710_5307019b",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/PinLauncher/20261030_190710_5307019b"
+        },
+        {
+          "at": "2026-10-30T18:09:50.878164+00:00",
+          "status": "Validated",
+          "run_id": "20261030_190710_5307019b",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/PinLauncher/20261030_190710_5307019b"
+        },
+        {
+          "at": "2026-10-30T18:09:50.903688+00:00",
+          "status": "Needs Review",
+          "run_id": "20261030_190710_5307019b",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/PinLauncher/20261030_190710_5307019b"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949108+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        },
+        {
+          "at": "2026-10-31T21:51:09.055182+00:00",
+          "status": "Needs Review",
+          "event": "reference_driven_pin_launcher_rework",
+          "previous": {
+            "output_path": "Assets/DetectiveDesk/AssetProduction/PinLauncher/20261030_190710_5307019b",
+            "screenshot_path": "Assets/DetectiveDesk/AssetProduction/PinLauncher/20261030_190710_5307019b/preview.png",
+            "report_path": "Assets/DetectiveDesk/AssetProduction/PinLauncher/20261030_190710_5307019b/asset-report.md",
+            "scene_integration": {
+              "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+              "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+              "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+              "at": "2026-10-31T00:41:20.949106+00:00"
+            }
+          },
+          "evidence": {
+            "blender": "Assets/DetectiveDesk/PinLauncherRework/blender-validation.json",
+            "unity": "Assets/DetectiveDesk/PinLauncherRework/unity-validation.json",
+            "preservation": "ProductionLogs/PinLauncherRework/preservation-comparison.json",
+            "runtime": "ProductionLogs/PinLauncherRework/runtime-callback.json",
+            "generator_helper": "Assets/DetectiveDesk/ArtSource/Gameplay/PinLauncher/pinlauncher_detail.py",
+            "reference": "Inspiration/SceneAndValidatedAssets/SceneApproved.png"
+          }
+        }
+      ],
+      "test_runs": [],
+      "notes": "Reference-driven brass pin cannon rework installed in DetectiveOffice. Exact embedded entry/helper, 12 packed maps, FBX reimport and Unity 168 meshes/73960 triangles validated. Player-facing handwheel corrected. Original gameplay root/colliders/scripts, camera and all unrelated original components preserved; FirePin callback passed Play Mode. Physical mouse/hover and new projectile mechanics not tested or added. Human visual approval pending.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261030_190710_5307019b/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "Assets/DetectiveDesk/PinLauncherRework/asset-report.md",
+        "screenshot": "Assets/DetectiveDesk/PinLauncherRework/preview.png",
+        "at": "2026-10-31T21:51:09.055178+00:00"
+      },
+      "rework_evidence": {
+        "blender": "Assets/DetectiveDesk/PinLauncherRework/blender-validation.json",
+        "unity": "Assets/DetectiveDesk/PinLauncherRework/unity-validation.json",
+        "preservation": "ProductionLogs/PinLauncherRework/preservation-comparison.json",
+        "runtime": "ProductionLogs/PinLauncherRework/runtime-callback.json",
+        "generator_helper": "Assets/DetectiveDesk/ArtSource/Gameplay/PinLauncher/pinlauncher_detail.py",
+        "reference": "Inspiration/SceneAndValidatedAssets/SceneApproved.png"
+      }
+    },
+    {
+      "id": "DD-17",
+      "slug": "CaseFiles",
+      "category": "Gameplay",
+      "name": "Case files",
+      "pipeline": "Blender",
+      "priority": "P1",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Gameplay/CaseFiles/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Gameplay/CaseFiles/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/CaseFiles/20261030_190951_a7461063",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Gameplay/CaseFiles/References/",
+      "requirements": "Folder covers, sheets, paper clip and separate paper layers",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/CaseFiles/20261030_190951_a7461063/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/CaseFiles/20261030_190951_a7461063/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949120+00:00",
+      "history": [
+        {
+          "at": "2026-10-30T18:12:01.173178+00:00",
+          "status": "Generated",
+          "run_id": "20261030_190951_a7461063",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/CaseFiles/20261030_190951_a7461063"
+        },
+        {
+          "at": "2026-10-30T18:12:01.190557+00:00",
+          "status": "Imported",
+          "run_id": "20261030_190951_a7461063",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/CaseFiles/20261030_190951_a7461063"
+        },
+        {
+          "at": "2026-10-30T18:12:01.215174+00:00",
+          "status": "Validated",
+          "run_id": "20261030_190951_a7461063",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/CaseFiles/20261030_190951_a7461063"
+        },
+        {
+          "at": "2026-10-30T18:12:01.239662+00:00",
+          "status": "Needs Review",
+          "run_id": "20261030_190951_a7461063",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/CaseFiles/20261030_190951_a7461063"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949121+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261030_190951_a7461063/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949119+00:00"
+      }
+    },
+    {
+      "id": "DD-18",
+      "slug": "SolvedStamp",
+      "category": "Gameplay",
+      "name": "Solved stamping station",
+      "pipeline": "Blender",
+      "priority": "P1",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": true,
+      "existing_binding": "Assets/DetectiveDesk/AssetFurnaceStamp/AssetFurnace_SOLVED_Stamp_Visual.prefab",
+      "dependency_available": true,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Gameplay/SolvedStamp/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Gameplay/SolvedStamp/build_asset.py",
+      "output_path": "",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Gameplay/SolvedStamp/References/",
+      "requirements": "Stamp, stamp pad and base for case-complete action",
+      "attempt_count": 0,
+      "last_error": "",
+      "screenshot_path": "",
+      "report_path": "",
+      "validated": false,
+      "human_approved": false,
+      "last_updated": "2026-10-30T15:26:54.772219+00:00",
+      "history": [],
+      "test_runs": [],
+      "notes": "Existing work protected; inspected inventory, no new visual approval."
+    },
+    {
+      "id": "DD-19",
+      "slug": "StatueSlots",
+      "category": "Props",
+      "name": "Statue display slots",
+      "pipeline": "Blender",
+      "priority": "P1",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Props/StatueSlots/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Props/StatueSlots/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/StatueSlots/20261030_191201_78b848b4",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Props/StatueSlots/References/",
+      "requirements": "4 reusable empty display bases; no statue attached",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/StatueSlots/20261030_191201_78b848b4/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/StatueSlots/20261030_191201_78b848b4/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949135+00:00",
+      "history": [
+        {
+          "at": "2026-10-30T18:14:26.954485+00:00",
+          "status": "Generated",
+          "run_id": "20261030_191201_78b848b4",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/StatueSlots/20261030_191201_78b848b4"
+        },
+        {
+          "at": "2026-10-30T18:14:26.972414+00:00",
+          "status": "Imported",
+          "run_id": "20261030_191201_78b848b4",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/StatueSlots/20261030_191201_78b848b4"
+        },
+        {
+          "at": "2026-10-30T18:14:26.996238+00:00",
+          "status": "Validated",
+          "run_id": "20261030_191201_78b848b4",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/StatueSlots/20261030_191201_78b848b4"
+        },
+        {
+          "at": "2026-10-30T18:14:27.020655+00:00",
+          "status": "Needs Review",
+          "run_id": "20261030_191201_78b848b4",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/StatueSlots/20261030_191201_78b848b4"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949136+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261030_191201_78b848b4/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949134+00:00"
+      }
+    },
+    {
+      "id": "DD-20",
+      "slug": "CollectibleStatues",
+      "category": "Props",
+      "name": "Collectible statues",
+      "pipeline": "Blender",
+      "priority": "P2",
+      "dependencies": [
+        "StatueSlots"
+      ],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Props/CollectibleStatues/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Props/CollectibleStatues/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/CollectibleStatues/20261031_011441_91ecff05",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Props/CollectibleStatues/References/",
+      "requirements": "Modular miniature figures/busts",
+      "attempt_count": 2,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/CollectibleStatues/20261031_011441_91ecff05/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/CollectibleStatues/20261031_011441_91ecff05/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949149+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T00:16:40.365002+00:00",
+          "status": "Generated",
+          "run_id": "20261031_011441_91ecff05",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/CollectibleStatues/20261031_011441_91ecff05"
+        },
+        {
+          "at": "2026-10-31T00:16:40.382306+00:00",
+          "status": "Imported",
+          "run_id": "20261031_011441_91ecff05",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/CollectibleStatues/20261031_011441_91ecff05"
+        },
+        {
+          "at": "2026-10-31T00:16:40.407519+00:00",
+          "status": "Validated",
+          "run_id": "20261031_011441_91ecff05",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/CollectibleStatues/20261031_011441_91ecff05"
+        },
+        {
+          "at": "2026-10-31T00:16:40.433012+00:00",
+          "status": "Needs Review",
+          "run_id": "20261031_011441_91ecff05",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/CollectibleStatues/20261031_011441_91ecff05"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949150+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261031_011441_91ecff05/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949147+00:00"
+      }
+    },
+    {
+      "id": "DD-21",
+      "slug": "KintsugiMaterial",
+      "category": "Props",
+      "name": "Kintsugi material",
+      "pipeline": "Shader / Texture",
+      "priority": "P2",
+      "dependencies": [
+        "CollectibleStatues"
+      ],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Props/KintsugiMaterial/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/KintsugiMaterial/20261031_011641_bff2b921",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Props/KintsugiMaterial/References/",
+      "requirements": "Black stone and luminous gold crack shader",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/KintsugiMaterial/20261031_011641_bff2b921/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/KintsugiMaterial/20261031_011641_bff2b921/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949163+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T00:18:32.386541+00:00",
+          "status": "Generated",
+          "run_id": "20261031_011641_bff2b921",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/KintsugiMaterial/20261031_011641_bff2b921"
+        },
+        {
+          "at": "2026-10-31T00:18:32.404925+00:00",
+          "status": "Imported",
+          "run_id": "20261031_011641_bff2b921",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/KintsugiMaterial/20261031_011641_bff2b921"
+        },
+        {
+          "at": "2026-10-31T00:18:32.429384+00:00",
+          "status": "Validated",
+          "run_id": "20261031_011641_bff2b921",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/KintsugiMaterial/20261031_011641_bff2b921"
+        },
+        {
+          "at": "2026-10-31T00:18:32.453746+00:00",
+          "status": "Needs Review",
+          "run_id": "20261031_011641_bff2b921",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/KintsugiMaterial/20261031_011641_bff2b921"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949164+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Needs human review. Subsequent serialization removed only _EMISSION keyword; current material retained. Emission/glow is unverified. Audit: ProductionLogs/AssetQueue/KintsugiKeywordAudit.json. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261031_011641_bff2b921/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949162+00:00"
+      }
+    },
+    {
+      "id": "DD-22",
+      "slug": "JewelerHammer",
+      "category": "Props",
+      "name": "Jeweler hammer",
+      "pipeline": "Blender",
+      "priority": "P2",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Props/JewelerHammer/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Props/JewelerHammer/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/JewelerHammer/20261031_011833_0ceabff9",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Props/JewelerHammer/References/",
+      "requirements": "Small brass mallet with wooden handle",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/JewelerHammer/20261031_011833_0ceabff9/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/JewelerHammer/20261031_011833_0ceabff9/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949177+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T00:22:54.005550+00:00",
+          "status": "Needs Review",
+          "run_id": "20261031_011833_0ceabff9",
+          "recovered": true
+        },
+        {
+          "at": "2026-10-31T00:41:20.949178+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Verified saved hammer output recovered after narrow audit of preceding material keyword serialization. Human visual approval pending. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261031_011833_0ceabff9/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949175+00:00"
+      }
+    },
+    {
+      "id": "DD-23",
+      "slug": "WhiskeyGlass",
+      "category": "Props",
+      "name": "Whiskey glass",
+      "pipeline": "Blender",
+      "priority": "P2",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Props/WhiskeyGlass/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Props/WhiskeyGlass/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/WhiskeyGlass/20261031_012255_d0b59e21",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Props/WhiskeyGlass/References/",
+      "requirements": "Heavy faceted glass, amber liquid and ice",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/WhiskeyGlass/20261031_012255_d0b59e21/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/WhiskeyGlass/20261031_012255_d0b59e21/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949191+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T00:24:57.815510+00:00",
+          "status": "Generated",
+          "run_id": "20261031_012255_d0b59e21",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WhiskeyGlass/20261031_012255_d0b59e21"
+        },
+        {
+          "at": "2026-10-31T00:24:57.833138+00:00",
+          "status": "Imported",
+          "run_id": "20261031_012255_d0b59e21",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WhiskeyGlass/20261031_012255_d0b59e21"
+        },
+        {
+          "at": "2026-10-31T00:24:57.858082+00:00",
+          "status": "Validated",
+          "run_id": "20261031_012255_d0b59e21",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WhiskeyGlass/20261031_012255_d0b59e21"
+        },
+        {
+          "at": "2026-10-31T00:24:57.882307+00:00",
+          "status": "Needs Review",
+          "run_id": "20261031_012255_d0b59e21",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WhiskeyGlass/20261031_012255_d0b59e21"
+        },
+        {
+          "at": "2026-10-31T00:31:56.159894+00:00",
+          "status": "Needs Review",
+          "material_correction": true,
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WhiskeyGlass/20261031_012255_d0b59e21"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949191+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Scoped URP transparent-alpha crystal material correction and new Unity review executed; amber fill and ice visibility inspected. Refraction and gameplay integration remain unverified; human approval pending. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261031_012255_d0b59e21/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949189+00:00"
+      }
+    },
+    {
+      "id": "DD-24",
+      "slug": "WhiskeyBottle",
+      "category": "Props",
+      "name": "Whiskey bottle",
+      "pipeline": "Blender",
+      "priority": "P2",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Props/WhiskeyBottle/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Props/WhiskeyBottle/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/WhiskeyBottle/20261031_012732_edb92053",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Props/WhiskeyBottle/References/",
+      "requirements": "Clear glass bottle/decanter, stopper, no branded labels",
+      "attempt_count": 2,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/WhiskeyBottle/20261031_012732_edb92053/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/WhiskeyBottle/20261031_012732_edb92053/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949205+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T00:29:30.850030+00:00",
+          "status": "Generated",
+          "run_id": "20261031_012732_edb92053",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WhiskeyBottle/20261031_012732_edb92053"
+        },
+        {
+          "at": "2026-10-31T00:29:30.872274+00:00",
+          "status": "Imported",
+          "run_id": "20261031_012732_edb92053",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WhiskeyBottle/20261031_012732_edb92053"
+        },
+        {
+          "at": "2026-10-31T00:29:30.897731+00:00",
+          "status": "Validated",
+          "run_id": "20261031_012732_edb92053",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WhiskeyBottle/20261031_012732_edb92053"
+        },
+        {
+          "at": "2026-10-31T00:29:30.922813+00:00",
+          "status": "Needs Review",
+          "run_id": "20261031_012732_edb92053",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/WhiskeyBottle/20261031_012732_edb92053"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949206+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261031_012732_edb92053/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949204+00:00"
+      }
+    },
+    {
+      "id": "DD-25",
+      "slug": "BankersLamp",
+      "category": "Props",
+      "name": "Banker lamp",
+      "pipeline": "Blender",
+      "priority": "P1",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Props/BankersLamp/",
+      "generator_path": "Assets/DetectiveDesk/ArtSource/Props/BankersLamp/build_asset.py",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/BankersLamp/20261030_212422_3e4ba5f3",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Props/BankersLamp/References/",
+      "requirements": "Green glass shade, curved brass stem, pull-chain",
+      "attempt_count": 3,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/BankersLamp/20261030_212422_3e4ba5f3/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/BankersLamp/20261030_212422_3e4ba5f3/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949219+00:00",
+      "history": [
+        {
+          "at": "2026-10-30T20:26:19.021278+00:00",
+          "status": "Generated",
+          "run_id": "20261030_212422_3e4ba5f3",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/BankersLamp/20261030_212422_3e4ba5f3"
+        },
+        {
+          "at": "2026-10-30T20:26:19.041978+00:00",
+          "status": "Imported",
+          "run_id": "20261030_212422_3e4ba5f3",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/BankersLamp/20261030_212422_3e4ba5f3"
+        },
+        {
+          "at": "2026-10-30T20:26:19.069578+00:00",
+          "status": "Validated",
+          "run_id": "20261030_212422_3e4ba5f3",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/BankersLamp/20261030_212422_3e4ba5f3"
+        },
+        {
+          "at": "2026-10-30T20:26:19.095961+00:00",
+          "status": "Needs Review",
+          "run_id": "20261030_212422_3e4ba5f3",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/BankersLamp/20261030_212422_3e4ba5f3"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949220+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261030_212422_3e4ba5f3/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949218+00:00"
+      }
+    },
+    {
+      "id": "DD-26",
+      "slug": "CluePhotos",
+      "category": "Props",
+      "name": "Clue photographs",
+      "pipeline": "Texture / Unity",
+      "priority": "P2",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Props/CluePhotos/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/CluePhotos/20261031_014924_21ace326",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Props/CluePhotos/References/",
+      "requirements": "Separate replaceable photo textures on paper quads",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/CluePhotos/20261031_014924_21ace326/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/CluePhotos/20261031_014924_21ace326/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:53:21.384387+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T00:53:21.384404+00:00",
+          "status": "Needs Review",
+          "event": "coordinator_safe_console_recovery",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/CluePhotos/20261031_014924_21ace326/asset-report.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Coordinator verified preservation, review hashes and final dedicated Unity MCP Console inspection: zero errors. Procedural illustrations await human visual/narrative approval.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261031_014924_21ace326/job.json"
+    },
+    {
+      "id": "DD-27",
+      "slug": "ClueMemos",
+      "category": "Props",
+      "name": "Clue memos",
+      "pipeline": "Texture / Unity",
+      "priority": "P2",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Props/ClueMemos/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/ClueMemos/20261031_015323_3af426b0",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Props/ClueMemos/References/",
+      "requirements": "Separate handwritten paper textures",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/ClueMemos/20261031_015323_3af426b0/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/ClueMemos/20261031_015323_3af426b0/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:55:33.952871+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T00:55:33.878400+00:00",
+          "status": "Generated",
+          "run_id": "20261031_015323_3af426b0",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/ClueMemos/20261031_015323_3af426b0"
+        },
+        {
+          "at": "2026-10-31T00:55:33.901273+00:00",
+          "status": "Imported",
+          "run_id": "20261031_015323_3af426b0",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/ClueMemos/20261031_015323_3af426b0"
+        },
+        {
+          "at": "2026-10-31T00:55:33.927792+00:00",
+          "status": "Validated",
+          "run_id": "20261031_015323_3af426b0",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/ClueMemos/20261031_015323_3af426b0"
+        },
+        {
+          "at": "2026-10-31T00:55:33.952863+00:00",
+          "status": "Needs Review",
+          "run_id": "20261031_015323_3af426b0",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/ClueMemos/20261031_015323_3af426b0"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261031_015323_3af426b0/job.json"
+    },
+    {
+      "id": "DD-28",
+      "slug": "DeskWear",
+      "category": "Props",
+      "name": "Desk wear overlays",
+      "pipeline": "Texture / Unity",
+      "priority": "P2",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Props/DeskWear/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/DeskWear/20261031_015534_13afb160",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Props/DeskWear/References/",
+      "requirements": "Decals for rings, scuffs, scratches and stains",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/DeskWear/20261031_015534_13afb160/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/DeskWear/20261031_015534_13afb160/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:57:24.864972+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T00:57:24.789048+00:00",
+          "status": "Generated",
+          "run_id": "20261031_015534_13afb160",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/DeskWear/20261031_015534_13afb160"
+        },
+        {
+          "at": "2026-10-31T00:57:24.811324+00:00",
+          "status": "Imported",
+          "run_id": "20261031_015534_13afb160",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/DeskWear/20261031_015534_13afb160"
+        },
+        {
+          "at": "2026-10-31T00:57:24.837394+00:00",
+          "status": "Validated",
+          "run_id": "20261031_015534_13afb160",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/DeskWear/20261031_015534_13afb160"
+        },
+        {
+          "at": "2026-10-31T00:57:24.864963+00:00",
+          "status": "Needs Review",
+          "run_id": "20261031_015534_13afb160",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/DeskWear/20261031_015534_13afb160"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261031_015534_13afb160/job.json"
+    },
+    {
+      "id": "DD-29",
+      "slug": "MainHUD",
+      "category": "UI",
+      "name": "Main HUD",
+      "pipeline": "Unity UI",
+      "priority": "P1",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": true,
+      "existing_binding": "Assets/DetectiveDesk/Scripts",
+      "dependency_available": true,
+      "source_path": "Assets/DetectiveDesk/ArtSource/UI/MainHUD/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/UI/MainHUD/References/",
+      "requirements": "Dark slim top panel; no huge floating widgets",
+      "attempt_count": 0,
+      "last_error": "",
+      "screenshot_path": "",
+      "report_path": "",
+      "validated": false,
+      "human_approved": false,
+      "last_updated": "2026-10-30T15:26:54.772343+00:00",
+      "history": [],
+      "test_runs": [],
+      "notes": "Existing work protected; inspected inventory, no new visual approval."
+    },
+    {
+      "id": "DD-30",
+      "slug": "CurrencyHUD",
+      "category": "UI",
+      "name": "Currency indicators",
+      "pipeline": "Unity UI",
+      "priority": "P1",
+      "dependencies": [
+        "MainHUD"
+      ],
+      "status": "Needs Review",
+      "protected_existing": true,
+      "existing_binding": "Assets/DetectiveDesk/Scripts",
+      "dependency_available": true,
+      "source_path": "Assets/DetectiveDesk/ArtSource/UI/CurrencyHUD/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/UI/CurrencyHUD/References/",
+      "requirements": "Money, money/minute, gold",
+      "attempt_count": 0,
+      "last_error": "",
+      "screenshot_path": "",
+      "report_path": "",
+      "validated": false,
+      "human_approved": false,
+      "last_updated": "2026-10-30T15:26:54.772438+00:00",
+      "history": [],
+      "test_runs": [],
+      "notes": "Existing work protected; inspected inventory, no new visual approval."
+    },
+    {
+      "id": "DD-31",
+      "slug": "SettingsUI",
+      "category": "UI",
+      "name": "Settings interface",
+      "pipeline": "Unity UI",
+      "priority": "P1",
+      "dependencies": [
+        "MainHUD"
+      ],
+      "status": "Needs Review",
+      "protected_existing": true,
+      "existing_binding": "Assets/DetectiveDesk/Scripts",
+      "dependency_available": true,
+      "source_path": "Assets/DetectiveDesk/ArtSource/UI/SettingsUI/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/UI/SettingsUI/References/",
+      "requirements": "Cog at far top-left; accessible modal",
+      "attempt_count": 0,
+      "last_error": "",
+      "screenshot_path": "",
+      "report_path": "",
+      "validated": false,
+      "human_approved": false,
+      "last_updated": "2026-10-30T15:26:54.772533+00:00",
+      "history": [],
+      "test_runs": [],
+      "notes": "Existing work protected; inspected inventory, no new visual approval."
+    },
+    {
+      "id": "DD-32",
+      "slug": "UpgradesUI",
+      "category": "UI",
+      "name": "Upgrades interface",
+      "pipeline": "Unity UI",
+      "priority": "P1",
+      "dependencies": [
+        "MainHUD"
+      ],
+      "status": "Needs Review",
+      "protected_existing": true,
+      "existing_binding": "Assets/DetectiveDesk/Scripts",
+      "dependency_available": true,
+      "source_path": "Assets/DetectiveDesk/ArtSource/UI/UpgradesUI/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/UI/UpgradesUI/References/",
+      "requirements": "UPGRADES at far top-right",
+      "attempt_count": 0,
+      "last_error": "",
+      "screenshot_path": "",
+      "report_path": "",
+      "validated": false,
+      "human_approved": false,
+      "last_updated": "2026-10-30T15:26:54.772626+00:00",
+      "history": [],
+      "test_runs": [],
+      "notes": "Existing work protected; inspected inventory, no new visual approval."
+    },
+    {
+      "id": "DD-33",
+      "slug": "InteractionFeedback",
+      "category": "UI",
+      "name": "Interaction feedback",
+      "pipeline": "Unity UI / Shader",
+      "priority": "P1",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/UI/InteractionFeedback/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/InteractionFeedback/20261030_214853_b1cdac91",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/UI/InteractionFeedback/References/",
+      "requirements": "Hover / selection glows subtle brass or green",
+      "attempt_count": 3,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/InteractionFeedback/20261030_214853_b1cdac91/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/InteractionFeedback/20261030_214853_b1cdac91/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949237+00:00",
+      "history": [
+        {
+          "at": "2026-10-30T20:50:52.265661+00:00",
+          "status": "Generated",
+          "run_id": "20261030_214853_b1cdac91",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/InteractionFeedback/20261030_214853_b1cdac91"
+        },
+        {
+          "at": "2026-10-30T20:50:52.291413+00:00",
+          "status": "Imported",
+          "run_id": "20261030_214853_b1cdac91",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/InteractionFeedback/20261030_214853_b1cdac91"
+        },
+        {
+          "at": "2026-10-30T20:50:52.328682+00:00",
+          "status": "Validated",
+          "run_id": "20261030_214853_b1cdac91",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/InteractionFeedback/20261030_214853_b1cdac91"
+        },
+        {
+          "at": "2026-10-30T20:50:52.361702+00:00",
+          "status": "Needs Review",
+          "run_id": "20261030_214853_b1cdac91",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/InteractionFeedback/20261030_214853_b1cdac91"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949238+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261030_214853_b1cdac91/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949236+00:00"
+      }
+    },
+    {
+      "id": "DD-34",
+      "slug": "CaseInventoryUI",
+      "category": "UI",
+      "name": "Inventory & case UI",
+      "pipeline": "Unity UI",
+      "priority": "P2",
+      "dependencies": [
+        "CaseFiles",
+        "MainHUD"
+      ],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/UI/CaseInventoryUI/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/CaseInventoryUI/20261031_015725_aad613fe",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/UI/CaseInventoryUI/References/",
+      "requirements": "Pins, cases, evidence details",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/CaseInventoryUI/20261031_015725_aad613fe/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/CaseInventoryUI/20261031_015725_aad613fe/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:59:28.855627+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T00:59:28.781911+00:00",
+          "status": "Generated",
+          "run_id": "20261031_015725_aad613fe",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/CaseInventoryUI/20261031_015725_aad613fe"
+        },
+        {
+          "at": "2026-10-31T00:59:28.804395+00:00",
+          "status": "Imported",
+          "run_id": "20261031_015725_aad613fe",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/CaseInventoryUI/20261031_015725_aad613fe"
+        },
+        {
+          "at": "2026-10-31T00:59:28.830202+00:00",
+          "status": "Validated",
+          "run_id": "20261031_015725_aad613fe",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/CaseInventoryUI/20261031_015725_aad613fe"
+        },
+        {
+          "at": "2026-10-31T00:59:28.855619+00:00",
+          "status": "Needs Review",
+          "run_id": "20261031_015725_aad613fe",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/CaseInventoryUI/20261031_015725_aad613fe"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261031_015725_aad613fe/job.json"
+    },
+    {
+      "id": "DD-35",
+      "slug": "MahoganyPBR",
+      "category": "Materials",
+      "name": "Dark mahogany PBR",
+      "pipeline": "Textures / Shader",
+      "priority": "P1",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Materials/MahoganyPBR/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/MahoganyPBR/20261030_215053_f81465af",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Materials/MahoganyPBR/References/",
+      "requirements": "Unified mahogany basecolor, roughness and normals",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/MahoganyPBR/20261030_215053_f81465af/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/MahoganyPBR/20261030_215053_f81465af/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949251+00:00",
+      "history": [
+        {
+          "at": "2026-10-30T20:52:34.299161+00:00",
+          "status": "Generated",
+          "run_id": "20261030_215053_f81465af",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/MahoganyPBR/20261030_215053_f81465af"
+        },
+        {
+          "at": "2026-10-30T20:52:34.321623+00:00",
+          "status": "Imported",
+          "run_id": "20261030_215053_f81465af",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/MahoganyPBR/20261030_215053_f81465af"
+        },
+        {
+          "at": "2026-10-30T20:52:34.349542+00:00",
+          "status": "Validated",
+          "run_id": "20261030_215053_f81465af",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/MahoganyPBR/20261030_215053_f81465af"
+        },
+        {
+          "at": "2026-10-30T20:52:34.376065+00:00",
+          "status": "Needs Review",
+          "run_id": "20261030_215053_f81465af",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/MahoganyPBR/20261030_215053_f81465af"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949252+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261030_215053_f81465af/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949250+00:00"
+      }
+    },
+    {
+      "id": "DD-36",
+      "slug": "AgedBrassPBR",
+      "category": "Materials",
+      "name": "Aged brass PBR",
+      "pipeline": "Textures / Shader",
+      "priority": "P1",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Materials/AgedBrassPBR/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/AgedBrassPBR/20261030_215235_85980d90",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Materials/AgedBrassPBR/References/",
+      "requirements": "Brass edge sheen, aged patina, scratches",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/AgedBrassPBR/20261030_215235_85980d90/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/AgedBrassPBR/20261030_215235_85980d90/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949265+00:00",
+      "history": [
+        {
+          "at": "2026-10-30T20:54:00.308651+00:00",
+          "status": "Generated",
+          "run_id": "20261030_215235_85980d90",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/AgedBrassPBR/20261030_215235_85980d90"
+        },
+        {
+          "at": "2026-10-30T20:54:00.333851+00:00",
+          "status": "Imported",
+          "run_id": "20261030_215235_85980d90",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/AgedBrassPBR/20261030_215235_85980d90"
+        },
+        {
+          "at": "2026-10-30T20:54:00.362165+00:00",
+          "status": "Validated",
+          "run_id": "20261030_215235_85980d90",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/AgedBrassPBR/20261030_215235_85980d90"
+        },
+        {
+          "at": "2026-10-30T20:54:00.391974+00:00",
+          "status": "Needs Review",
+          "run_id": "20261030_215235_85980d90",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/AgedBrassPBR/20261030_215235_85980d90"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949266+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261030_215235_85980d90/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949264+00:00"
+      }
+    },
+    {
+      "id": "DD-37",
+      "slug": "FabricLeatherPBR",
+      "category": "Materials",
+      "name": "Fabric and leather PBR",
+      "pipeline": "Textures / Shader",
+      "priority": "P1",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Materials/FabricLeatherPBR/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/FabricLeatherPBR/20261030_220615_17c6c6ae",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Materials/FabricLeatherPBR/References/",
+      "requirements": "Velvet and leather variation",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/FabricLeatherPBR/20261030_220615_17c6c6ae/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/FabricLeatherPBR/20261030_220615_17c6c6ae/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:41:20.949279+00:00",
+      "history": [
+        {
+          "at": "2026-10-30T21:08:09.614170+00:00",
+          "status": "Generated",
+          "run_id": "20261030_220615_17c6c6ae",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/FabricLeatherPBR/20261030_220615_17c6c6ae"
+        },
+        {
+          "at": "2026-10-30T21:08:09.632764+00:00",
+          "status": "Imported",
+          "run_id": "20261030_220615_17c6c6ae",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/FabricLeatherPBR/20261030_220615_17c6c6ae"
+        },
+        {
+          "at": "2026-10-30T21:08:09.659229+00:00",
+          "status": "Validated",
+          "run_id": "20261030_220615_17c6c6ae",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/FabricLeatherPBR/20261030_220615_17c6c6ae"
+        },
+        {
+          "at": "2026-10-30T21:08:09.686782+00:00",
+          "status": "Needs Review",
+          "run_id": "20261030_220615_17c6c6ae",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/FabricLeatherPBR/20261030_220615_17c6c6ae"
+        },
+        {
+          "at": "2026-10-31T00:41:20.949280+00:00",
+          "status": "Needs Review",
+          "event": "scene_visual_integration",
+          "report": "ProductionLogs/SceneIntegration/IntegrationReport.md"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed. Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261030_220615_17c6c6ae/job.json",
+      "scene_integration": {
+        "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+        "report": "ProductionLogs/SceneIntegration/IntegrationReport.md",
+        "screenshot": "../Artifacts/DetectiveDesk/AfterAssetIntegration.png",
+        "at": "2026-10-31T00:41:20.949278+00:00"
+      }
+    },
+    {
+      "id": "DD-38",
+      "slug": "SpecialMaterials",
+      "category": "Materials",
+      "name": "Specialty materials",
+      "pipeline": "Textures / Shader",
+      "priority": "P2",
+      "dependencies": [],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Materials/SpecialMaterials/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/SpecialMaterials/20261031_015929_477ff047",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Materials/SpecialMaterials/References/",
+      "requirements": "Parchment, enamel, crystal, whiskey, stone",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/SpecialMaterials/20261031_015929_477ff047/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/SpecialMaterials/20261031_015929_477ff047/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T01:01:07.821294+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T01:01:07.744242+00:00",
+          "status": "Generated",
+          "run_id": "20261031_015929_477ff047",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/SpecialMaterials/20261031_015929_477ff047"
+        },
+        {
+          "at": "2026-10-31T01:01:07.766780+00:00",
+          "status": "Imported",
+          "run_id": "20261031_015929_477ff047",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/SpecialMaterials/20261031_015929_477ff047"
+        },
+        {
+          "at": "2026-10-31T01:01:07.792441+00:00",
+          "status": "Validated",
+          "run_id": "20261031_015929_477ff047",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/SpecialMaterials/20261031_015929_477ff047"
+        },
+        {
+          "at": "2026-10-31T01:01:07.821286+00:00",
+          "status": "Needs Review",
+          "run_id": "20261031_015929_477ff047",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/SpecialMaterials/20261031_015929_477ff047"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261031_015929_477ff047/job.json"
+    },
+    {
+      "id": "DD-39",
+      "slug": "AtmosphereFX",
+      "category": "Effects",
+      "name": "Atmospheric effects",
+      "pipeline": "Unity VFX",
+      "priority": "P2",
+      "dependencies": [
+        "RainyWindow"
+      ],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Effects/AtmosphereFX/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/AtmosphereFX/20261031_020108_ba47aaf2",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Effects/AtmosphereFX/References/",
+      "requirements": "Rain, motes, atmospheric haze",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/AtmosphereFX/20261031_020108_ba47aaf2/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/AtmosphereFX/20261031_020108_ba47aaf2/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T01:03:22.014388+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T01:03:21.943228+00:00",
+          "status": "Generated",
+          "run_id": "20261031_020108_ba47aaf2",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/AtmosphereFX/20261031_020108_ba47aaf2"
+        },
+        {
+          "at": "2026-10-31T01:03:21.962910+00:00",
+          "status": "Imported",
+          "run_id": "20261031_020108_ba47aaf2",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/AtmosphereFX/20261031_020108_ba47aaf2"
+        },
+        {
+          "at": "2026-10-31T01:03:21.989628+00:00",
+          "status": "Validated",
+          "run_id": "20261031_020108_ba47aaf2",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/AtmosphereFX/20261031_020108_ba47aaf2"
+        },
+        {
+          "at": "2026-10-31T01:03:22.014380+00:00",
+          "status": "Needs Review",
+          "run_id": "20261031_020108_ba47aaf2",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/AtmosphereFX/20261031_020108_ba47aaf2"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261031_020108_ba47aaf2/job.json"
+    },
+    {
+      "id": "DD-40",
+      "slug": "MechanicalAnim",
+      "category": "Effects",
+      "name": "Mechanical animations",
+      "pipeline": "Unity animation",
+      "priority": "P1",
+      "dependencies": [
+        "MechanicalGlobe"
+      ],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Effects/MechanicalAnim/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/MechanicalAnim/20261031_010433_ee07414a",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Effects/MechanicalAnim/References/",
+      "requirements": "Globe gears, RPM needle, launcher recoil",
+      "attempt_count": 3,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/MechanicalAnim/20261031_010433_ee07414a/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/MechanicalAnim/20261031_010433_ee07414a/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:06:16.142532+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T00:04:31.390042+00:00",
+          "status": "Not Started",
+          "reason": "Authorized continuation after usage reset; latest unvalidated partial controller retained."
+        },
+        {
+          "at": "2026-10-31T00:06:16.069507+00:00",
+          "status": "Generated",
+          "run_id": "20261031_010433_ee07414a",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/MechanicalAnim/20261031_010433_ee07414a"
+        },
+        {
+          "at": "2026-10-31T00:06:16.088431+00:00",
+          "status": "Imported",
+          "run_id": "20261031_010433_ee07414a",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/MechanicalAnim/20261031_010433_ee07414a"
+        },
+        {
+          "at": "2026-10-31T00:06:16.115977+00:00",
+          "status": "Validated",
+          "run_id": "20261031_010433_ee07414a",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/MechanicalAnim/20261031_010433_ee07414a"
+        },
+        {
+          "at": "2026-10-31T00:06:16.142523+00:00",
+          "status": "Needs Review",
+          "run_id": "20261031_010433_ee07414a",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/MechanicalAnim/20261031_010433_ee07414a"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261031_010433_ee07414a/job.json"
+    },
+    {
+      "id": "DD-41",
+      "slug": "InteractionAnim",
+      "category": "Effects",
+      "name": "Interaction animations",
+      "pipeline": "Unity animation",
+      "priority": "P1",
+      "dependencies": [
+        "PinCoffer",
+        "CollectiblePin"
+      ],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Effects/InteractionAnim/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/InteractionAnim/20261031_010617_08d3f30f",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Effects/InteractionAnim/References/",
+      "requirements": "Box lid, pin pickup, statue placement",
+      "attempt_count": 1,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/InteractionAnim/20261031_010617_08d3f30f/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/InteractionAnim/20261031_010617_08d3f30f/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T00:08:08.331495+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T00:08:08.261027+00:00",
+          "status": "Generated",
+          "run_id": "20261031_010617_08d3f30f",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/InteractionAnim/20261031_010617_08d3f30f"
+        },
+        {
+          "at": "2026-10-31T00:08:08.279264+00:00",
+          "status": "Imported",
+          "run_id": "20261031_010617_08d3f30f",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/InteractionAnim/20261031_010617_08d3f30f"
+        },
+        {
+          "at": "2026-10-31T00:08:08.305558+00:00",
+          "status": "Validated",
+          "run_id": "20261031_010617_08d3f30f",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/InteractionAnim/20261031_010617_08d3f30f"
+        },
+        {
+          "at": "2026-10-31T00:08:08.331487+00:00",
+          "status": "Needs Review",
+          "run_id": "20261031_010617_08d3f30f",
+          "evidence": "Assets/DetectiveDesk/AssetProduction/InteractionAnim/20261031_010617_08d3f30f"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Automated evidence validated; human visual approval pending. No main-scene placement performed.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261031_010617_08d3f30f/job.json"
+    },
+    {
+      "id": "DD-42",
+      "slug": "CompletionFX",
+      "category": "Effects",
+      "name": "Completion and reward effects",
+      "pipeline": "Unity VFX",
+      "priority": "P2",
+      "dependencies": [
+        "SolvedStamp"
+      ],
+      "status": "Needs Review",
+      "protected_existing": false,
+      "existing_binding": "",
+      "dependency_available": false,
+      "source_path": "Assets/DetectiveDesk/ArtSource/Effects/CompletionFX/",
+      "generator_path": "— Unity/texture work",
+      "output_path": "Assets/DetectiveDesk/AssetProduction/CompletionFX/20261031_082054_a21cd7b6",
+      "reference_path": "Assets/DetectiveDesk/ArtSource/Effects/CompletionFX/References/",
+      "requirements": "Red SOLVED impression, gold rewards",
+      "attempt_count": 2,
+      "last_error": "",
+      "screenshot_path": "Assets/DetectiveDesk/AssetProduction/CompletionFX/20261031_082054_a21cd7b6/preview.png",
+      "report_path": "Assets/DetectiveDesk/AssetProduction/CompletionFX/20261031_082054_a21cd7b6/asset-report.md",
+      "validated": true,
+      "human_approved": false,
+      "last_updated": "2026-10-31T07:23:42.755497+00:00",
+      "history": [
+        {
+          "at": "2026-10-31T07:20:14.008444+00:00",
+          "status": "In Progress",
+          "event": "usage_limit_before_unity_authoring",
+          "job_file": "ProductionLogs/AssetQueue/runs/20261031_020322_2b7a1560/job.json"
+        },
+        {
+          "at": "2026-10-31T07:23:42.755507+00:00",
+          "status": "Needs Review",
+          "event": "single_folder_metadata_recovery",
+          "evidence": "ProductionLogs/AssetQueue/runs/20261031_082054_a21cd7b6/metadata-recovery-audit.json"
+        }
+      ],
+      "test_runs": [],
+      "notes": "Completion effect generated and editor-sampled; isolated Unity review and Console passed. Final protection audit accepted only a delayed Unity folder .meta for the earlier attempt; all other protected files unchanged. Runtime gameplay integration and human approval pending.",
+      "last_job_file": "ProductionLogs/AssetQueue/runs/20261031_082054_a21cd7b6/job.json"
+    }
+  ]
+}

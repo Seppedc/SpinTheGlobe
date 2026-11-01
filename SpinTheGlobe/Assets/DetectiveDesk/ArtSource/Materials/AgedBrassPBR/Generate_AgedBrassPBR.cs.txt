@@ -1,0 +1,38 @@
+using System;
+using System.IO;
+using UnityEngine;
+using UnityEditor;
+internal class CommandScript:IRunCommand {
+ const string Folder="Assets/DetectiveDesk/AssetProduction/AgedBrassPBR/20261030_215235_85980d90";
+ const int N=512;
+ float Noise(float u,float v,int frequency) {
+  float x=u*frequency,y=v*frequency; int ix=(int)x,iy=(int)y;float fx=Mathf.SmoothStep(0,1,x-ix),fy=Mathf.SmoothStep(0,1,y-iy);
+  return Mathf.Lerp(Mathf.Lerp(Hash(ix%frequency,iy%frequency),Hash((ix+1)%frequency,iy%frequency),fx),Mathf.Lerp(Hash(ix%frequency,(iy+1)%frequency),Hash((ix+1)%frequency,(iy+1)%frequency),fx),fy);
+ }
+ float Hash(int x,int y) {unchecked {uint h=(uint)(x*374761393+y*668265263+1367);h=(h^(h>>13))*1274126177;return (h^(h>>16))/(float)uint.MaxValue;}}
+ void Save(string name,Color[] colors,bool srgb,bool normal=false) {
+  var t=new Texture2D(N,N,TextureFormat.RGBA32,false,!srgb);t.SetPixels(colors);t.Apply();string p=Folder+"/"+name+".png";File.WriteAllBytes(p,t.EncodeToPNG());UnityEngine.Object.DestroyImmediate(t);
+  AssetDatabase.ImportAsset(p,ImportAssetOptions.ForceSynchronousImport);var i=(TextureImporter)AssetImporter.GetAtPath(p);i.sRGBTexture=srgb;i.wrapMode=TextureWrapMode.Repeat;i.textureCompression=TextureImporterCompression.Uncompressed;i.mipmapEnabled=true;if(normal)i.textureType=TextureImporterType.NormalMap;i.SaveAndReimport();
+ }
+ public void Execute(ExecutionResult result) {
+  var shader=Shader.Find("Universal Render Pipeline/Lit");if(!shader||!shader.isSupported)throw new Exception("URP Lit unsupported");
+  var albedo=new Color[N*N];var mask=new Color[N*N];var normals=new Color[N*N];var height=new float[N*N];var rng=new System.Random(360);
+  var scratches=new float[N*N];
+  for(int s=0;s<380;s++){int sx=rng.Next(N),sy=rng.Next(N),len=rng.Next(5,65);float slope=(float)(rng.NextDouble()-.5)*.45f;for(int k=0;k<len;k++){int x=(sx+k)%N,y=(sy+(int)(k*slope)+N)%N;scratches[y*N+x]=Mathf.Sin(Mathf.PI*k/len)*(.35f+(float)rng.NextDouble()*.5f);}}
+  for(int y=0;y<N;y++)for(int x=0;x<N;x++){
+   int k=y*N+x;float u=x/(float)N,v=y/(float)N;
+   float broad=Noise(u,v,5)*.65f+Noise(u,v,13)*.25f+Noise(u,v,41)*.1f;
+   float patina=Mathf.SmoothStep(.49f,.70f,broad);float grain=Noise(u,v,180);float scratch=scratches[k];float polish=1-patina;
+   Color brass=Color.Lerp(new Color(.29f,.19f,.075f),new Color(.66f,.47f,.20f),.55f+grain*.22f);
+   Color verdigris=Color.Lerp(new Color(.065f,.115f,.087f),new Color(.16f,.25f,.18f),grain);
+   albedo[k]=Color.Lerp(Color.Lerp(brass,verdigris,patina*.92f),new Color(.69f,.51f,.25f),scratch*.65f);
+   mask[k]=new Color(Mathf.Lerp(.94f,.14f,patina),0,0,Mathf.Clamp01(.62f-patina*.37f+(grain-.5f)*.08f+scratch*.12f));
+   height[k]=patina*.35f+(grain-.5f)*.07f-scratch*.15f;
+  }
+  for(int y=0;y<N;y++)for(int x=0;x<N;x++){float dx=height[y*N+(x+1)%N]-height[y*N+(x+N-1)%N];float dy=height[((y+1)%N)*N+x]-height[((y+N-1)%N)*N+x];Vector3 n=new Vector3(-dx*1.4f,-dy*1.4f,1).normalized;normals[y*N+x]=new Color(n.x*.5f+.5f,n.y*.5f+.5f,n.z*.5f+.5f,1);}
+  Save("AgedBrass_BaseColor",albedo,true);Save("AgedBrass_MetallicSmoothness",mask,false);Save("AgedBrass_Normal",normals,false,true);
+  var m=new Material(shader){name="AgedBrassPBR"};m.SetTexture("_BaseMap",AssetDatabase.LoadAssetAtPath<Texture2D>(Folder+"/AgedBrass_BaseColor.png"));m.SetTexture("_MetallicGlossMap",AssetDatabase.LoadAssetAtPath<Texture2D>(Folder+"/AgedBrass_MetallicSmoothness.png"));m.EnableKeyword("_METALLICSPECGLOSSMAP");m.SetFloat("_Metallic",1);m.SetFloat("_Smoothness",1);m.SetTexture("_BumpMap",AssetDatabase.LoadAssetAtPath<Texture2D>(Folder+"/AgedBrass_Normal.png"));m.SetFloat("_BumpScale",.65f);m.EnableKeyword("_NORMALMAP");AssetDatabase.CreateAsset(m,Folder+"/AgedBrassPBR.mat");
+  File.WriteAllText(Folder+"/review_manifest.json","{\"kind\":\"material\",\"asset_paths\":[\""+Folder+"/AgedBrassPBR.mat\"],\"prefab_path\":\""+Folder+"/AgedBrassPBR_Review.prefab\"}");
+  File.WriteAllText(Folder+"/material-validation.json","{\"status\":\"PASS\",\"resolution\":512,\"seed\":360,\"shader\":\"Universal Render Pipeline/Lit\",\"shader_supported\":true,\"maps\":3,\"base_color_srgb\":true,\"data_maps_linear\":true,\"wrap\":\"Repeat\"}");result.Log("Created deterministic aged brass maps and URP material.");
+ }
+}

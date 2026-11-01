@@ -1,0 +1,209 @@
+{
+  "edit_mode": true,
+  "scene_clean": true,
+  "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+  "renderer_count": 80,
+  "mesh_count": 80,
+  "missing_materials": 0,
+  "triangles": 272684,
+  "root_world_position": "(0.1340001, 0.0688000, 0.0236000)",
+  "root_scale": "(0.9200000, 0.9200000, 0.9200000)",
+  "bindings": {
+    "rotatingSphere": 93954,
+    "rpmNeedle": -5716
+  },
+  "textures": [
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/AmberAccent_BaseColor.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": true,
+      "type": "Default",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/AmberAccent_MetallicSmoothness.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": false,
+      "type": "Default",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/AmberAccent_Normal.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": false,
+      "type": "NormalMap",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/AntiqueBrass_BaseColor.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": true,
+      "type": "Default",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/AntiqueBrass_MetallicSmoothness.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": false,
+      "type": "Default",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/AntiqueBrass_Normal.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": false,
+      "type": "NormalMap",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/DarkMechanism_BaseColor.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": true,
+      "type": "Default",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/DarkMechanism_MetallicSmoothness.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": false,
+      "type": "Default",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/DarkMechanism_Normal.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": false,
+      "type": "NormalMap",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/EngravingInlay_BaseColor.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": true,
+      "type": "Default",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/EngravingInlay_MetallicSmoothness.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": false,
+      "type": "Default",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/EngravingInlay_Normal.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": false,
+      "type": "NormalMap",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/GaugeFace_BaseColor.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": true,
+      "type": "Default",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/GaugeFace_MetallicSmoothness.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": false,
+      "type": "Default",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/GaugeFace_Normal.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": false,
+      "type": "NormalMap",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/GaugeNeedle_BaseColor.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": true,
+      "type": "Default",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/GaugeNeedle_MetallicSmoothness.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": false,
+      "type": "Default",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/GaugeNeedle_Normal.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": false,
+      "type": "NormalMap",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/PolishedBrass_BaseColor.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": true,
+      "type": "Default",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/PolishedBrass_MetallicSmoothness.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": false,
+      "type": "Default",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/PolishedBrass_Normal.png",
+      "width": 512,
+      "height": 512,
+      "sRGB": false,
+      "type": "NormalMap",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/WorldCartography_BaseColor.png",
+      "width": 2048,
+      "height": 1024,
+      "sRGB": true,
+      "type": "Default",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/WorldCartography_MetallicSmoothness.png",
+      "width": 2048,
+      "height": 1024,
+      "sRGB": false,
+      "type": "Default",
+      "max_size": 2048
+    },
+    {
+      "path": "Assets/DetectiveDesk/GlobeRework/Textures/WorldCartography_Normal.png",
+      "width": 2048,
+      "height": 1024,
+      "sRGB": false,
+      "type": "NormalMap",
+      "max_size": 2048
+    }
+  ]
+}

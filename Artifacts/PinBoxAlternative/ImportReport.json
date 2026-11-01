@@ -1,0 +1,20 @@
+{
+  "source": "C:/Users/decra/Downloads/image_20k (4).glb",
+  "blender_conversion_completed": true,
+  "triangles": 20000,
+  "unity_prefab": "Assets/DetectiveDesk/PinBoxAlternative/PinBoxAlternative_Visual.prefab",
+  "scene_saved": true,
+  "backup_scene": "Assets/DetectiveDesk/Generated/DetectiveOffice_PrePinBoxAlternative.unity",
+  "previous_box_retained_inactive": true,
+  "current_tilt_and_horizontal_position_retained": true,
+  "base_grounded_on_desk": false,
+  "original_parent_collider_and_selection_binding_preserved": true,
+  "SelectPin_callback_passed": true,
+  "supplied_base_color_normal_and_metallic_roughness_maps_used": true,
+  "shader": "Universal Render Pipeline/Lit",
+  "final_console_errors": 0,
+  "saved_before_current_play_mode": true,
+  "current_play_test_left_running": true,
+  "base_height_refinement_runtime_only": true,
+  "base_height_refinement_delta": -0.01981133
+}

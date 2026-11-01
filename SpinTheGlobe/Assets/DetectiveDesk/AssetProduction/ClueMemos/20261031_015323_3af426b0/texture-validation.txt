@@ -1,0 +1,4 @@
+ContactSheet: 2048 x 2048 sRGB, clamp, uncompressed; PASS
+01_Appointment: 1024 x 1024 sRGB, clamp, uncompressed; PASS
+02_Timetable: 1024 x 1024 sRGB, clamp, uncompressed; PASS
+03_Reminder: 1024 x 1024 sRGB, clamp, uncompressed; PASS

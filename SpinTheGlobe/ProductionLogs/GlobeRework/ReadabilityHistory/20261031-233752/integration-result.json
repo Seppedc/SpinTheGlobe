@@ -1,0 +1,310 @@
+{
+  "status": "PASS",
+  "validation": {
+    "status": "PASS",
+    "canonical_fbx_source": "Assets/DetectiveDesk/ArtSource/Gameplay/MechanicalGlobe/MechanicalGlobe.fbx",
+    "source_sha256": "bab34469e31d1c610eb951e0ccb503e105c0830df04799b50ee3a94bb5dd9763",
+    "prefab_path": "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Static.prefab",
+    "module_prefab_paths": [
+      "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_12T_Pivot.prefab",
+      "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_14T_Pivot.prefab",
+      "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Gear_16T_Pivot.prefab",
+      "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Needle.prefab",
+      "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Sphere.prefab",
+      "Assets/DetectiveDesk/GlobeRework/Prefabs/GlobeRework_Static.prefab"
+    ],
+    "screenshot_path": "Assets/DetectiveDesk/GlobeRework/preview.png",
+    "screenshot_sha256": "f468d6d42f17dcb6c47a2cc40682e114b980061e4b81b24f38fcea5e4dda2c86",
+    "screenshot_resolution": [
+      1920,
+      1080
+    ],
+    "screenshot_visually_inspected": true,
+    "protected_scene_unchanged": true,
+    "console_errors": 0,
+    "console_warnings": 0,
+    "missing_materials": 0,
+    "mesh_count": 80,
+    "renderer_count": 80,
+    "triangle_count": 272684,
+    "texture_import_validation": {
+      "status": "PASS",
+      "texture_count": 24,
+      "world_dimensions": [
+        2048,
+        1024
+      ],
+      "base_color_sRGB": true,
+      "packed_metallic_smoothness_linear": true,
+      "normal_importer": true,
+      "details": "ProductionLogs/GlobeRework/final-unity-inspection.json"
+    },
+    "runtime_test": {
+      "status": "PASS",
+      "elapsed_seconds": 2.00017262,
+      "frames": 494,
+      "rotation_degrees": [
+        14.0011873,
+        22.4019184,
+        16.801384,
+        19.2016582
+      ],
+      "expected_abs_ratios": [
+        1.0,
+        1.6,
+        1.2,
+        1.37142861
+      ],
+      "needle_angle": 71.99999,
+      "game_sphere_binding": true,
+      "InspectGlobe_callback": true,
+      "hud_text": "Mechanical globe \u2022 spinning at 7\u00b0/s",
+      "physical_mouse_click_tested": false
+    },
+    "edit_mode": true,
+    "scene_clean": true,
+    "review_status": "Needs Review",
+    "limitations": [
+      "Physical mouse click was not tested; original InspectGlobe callback and HUD were executed.",
+      "Runtime gear ratios verified by motion magnitudes; signed ratios and local Z axes preserved in unchanged mechanism data.",
+      "One additive anchor validation failed before integration due to helper rotation composition; corrected and rerun successfully. One dynamic final-inspection snippet failed compilation only due to Newtonsoft reference visibility; precompiled helper executed successfully. Neither was a project compilation failure."
+    ]
+  },
+  "import": {
+    "status": "PASS",
+    "anchors": {
+      "Sphere_RotationPivot": {
+        "error": 8.046627e-07,
+        "position": "(-1.4500000, 2.1500000, -0.3299992)"
+      },
+      "Pedestal_Assembly": {
+        "error": 3.27825546e-07,
+        "position": "(-1.4500000, 0.8600000, -0.3299997)"
+      },
+      "RPMGauge_Assembly": {
+        "error": 3.81655951e-07,
+        "position": "(-0.4900001, 1.4300000, -0.7499996)"
+      }
+    },
+    "mesh_count": 80,
+    "triangles": 272684,
+    "normal_transform": "inverse transpose; determinant checked; tangent handedness retained",
+    "material_count": 9,
+    "additive_scene_validation": true
+  },
+  "final_inspection": {
+    "edit_mode": true,
+    "scene_clean": true,
+    "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+    "renderer_count": 80,
+    "mesh_count": 80,
+    "missing_materials": 0,
+    "triangles": 272684,
+    "root_world_position": "(0.1340001, 0.0688000, 0.0236000)",
+    "root_scale": "(0.9200000, 0.9200000, 0.9200000)",
+    "bindings": {
+      "rotatingSphere": 93954,
+      "rpmNeedle": -5716
+    },
+    "textures": [
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/AmberAccent_BaseColor.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": true,
+        "type": "Default",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/AmberAccent_MetallicSmoothness.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": false,
+        "type": "Default",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/AmberAccent_Normal.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": false,
+        "type": "NormalMap",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/AntiqueBrass_BaseColor.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": true,
+        "type": "Default",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/AntiqueBrass_MetallicSmoothness.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": false,
+        "type": "Default",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/AntiqueBrass_Normal.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": false,
+        "type": "NormalMap",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/DarkMechanism_BaseColor.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": true,
+        "type": "Default",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/DarkMechanism_MetallicSmoothness.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": false,
+        "type": "Default",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/DarkMechanism_Normal.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": false,
+        "type": "NormalMap",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/EngravingInlay_BaseColor.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": true,
+        "type": "Default",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/EngravingInlay_MetallicSmoothness.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": false,
+        "type": "Default",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/EngravingInlay_Normal.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": false,
+        "type": "NormalMap",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/GaugeFace_BaseColor.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": true,
+        "type": "Default",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/GaugeFace_MetallicSmoothness.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": false,
+        "type": "Default",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/GaugeFace_Normal.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": false,
+        "type": "NormalMap",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/GaugeNeedle_BaseColor.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": true,
+        "type": "Default",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/GaugeNeedle_MetallicSmoothness.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": false,
+        "type": "Default",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/GaugeNeedle_Normal.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": false,
+        "type": "NormalMap",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/PolishedBrass_BaseColor.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": true,
+        "type": "Default",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/PolishedBrass_MetallicSmoothness.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": false,
+        "type": "Default",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/PolishedBrass_Normal.png",
+        "width": 512,
+        "height": 512,
+        "sRGB": false,
+        "type": "NormalMap",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/WorldCartography_BaseColor.png",
+        "width": 2048,
+        "height": 1024,
+        "sRGB": true,
+        "type": "Default",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/WorldCartography_MetallicSmoothness.png",
+        "width": 2048,
+        "height": 1024,
+        "sRGB": false,
+        "type": "Default",
+        "max_size": 2048
+      },
+      {
+        "path": "Assets/DetectiveDesk/GlobeRework/Textures/WorldCartography_Normal.png",
+        "width": 2048,
+        "height": 1024,
+        "sRGB": false,
+        "type": "NormalMap",
+        "max_size": 2048
+      }
+    ]
+  },
+  "preservation_evidence": "ProductionLogs/GlobeRework/preservation-comparison.json",
+  "old_renderers_retained_disabled": true,
+  "original_pivots_controllers_colliders_preserved": true,
+  "old_prefabs_meshes_materials_untouched": true,
+  "normalization": "180 degree Unity Y composed with imported hierarchy rotation; all 3 anchor errors < 0.000001 m. Mesh normals inverse-transpose; tangent handedness and winding determinant handled.",
+  "saved_scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity"
+}

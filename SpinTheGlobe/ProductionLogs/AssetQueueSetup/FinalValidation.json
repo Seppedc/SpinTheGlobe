@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "groups": 42,
+  "run_state": "Stopped",
+  "active_worker": null,
+  "max_assets_default": 3,
+  "test": {
+    "at": "2026-10-30T15:33:18.160100+00:00",
+    "status": "Needs Review",
+    "validated": true,
+    "job_file": "ProductionLogs/AssetQueue/runs/20261030_163124_74e8d266/job.json",
+    "output_path": "Assets/DetectiveDesk/AssetProduction/_Tests/WallMolding/20261030_163124_74e8d266",
+    "screenshot_path": "Assets/DetectiveDesk/AssetProduction/_Tests/WallMolding/20261030_163124_74e8d266/preview.png"
+  }
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "type": "item.started",
+    "item": {
+      "id": "item_18",
+      "type": "mcp_tool_call",
+      "server": "unity_mcp",
+      "tool": "Unity_RunCommand",
+      "arguments": {
+        "Title": "Capture Game camera with reversible overlay canvas handling",
+        "Code": "using UnityEngine;\nusing UnityEditor;\nusing System;\nusing System.IO;\nusing System.Linq;\nusing System.Collections.Generic;\ninternal class CommandScript : IRunCommand {\n public void Execute(ExecutionResult result) {\n var cam=Camera.main; if(cam==null) throw new Exception(\"No main camera\");\n var saved=new Dictionary<UnityEngine.Object,string>(); saved.Add(cam,EditorJsonUtility.ToJson(cam));\n var canvases=UnityEngine.Object.FindObjectsByType<Canvas>(FindObjectsInactive.Exclude,FindObjectsSortMode.None).Where(c=>c.renderMode==RenderMode.ScreenSpaceOverlay).ToArray();\n foreach(var c in canvases) { saved.Add(c,EditorJsonUtility.ToJson(c)); foreach(var t in c.GetComponentsInChildren<RectTransform>(true)) if(!saved.ContainsKey(t)) saved.Add(t,EditorJsonUtility.ToJson(t)); }\n var oldActive=RenderTexture.active; RenderTexture rt=null; Texture2D tex=null;\n try {\n rt=new RenderTexture(1920,1080,24); rt.Create(); cam.targetTexture=rt; cam.aspect=1920f/1080f;\n foreach(var c in canvases){c.renderMode=RenderMode.ScreenSpaceCamera;c.worldCamera=cam;c.planeDistance=1f;}\n Canvas.ForceUpdateCanvases(); cam.Render(); RenderTexture.active=rt; tex=new Texture2D(1920,1080,TextureFormat.RGB24,false); tex.ReadPixels(new Rect(0,0,1920,1080),0,0);tex.Apply();\n var bytes=tex.EncodeToPNG();File.WriteAllBytes(\"Assets/DetectiveDesk/PinLauncherRework/preview.png\",bytes);File.WriteAllBytes(\"ProductionLogs/PinLauncherRework/after-game-camera.png\",bytes);\n result.Log(\"Captured 1920x1080; overlay canvases=\"+canvases.Length);\n } finally { foreach(var p in saved.Where(p=>p.Key is Camera||p.Key is Canvas)) EditorJsonUtility.FromJsonOverwrite(p.Value,p.Key); foreach(var p in saved.Where(p=>p.Key is RectTransform)) EditorJsonUtility.FromJsonOverwrite(p.Value,p.Key); RenderTexture.active=oldActive; if(rt!=null){rt.Release();UnityEngine.Object.DestroyImmediate(rt);} if(tex!=null)UnityEngine.Object.DestroyImmediate(tex); }\n foreach(var p in saved) if(EditorJsonUtility.ToJson(p.Key)!=p.Value) throw new Exception(\"Capture restoration mismatch \"+p.Key.name);\n result.Log(\"All saved camera, canvas and RectTransform values restored exactly\");\n }\n}"
+      },
+      "result": null,
+      "error": null,
+      "status": "in_progress"
+    }
+  },
+  {
+    "type": "item.started",
+    "item": {
+      "id": "item_55",
+      "type": "mcp_tool_call",
+      "server": "unity_mcp",
+      "tool": "Unity_RunCommand",
+      "arguments": {
+        "Title": "Final Game camera capture with explicit render target restoration",
+        "Code": "using UnityEngine;\nusing UnityEditor;\nusing System;\nusing System.IO;\nusing System.Linq;\nusing System.Collections.Generic;\ninternal class CommandScript : IRunCommand {\n public void Execute(ExecutionResult result) {\n if(EditorApplication.isPlayingOrWillChangePlaymode)throw new Exception(\"Must capture Edit Mode\");\n var cam=Camera.main;var oldTarget=cam.targetTexture;var oldActive=RenderTexture.active;\n var saved=new Dictionary<UnityEngine.Object,string>();saved[cam]=EditorJsonUtility.ToJson(cam);\n var canvases=UnityEngine.Object.FindObjectsByType<Canvas>(FindObjectsInactive.Exclude).Where(c=>c.renderMode==RenderMode.ScreenSpaceOverlay).ToArray();\n foreach(var c in canvases){saved[c]=EditorJsonUtility.ToJson(c);foreach(var t in c.GetComponentsInChildren<RectTransform>(true))saved[t]=EditorJsonUtility.ToJson(t);}\n RenderTexture rt=null;Texture2D tex=null;\n try{\n rt=new RenderTexture(1920,1080,24);rt.Create();cam.targetTexture=rt;cam.aspect=1920f/1080;\n foreach(var c in canvases){c.renderMode=RenderMode.ScreenSpaceCamera;c.worldCamera=cam;c.planeDistance=1;}\n Canvas.ForceUpdateCanvases();cam.Render();RenderTexture.active=rt;\n tex=new Texture2D(1920,1080,TextureFormat.RGB24,false);tex.ReadPixels(new Rect(0,0,1920,1080),0,0);tex.Apply();var bytes=tex.EncodeToPNG();\n File.WriteAllBytes(\"Assets/DetectiveDesk/PinLauncherRework/preview.png\",bytes);File.WriteAllBytes(\"ProductionLogs/PinLauncherRework/after-game-camera.png\",bytes);\n } finally {\n cam.targetTexture=oldTarget;\n foreach(var p in saved.Where(p=>p.Key is Camera||p.Key is Canvas))EditorJsonUtility.FromJsonOverwrite(p.Value,p.Key);\n foreach(var p in saved.Where(p=>p.Key is RectTransform))EditorJsonUtility.FromJsonOverwrite(p.Value,p.Key);\n RenderTexture.active=oldActive;if(rt!=null){rt.Release();UnityEngine.Object.DestroyImmediate(rt);}if(tex!=null)UnityEngine.Object.DestroyImmediate(tex);\n }\n foreach(var p in saved)if(EditorJsonUtility.ToJson(p.Key)!=p.Value)throw new Exception(\"Restoration mismatch \"+p.Key.name);\n result.Log(\"1920x1080 final capture complete; camera, canvases and all affected RectTransforms restored exactly\");\n }\n}"
+      },
+      "result": null,
+      "error": null,
+      "status": "in_progress"
+    }
+  }
+]

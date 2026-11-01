@@ -1,0 +1,13 @@
+{
+    "status": "PASS",
+    "source_sha256": "0229155616b798ab717d9eb6f660dc10202c1050b159c479fd8404534408a80e",
+    "prefab_path": "Assets/DetectiveDesk/AssetProduction/DeskWear/20261031_015534_13afb160/DeskWearReview.prefab",
+    "screenshot_path": "Assets/DetectiveDesk/AssetProduction/DeskWear/20261031_015534_13afb160/preview.png",
+    "screenshot_sha256": "72052d70ba9d5660840c5de7fc56639d57dc8a5c57065c6cd0bb924aaca50033",
+    "review_scene": "Assets/DetectiveDesk/AssetReview/AssetReview.unity",
+    "protected_scene_unchanged": true,
+    "console_errors": 0,
+    "mesh_count": 8,
+    "renderer_count": 8,
+    "missing_materials": 0
+}

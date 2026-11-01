@@ -1,0 +1,230 @@
+{
+  "files": [
+    {
+      "source": "Assets/DetectiveDesk/Gameplay/Data/UpgradeConfig.asset",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Gameplay/Data/UpgradeConfig.asset.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Editor/Gameplay/GameplayIntegration.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Editor/Gameplay/GameplayIntegration.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Editor/Gameplay/GameplayMathValidation.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Editor/Gameplay/GameplayMathValidation.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Editor/Gameplay/GameplayRuntimeValidation.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Editor/Gameplay/GameplayRuntimeValidation.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/AudioManager.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/AudioManager.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/CountryData.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/CountryData.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/CountryTarget.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/CountryTarget.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/FigurinePedestal.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/FigurinePedestal.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/GameManager.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/GameManager.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/GameplayMath.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/GameplayMath.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/GameplayPanel.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/GameplayPanel.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/GlobeController.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/GlobeController.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/GlobePinMarker.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/GlobePinMarker.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/MeridianTrigger.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/MeridianTrigger.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/PinInstance.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/PinInstance.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/TachometerUI.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/TachometerUI.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/UpgradeConfig.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/UpgradeConfig.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/WallMapManager.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/WallMapManager.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/YarnRenderer.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Gameplay/YarnRenderer.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Runtime/DeskAssetPresentation.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDesk/Scripts/Runtime/DeskAssetPresentation.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDeskUnityStarter/Assets/DetectiveDesk/Scripts/Runtime/DetectiveGame.cs",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "Assets/DetectiveDeskUnityStarter/Assets/DetectiveDesk/Scripts/Runtime/DetectiveGame.cs.meta",
+      "originalUnchanged": true,
+      "backupMatches": true
+    },
+    {
+      "source": "ProjectSettings/DynamicsManager.asset",
+      "originalUnchanged": true,
+      "backupMatches": true
+    }
+  ],
+  "allUnchanged": true
+}

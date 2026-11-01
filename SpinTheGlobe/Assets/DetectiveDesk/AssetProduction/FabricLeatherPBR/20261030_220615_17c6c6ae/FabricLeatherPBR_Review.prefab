@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &279894913664843207
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1499842814375935808, guid: b9c818b3f8388b04b9f29435e4c45768, type: 3}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 4081094011395379177, guid: b9c818b3f8388b04b9f29435e4c45768, type: 3}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 6743328590530511102, guid: b9c818b3f8388b04b9f29435e4c45768, type: 3}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117296591866930816, guid: b9c818b3f8388b04b9f29435e4c45768, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117296591866930816, guid: b9c818b3f8388b04b9f29435e4c45768, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117296591866930816, guid: b9c818b3f8388b04b9f29435e4c45768, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117296591866930816, guid: b9c818b3f8388b04b9f29435e4c45768, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117296591866930816, guid: b9c818b3f8388b04b9f29435e4c45768, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117296591866930816, guid: b9c818b3f8388b04b9f29435e4c45768, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117296591866930816, guid: b9c818b3f8388b04b9f29435e4c45768, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117296591866930816, guid: b9c818b3f8388b04b9f29435e4c45768, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117296591866930816, guid: b9c818b3f8388b04b9f29435e4c45768, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7117296591866930816, guid: b9c818b3f8388b04b9f29435e4c45768, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7691625694369738674, guid: b9c818b3f8388b04b9f29435e4c45768, type: 3}
+      propertyPath: m_Name
+      value: FabricLeatherPBR_Review
+      objectReference: {fileID: 0}
+    - target: {fileID: 7691625694369738674, guid: b9c818b3f8388b04b9f29435e4c45768, type: 3}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 9141569654479279928, guid: b9c818b3f8388b04b9f29435e4c45768, type: 3}
+      propertyPath: m_Layer
+      value: 31
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b9c818b3f8388b04b9f29435e4c45768, type: 3}

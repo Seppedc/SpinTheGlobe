@@ -1,0 +1,13 @@
+{
+    "playing": false,
+    "dirty": false,
+    "modalActive": false,
+    "singlePanel": true,
+    "sceneCount": 1,
+    "speed": 0,
+    "motor": 0,
+    "durability": 0,
+    "prerequisiteEdges": 58,
+    "expectedPrerequisiteEdges": 58,
+    "money": 422.0
+}

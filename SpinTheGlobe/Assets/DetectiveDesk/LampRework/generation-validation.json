@@ -1,0 +1,198 @@
+{
+  "status": "PASS",
+  "mesh_count": 127,
+  "triangles": 80000,
+  "zero_area_triangles": 0,
+  "bounds_blender_m": [
+    [
+      -0.15444999933242798,
+      0.15444999933242798
+    ],
+    [
+      -0.13275623321533203,
+      0.09245067089796066
+    ],
+    [
+      0.0,
+      0.4199766218662262
+    ]
+  ],
+  "dimensions_m": [
+    0.30889999866485596,
+    0.2252069041132927,
+    0.4199766218662262
+  ],
+  "root_at_base_origin": true,
+  "shade_tilt_degrees": 10,
+  "chain_beads": 48,
+  "closed_rounded_hood": true,
+  "glass_thickness_m": 0.003,
+  "embedded_sources_exact": true,
+  "packed_images": 12,
+  "uv_meshes": 127,
+  "materials": {
+    "Lamp_AgedBrass": {
+      "base_color_linear": [
+        1,
+        1,
+        1
+      ],
+      "metallic": 0.84,
+      "roughness": 0.28,
+      "normal_strength": 0.1,
+      "textures": {
+        "BaseColor": "Textures/Lamp_AgedBrass_BaseColor.png",
+        "Roughness": "Textures/Lamp_AgedBrass_Roughness.png",
+        "MetallicSmoothness": "Textures/Lamp_AgedBrass_MetallicSmoothness.png",
+        "Normal": "Textures/Lamp_AgedBrass_Normal.png"
+      },
+      "surface": "Opaque"
+    },
+    "Lamp_PolishedBrass": {
+      "base_color_linear": [
+        1,
+        1,
+        1
+      ],
+      "metallic": 0.9,
+      "roughness": 0.2,
+      "normal_strength": 0.1,
+      "textures": {
+        "BaseColor": "Textures/Lamp_PolishedBrass_BaseColor.png",
+        "Roughness": "Textures/Lamp_PolishedBrass_Roughness.png",
+        "MetallicSmoothness": "Textures/Lamp_PolishedBrass_MetallicSmoothness.png",
+        "Normal": "Textures/Lamp_PolishedBrass_Normal.png"
+      },
+      "surface": "Opaque"
+    },
+    "Lamp_EmeraldGlass": {
+      "base_color_linear": [
+        1,
+        1,
+        1
+      ],
+      "metallic": 0,
+      "roughness": 0.11,
+      "normal_strength": 0.1,
+      "textures": {
+        "BaseColor": "Textures/Lamp_EmeraldGlass_BaseColor.png",
+        "Roughness": "Textures/Lamp_EmeraldGlass_Roughness.png",
+        "MetallicSmoothness": "Textures/Lamp_EmeraldGlass_MetallicSmoothness.png",
+        "Normal": "Textures/Lamp_EmeraldGlass_Normal.png"
+      },
+      "surface": "Opaque"
+    },
+    "Lamp_GreenGlassEdge": {
+      "base_color_linear": [
+        0.02,
+        0.265,
+        0.047
+      ],
+      "metallic": 0,
+      "roughness": 0.1,
+      "normal_strength": 0.1,
+      "textures": {},
+      "surface": "Opaque"
+    },
+    "Lamp_OpalLiner": {
+      "base_color_linear": [
+        0.82,
+        0.72,
+        0.49
+      ],
+      "metallic": 0,
+      "roughness": 0.45,
+      "normal_strength": 0.1,
+      "textures": {},
+      "surface": "Opaque",
+      "emission_linear": [
+        0.055,
+        0.042,
+        0.02
+      ]
+    },
+    "Lamp_BulbWarm": {
+      "base_color_linear": [
+        0.95,
+        0.82,
+        0.58
+      ],
+      "metallic": 0,
+      "roughness": 0.27,
+      "normal_strength": 0.1,
+      "textures": {},
+      "surface": "Opaque",
+      "emission_linear": [
+        1.4,
+        1.0,
+        0.55
+      ]
+    },
+    "Lamp_CeramicSocket": {
+      "base_color_linear": [
+        0.65,
+        0.61,
+        0.49
+      ],
+      "metallic": 0,
+      "roughness": 0.32,
+      "normal_strength": 0.1,
+      "textures": {},
+      "surface": "Opaque"
+    },
+    "Lamp_Felt": {
+      "base_color_linear": [
+        0.01,
+        0.018,
+        0.012
+      ],
+      "metallic": 0,
+      "roughness": 0.94,
+      "normal_strength": 0.1,
+      "textures": {},
+      "surface": "Opaque"
+    },
+    "Lamp_CordRubber": {
+      "base_color_linear": [
+        0.012,
+        0.014,
+        0.012
+      ],
+      "metallic": 0,
+      "roughness": 0.68,
+      "normal_strength": 0.1,
+      "textures": {},
+      "surface": "Opaque"
+    },
+    "Lamp_DarkInlay": {
+      "base_color_linear": [
+        0.017,
+        0.021,
+        0.018
+      ],
+      "metallic": 0.28,
+      "roughness": 0.54,
+      "normal_strength": 0.1,
+      "textures": {},
+      "surface": "Opaque"
+    }
+  },
+  "light_markers": {
+    "origin": [
+      -0.025,
+      0.047,
+      0.276
+    ],
+    "target": [
+      -0.025,
+      0.047,
+      0.01
+    ]
+  },
+  "reference": "Inspiration/SceneAndValidatedAssets/SceneApproved.png",
+  "limits": [
+    "Reference crops part of the foot; original footprint retained and visible turned moldings refined",
+    "Opaque coated emerald glass and ivory lining, not validated refractive glass",
+    "Lamp-local light must be bound and verified in Unity; no switch gameplay added"
+  ]
+}

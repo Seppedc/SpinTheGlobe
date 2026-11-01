@@ -1,0 +1,57 @@
+{
+  "status": "PASS",
+  "revision": 2,
+  "mesh_count": 165,
+  "triangles": 72644,
+  "bounds_m": [
+    [
+      -0.09700000286102295,
+      0.11600000411272049
+    ],
+    [
+      -0.1396007537841797,
+      0.15998974442481995
+    ],
+    [
+      0.0,
+      0.28790798783302307
+    ]
+  ],
+  "dimensions_m": [
+    0.21300000697374344,
+    0.29959049820899963,
+    0.28790798783302307
+  ],
+  "embedded_source_exact": true,
+  "materials": [
+    "PL_Mahogany",
+    "PL_AgedBrass",
+    "PL_SpringSteel",
+    "PL_PolishedBrass",
+    "PL_EngravingInlay",
+    "PL_GreenEnamel",
+    "PL_RubberFeet",
+    "PL_PinTipCrimson"
+  ],
+  "moving_pivots": [
+    "ROOT_PinLauncher",
+    "Pedestal_Static",
+    "Turret_Yaw_Pivot",
+    "Elevation_Pivot",
+    "Recoil_Slide_Pivot",
+    "MuzzleTip",
+    "BreechOrigin",
+    "PinSeat",
+    "Plunger_Translation_Pivot",
+    "Handwheel_Rotation_Pivot",
+    "Handwheel_Crank_Pivot",
+    "ElevationScale_Zero"
+  ],
+  "uv_meshes": 165,
+  "packed_images": 12,
+  "reference": "Inspiration/SceneAndValidatedAssets/SceneApproved.png",
+  "limitations": [
+    "Original procedural maps, not scanned textures",
+    "Cosmetic toy geometry; no physical firing simulation"
+  ]
+}

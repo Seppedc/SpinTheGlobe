@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "nodes": 39,
+  "graphChecks": 25,
+  "runtimeChecks": 77,
+  "gameplayChecks": 126,
+  "scene": "Assets/DetectiveDesk/Generated/DetectiveOffice.unity",
+  "prefab": "Assets/DetectiveDesk/Gameplay/SkillTree/SkillTreePanel.prefab",
+  "definition": "Assets/DetectiveDesk/Gameplay/SkillTree/DefaultSkillTree.asset",
+  "legacyListRetainedInactive": true,
+  "cash": 422,
+  "levels": [
+    0,
+    0,
+    0
+  ],
+  "figurineTiers": [
+    0,
+    0,
+    0
+  ],
+  "physics": "PhysX",
+  "newSceneObjects": 278,
+  "newSceneComponents": 916,
+  "entryChecks": 9,
+  "entryButton": "DetectiveOffice/GameUI/UpgradesButton",
+  "entryVisible": true,
+  "entryDoesNotOverlapArchive": true,
+  "currentBalanceScreenshot": "ProductionLogs/SkillTree/engineering-current-balance.png",
+  "finalSceneObjects": 1859,
+  "finalSceneComponents": 5524,
+  "consoleCurrentErrors": 0,
+  "consoleCurrentWarnings": 0
+}

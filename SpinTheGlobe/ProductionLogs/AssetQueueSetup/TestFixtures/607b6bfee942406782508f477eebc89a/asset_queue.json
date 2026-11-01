@@ -1,0 +1,60 @@
+{
+  "run_state": "Paused",
+  "active_worker": null,
+  "last_error": "",
+  "assets": [
+    {
+      "id": "DD-01",
+      "slug": "Asset1",
+      "priority": "P1",
+      "pipeline": "Blender",
+      "dependencies": [],
+      "protected_existing": false,
+      "status": "Needs Review",
+      "validated": true,
+      "dependency_available": false,
+      "attempt_count": 0,
+      "last_error": "",
+      "last_updated": "2026-10-30T15:49:46.117693+00:00",
+      "test_runs": [],
+      "history": [],
+      "notes": ""
+    },
+    {
+      "id": "DD-02",
+      "slug": "Asset2",
+      "priority": "P1",
+      "pipeline": "Blender",
+      "dependencies": [],
+      "protected_existing": false,
+      "status": "Not Started",
+      "validated": false,
+      "dependency_available": false,
+      "attempt_count": 0,
+      "last_error": "",
+      "last_updated": "2026-10-30T15:49:46.117699+00:00",
+      "test_runs": [],
+      "history": [],
+      "notes": ""
+    },
+    {
+      "id": "DD-03",
+      "slug": "Asset3",
+      "priority": "P1",
+      "pipeline": "Blender",
+      "dependencies": [],
+      "protected_existing": false,
+      "status": "Not Started",
+      "validated": false,
+      "dependency_available": false,
+      "attempt_count": 0,
+      "last_error": "",
+      "last_updated": "2026-10-30T15:49:46.117701+00:00",
+      "test_runs": [],
+      "history": [],
+      "notes": ""
+    }
+  ],
+  "max_assets_per_run": 3,
+  "updated_at": "2026-10-30T15:49:46.129788+00:00"
+}

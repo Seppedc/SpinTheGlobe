@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spin the Globe - Desk Prototype</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+  body {
+    background: #0d0a08;
+    color: #f1e5d1;
+    font-family: 'Georgia', serif;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  #hud {
+    background: #18120c;
+    border-bottom: 2px solid #3b2818;
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    z-index: 10;
+  }
+  .stat-badge {
+    background: #251a11;
+    border: 1px solid #5a3e24;
+    padding: 4px 10px;
+    border-radius: 4px;
+    color: #e5b972;
+    font-weight: bold;
+  }
+  #main-viewport {
+    flex: 1;
+    position: relative;
+    display: flex;
+  }
+  canvas#gameCanvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+  }
+  #shop-panel {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    background: rgba(24, 18, 12, 0.88);
+    border: 2px solid #5a3e24;
+    border-radius: 6px;
+    padding: 12px;
+    width: 250px;
+    z-index: 5;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+  }
+  .shop-title {
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #e5b972;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #3b2818;
+    padding-bottom: 4px;
+  }
+  .shop-item {
+    margin-bottom: 10px;
+  }
+  .shop-btn {
+    width: 100%;
+    background: #3a2717;
+    border: 1px solid #7c5732;
+    color: #f1e5d1;
+    padding: 6px 8px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    transition: background 0.15s;
+  }
+  .shop-btn:hover:not(:disabled) {
+    background: #5a3e24;
+  }
+  .shop-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .shop-desc {
+    font-size: 11px;
+    color: #a4917a;
+    margin-top: 2px;
+  }
+</style>
+</head>
+<body>
+
+<div id="hud">
+  <div>FUNDS: <span id="val-funds" class="stat-badge">€0.00</span></div>
+  <div>ROTATION: <span id="val-revs" class="stat-badge">0° (Rev 0)</span></div>
+  <div>SPEED: <span id="val-rpm" class="stat-badge">0 RPM</span></div>
+  <div>ACTIVE PINS: <span id="val-pins" class="stat-badge">0</span></div>
+</div>
+
+<div id="main-viewport">
+  <canvas id="gameCanvas"></canvas>
+
+  <div id="shop-panel">
+    <div class="shop-title">Desk Workshop</div>
+
+    <div class="shop-item">
+      <button id="btn-auto" class="shop-btn">
+        <span>Auto-Motor (Lvl <span id="lvl-auto">0</span>)</span>
+        <span id="cost-auto">€15.00</span>
+      </button>
+      <div class="shop-desc">Keeps the globe spinning at a steady baseline floor speed.</div>
+    </div>
+
+    <div class="shop-item">
+      <button id="btn-bearings" class="shop-btn">
+        <span>Precision Bearings (Lvl <span id="lvl-bearings">0</span>)</span>
+        <span id="cost-bearings">€30.00</span>
+      </button>
+      <div class="shop-desc">Increases the maximum achievable terminal RPM.</div>
+    </div>
+
+    <div class="shop-item">
+      <button id="btn-durability" class="shop-btn">
+        <span>Pin Durability (Lvl <span id="lvl-durability">0</span>)</span>
+        <span id="cost-durability">€45.00</span>
+      </button>
+      <div class="shop-desc">Pins wobble on pass 1 and only drop on pass 2+.</div>
+    </div>
+
+    <div class="shop-item">
+      <button id="btn-figurine" class="shop-btn">
+        <span>Restore Idol (Tier <span id="lvl-figurine">0</span>/3)</span>
+        <span id="cost-figurine">€50.00</span>
+      </button>
+      <div class="shop-desc">Glues shattered porcelain into gold; multiplies all cash.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+let width, height;
+function resize() {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight - 40;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// Web Audio API
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audio = null;
+function playSound(type) {
+  try {
+    if (!audio) audio = new AudioCtx();
+    const now = audio.currentTime;
+    const osc = audio.createOscillator();
+    const gain = audio.createGain();
+    osc.connect(gain);
+    gain.connect(audio.destination);
+
+    if (type === 'spin') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(110, now);
+      gain.gain.setValueAtTime(0.04, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+      osc.start(now);
+      osc.stop(now + 0.15);
+    } else if (type === 'meridian') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, now);
+      osc.frequency.exponentialRampToValueAtTime(1760, now + 0.1);
+      gain.gain.setValueAtTime(0.2, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+      osc.start(now);
+      osc.stop(now + 0.3);
+    } else if (type === 'pin') {
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(220, now);
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+      osc.start(now);
+      osc.stop(now + 0.08);
+    }
+  } catch(e) {}
+}
+
+// Game State
+const state = {
+  funds: 0.0,
+  multiplier: 1.0,
+  
+  // Globe Physics
+  globeAngle: 0,
+  globeVelocity: 0,
+  baseAutoSpeed: 0,
+  maxVelocity: 0.08, // Radians per frame
+  friction: 0.985,
+  isDragging: false,
+  dragStartX: 0,
+  
+  // Upgrades
+  autoLevel: 0,
+  bearingsLevel: 0,
+  durabilityLevel: 0,
+  figurineTier: 0,
+
+  // Revolution tracking
+  lastFullTurns: 0,
+  
+  // Pins
+  pins: [], // { id, countryId, name, x, y, lon, lat, passesLeft, maxPasses, wobble }
+  countryTriggerLocks: {},
+  floatingTexts: []
+};
+
+// Target Countries on the Map
+const countries = [
+  { id: 'uk', name: 'UK', x: 0.44, y: 0.28, lon: 0.0, lat: 51, baseVal: 40 },
+  { id: 'fr', name: 'France', x: 0.46, y: 0.33, lon: 2.3, lat: 46, baseVal: 35 },
+  { id: 'be', name: 'Belgium', x: 0.465, y: 0.30, lon: 4.4, lat: 50.8, baseVal: 75 },
+  { id: 'us', name: 'USA', x: 0.24, y: 0.35, lon: -98.0, lat: 38.0, baseVal: 20 },
+  { id: 'br', name: 'Brazil', x: 0.32, y: 0.62, lon: -51.0, lat: -14.0, baseVal: 30 },
+  { id: 'eg', name: 'Egypt', x: 0.53, y: 0.40, lon: 31.0, lat: 26.0, baseVal: 35 },
+  { id: 'jp', name: 'Japan', x: 0.79, y: 0.36, lon: 138.0, lat: 36.0, baseVal: 60 },
+  { id: 'au', name: 'Australia', x: 0.78, y: 0.70, lon: 133.0, lat: -25.0, baseVal: 30 }
+];
+
+// Event Listeners for Interaction
+window.addEventListener('mousedown', (e) => {
+  // Check if click was on the corkboard map
+  const mapRect = getMapRect();
+  if (e.clientX >= mapRect.x && e.clientX <= mapRect.x + mapRect.w &&
+      e.clientY >= mapRect.y && e.clientY <= mapRect.y + mapRect.h) {
+    firePinAtMap(e.clientX, e.clientY, mapRect);
+    return;
+  }
+
+  // Check if click was on globe for spinning
+  const globe = getGlobeGeometry();
+  const dx = e.clientX - globe.cx;
+  const dy = e.clientY - globe.cy;
+  if (Math.hypot(dx, dy) <= globe.r) {
+    state.isDragging = true;
+    state.dragStartX = e.clientX;
+  }
+});
+
+window.addEventListener('mousemove', (e) => {
+  if (!state.isDragging) return;
+  const deltaX = e.clientX - state.dragStartX;
+  state.dragStartX = e.clientX;
+
+  // STRICT UNIDIRECTIONAL SPIN: only allow positive (west-to-east) acceleration
+  if (deltaX > 0) {
+    state.globeVelocity = Math.min(state.maxVelocity, state.globeVelocity + deltaX * 0.0008);
+    playSound('spin');
+  }
+});
+
+window.addEventListener('mouseup', () => { state.isDragging = false; });
+
+function firePinAtMap(mx, my, rect) {
+  const normX = (mx - rect.x) / rect.w;
+  const normY = (my - rect.y) / rect.h;
+
+  // Find closest country within radius
+  let target = null;
+  let minDist = 0.07;
+  for (const c of countries) {
+    const dist = Math.hypot(c.x - normX, c.y - normY);
+    if (dist < minDist) {
+      minDist = dist;
+      target = c;
+    }
+  }
+
+  if (target) {
+    const maxP = 1 + state.durabilityLevel;
+    state.pins.push({
+      id: Date.now() + Math.random(),
+      countryId: target.id,
+      name: target.name,
+      x: rect.x + target.x * rect.w,
+      y: rect.y + target.y * rect.h,
+      lon: target.lon,
+      lat: target.lat,
+      baseVal: target.baseVal,
+      passesLeft: maxP,
+      maxPasses: maxP,
+      wobble: 0
+    });
+    playSound('pin');
+    addFloatText(mx, my, `Pinned: ${target.name}!`, '#e5b972');
+  }
+}
+
+function addFloatText(x, y, text, color = '#ffd700') {
+  state.floatingTexts.push({ x, y, text, color, life: 1.0 });
+}
+
+// Geometry Helpers
+function getMapRect() {
+  const mapW = width * 0.55;
+  const mapH = height * 0.44;
+  return { x: width * 0.35, y: height * 0.05, w: mapW, h: mapH };
+}
+
+function getGlobeGeometry() {
+  const r = Math.min(width, height) * 0.22;
+  return { cx: width * 0.50, cy: height * 0.72, r: r };
+}
+
+// Main Physics Loop
+function updatePhysics() {
+  // Enforce baseline auto-spin floor
+  if (state.autoLevel > 0) {
+    if (state.globeVelocity < state.baseAutoSpeed) {
+      state.globeVelocity = state.baseAutoSpeed;
+    } else {
+      state.globeVelocity = Math.max(state.baseAutoSpeed, state.globeVelocity * state.friction);
+    }
+  } else {
+    state.globeVelocity *= state.friction;
+    if (state.globeVelocity < 0.0001) state.globeVelocity = 0;
+  }
+
+  // Cap at current Max Velocity
+  if (state.globeVelocity > state.maxVelocity) {
+    state.globeVelocity = state.maxVelocity;
+  }
+
+  // Advance Globe Angle
+  const prevAngle = state.globeAngle;
+  state.globeAngle += state.globeVelocity;
+
+  // Revolution tracking (Origin 0°)
+  const currentTurns = Math.floor(state.globeAngle / (Math.PI * 2));
+  if (currentTurns > state.lastFullTurns) {
+    state.lastFullTurns = currentTurns;
+    const baseReward = 5.0 * state.multiplier;
+    state.funds += baseReward;
+    const g = getGlobeGeometry();
+    addFloatText(g.cx, g.cy - g.r - 20, `360° Turn: +€${baseReward.toFixed(2)}`, '#4ade80');
+    playSound('meridian');
+  }
+
+  // Meridian Line Check (Country trigger and durability drop)
+  // Meridian wire is vertical at the center (view angle: facing forward)
+  for (let i = state.pins.length - 1; i >= 0; i--) {
+    const pin = state.pins[i];
+    // Calculate current longitude in world coordinates
+    const lonRad = (pin.lon * Math.PI) / 180;
+    const currentRot = (state.globeAngle + lonRad) % (Math.PI * 2);
+
+    // Meridian is at angle ~0 or PI*2
+    const distToMeridian = Math.abs(currentRot - Math.PI);
+
+    if (distToMeridian < 0.08) {
+      if (!state.countryTriggerLocks[pin.id]) {
+        state.countryTriggerLocks[pin.id] = true;
+        const payout = pin.baseVal * state.multiplier;
+        state.funds += payout;
+        playSound('meridian');
+
+        const g = getGlobeGeometry();
+        addFloatText(g.cx, g.cy, `${pin.name}: +€${payout.toFixed(2)}`, '#ffd700');
+
+        pin.passesLeft--;
+        if (pin.passesLeft <= 0) {
+          // Drop off completely
+          state.pins.splice(i, 1);
+          delete state.countryTriggerLocks[pin.id];
+          continue;
+        } else {
+          // Bent / wobble
+          pin.wobble = 1.0;
+        }
+      }
+    } else if (distToMeridian > 0.4) {
+      // Re-arm for next full turn
+      delete state.countryTriggerLocks[pin.id];
+    }
+  }
+}
+
+// Render Loop
+function render() {
+  ctx.clearRect(0, 0, width, height);
+
+  // Background room tone
+  ctx.fillStyle = '#140f0b';
+  ctx.fillRect(0, 0, width, height);
+
+  renderWindow();
+  renderCorkboardMap();
+  renderTachometer();
+  renderGlobe();
+  renderFigurines();
+  renderFloatingTexts();
+
+  updateUI();
+}
+
+function renderWindow() {
+  const winW = width * 0.28;
+  const winH = height * 0.82;
+  ctx.save();
+  ctx.fillStyle = '#090d13';
+  ctx.fillRect(16, 16, winW, winH);
+  ctx.strokeStyle = '#2b1c12';
+  ctx.lineWidth = 10;
+  ctx.strokeRect(16, 16, winW, winH);
+
+  // Window drops
+  ctx.fillStyle = 'rgba(150, 200, 255, 0.2)';
+  for (let i = 0; i < 25; i++) {
+    const rx = 24 + ((i * 47) % (winW - 20));
+    const ry = (Date.now() * 0.05 * ((i % 3) + 1) + i * 80) % (winH - 20);
+    ctx.fillRect(rx, 24 + ry, 2, 8);
+  }
+  ctx.restore();
+}
+
+function renderCorkboardMap() {
+  const r = getMapRect();
+  ctx.save();
+  // Corkboard frame
+  ctx.fillStyle = '#8b5a2b';
+  ctx.fillRect(r.x - 8, r.y - 8, r.w + 16, r.h + 16);
+  // Parchment Map
+  ctx.fillStyle = '#d4b886';
+  ctx.fillRect(r.x, r.y, r.w, r.h);
+
+  // Map Grid
+  ctx.strokeStyle = 'rgba(90, 60, 30, 0.15)';
+  ctx.lineWidth = 1;
+  for (let x = r.x; x < r.x + r.w; x += 40) {
+    ctx.beginPath(); ctx.moveTo(x, r.y); ctx.lineTo(x, r.y + r.h); ctx.stroke();
+  }
+  for (let y = r.y; y < r.y + r.h; y += 40) {
+    ctx.beginPath(); ctx.moveTo(r.x, y); ctx.lineTo(r.x + r.w, y); ctx.stroke();
+  }
+
+  // Draw countries
+  for (const c of countries) {
+    const cx = r.x + c.x * r.w;
+    const cy = r.y + c.y * r.h;
+    ctx.fillStyle = '#b59360';
+    ctx.beginPath();
+    ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#6e4720';
+    ctx.stroke();
+
+    ctx.fillStyle = '#3a2310';
+    ctx.font = '10px Georgia';
+    ctx.textAlign = 'center';
+    ctx.fillText(c.name, cx, cy + 3);
+  }
+
+  // Draw Pins & Strings
+  if (state.pins.length > 1) {
+    ctx.strokeStyle = 'rgba(210, 40, 40, 0.7)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    for (let i = 0; i < state.pins.length; i++) {
+      if (i === 0) ctx.moveTo(state.pins[i].x, state.pins[i].y);
+      else ctx.lineTo(state.pins[i].x, state.pins[i].y);
+    }
+    ctx.stroke();
+  }
+
+  for (const pin of state.pins) {
+    ctx.save();
+    ctx.translate(pin.x, pin.y);
+    if (pin.passesLeft < pin.maxPasses) {
+      // Crooked
+      ctx.rotate(0.35);
+    }
+    // Pin head
+    ctx.fillStyle = '#dc2626';
+    ctx.beginPath();
+    ctx.arc(0, 0, 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.restore();
+  }
+  ctx.restore();
+}
+
+function renderGlobe() {
+  const g = getGlobeGeometry();
+  ctx.save();
+
+  // Brass stand
+  ctx.fillStyle = '#6e4a20';
+  ctx.fillRect(g.cx - 10, g.cy + g.r, 20, 50);
+  ctx.beginPath();
+  ctx.ellipse(g.cx, g.cy + g.r + 50, 60, 16, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Globe sphere clipping
+  ctx.beginPath();
+  ctx.arc(g.cx, g.cy, g.r, 0, Math.PI * 2);
+  ctx.clip();
+
+  // Ocean fill
+  ctx.fillStyle = '#223644';
+  ctx.fillRect(g.cx - g.r, g.cy - g.r, g.r * 2, g.r * 2);
+
+  // Rotating meridian lines & lands
+  ctx.strokeStyle = 'rgba(218, 165, 32, 0.25)';
+  ctx.lineWidth = 1;
+  const numLongs = 12;
+  for (let i = 0; i < numLongs; i++) {
+    const angle = state.globeAngle + (i * (Math.PI * 2 / numLongs));
+    const xOffset = Math.sin(angle) * g.r;
+    if (Math.cos(angle) > 0) {
+      ctx.beginPath();
+      ctx.ellipse(g.cx + xOffset, g.cy, Math.abs(Math.sin(angle) * 12), g.r, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  }
+
+  // 0° START Origin Marker
+  const originAngle = (state.globeAngle % (Math.PI * 2));
+  if (Math.cos(originAngle) > 0) {
+    const ox = g.cx + Math.sin(originAngle) * g.r;
+    ctx.fillStyle = '#eab308';
+    ctx.fillRect(ox - 3, g.cy - g.r, 6, g.r * 2);
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 10px sans-serif';
+    ctx.fillText('0° START', ox + 6, g.cy);
+  }
+
+  // Pinned dots appearing on the globe
+  for (const pin of state.pins) {
+    const lonRad = (pin.lon * Math.PI) / 180;
+    const pAngle = state.globeAngle + lonRad;
+    if (Math.cos(pAngle) > 0) {
+      const px = g.cx + Math.sin(pAngle) * (g.r * 0.85);
+      const py = g.cy - ((pin.lat / 90) * (g.r * 0.75));
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.arc(px, py, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.stroke();
+    }
+  }
+
+  ctx.restore(); // remove clip
+
+  // Prominent Brass Meridian Wire (Vertical Center)
+  ctx.strokeStyle = '#e5b972';
+  ctx.lineWidth = 3;
+  ctx.shadowColor = '#e5b972';
+  ctx.shadowBlur = 8;
+  ctx.beginPath();
+  ctx.moveTo(g.cx, g.cy - g.r - 8);
+  ctx.lineTo(g.cx, g.cy + g.r + 8);
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+}
+
+function renderTachometer() {
+  const g = getGlobeGeometry();
+  const tx = g.cx + g.r + 35;
+  const ty = g.cy + 30;
+  const tr = 34;
+
+  ctx.save();
+  // Outer brass ring
+  ctx.fillStyle = '#2b1b11';
+  ctx.beginPath();
+  ctx.arc(tx, ty, tr, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = '#a47838';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  // Speed ratio
+  const ratio = Math.min(1.0, state.globeVelocity / state.maxVelocity);
+
+  // Redline zone
+  ctx.strokeStyle = '#dc2626';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.arc(tx, ty, tr - 6, Math.PI * 0.1, Math.PI * 0.5);
+  ctx.stroke();
+
+  // Needle
+  const needleAngle = Math.PI * 0.8 + ratio * (Math.PI * 1.4);
+  ctx.strokeStyle = ratio > 0.95 ? '#ef4444' : '#e5b972';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(tx, ty);
+  ctx.lineTo(tx + Math.cos(needleAngle) * (tr - 8), ty + Math.sin(needleAngle) * (tr - 8));
+  ctx.stroke();
+
+  // Label
+  ctx.fillStyle = ratio > 0.95 ? '#ef4444' : '#b89c74';
+  ctx.font = 'bold 9px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(ratio > 0.95 ? 'MAX!' : 'RPM', tx, ty + 18);
+
+  ctx.restore();
+}
+
+function renderFigurines() {
+  const fx = width * 0.35;
+  const fy = height * 0.82;
+
+  ctx.save();
+  // Pedestal
+  ctx.fillStyle = '#3a2312';
+  ctx.fillRect(fx - 40, fy, 80, 14);
+
+  // Idol evolution
+  if (state.figurineTier === 0) {
+    // Shards
+    ctx.fillStyle = '#7a7066';
+    ctx.fillRect(fx - 15, fy - 6, 8, 6);
+    ctx.fillRect(fx + 2, fy - 8, 12, 8);
+    ctx.fillRect(fx - 6, fy - 14, 10, 6);
+  } else if (state.figurineTier === 1) {
+    // Glued stone
+    ctx.fillStyle = '#8f8377';
+    ctx.beginPath();
+    ctx.arc(fx, fy - 20, 10, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillRect(fx - 8, fy - 12, 16, 12);
+  } else if (state.figurineTier === 2) {
+    // Kintsugi Gold Veins
+    ctx.fillStyle = '#a89c8d';
+    ctx.beginPath();
+    ctx.arc(fx, fy - 22, 11, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillRect(fx - 9, fy - 13, 18, 13);
+    ctx.strokeStyle = '#eab308';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  } else {
+    // Solid Gold Idol
+    ctx.fillStyle = '#ffd700';
+    ctx.shadowColor = '#ffd700';
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.arc(fx, fy - 24, 12, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillRect(fx - 10, fy - 14, 20, 14);
+  }
+  ctx.restore();
+}
+
+function renderFloatingTexts() {
+  for (let i = state.floatingTexts.length - 1; i >= 0; i--) {
+    const ft = state.floatingTexts[i];
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, ft.life);
+    ctx.fillStyle = ft.color;
+    ctx.font = 'bold 13px Georgia';
+    ctx.fillText(ft.text, ft.x, ft.y);
+    ctx.restore();
+
+    ft.y -= 0.8;
+    ft.life -= 0.018;
+    if (ft.life <= 0) state.floatingTexts.splice(i, 1);
+  }
+}
+
+function updateUI() {
+  document.getElementById('val-funds').textContent = `€${state.funds.toFixed(2)}`;
+  const deg = Math.floor(((state.globeAngle % (Math.PI * 2)) / (Math.PI * 2)) * 360);
+  const turns = Math.floor(state.globeAngle / (Math.PI * 2));
+  document.getElementById('val-revs').textContent = `${deg}° (Rev ${turns})`;
+  
+  const rpm = Math.round((state.globeVelocity * 60 * 60) / (Math.PI * 2));
+  document.getElementById('val-rpm').textContent = `${rpm} RPM`;
+  document.getElementById('val-pins').textContent = state.pins.length;
+
+  // Shop button states
+  updateShopBtn('auto', state.autoLevel, 15 * Math.pow(2.2, state.autoLevel));
+  updateShopBtn('bearings', state.bearingsLevel, 30 * Math.pow(2.4, state.bearingsLevel));
+  updateShopBtn('durability', state.durabilityLevel, 45 * Math.pow(2.5, state.durabilityLevel));
+  if (state.figurineTier < 3) {
+    updateShopBtn('figurine', state.figurineTier, 50 * Math.pow(3.0, state.figurineTier));
+  } else {
+    document.getElementById('btn-figurine').disabled = true;
+    document.getElementById('cost-figurine').textContent = 'MAXED';
+  }
+}
+
+function updateShopBtn(id, lvl, cost) {
+  const btn = document.getElementById(`btn-${id}`);
+  const costEl = document.getElementById(`cost-${id}`);
+  const lvlEl = document.getElementById(`lvl-${id}`);
+  if (lvlEl) lvlEl.textContent = lvl;
+  if (costEl) costEl.textContent = `€${cost.toFixed(2)}`;
+  btn.disabled = state.funds < cost;
+}
+
+// Shop Handlers
+document.getElementById('btn-auto').onclick = () => {
+  const cost = 15 * Math.pow(2.2, state.autoLevel);
+  if (state.funds >= cost) {
+    state.funds -= cost;
+    state.autoLevel++;
+    state.baseAutoSpeed = 0.008 * state.autoLevel;
+  }
+};
+document.getElementById('btn-bearings').onclick = () => {
+  const cost = 30 * Math.pow(2.4, state.bearingsLevel);
+  if (state.funds >= cost) {
+    state.funds -= cost;
+    state.bearingsLevel++;
+    state.maxVelocity += 0.04;
+  }
+};
+document.getElementById('btn-durability').onclick = () => {
+  const cost = 45 * Math.pow(2.5, state.durabilityLevel);
+  if (state.funds >= cost) {
+    state.funds -= cost;
+    state.durabilityLevel++;
+  }
+};
+document.getElementById('btn-figurine').onclick = () => {
+  const cost = 50 * Math.pow(3.0, state.figurineTier);
+  if (state.funds >= cost && state.figurineTier < 3) {
+    state.funds -= cost;
+    state.figurineTier++;
+    state.multiplier += 0.5;
+  }
+};
+
+// Loop runner
+function loop() {
+  updatePhysics();
+  render();
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>

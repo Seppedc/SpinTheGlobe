@@ -1,0 +1,55 @@
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.SceneManagement;
+using UnityEditor.SceneManagement;
+using System.IO;
+internal class CommandScript:IRunCommand {
+ public void Execute(ExecutionResult result) {
+ string folder="Assets/DetectiveDesk/AssetProduction/SpecialMaterials/20261031_015929_477ff047";
+ Directory.CreateDirectory(folder);
+ var shader=Shader.Find("Universal Render Pipeline/Lit");
+ if(!shader || !shader.isSupported) throw new System.Exception("URP Lit unavailable");
+ string[] names={"Parchment","Enamel","Crystal","Whiskey","Stone"};
+ Color[] colors={new Color(.70f,.55f,.32f),new Color(.055f,.18f,.14f),new Color(.65f,.85f,.90f,.28f),new Color(.47f,.17f,.025f,.72f),new Color(.26f,.28f,.29f)};
+ float[] smooth={.12f,.87f,.97f,.94f,.22f};
+ var mats=new Material[5];
+ for(int k=0;k<5;k++){
+ var tex=new Texture2D(512,512,TextureFormat.RGBA32,false);
+ var pixels=new Color[512*512];
+ for(int y=0;y<512;y++)for(int x=0;x<512;x++){
+ float u=x/512f,v=y/512f;
+ // Periodic sampled noise makes the color maps tile seamlessly.
+ float a=Mathf.Sin(u*Mathf.PI*2),b=Mathf.Cos(v*Mathf.PI*2);
+ float noise=Mathf.PerlinNoise(8+a*2,8+b*2);
+ float fine=Mathf.PerlinNoise(x*.37f,y*.37f);
+ float variation=k==0 ? .84f+.22f*noise+.05f*fine : k==4 ? .66f+.48f*noise+.15f*fine : .98f+.02f*noise;
+ Color c=colors[k]*variation;c.a=colors[k].a;pixels[y*512+x]=c;
+ }
+ tex.SetPixels(pixels);tex.Apply();
+ string tp=folder+"/"+names[k]+"_BaseColor.png";
+ File.WriteAllBytes(tp,tex.EncodeToPNG());Object.DestroyImmediate(tex);
+ AssetDatabase.ImportAsset(tp,ImportAssetOptions.ForceSynchronousImport);
+ var imp=(TextureImporter)AssetImporter.GetAtPath(tp);imp.wrapMode=TextureWrapMode.Repeat;imp.sRGBTexture=true;imp.mipmapEnabled=true;imp.SaveAndReimport();
+ var m=new Material(shader);m.name="Special_"+names[k];m.SetColor("_BaseColor",Color.white);
+ m.SetTexture("_BaseMap",AssetDatabase.LoadAssetAtPath<Texture2D>(tp));m.SetFloat("_Smoothness",smooth[k]);m.SetFloat("_Metallic",0);
+ if(k==2 || k==3){
+ m.SetFloat("_Surface",1);m.SetFloat("_Blend",0);m.SetFloat("_SrcBlend",(float)UnityEngine.Rendering.BlendMode.SrcAlpha);m.SetFloat("_DstBlend",(float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);m.SetFloat("_ZWrite",0);m.SetOverrideTag("RenderType","Transparent");m.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");m.renderQueue=3000;
+ }
+ AssetDatabase.CreateAsset(m,folder+"/"+names[k]+".mat");mats[k]=m;
+ var imported=AssetDatabase.LoadAssetAtPath<Texture2D>(tp);
+ if(imported.width!=512 || imported.height!=512)throw new System.Exception("Unexpected imported texture size");
+ result.Log(names[k]+": 512x512 texture; shader "+m.shader.name+"; smoothness "+smooth[k]);
+ }
+ var original=SceneManager.GetActiveScene();bool dirty=original.isDirty;
+ var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Additive);
+ try{
+ SceneManager.SetActiveScene(scene);
+ var root=new GameObject("SpecialMaterials_SwatchDisplay");
+ for(int k=0;k<5;k++){var go=GameObject.CreatePrimitive(PrimitiveType.Sphere);go.name=names[k]+"_PreviewOnly";go.transform.SetParent(root.transform);go.transform.localPosition=new Vector3((k-2)*1.25f,0,0);go.GetComponent<Renderer>().sharedMaterial=mats[k];Object.DestroyImmediate(go.GetComponent<Collider>());}
+ PrefabUtility.SaveAsPrefabAsset(root,folder+"/MaterialSwatches.prefab");
+ }finally{SceneManager.SetActiveScene(original);EditorSceneManager.CloseScene(scene,true);}
+ if(original.isDirty!=dirty)throw new System.Exception("Original dirty state changed");
+ File.WriteAllText(folder+"/review_manifest.json","{\"kind\":\"prefab\",\"asset_paths\":[\""+folder+"/MaterialSwatches.prefab\",\""+folder+"/Parchment.mat\",\""+folder+"/Enamel.mat\",\""+folder+"/Crystal.mat\",\""+folder+"/Whiskey.mat\",\""+folder+"/Stone.mat\"],\"prefab_path\":\""+folder+"/SpecialMaterials_Review.prefab\"}");
+ result.Log("Five standalone materials authored; original active scene and dirty state restored.");
+ }
+}

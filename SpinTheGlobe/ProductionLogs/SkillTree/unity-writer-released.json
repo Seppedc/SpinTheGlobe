@@ -1,0 +1,25 @@
+{
+  "writer": "sequential-skill-tree-integration",
+  "state": "released",
+  "timestampUtc": "2026-11-01T20:16:55.607904+00:00",
+  "bridgeCallsStopped": true,
+  "play": false,
+  "sceneClean": true,
+  "sceneCount": 1,
+  "modalActive": false,
+  "money": 422,
+  "levels": [
+    0,
+    0,
+    0
+  ],
+  "figurineTiers": [
+    0,
+    0,
+    0
+  ],
+  "graphChecks": 25,
+  "runtimeChecks": 77,
+  "gameplayChecks": 126,
+  "report": "ProductionLogs/SkillTree/implementation-report.md"
+}

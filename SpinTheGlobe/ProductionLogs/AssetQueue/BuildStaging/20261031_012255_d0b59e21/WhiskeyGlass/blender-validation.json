@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "blend": "ProductionLogs/AssetQueue/BuildStaging/20261031_012255_d0b59e21/WhiskeyGlass/WhiskeyGlass.blend",
+  "blend_sha256": "844b9b186415fa46b77d667477cc440b1c48ee7b48703c2f6f7d91dde237632e",
+  "fbx": "ProductionLogs/AssetQueue/BuildStaging/20261031_012255_d0b59e21/WhiskeyGlass/WhiskeyGlass.fbx",
+  "fbx_sha256": "538242e2fdf44534163bbe954ccf2a2a2e4720a8f7d336196fe9df5816d21323",
+  "generator": "ProductionLogs/AssetQueue/BuildStaging/20261031_012255_d0b59e21/WhiskeyGlass/build_asset.py",
+  "generator_sha256": "6f5f29588e02668bf89a686fbb5efd4801081a115d404bb8cceca0fbf23cc5f7",
+  "embedded_source_exact": true,
+  "mesh_count": 5,
+  "triangles": 5508,
+  "dimensions_m": [
+    0.08799999952316284,
+    0.08799999952316284,
+    0.09291520714759827
+  ],
+  "root_at_origin": true,
+  "minimum_m": [
+    -0.04399999976158142,
+    -0.04399999976158142,
+    0.0
+  ],
+  "maximum_m": [
+    0.04399999976158142,
+    0.04399999976158142,
+    0.09291520714759827
+  ],
+  "materials": [
+    "WG_AmberWhiskey",
+    "WG_ClearIce",
+    "WG_HeavyCrystal"
+  ],
+  "moving_part_candidates": [],
+  "expected_dimensions_review": "Actual dimensions recorded; asset-specific fit remains reviewable, no visual approval implied."
+}

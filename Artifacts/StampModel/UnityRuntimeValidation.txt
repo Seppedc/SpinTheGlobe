@@ -1,0 +1,3 @@
+FAIL: System.InvalidOperationException: Visible stamp ray does not reach original parent collider: hit=none collider=Center: (0.00, 0.00, 0.00), Extents: (0.50, 0.50, 0.50) time=1.002771
+  at StampImportFrameCheck.Check (System.Boolean valid, System.String message) [0x00009] in C:\Users\decra\source\Antigravity\SpinTheGlobe\SpinTheGlobe\Assets\DetectiveDeskUnityStarter\Assets\DetectiveDesk\Scripts\Editor\StampImportFrameCheck.cs:20 
+  at StampImportFrameCheck.Tick () [0x0011f] in C:\Users\decra\source\Antigravity\SpinTheGlobe\SpinTheGlobe\Assets\DetectiveDeskUnityStarter\Assets\DetectiveDesk\Scripts\Editor\StampImportFrameCheck.cs:35 

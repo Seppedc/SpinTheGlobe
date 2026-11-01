@@ -1,0 +1,10 @@
+Implemented and saved the 39-node cash-funded skill tree, reusable prefab, and default graph. Unity writer released in clean Edit Mode.
+
+- Passed 25 graph, 77 runtime UI, and 126 gameplay regression checks.
+- All 546 protected art files and UpgradeConfig unchanged.
+- Cash restored to 422; all levels and figurine tiers remain zero.
+- All requested reports and screenshots created.
+
+[Implementation report](ProductionLogs/SkillTree/implementation-report.md)
+
+Physical mouse and Escape events were not synthesized; callbacks, retained bindings, scrolling bounds, and world-input guards were verified.

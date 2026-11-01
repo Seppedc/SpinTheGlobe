@@ -1,0 +1,54 @@
+using UnityEngine;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using System.Linq;
+using System.IO;
+using System.Collections.Generic;
+internal class CommandScript : IRunCommand {
+ ExecutionResult log; Transform office,env,decor; Dictionary<string,string> paths=new Dictionary<string,string>();
+ Transform Find(string name){return office.GetComponentsInChildren<Transform>(true).First(t=>t.name==name);}
+ Bounds BoundsOf(GameObject g){var rr=g.GetComponentsInChildren<Renderer>(true).Where(x=>x.enabled&&x.gameObject.activeInHierarchy).ToArray();var b=rr[0].bounds;foreach(var r in rr.Skip(1))b.Encapsulate(r.bounds);return b;}
+ void Hide(params string[] names){foreach(var n in names){var t=Find(n);foreach(var r in t.GetComponentsInChildren<Renderer>(true)){log.RegisterObjectModification(r);r.enabled=false;}}}
+ string PathFor(string slug,string file){return paths[slug]+"/"+file;}
+ Material Mat(string slug,string file){return AssetDatabase.LoadAssetAtPath<Material>(PathFor(slug,file));}
+ GameObject Spawn(string slug,Transform parent,Vector3 center,float width,float yaw=0,string part=null){
+ var p=AssetDatabase.LoadAssetAtPath<GameObject>(PathFor(slug,slug+"_Review.prefab"));if(!p)throw new System.Exception("Missing "+slug);
+ var g=(GameObject)PrefabUtility.InstantiatePrefab(p,parent);log.RegisterObjectCreation(g);g.name="Generated_"+slug+(part==null?"":"_"+part);
+ foreach(var t in g.GetComponentsInChildren<Transform>(true))t.gameObject.layer=parent.gameObject.layer;
+ foreach(var c in g.GetComponentsInChildren<Collider>(true))c.enabled=false;
+ if(part!=null){var keep=g.GetComponentsInChildren<Transform>(true).First(t=>t.name==part);foreach(var t in g.GetComponentsInChildren<Transform>(true).Where(t=>t!=g.transform&&!t.IsChildOf(keep)&&!keep.IsChildOf(t)).ToArray())t.gameObject.SetActive(false);}
+ g.transform.rotation=Quaternion.Euler(0,yaw,0);g.transform.localScale=Vector3.one;var b=BoundsOf(g);g.transform.localScale*=width/b.size.x;b=BoundsOf(g);g.transform.position+=center-b.center;return g;}
+ void Surface(GameObject g,Material mat,string token){foreach(var r in g.GetComponentsInChildren<Renderer>(true)){var m=r.sharedMaterials;bool changed=false;for(int i=0;i<m.Length;i++)if(m[i]&&m[i].name.ToLower().Contains(token)){m[i]=mat;changed=true;}if(changed){log.RegisterObjectModification(r);r.sharedMaterials=m;}}}
+ public void Execute(ExecutionResult result){
+ log=result;if(EditorApplication.isPlaying)throw new System.Exception("Edit Mode required");office=GameObject.Find("DetectiveOffice").transform;env=Find("Environment");decor=Find("Decorations");
+ if(office.GetComponentsInChildren<Transform>(true).Any(t=>t.name=="Generated_DetectiveDesk"))throw new System.Exception("Integration already applied");
+ foreach(var d in Directory.GetDirectories("Assets/DetectiveDesk/AssetProduction")){var slug=System.IO.Path.GetFileName(d);var dirs=Directory.GetDirectories(d).OrderBy(x=>x).ToArray();if(dirs.Length>0)paths[slug]=dirs.Last();}
+ // Explicitly select the verified outputs rather than older attempts.
+ paths["BankersLamp"]="Assets/DetectiveDesk/AssetProduction/BankersLamp/20261030_212422_3e4ba5f3";
+ paths["CollectibleStatues"]="Assets/DetectiveDesk/AssetProduction/CollectibleStatues/20261031_011441_91ecff05";
+ paths["WhiskeyBottle"]="Assets/DetectiveDesk/AssetProduction/WhiskeyBottle/20261031_012732_edb92053";
+ var cam=Camera.main;string cameraState=EditorJsonUtility.ToJson(cam.transform);var slots=office.GetComponentsInChildren<Transform>(true).Where(t=>t.name.StartsWith("PinSlot_")).ToDictionary(t=>t.name,t=>EditorJsonUtility.ToJson(t));
+ var desk=Spawn("DetectiveDesk",env,new Vector3(0,.6106f,-.55f),10.8f);Hide("Desk slab","Desk front apron");foreach(var t in env.GetComponentsInChildren<Transform>(true).Where(t=>t.name=="Desk leg").ToArray())foreach(var r in t.GetComponents<Renderer>()){log.RegisterObjectModification(r);r.enabled=false;}
+ var structure=Spawn("DeskStructure",env,new Vector3(0,-.45f,-.55f),8.1f);
+ var wall=Spawn("BackWall",env,new Vector3(0,2.8f,2.45f),14);Hide("Back wall");
+ var mold=Spawn("WallMolding",env,new Vector3(0,2.8f,2.18f),11.8f);Hide("Back wall trim");
+ var frame=Spawn("WorldMapFrame",env,new Vector3(.55f,2.8f,2.025f),7.3f);Hide("Map frame");
+ var map=Find("CLEAN MAP - replace texture here");var mr=map.GetComponent<Renderer>();log.RegisterObjectModification(mr);mr.sharedMaterial=Mat("WorldMap","WorldMap_Parchment.mat");log.RegisterObjectModification(map);map.localScale=new Vector3(7.12f,7.12f/(2048f/900f),map.localScale.z);
+ var win=Spawn("RainyWindow",env,new Vector3(-4.85f,2.53f,1.90f),1.47f); // Height adjusted through a parent frame to retain the existing narrow opening.
+ log.RegisterObjectModification(win.transform);win.transform.localScale=new Vector3(win.transform.localScale.x,win.transform.localScale.y*(3.35f/BoundsOf(win).size.y),win.transform.localScale.z);
+ foreach(var n in new[]{"Window left rail","Window right rail","Window crossbar","Window sill"})Hide(n);
+ var recess=Find("Window dark recess").GetComponent<Renderer>();log.RegisterObjectModification(recess);recess.sharedMaterial=Mat("CityBackdrop","CityBackdrop_Unlit.mat");
+ var floor=Spawn("FloorBackground",env,new Vector3(0,-.08f,0),12);Hide("Floor");
+ var lamp=Spawn("BankersLamp",env,new Vector3(4.25f,1.57f,.55f),1.035f);var lb=BoundsOf(lamp);lamp.transform.position+=Vector3.up*(.815f-lb.min.y);foreach(var n in new[]{"Lamp brass base","Lamp stem","Lamp emerald shade","Lamp gold lip","Lamp bulb"})Hide(n);
+ var launcher=Find("ToyPinLauncher - aimed up at map");Hide("ToyPinLauncher - aimed up at map");var launch=Spawn("PinLauncher",launcher,new Vector3(3.05f,1.25f,.60f),.80f);var lbb=BoundsOf(launch);launch.transform.position+=Vector3.up*(.815f-lbb.min.y);
+ var files=Find("CaseFiles");foreach(var t in files.GetComponentsInChildren<Transform>(true).Where(t=>t.name.StartsWith("Manila file")))Hide(t.name);var cf=Spawn("CaseFiles",files,new Vector3(2.2f,.9f,-1.2f),1.75f,90);cf.transform.position+=Vector3.up*(.815f-BoundsOf(cf).min.y);
+ Hide("Small jeweler hammer handle","Hammer head");var hammer=Spawn("JewelerHammer",decor,new Vector3(-3.2f,1f,-1.05f),.24f);hammer.transform.rotation=Quaternion.Euler(90,0,65);var hb=BoundsOf(hammer);hammer.transform.localScale*=.75f/Mathf.Max(hb.size.x,hb.size.z);hb=BoundsOf(hammer);hammer.transform.position+=new Vector3(-3.2f,.815f,-1.05f)-new Vector3(hb.center.x,hb.min.y,hb.center.z);
+ Hide("Whiskey bottle","Bottle cap");var bottle=Spawn("WhiskeyBottle",decor,new Vector3(-4.33f,1.20f,-.50f),.30f);bottle.transform.position+=Vector3.up*(.815f-BoundsOf(bottle).min.y);
+ Hide("Whiskey glass","Glass rim");var glass=Spawn("WhiskeyGlass",decor,new Vector3(-3.93f,1f,-.95f),.28f);glass.transform.position+=Vector3.up*(.815f-BoundsOf(glass).min.y);
+ for(int i=0;i<2;i++){var parent=Find("StatueCollectibleSlot_"+i);Hide("StatueCollectibleSlot_"+i);float x=-3.55f+i*.72f;var bas=Spawn("StatueSlots",parent,new Vector3(x,.9f,-.3f),.58f,0,"DisplayBase_0"+(i+1));bas.transform.position+=Vector3.up*(.815f-BoundsOf(bas).min.y);float y=BoundsOf(bas).max.y;var bust=Spawn("CollectibleStatues",parent,new Vector3(x,1.3f,-.3f),.42f,0,i==0?"Detective_Assembly":"Archivist_Assembly");bust.transform.position+=Vector3.up*(y-BoundsOf(bust).min.y);Surface(bust,Mat("KintsugiMaterial","Kintsugi.mat"),"stone");}
+ var mahogany=Mat("MahoganyPBR","MahoganyPBR.mat");var brass=Mat("AgedBrassPBR","AgedBrassPBR.mat");foreach(var g in new[]{desk,structure,wall,mold,frame,win}){Surface(g,mahogany,"mahogany");Surface(g,brass,"brass");}
+ Surface(Find("DetectivePinCoffer").gameObject,Mat("FabricLeatherPBR","Velvet_Burgundy.mat"),"velvet");Surface(lamp,brass,"brass");Surface(launch,brass,"brass");Surface(cf,Mat("FabricLeatherPBR","Leather_Oxblood.mat"),"leather");
+ if(EditorJsonUtility.ToJson(cam.transform)!=cameraState)throw new System.Exception("Camera changed");foreach(var kv in slots)if(EditorJsonUtility.ToJson(Find(kv.Key))!=kv.Value)throw new System.Exception("Slot changed "+kv.Key);
+ EditorSceneManager.MarkSceneDirty(office.gameObject.scene);EditorSceneManager.SaveScene(office.gameObject.scene);AssetDatabase.SaveAssets();result.Log("Integrated generated visuals; camera and 12 slot transforms unchanged. Scene saved.");
+ }
+}

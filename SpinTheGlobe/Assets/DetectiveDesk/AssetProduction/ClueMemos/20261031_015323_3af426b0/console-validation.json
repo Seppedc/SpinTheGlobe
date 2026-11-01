@@ -1,0 +1,10 @@
+{
+    "entries":  0,
+    "types":  [
+                  "Error",
+                  "Warning"
+              ],
+    "after_final_review":  true,
+    "tool":  "Unity_ReadConsole",
+    "action":  "Get"
+}

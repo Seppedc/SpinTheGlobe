@@ -1,0 +1,13 @@
+{
+    "status": "PASS",
+    "source_sha256": "abf87cfe0a3d849cffe145c4bde06431342f224e6e0e196c0d29ae2a0fd7a18b",
+    "prefab_path": "Assets/DetectiveDesk/AssetProduction/FabricLeatherPBR/20261030_220615_17c6c6ae/FabricLeatherPBR_Review.prefab",
+    "screenshot_path": "Assets/DetectiveDesk/AssetProduction/FabricLeatherPBR/20261030_220615_17c6c6ae/preview.png",
+    "screenshot_sha256": "5eda822aa801e8748b49966bde9d7c58fb14cf9b5c97ba1cb81c392cf7a1e3ee",
+    "review_scene": "Assets/DetectiveDesk/AssetReview/AssetReview.unity",
+    "protected_scene_unchanged": true,
+    "console_errors": 0,
+    "mesh_count": 4,
+    "renderer_count": 4,
+    "missing_materials": 0
+}

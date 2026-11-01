@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-30T17:53:45.135670+00:00",
+  "reason": "User explicitly requested continuation after clean editor shutdown; preserve current saved scene, never restore older checkpoint. Unity reopened and MCP/Console verified.",
+  "current_scene_sha256": "0ecb026bd927aa44c2c9c3f6c1bfeca10b9a42f3f5f7dbc0ca3f8e9690a7d7f4",
+  "failed_job": "ProductionLogs/AssetQueue/runs/20261030_172313_a2e63920/job.json",
+  "failed_job_outcome": "project_error",
+  "retry_attempts_used": 1
+}
