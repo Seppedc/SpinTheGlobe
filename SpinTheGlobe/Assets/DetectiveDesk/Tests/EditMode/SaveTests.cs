@@ -43,7 +43,6 @@ namespace DetectiveDesk.Tests
             store.Save(new SaveData { money = 10 });
             store.Save(new SaveData { money = 20 }); // first save becomes .bak
             File.WriteAllText(store.FilePath, "{ not json");
-            UnityEngine.TestTools.LogAssert.ignoreFailingMessages = true;
             Assert.IsTrue(store.TryLoad(out var loaded));
             Assert.AreEqual(10, loaded.money, 1e-9);
         }

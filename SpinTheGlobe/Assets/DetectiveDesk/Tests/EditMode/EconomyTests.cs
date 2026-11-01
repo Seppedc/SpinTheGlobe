@@ -50,7 +50,7 @@ namespace DetectiveDesk.Tests
         [TestCase(1000, "1.00K")]
         [TestCase(1234567, "1.23M")]
         [TestCase(999999, "999K")]
-        [TestCase(45600000000, "45.6B")]
+        [TestCase(4.56e10, "45.6B")]
         [TestCase(-2500, "-2.50K")]
         public void NumberFormatter_Formats(double value, string expected) =>
             Assert.AreEqual(expected, NumberFormatter.Format(value));
