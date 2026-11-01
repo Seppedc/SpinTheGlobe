@@ -1,1 +1,0 @@
-PASS: 12 named sockets with prefab references; independent Ruby and Sapphire pins seat/release correctly; original pin-selection HUD callback preserved. LIMITATION: the project's default physics scene is empty despite enabled colliders; native mouse-hit verification is unavailable. Geometric camera/collider tests were completed separately; global physics settings unchanged.

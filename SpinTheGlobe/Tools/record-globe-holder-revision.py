@@ -17,7 +17,7 @@ with q.Lock():
  pending=job.pop('pending_revision',None)
  job['approved_parts']=['World sphere geometry and current colors (user statement before holder revision)']
  if pending:job['history'].append({'at':stamp,'event':'staged_revision_resolved','prior_staging':pending})
- job['scene_integration']={'scene':'Assets/DetectiveDesk/Generated/DetectiveOffice.unity','report':job['report_path'],'screenshot':job['screenshot_path'],'at':stamp}
+ job['scene_integration']={'scene':'Assets/DetectiveDesk/Scenes/DetectiveOffice.unity','report':job['report_path'],'screenshot':job['screenshot_path'],'at':stamp}
  registry=q.read(q.ROOT/'asset_registry.json');r=next(a for a in registry if a['slug']=='MechanicalGlobe');r.update(status='Detailed source; holder revision needs visual review',unity=ev['prefab_path'],check='Executed source preservation/embedded scripts/half holder/no exposed gears/relocated gauge/FBX validation; existing Unity module refresh, preservation and Console checks. Exact runtime checks and limits recorded in report.')
  q.atomic(q.ROOT/'asset_registry.json',registry);q.save(state)
  assert len(q.read(q.QUEUE)['assets'])==42

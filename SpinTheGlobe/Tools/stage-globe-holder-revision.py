@@ -9,7 +9,7 @@ checkpoint.mkdir(parents=True,exist_ok=True);stage.mkdir(parents=True)
 for n in ['build_asset.py','reference_globe.py','legacy_globe.py','MechanicalGlobe.blend','MechanicalGlobe.fbx','README.md']:
  shutil.copy2(source/n,checkpoint/n)
  if n.endswith('.py'):shutil.copy2(source/n,stage/n)
-shutil.copy2(root/'Assets/DetectiveDesk/Generated/DetectiveOffice.unity',checkpoint/'DetectiveOffice.unity')
+shutil.copy2(root/'Assets/DetectiveDesk/Scenes/DetectiveOffice.unity',checkpoint/'DetectiveOffice.unity')
 for folder in ['Prefabs','Materials','NativeMeshes']:shutil.copytree(root/'Assets/DetectiveDesk/GlobeRework'/folder,checkpoint/folder)
 for n in ['asset_queue.json','asset_registry.json','Asset_Tracker.xlsx','assets.csv']:shutil.copy2(root/n,checkpoint/n)
 p=stage/'reference_globe.py';s=p.read_text(encoding='utf-8')

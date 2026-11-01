@@ -1,4 +1,0 @@
-Scene unchanged=True
-Prefab slots=12; pin references valid=True; missing scripts=0
-Production meshes=74; materials=7
-Native visual meshes unchanged by canonical refresh; no duplicate scene coffer created.

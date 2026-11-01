@@ -1,1 +1,0 @@
-PASS: normal-frame sphere rotation, animated gears, 1.17 RPM gauge, existing globe click/HUD, and reversible hover emission.

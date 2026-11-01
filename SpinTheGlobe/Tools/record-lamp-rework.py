@@ -14,7 +14,7 @@ with q.Lock():
  job.update(status='Needs Review',validated=True,human_approved=False,existing_binding=ev['prefab_path'],output_path=out,screenshot_path=ev['screenshot_path'],report_path=out+'/asset-report.md',last_updated=stamp,last_error='')
  job['notes']='Reference detail revision built and independently checked in Blender/FBX, integrated at original lamp anchor with explicit URP materials. Camera, gameplay and unrelated scene components preserved. New restrained bulb-local spot; original four room lights unchanged. See lamp report and Game view. Human visual approval pending.'
  job['history'].append({'at':stamp,'status':'Needs Review','event':'reference_lamp_rework','previous_output':previous,'evidence':out})
- job['scene_integration']={'scene':'Assets/DetectiveDesk/Generated/DetectiveOffice.unity','report':job['report_path'],'screenshot':job['screenshot_path'],'at':stamp}
+ job['scene_integration']={'scene':'Assets/DetectiveDesk/Scenes/DetectiveOffice.unity','report':job['report_path'],'screenshot':job['screenshot_path'],'at':stamp}
  registry=q.read(q.ROOT/'asset_registry.json');r=next(a for a in registry if a['slug']=='BankersLamp');r.update(status='Detailed source; visual review pending',unity=ev['prefab_path'],check='Executed Blender source/embedded helper/closed hood/48 beads/UV/PBR/FBX reimport; Unity URP import, placement, preservation, Game image and Console checks. See evidence for exact results.')
  q.atomic(q.ROOT/'asset_registry.json',registry);q.save(state)
  synced=q.read(q.QUEUE);assert len(synced['assets'])==42;assert next(a for a in synced['assets'] if a['slug']=='BankersLamp')['status']=='Needs Review'

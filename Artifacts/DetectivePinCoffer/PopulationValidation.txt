@@ -1,1 +1,0 @@
-PASS: twelve independent skins populate correctly; repeat is idempotent; Clear removes only its own test pins; pre-existing occupants survive populate/clear; populated Game camera captured. Saved scene/prefab remain unchanged.

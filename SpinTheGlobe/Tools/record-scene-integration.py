@@ -10,7 +10,7 @@ deferred={'MechanicalAnim','InteractionAnim'}
 applied=[x for x in manifest if x['slug'] not in deferred]
 text='''# DetectiveOffice generated asset integration
 
-Scene: `Assets/DetectiveDesk/Generated/DetectiveOffice.unity`
+Scene: `Assets/DetectiveDesk/Scenes/DetectiveOffice.unity`
 
 Backup: `Assets/DetectiveDesk/Backups/SceneIntegration_20261031_013748/`
 contains the original scene and copies of DetectivePinCoffer and CollectiblePin prefabs.
@@ -79,7 +79,7 @@ with q.Lock():
   if p.exists() and not (checkpoint/name).exists():shutil.copy2(p,checkpoint/name)
  for j in state['assets']:
   if j['slug'] in {x['slug'] for x in applied}:
-   j['scene_integration']={'scene':'Assets/DetectiveDesk/Generated/DetectiveOffice.unity','report':report.relative_to(ROOT).as_posix(),'screenshot':'../Artifacts/DetectiveDesk/AfterAssetIntegration.png','at':q.now()}
+   j['scene_integration']={'scene':'Assets/DetectiveDesk/Scenes/DetectiveOffice.unity','report':report.relative_to(ROOT).as_posix(),'screenshot':'../Artifacts/DetectiveDesk/AfterAssetIntegration.png','at':q.now()}
    note=' Applied to DetectiveOffice scene for visual review; original gameplay/camera/colliders preserved. See ProductionLogs/SceneIntegration/IntegrationReport.md. Animation wiring is separate.'
    if note.strip() not in j['notes']:j['notes']+=note
    j['last_updated']=q.now()

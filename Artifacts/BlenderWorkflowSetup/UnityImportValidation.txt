@@ -1,2 +1,0 @@
-.blend: meshes=25, triangles=18590, sockets=12, lidPivot=True, missing/incompatible materials=0
-.fbx: meshes=25, triangles=18590, sockets=12, lidPivot=True, missing/incompatible materials=0

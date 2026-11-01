@@ -36,7 +36,7 @@ public static class GlobeHolderRefresh
     static void Ready(bool clean)
     {
         if(EditorApplication.isPlaying||EditorApplication.isCompiling)throw new Exception("Expected EditMode without compilation");
-        var s=SceneManager.GetActiveScene();if(s.path!="Assets/DetectiveDesk/Generated/DetectiveOffice.unity"||(clean&&s.isDirty))throw new Exception("Unexpected scene or unsaved edits");
+        var s=SceneManager.GetActiveScene();if(s.path!="Assets/DetectiveDesk/Scenes/DetectiveOffice.unity"||(clean&&s.isDirty))throw new Exception("Unexpected scene or unsaved edits");
     }
     public static void Baseline()
     {

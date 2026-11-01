@@ -1,0 +1,41 @@
+namespace DetectiveDesk.Progression
+{
+    /// <summary>
+    /// Every tunable gameplay number that upgrades can modify.
+    /// Explicit values are serialized into assets and saves: append only, never renumber.
+    /// Per-pin stats (PinDurability, PinPayout) are addressed with a pin index; -1 means "all pins".
+    /// </summary>
+    public enum StatId
+    {
+        None = 0,
+
+        // Globe
+        GlobeMaxSpeed = 100,        // degrees / second cap for drag and auto-rotate
+        GlobeAutoSpeed = 101,       // degrees / second auto-rotate floor (never above GlobeMaxSpeed)
+        GlobeDragPower = 102,       // multiplier on drag acceleration
+        GlobeClickPower = 103,      // multiplier on click impulse
+        GlobeMultiplier = 104,      // base multiplier on all globe earnings
+
+        // Pins & shooter
+        PinSlots = 200,             // number of pins unlocked (0..12)
+        ShooterCooldown = 201,      // seconds between shots
+        PinLandChance = 202,        // probability a shot lands on land
+        PinCityChance = 203,        // probability a shot lands near a big city
+        PinDurability = 210,        // passes a pin survives (per pin)
+        PinPayout = 211,            // payout multiplier (per pin)
+
+        // Case file
+        CasePayout = 300,           // multiplier on case rewards
+        CaseCooldown = 301,         // seconds before the next case opens
+        CaseAutoStampChance = 302,  // probability a full case stamps itself
+
+        // Whiskey glass
+        WhiskeyBoostDuration = 400, // seconds
+        WhiskeyCooldown = 401,      // seconds
+        WhiskeyBoostStrength = 402, // payout & spin multiplier while active
+
+        // Statues
+        StatueGoldFillRate = 500,   // multiplier on gold fill per globe revolution
+        StatuePayout = 501,         // multiplier on gold from smashing
+    }
+}
