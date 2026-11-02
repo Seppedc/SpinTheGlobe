@@ -244,7 +244,8 @@ namespace DetectiveDesk.Gameplay
                     if (!maxed) sb.Append("  ▸  ").Append(StatInfo.Format(m.stat, game.Stats.Preview(m.stat, node.modifiers, 1, m.pinIndex)));
                     sb.Append('\n');
                 }
-            if (node.maxRank > 1) sb.Append("Rank ").Append(rank).Append(" / ").Append(node.maxRank);
+            if (node.maxRank >= DefaultSkillTreeFactory.MasteryRanks) sb.Append("Rank ").Append(rank).Append(" · endless");
+            else if (node.maxRank > 1) sb.Append("Rank ").Append(rank).Append(" / ").Append(node.maxRank);
             tipStats.text = sb.ToString().TrimEnd('\n');
 
             string price = node.currency == Currency.Gold
@@ -342,7 +343,8 @@ namespace DetectiveDesk.Gameplay
                 v.fill.color = fill;
                 if (v.pulse >= 0) v.border.color = border;
                 v.label.color = owned || status == NodeStatus.Available ? UIFactory.Ink : status == NodeStatus.Unaffordable ? UIFactory.InkDim : new Color(0.45f, 0.42f, 0.38f);
-                v.rank.text = v.data.maxRank > 1 ? rank + "/" + v.data.maxRank : "";
+                v.rank.text = v.data.maxRank >= DefaultSkillTreeFactory.MasteryRanks ? (rank > 0 ? "Lv " + rank : "∞")
+                            : v.data.maxRank > 1 ? rank + "/" + v.data.maxRank : "";
 
                 foreach (var link in v.links)
                 {
@@ -361,6 +363,7 @@ namespace DetectiveDesk.Gameplay
                 case SkillBranch.CaseFile: return new Color(0.88f, 0.78f, 0.5f);
                 case SkillBranch.Whiskey: return new Color(0.95f, 0.6f, 0.2f);
                 case SkillBranch.Statues: return new Color(0.4f, 0.75f, 0.5f);
+                case SkillBranch.Lootbox: return new Color(0.7f, 0.5f, 0.85f);
                 default: return UIFactory.Brass;
             }
         }

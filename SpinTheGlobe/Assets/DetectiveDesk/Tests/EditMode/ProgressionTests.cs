@@ -126,6 +126,22 @@ namespace DetectiveDesk.Tests
         }
 
         [Test]
+        public void MultiplyModifier_Compounds()
+        {
+            stats.SetBase(StatId.GlobeMultiplier, 1);
+            var mods = new[] { StatModifier.Multiply(StatId.GlobeMultiplier, 1.05) };
+            Assert.AreEqual(System.Math.Pow(1.05, 10), stats.Preview(StatId.GlobeMultiplier, mods, 10), 1e-9);
+        }
+
+        [Test]
+        public void GoldNodes_CostGold_AndEveryBranchHasMastery()
+        {
+            Assert.AreEqual(Currency.Gold, tree.Find("pin_steel_tips").currency);
+            Assert.IsTrue(tree.Nodes.Any(n => n.branch == SkillBranch.Lootbox));
+            Assert.AreEqual(6, tree.Nodes.Count(n => n.maxRank >= DefaultSkillTreeFactory.MasteryRanks));
+        }
+
+        [Test]
         public void TemporaryMultiplier_LayersOnTopOfPermanentValue()
         {
             stats.SetTemporaryMultiplier(StatId.GlobeMultiplier, 1.5);

@@ -27,7 +27,9 @@ namespace DetectiveDesk.Gameplay
         public int Index { get; private set; }
         public int Pieces { get; private set; }
         public float GoldFill { get; private set; }
-        public int PiecesRequired => game ? game.Balance.statueBasePieces + game.Balance.statuePiecesPerIndex * Index : 5;
+        public int PiecesRequired => game
+            ? Mathf.Max(2, game.Balance.statueBasePieces + game.Balance.statuePiecesPerIndex * Index - Mathf.RoundToInt((float)game.Stats.Get(StatId.StatuePieceReduction)))
+            : 5;
         public bool IsComplete => Pieces >= PiecesRequired;
         public bool IsReadyToSmash => IsComplete && GoldFill >= 1f;
         public bool IsBusy { get; set; }

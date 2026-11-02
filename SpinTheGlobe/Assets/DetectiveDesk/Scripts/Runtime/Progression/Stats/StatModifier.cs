@@ -8,6 +8,8 @@ namespace DetectiveDesk.Progression
         Add = 0,
         /// <summary>Adds valuePerRank × rank to the percentage multiplier (0.25 = +25%, -0.1 = -10%).</summary>
         Percent = 1,
+        /// <summary>Multiplies the final value by valuePerRank^rank (×2 milestones, endless Mastery nodes).</summary>
+        Multiply = 2,
     }
 
     /// <summary>One effect of a skill node, scaled by the node's owned rank.</summary>
@@ -30,5 +32,6 @@ namespace DetectiveDesk.Progression
 
         public static StatModifier Add(StatId stat, double perRank, int pinIndex = -1) => new StatModifier(stat, ModifierKind.Add, perRank, pinIndex);
         public static StatModifier Percent(StatId stat, double perRank, int pinIndex = -1) => new StatModifier(stat, ModifierKind.Percent, perRank, pinIndex);
+        public static StatModifier Multiply(StatId stat, double perRank, int pinIndex = -1) => new StatModifier(stat, ModifierKind.Multiply, perRank, pinIndex);
     }
 }

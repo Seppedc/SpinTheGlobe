@@ -58,13 +58,17 @@ namespace DetectiveDesk.Progression
 
         [Header("Case file")]
         [Min(1)] public int caseBaseEvidence = 3;
-        [Min(0)] public int caseEvidencePerLevel = 1;
-        [Min(1)] public int caseMaxEvidence = 12;
+        [Min(0)] public int caseEvidencePerLevel = 2;
+        [Min(1)] public int caseMaxEvidence = 40;
         [Tooltip("Every N cases the required pin durability level rises by one.")]
-        [Min(1)] public int caseLevelsPerDurabilityStep = 3;
+        [Min(1)] public int caseLevelsPerDurabilityStep = 4;
         [Min(0)] public int caseMaxDurabilityRequirement = 5;
+        [Tooltip("Minimum case reward: this × case number.")]
         [Min(0)] public double caseBaseReward = 40;
-        [Min(1)] public double caseRewardGrowth = 1.6;
+        [Tooltip("A case pays at least this many seconds of your recent income (globe + pins). Keeps cases relevant all game without exploding.")]
+        [Min(0)] public float caseIncomeSeconds = 12;
+        [Tooltip("Gold per approved case is CaseGold × (1 + case number / this).")]
+        [Min(1)] public float caseGoldLevelDivisor = 10;
 
         [Header("Whiskey glass")]
         [Range(0.01f, 1)] public float whiskeyFillPerClick = 0.1f;
@@ -97,8 +101,10 @@ namespace DetectiveDesk.Progression
         [Header("Paper ball (placeholder reward)")]
         [Min(0)] public double paperBallReward = 25;
 
+        /// <summary>Code defaults first, then the asset's list on top, so stats added later never start at 0.</summary>
         public void ApplyTo(StatSheet sheet)
         {
+            foreach (var s in Defaults()) sheet.SetBase(s.stat, s.value);
             foreach (var s in baseStats) if (s.stat != StatId.None) sheet.SetBase(s.stat, s.value);
         }
 
@@ -110,6 +116,7 @@ namespace DetectiveDesk.Progression
             new StatBase(StatId.GlobeDragPower, 1),
             new StatBase(StatId.GlobeClickPower, 1),
             new StatBase(StatId.GlobeMultiplier, 1),
+            new StatBase(StatId.IncomeMultiplier, 1),
 
             new StatBase(StatId.PinSlots, 0),              // start with no pins
             new StatBase(StatId.ShooterCooldown, 4),       // seconds
@@ -117,17 +124,27 @@ namespace DetectiveDesk.Progression
             new StatBase(StatId.PinCityChance, 0.05),
             new StatBase(StatId.PinDurability, 1),         // passes before falling off
             new StatBase(StatId.PinPayout, 1),
+            new StatBase(StatId.PinAutoFire, 0),
+            new StatBase(StatId.PinDoubleShotChance, 0),
 
             new StatBase(StatId.CasePayout, 1),
             new StatBase(StatId.CaseCooldown, 30),
             new StatBase(StatId.CaseAutoStampChance, 0),
+            new StatBase(StatId.CaseEvidenceReduction, 0),
+            new StatBase(StatId.CaseGold, 0),
 
             new StatBase(StatId.WhiskeyBoostDuration, 10),
             new StatBase(StatId.WhiskeyCooldown, 60),
             new StatBase(StatId.WhiskeyBoostStrength, 1.5),
+            new StatBase(StatId.WhiskeyAutoRefill, 0),
 
             new StatBase(StatId.StatueGoldFillRate, 1),
             new StatBase(StatId.StatuePayout, 1),
+            new StatBase(StatId.StatuePieceReduction, 0),
+
+            new StatBase(StatId.LootboxPrice, 1),
+            new StatBase(StatId.LootLuck, 0),
+            new StatBase(StatId.LootDoubleChance, 0),
         };
     }
 }

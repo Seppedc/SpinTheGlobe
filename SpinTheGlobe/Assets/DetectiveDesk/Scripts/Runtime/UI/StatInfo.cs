@@ -28,6 +28,16 @@ namespace DetectiveDesk.Gameplay
                 case StatId.WhiskeyBoostStrength: return "Boost strength";
                 case StatId.StatueGoldFillRate: return "Gold fill speed";
                 case StatId.StatuePayout: return "Statue gold";
+                case StatId.IncomeMultiplier: return "All income";
+                case StatId.PinAutoFire: return "Auto-fire";
+                case StatId.PinDoubleShotChance: return "Double-shot chance";
+                case StatId.CaseEvidenceReduction: return "Evidence saved";
+                case StatId.CaseGold: return "Gold per case";
+                case StatId.WhiskeyAutoRefill: return "Auto-refill";
+                case StatId.StatuePieceReduction: return "Pieces saved";
+                case StatId.LootboxPrice: return "Lootbox price";
+                case StatId.LootLuck: return "Loot luck";
+                case StatId.LootDoubleChance: return "Double-box chance";
                 default: return stat.ToString();
             }
         }
@@ -41,7 +51,17 @@ namespace DetectiveDesk.Gameplay
                     return (v / 6.0).ToString("0.#") + " RPM";
                 case StatId.PinSlots:
                 case StatId.PinDurability:
+                case StatId.CaseEvidenceReduction:
+                case StatId.CaseGold:
+                case StatId.StatuePieceReduction:
                     return System.Math.Round(v).ToString("0");
+                case StatId.PinAutoFire:
+                case StatId.WhiskeyAutoRefill:
+                    return v >= 1 ? "On" : "Off";
+                case StatId.PinDoubleShotChance:
+                case StatId.LootDoubleChance:
+                case StatId.LootLuck:
+                    return "+" + (v * 100).ToString("0.#") + "%";
                 case StatId.ShooterCooldown:
                 case StatId.CaseCooldown:
                 case StatId.WhiskeyCooldown:

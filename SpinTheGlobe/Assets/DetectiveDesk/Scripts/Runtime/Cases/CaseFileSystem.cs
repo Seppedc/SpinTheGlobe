@@ -27,11 +27,17 @@ namespace DetectiveDesk.Gameplay
         readonly System.Random rng = new System.Random();
 
         GameBalance B => game.Balance;
-        public int Required => game ? Mathf.Min(B.caseMaxEvidence, B.caseBaseEvidence + B.caseEvidencePerLevel * Level) : 3;
+        public int Required => game ? Mathf.Max(1, Mathf.Min(B.caseMaxEvidence, B.caseBaseEvidence + B.caseEvidencePerLevel * Level)
+                                                   - Mathf.RoundToInt((float)game.Stats.Get(StatId.CaseEvidenceReduction))) : 3;
         public int RequiredDurability => game ? Mathf.Min(B.caseMaxDurabilityRequirement, Level / Mathf.Max(1, B.caseLevelsPerDurabilityStep)) : 0;
         public bool IsFull => Evidence >= Required;
         public bool OnCooldown => Cooldown > 0;
-        public double Reward => game ? B.caseBaseReward * System.Math.Pow(B.caseRewardGrowth, Level) * game.Stats.Get(StatId.CasePayout) : 0;
+        /// <summary>max(base × case number, N seconds of recent income) × case reward × golden income multiplier.</summary>
+        public double Reward => game
+            ? System.Math.Max(B.caseBaseReward * (Level + 1) * game.Stats.Get(StatId.IncomeMultiplier), B.caseIncomeSeconds * game.IncomeRate)
+              * game.Stats.Get(StatId.CasePayout)
+            : 0;
+        public double GoldReward => game ? System.Math.Round(game.Stats.Get(StatId.CaseGold) * (1 + Level / (double)B.caseGoldLevelDivisor)) : 0;
 
         public void Initialize(GameManager owner)
         {
@@ -99,13 +105,16 @@ namespace DetectiveDesk.Gameplay
         void Stamp(bool automatic)
         {
             double reward = Reward;
+            double gold = GoldReward;
             int level = Level;
             stamping = true;
             StartCoroutine(StampAnimation(() =>
             {
                 game.Credit(reward);
+                if (gold > 0) game.CreditGold(gold);
                 if (game.legacy) game.legacy.PlayCaseSolvedEffects();
-                game.ShowHint((automatic ? "Auto-stamped! " : "") + "Case #" + (level + 1) + " APPROVED: +" + UIFactory.Money(reward));
+                game.ShowHint((automatic ? "Auto-stamped! " : "") + "Case #" + (level + 1) + " APPROVED: +" + UIFactory.Money(reward) +
+                              (gold > 0 ? " and " + UIFactory.Num(gold) + " gold" : ""));
                 Level++;
                 Evidence = 0;
                 Cooldown = (float)game.Stats.Get(StatId.CaseCooldown);

@@ -63,6 +63,14 @@ namespace DetectiveDesk.Gameplay
 
         SaveStore store;
         float autosaveTimer;
+        double incomeAccumulator;
+        float incomeSampleTimer;
+
+        /// <summary>Recent earnings per second from the globe and pins (≈30 s moving average). Drives case rewards.</summary>
+        public double IncomeRate { get; private set; }
+
+        /// <summary>Multiplier on all globe-related earnings: Globe earnings × the golden income multiplier.</summary>
+        public double IncomeScale => Stats.Get(StatId.GlobeMultiplier) * Stats.Get(StatId.IncomeMultiplier);
         bool loaded;
 
         // ------------------------------------------------------------------ lifecycle
@@ -130,6 +138,14 @@ namespace DetectiveDesk.Gameplay
         {
             if (!loaded) return;
             PlayTime += Time.unscaledDeltaTime;
+            incomeSampleTimer += Time.deltaTime;
+            if (incomeSampleTimer >= 1f)
+            {
+                double sample = incomeAccumulator / incomeSampleTimer;
+                IncomeRate = IncomeRate <= 0 ? sample : IncomeRate + (sample - IncomeRate) * (incomeSampleTimer / 30.0);
+                incomeAccumulator = 0;
+                incomeSampleTimer = 0;
+            }
             autosaveTimer += Time.unscaledDeltaTime;
             if (useSaveFile && autosaveTimer >= Balance.autosaveInterval) { autosaveTimer = 0; SaveGame(); }
 
@@ -152,7 +168,7 @@ namespace DetectiveDesk.Gameplay
         // ------------------------------------------------------------------ economy
         void Revolution(long count)
         {
-            Credit(count * Balance.revolutionReward * Stats.Get(StatId.GlobeMultiplier));
+            CreditIncome(count * Balance.revolutionReward * IncomeScale);
             float fill = (float)(count * Balance.statueGoldFillPerRevolution * Stats.Get(StatId.StatueGoldFillRate));
             if (figurines != null) foreach (var f in figurines) if (f) f.AddGold(fill);
             EventBus.Publish(new GlobeRevolutions(count));
@@ -164,6 +180,14 @@ namespace DetectiveDesk.Gameplay
             Wallet.Add(Currency.Money, amount);
             CashAwarded?.Invoke(amount);
             if (audioManager) audioManager.Payout();
+        }
+
+        /// <summary>Recurring earnings (globe turns, pin passes): credited and counted in <see cref="IncomeRate"/>.</summary>
+        public void CreditIncome(double amount)
+        {
+            if (double.IsNaN(amount) || double.IsInfinity(amount) || amount <= 0) return;
+            incomeAccumulator += amount;
+            Credit(amount);
         }
 
         public void CreditGold(double amount)
@@ -178,7 +202,7 @@ namespace DetectiveDesk.Gameplay
         public double EstimatedIncomePerMinute()
         {
             if (!globe) return 0;
-            double perTurn = Balance.revolutionReward * Stats.Get(StatId.GlobeMultiplier) + (map ? map.ActiveValuePerRevolution : 0);
+            double perTurn = Balance.revolutionReward * IncomeScale + (map ? map.ActiveValuePerRevolution : 0);
             return perTurn * globe.CurrentVelocity / 6.0; // revolutions per minute = °/s × 60 / 360
         }
 

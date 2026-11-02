@@ -74,7 +74,12 @@ namespace DetectiveDesk.Gameplay
         {
             if (!game) return;
             if (BoostRemaining > 0) { BoostRemaining -= Time.deltaTime; if (BoostRemaining <= 0) { BoostRemaining = 0; EndBoost(); } }
-            else if (Cooldown > 0) Cooldown = Mathf.Max(0, Cooldown - Time.deltaTime);
+            else if (Cooldown > 0)
+            {
+                Cooldown = Mathf.Max(0, Cooldown - Time.deltaTime);
+                // Bottomless Glass: refills and starts the next boost by itself.
+                if (Cooldown <= 0 && game.Stats.Get(StatId.WhiskeyAutoRefill) >= 1) { Fill = 1; StartBoost(); }
+            }
             Glow();
         }
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace DetectiveDesk.Progression
 {
     /// <summary>
-    /// Final value of every stat:  (base + Σadd) × max(MinimumFactor, 1 + Σpercent)
+    /// Final value of every stat:  (base + Σadd) × max(MinimumFactor, 1 + Σpercent) × Π(multiply^rank)
     /// Per-pin stats combine the global ("all pins", index -1) contributions with that pin's own.
     /// Rebuilt from the skill tree whenever a node is purchased; temporary buffs (whiskey) are layered on top.
     /// </summary>
@@ -16,6 +16,7 @@ namespace DetectiveDesk.Progression
         readonly Dictionary<StatId, double> baseValues = new Dictionary<StatId, double>();
         readonly Dictionary<(StatId, int), double> additive = new Dictionary<(StatId, int), double>();
         readonly Dictionary<(StatId, int), double> percent = new Dictionary<(StatId, int), double>();
+        readonly Dictionary<(StatId, int), double> product = new Dictionary<(StatId, int), double>();
         readonly Dictionary<StatId, double> temporaryMultipliers = new Dictionary<StatId, double>();
 
         public event Action Changed;
@@ -48,6 +49,7 @@ namespace DetectiveDesk.Progression
         {
             additive.Clear();
             percent.Clear();
+            product.Clear();
             if (tree != null && state != null)
             {
                 foreach (var node in tree.Nodes)
@@ -64,6 +66,12 @@ namespace DetectiveDesk.Progression
         {
             if (m.stat == StatId.None) return;
             var key = (m.stat, m.pinIndex < 0 ? -1 : m.pinIndex);
+            if (m.kind == ModifierKind.Multiply)
+            {
+                product.TryGetValue(key, out var p);
+                product[key] = (p == 0 ? 1 : p) * Math.Pow(m.valuePerRank, rank);
+                return;
+            }
             var target = m.kind == ModifierKind.Percent ? percent : additive;
             target.TryGetValue(key, out var current);
             target[key] = current + m.valuePerRank * rank;
@@ -73,7 +81,8 @@ namespace DetectiveDesk.Progression
         {
             double add = Lookup(additive, stat, -1);
             double pct = Lookup(percent, stat, -1);
-            if (pinIndex >= 0) { add += Lookup(additive, stat, pinIndex); pct += Lookup(percent, stat, pinIndex); }
+            double mul = Product(stat, -1);
+            if (pinIndex >= 0) { add += Lookup(additive, stat, pinIndex); pct += Lookup(percent, stat, pinIndex); mul *= Product(stat, pinIndex); }
 
             if (extra != null && extraRanks > 0)
             {
@@ -83,11 +92,14 @@ namespace DetectiveDesk.Progression
                     bool applies = m.pinIndex < 0 || m.pinIndex == pinIndex;
                     if (!applies) continue;
                     if (m.kind == ModifierKind.Percent) pct += m.valuePerRank * extraRanks;
+                    else if (m.kind == ModifierKind.Multiply) mul *= Math.Pow(m.valuePerRank, extraRanks);
                     else add += m.valuePerRank * extraRanks;
                 }
             }
-            return (GetBase(stat) + add) * Math.Max(MinimumFactor, 1 + pct);
+            return (GetBase(stat) + add) * Math.Max(MinimumFactor, 1 + pct) * mul;
         }
+
+        double Product(StatId stat, int index) => product.TryGetValue((stat, index), out var v) && v > 0 ? v : 1;
 
         double Temporary(StatId stat) => temporaryMultipliers.TryGetValue(stat, out var m) ? m : 1;
 

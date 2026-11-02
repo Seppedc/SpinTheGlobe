@@ -75,8 +75,8 @@ namespace DetectiveDesk.Gameplay
         public void Scored(GameObject ball)
         {
             if (!game) return;
-            double reward = game.Balance.paperBallReward * game.Stats.Get(StatId.GlobeMultiplier);
-            game.Credit(reward);
+            double reward = game.Balance.paperBallReward * game.IncomeScale;
+            game.CreditIncome(reward);
             game.ShowHint("Nothing but bin! +" + UIFactory.Money(reward));
             Destroy(ball);
         }

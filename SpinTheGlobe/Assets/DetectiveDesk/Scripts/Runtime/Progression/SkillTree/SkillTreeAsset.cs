@@ -14,6 +14,7 @@ namespace DetectiveDesk.Progression
         CaseFile = 3,
         Whiskey = 4,
         Statues = 5,
+        Lootbox = 6,
     }
 
     [Serializable]

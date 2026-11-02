@@ -83,13 +83,14 @@ namespace DetectiveDesk.Gameplay
                 launcherVisual.localPosition = launcherPosition + Vector3.back * .025f * recoil;
             }
             if (game && !game.WorldInputBlocked && Input.GetKeyDown(KeyCode.Space)) game.FirePin();
+            // Auto-loader upgrade: fire by itself whenever a pin is ready.
+            if (game && CooldownRemaining <= 0 && game.Stats.Get(StatId.PinAutoFire) >= 1 && ReadyCount > 0) FireNext();
         }
 
         public double PayoutFor(PinInstance pin)
         {
             if (!game || !pin) return 0;
-            return game.Balance.pinBasePayout * pin.Landing.Multiplier * game.PinPayoutMultiplier(pin.Index)
-                   * game.Stats.Get(StatId.GlobeMultiplier);
+            return game.Balance.pinBasePayout * pin.Landing.Multiplier * game.PinPayoutMultiplier(pin.Index) * game.IncomeScale;
         }
 
         /// <summary>Fire the next ready pin. Returns null on success or a message explaining why not.</summary>
@@ -109,10 +110,27 @@ namespace DetectiveDesk.Gameplay
             var landing = PinLanding.Sample(rng, game.Stats.Get(StatId.PinLandChance), game.Stats.Get(StatId.PinCityChance),
                 b.cityRadiusDegrees, b.landMultiplier, b.cityMultiplier, minimumLatitude, maximumLatitude);
             CooldownRemaining = (float)game.Stats.Get(StatId.ShooterCooldown);
+            Launch(index, landing);
+
+            // Twin Barrel: chance to fire a second ready pin in the same shot.
+            if (rng.NextDouble() < game.Stats.Get(StatId.PinDoubleShotChance))
+            {
+                for (int i = 0; i < unlocked; i++)
+                    if (!busy.Contains(i))
+                    {
+                        Launch(i, PinLanding.Sample(rng, game.Stats.Get(StatId.PinLandChance), game.Stats.Get(StatId.PinCityChance),
+                            b.cityRadiusDegrees, b.landMultiplier, b.cityMultiplier, minimumLatitude, maximumLatitude));
+                        break;
+                    }
+            }
+            return null;
+        }
+
+        void Launch(int index, PinLanding landing)
+        {
             busy.Add(index);
             if (game.PinBox) game.PinBox.Refresh();
             StartCoroutine(Flight(index, landing));
-            return null;
         }
 
         public Vector3 GeographicPoint(float latitude, float longitude)
@@ -158,7 +176,7 @@ namespace DetectiveDesk.Gameplay
         public void OnPinPassed(PinInstance pin)
         {
             double amount = PayoutFor(pin);
-            game.Credit(amount);
+            game.CreditIncome(amount);
             EventBus.Publish(new PinPaidOut(pin.Index, amount, pin.RemainingPasses));
         }
 
