@@ -23,8 +23,8 @@ namespace DetectiveDesk.Gameplay
         Button lootButton, paperButton;
         GameObject iceChip;
         CanvasGroup toastGroup;
-        float toastTimer, popTimer;
-        double popAmount;
+        float toastTimer, popTimer, incomeRefresh;
+        double popAmount, shownIncome = -1;
 
         public Canvas Canvas => canvas;
 
@@ -83,13 +83,13 @@ namespace DetectiveDesk.Gameplay
             IconButton(bar, "gear", 44, () => { if (game.legacy) game.legacy.ToggleSettings(); });
             UIFactory.NewDivider(bar, 46);
             UIFactory.NewIcon("money", bar, 34);
-            moneyText = Value(bar, 30, UITheme.Cream, true);
+            moneyText = Value(bar, 30, UITheme.Cream, true, 150);
             UIFactory.NewDivider(bar, 46);
             UIFactory.NewIcon("chart", bar, 30);
-            incomeText = Value(bar, 22, UITheme.Cream, false);
+            incomeText = Value(bar, 22, UITheme.Cream, false, 170);
             UIFactory.NewDivider(bar, 46);
             UIFactory.NewIcon("coin", bar, 32);
-            goldText = Value(bar, 28, UITheme.GoldBright, true);
+            goldText = Value(bar, 28, UITheme.GoldBright, true, 80);
         }
 
         /// <summary>Desk items under the top bar: lootbox (buy), paper balls (throw), ice cubes (used by the glass).</summary>
@@ -118,12 +118,23 @@ namespace DetectiveDesk.Gameplay
             return b;
         }
 
-        static TextMeshProUGUI Value(Transform parent, int size, Color color, bool display)
+        static void SetValue(TextMeshProUGUI t, string value) { if (t.text != value) t.text = value; }
+
+        /// <summary>
+        /// Top-bar value in a fixed-width slot so the bar never changes length; long numbers shrink to fit.
+        /// </summary>
+        static TextMeshProUGUI Value(Transform parent, int size, Color color, bool display, float width)
         {
             var t = display ? UIFactory.NewTitle("Value", parent, "", size, TextAnchor.MiddleLeft, color)
                             : UIFactory.NewText("Value", parent, "", size, TextAnchor.MiddleLeft, color);
             t.NoWrap();
-            t.gameObject.AddComponent<LayoutElement>().minWidth = 60;
+            t.overflowMode = TextOverflowModes.Overflow;
+            t.enableAutoSizing = true;
+            t.fontSizeMax = size;
+            t.fontSizeMin = size * 0.6f;
+            var le = t.gameObject.AddComponent<LayoutElement>();
+            le.minWidth = le.preferredWidth = width;
+            le.flexibleWidth = 0;
             return t;
         }
 
@@ -180,9 +191,19 @@ namespace DetectiveDesk.Gameplay
             if (!game || !canvas) return;
             if (Input.GetKeyDown(KeyCode.T) && !(game.PaperBalls && game.PaperBalls.IsAiming)) game.TreeView.Toggle();
 
-            moneyText.text = NumberFormatter.Money(game.Wallet.Money);
-            incomeText.text = "+" + NumberFormatter.Money(game.EstimatedIncomePerMinute()) + " / min";
-            goldText.text = NumberFormatter.Format(game.Wallet.Gold);
+            SetValue(moneyText, NumberFormatter.Money(game.Wallet.Money));
+            SetValue(goldText, NumberFormatter.Format(game.Wallet.Gold));
+
+            // Income per minute follows the globe's speed, which changes every frame: smooth it and
+            // refresh the number a few times per second so it reads calmly instead of flickering.
+            double target = game.EstimatedIncomePerMinute();
+            shownIncome = shownIncome < 0 ? target : shownIncome + (target - shownIncome) * (1 - System.Math.Exp(-Time.unscaledDeltaTime * 1.5));
+            incomeRefresh -= Time.unscaledDeltaTime;
+            if (incomeRefresh <= 0)
+            {
+                incomeRefresh = 0.4f;
+                SetValue(incomeText, "+" + NumberFormatter.Money(shownIncome < 100 ? System.Math.Round(shownIncome) : shownIncome) + " / min");
+            }
 
             bool treeOwned = game.Skills.Owns(DefaultSkillTreeFactory.RootId);
             upgradesHint.text = treeOwned ? "" : "Unlock for " + UIFactory.Money(game.Tree.Find(DefaultSkillTreeFactory.RootId).cost.Cost(0)) + "  [T]";
