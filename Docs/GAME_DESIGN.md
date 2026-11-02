@@ -81,13 +81,15 @@ Globe revolutions ─► gold fill in completed statues ─► smash with hammer
   - Every pin has its own Durability and Payout side nodes.
 - The data is in `Data/SkillTree/SkillTree.asset`. To generate it, use **Tools ▸ Spin The Globe ▸ Create Default Data**.
 
-## 4. Build order
-1. ✅ Foundation: wallet (money and gold), save, event bus, stat system, data-driven skill tree, tests.
-2. Globe rework: click impulse, connect stats (max, auto, multiplier), HUD, autosave.
-3. Pins: random landing with land/city detection, shooter cooldown, pin unlocks, per-pin durability and payout.
-4. Skill tree UI: radial view with pan and zoom, node reveal, purchase.
-5. Case file: evidence, tiers, stamp, cooldown, auto-stamp.
-6. Whiskey glass.
-7. Lootbox and inventory: ice cube, gold, statue pieces, paper ball, money.
-8. Statues: building from pieces, gold fill, hammer smash.
-9. Closed pin box, holder structure for the payout line, polish and balancing.
+## 4. Build status (2026-11-02)
+1. ✅ Foundation: wallet (money + gold), save, event bus, stat system, data-driven skill tree, tests
+2. ✅ Globe: click impulse, max/auto speed (auto ≤ max), multiplier, HUD, autosave
+3. ✅ Pins: random landing with land/city bonus, shooter cooldown, Pin 1→12, per-pin durability and payout
+4. ✅ Skill tree screen: radial, pan/zoom, nodes revealed by prerequisites
+5. ✅ Case file: evidence, growing thresholds, durability requirement, stamp, cooldown, auto-stamp
+6. ✅ Whiskey glass
+7. ✅ Lootbox, inventory and paper ball (placeholder bin and reward)
+8. ✅ Statues: pieces → gold fill → hammer smash
+9. ✅ Closed pin box · ⏳ payout-line holder model · ⏳ balancing · ⏳ what gold buys
+
+See `Docs/BUILD_LOG.md` for how to play, the testing shortcuts and the decisions taken.

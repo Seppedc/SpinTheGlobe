@@ -65,7 +65,8 @@ Assets/
 
 ## Code principles
 - **Assemblies:** Runtime, Editor and Tests each have their own `.asmdef`. Runtime code cannot depend on editor code. Tests only see Runtime.
-- **Namespaces** follow folders: `DetectiveDesk.Core`, `.Economy`, `.Progression`, `.Save`. Older code still uses `DetectiveDesk.Gameplay` until each system is rebuilt.
+- **Namespaces:** the pure-logic layers use `DetectiveDesk.Core`, `.Economy`, `.Progression` and `.Save`. The MonoBehaviour feature systems share `DetectiveDesk.Gameplay`.
+- **Composition root:** `GameManager` owns the Wallet, Inventory, StatSheet and SkillTreeState, adds each feature system to its own GameObject, and calls `Initialize(game)` after loading the save. Feature systems talk through `EventBus` and the GameManager, not to each other directly.
 - **Data-driven:** every number a designer might tune is in `GameBalance` or `SkillTreeAsset`, never hard-coded.
 - **Stats, not special cases:** every upgrade is a `StatModifier` on a `StatId`.
   - Formula: final = (base + Σadd) × max(0.05, 1 + Σpercent) × temporary buffs.
