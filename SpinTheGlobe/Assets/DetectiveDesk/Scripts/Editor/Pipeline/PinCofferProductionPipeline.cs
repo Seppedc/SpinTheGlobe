@@ -10,9 +10,9 @@ namespace DetectiveDesk.Editor
     /// <summary>Refreshes existing baked visual assets, preserving prefab and scene references.</summary>
     public static class PinCofferProductionPipeline
     {
-        public const string SourcePath = "Assets/DetectiveDesk/ArtSource/PinCoffer/PinCoffer.fbx";
-        public const string PrefabPath = "Assets/DetectiveDesk/PinCoffer/DetectivePinCoffer.prefab";
-        const string MeshFolder = "Assets/DetectiveDesk/PinCoffer/Meshes/";
+        public const string SourcePath = "Assets/DetectiveDesk/Art/Props/PinCoffer/Models/PinCoffer.fbx";
+        public const string PrefabPath = "Assets/DetectiveDesk/Art/Props/PinCoffer/Prefabs/DetectivePinCoffer.prefab";
+        const string MeshFolder = "Assets/DetectiveDesk/Art/Props/PinCoffer/Meshes/";
 
         [MenuItem("Tools/Detective Desk/Blender Assets/Refresh Pin Coffer From Blender")]
         public static void Refresh()

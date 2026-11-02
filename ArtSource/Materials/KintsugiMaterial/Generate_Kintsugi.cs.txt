@@ -1,0 +1,29 @@
+using UnityEngine;
+using UnityEditor;
+using System.IO;
+internal class CommandScript:IRunCommand {
+ public void Execute(ExecutionResult result) {
+ string p="Assets/DetectiveDesk/Art/Shared/Materials/KintsugiMaterial/20261031_011641_bff2b921";
+ var shader=Shader.Find("Universal Render Pipeline/Lit"); if(!shader || !shader.isSupported) throw new System.Exception("URP unavailable");
+ const int n=1024; var rng=new System.Random(21031); var sites=new Vector2[48]; for(int i=0;i<sites.Length;i++)sites[i]=new Vector2((float)rng.NextDouble(),(float)rng.NextDouble());
+ var albedo=new Color[n*n]; var emission=new Color[n*n]; var metal=new Color[n*n]; int crackPixels=0;
+ for(int y=0;y<n;y++)for(int x=0;x<n;x++){
+ float u=(float)x/n,v=(float)y/n; float a=100,b=100;
+ // Periodic domain warp preserves tiled boundaries.
+ float wu=u+.009f*Mathf.Sin(v*Mathf.PI*12)+.004f*Mathf.Sin(u*Mathf.PI*18+v*Mathf.PI*8);
+ float wv=v+.009f*Mathf.Sin(u*Mathf.PI*10);
+ for(int i=0;i<sites.Length;i++){float dx=Mathf.Abs(wu-sites[i].x);dx-=Mathf.Floor(dx);dx=Mathf.Min(dx,1-dx);float dy=Mathf.Abs(wv-sites[i].y);dy-=Mathf.Floor(dy);dy=Mathf.Min(dy,1-dy);float d=Mathf.Sqrt(dx*dx+dy*dy);if(d<a){b=a;a=d;}else if(d<b)b=d;}
+ float width=.0032f+.0012f*Mathf.Sin(u*37+v*51);float mask=1-Mathf.SmoothStep(0,1,Mathf.InverseLerp(width*.45f,width,b-a));
+ float grain=Mathf.PerlinNoise(u*128,v*128);float stone=.018f+grain*.026f;int k=y*n+x;
+ albedo[k]=Color.Lerp(new Color(stone*.82f,stone*.9f,stone),new Color(.72f,.41f,.075f),mask);
+ emission[k]=new Color(mask,mask*.48f,mask*.065f,1);
+ metal[k]=new Color(Mathf.Lerp(.05f,.88f,mask),0,0,Mathf.Lerp(.36f+grain*.12f,.78f,mask));if(mask>.5f)crackPixels++;
+ }
+ string[] names={"StoneGold_BaseColor","GoldSeams_Emission","StoneGold_MetallicSmoothness"}; Color[][] maps={albedo,emission,metal};
+ for(int i=0;i<3;i++){var t=new Texture2D(n,n,TextureFormat.RGBA32,false,i==2);t.SetPixels(maps[i]);t.Apply();string path=p+"/"+names[i]+".png";File.WriteAllBytes(path,t.EncodeToPNG());Object.DestroyImmediate(t);AssetDatabase.ImportAsset(path,ImportAssetOptions.ForceSynchronousImport);var ti=(TextureImporter)AssetImporter.GetAtPath(path);ti.sRGBTexture=i!=2;ti.wrapMode=TextureWrapMode.Repeat;ti.maxTextureSize=n;ti.textureCompression=TextureImporterCompression.Uncompressed;ti.SaveAndReimport();}
+ var m=AssetDatabase.LoadAssetAtPath<Material>(p+"/Kintsugi.mat"); if(!m) m=new Material(shader){name="Kintsugi_BlackStone_LuminousGold"};m.SetTexture("_BaseMap",AssetDatabase.LoadAssetAtPath<Texture2D>(p+"/"+names[0]+".png"));m.SetTexture("_EmissionMap",AssetDatabase.LoadAssetAtPath<Texture2D>(p+"/"+names[1]+".png"));m.SetTexture("_MetallicGlossMap",AssetDatabase.LoadAssetAtPath<Texture2D>(p+"/"+names[2]+".png"));m.EnableKeyword("_METALLICSPECGLOSSMAP");m.EnableKeyword("_EMISSION");m.SetColor("_EmissionColor",new Color(2.2f,2.2f,2.2f));m.SetFloat("_Smoothness",1);m.globalIlluminationFlags=MaterialGlobalIlluminationFlags.None;if(!AssetDatabase.Contains(m))AssetDatabase.CreateAsset(m,p+"/Kintsugi.mat"); else {EditorUtility.SetDirty(m);AssetDatabase.SaveAssetIfDirty(m);}
+ File.WriteAllText(p+"/review_manifest.json","{\"kind\":\"material\",\"asset_paths\":[\""+p+"/Kintsugi.mat\"],\"prefab_path\":\""+p+"/Kintsugi_Review.prefab\"}");
+ File.WriteAllText(p+"/material-validation.json","{\"status\":\"PASS\",\"resolution\":1024,\"seed\":21031,\"gold_pixels\":"+crackPixels+",\"shader\":\"Universal Render Pipeline/Lit\",\"maps\":3,\"statue_integration_tested\":false}");
+ result.Log("Created standalone Kintsugi material, 3 maps; gold pixels: "+crackPixels);
+ }
+}

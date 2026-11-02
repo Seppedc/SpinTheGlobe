@@ -9,7 +9,8 @@ An active-play incremental clicker set on a noir detective's desk. Spin the glob
 ## Docs
 - [Game design](Docs/GAME_DESIGN.md): the systems and the build order.
 - [Architecture](Docs/ARCHITECTURE.md): folder layout, code principles and asset rules.
-- [Agent rules](AGENTS.md) and [Unity / Blender pipeline rules](SpinTheGlobe/AGENTS.md).
+- [Agent rules](AGENTS.md) · [Blender → Unity skill](.agents/skills/blender-unity-assets/SKILL.md) · [Modelling standard](Docs/Pipeline/BLENDER_ASSET_STANDARD.md)
+- [Art sources](ArtSource/README.md): latest `.blend` files, generators and reference images.
 
 ## First-time setup
 1. Open `SpinTheGlobe/` in Unity Hub (6000.4.7f1).

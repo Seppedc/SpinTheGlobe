@@ -1,0 +1,39 @@
+using System;
+using System.IO;
+using UnityEngine;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
+internal class CommandScript:IRunCommand {
+float Noise(float x,float y){return Mathf.PerlinNoise(x+17.31f,y+49.17f);}
+float Line(Vector2 p,Vector2 a,Vector2 b,float w){Vector2 d=b-a;float t=Mathf.Clamp01(Vector2.Dot(p-a,d)/d.sqrMagnitude);return Mathf.Exp(-Mathf.Pow(Vector2.Distance(p,a+t*d)/w,2));}
+public void Execute(ExecutionResult result){
+string folder="Assets/DetectiveDesk/Art/Props/DeskWear/20261031_015534_13afb160";
+string[] names={"CupRings","Scuffs","Scratches","Stains"};
+var mats=new Material[4];var paths=new System.Collections.Generic.List<string>();
+for(int k=0;k<4;k++){
+var tex=new Texture2D(1024,1024,TextureFormat.RGBA32,false); var pixels=new Color[1024*1024];
+for(int y=0;y<1024;y++)for(int x=0;x<1024;x++){
+Vector2 p=new Vector2((x+.5f)/1024f,(y+.5f)/1024f);float n=Noise(p.x*58,p.y*58), broad=Noise(p.x*9,p.y*9);float a=0;
+if(k==0){float r=Vector2.Distance(p,new Vector2(.48f,.52f));float angle=Mathf.Atan2(p.y-.52f,p.x-.48f);float ring=.29f+.003f*Mathf.Sin(angle*7)+.004f*(broad-.5f); a=Mathf.Exp(-Mathf.Pow((r-ring)/.009f,2))*(.25f+.55f*Noise(angle*2,3));a+=.24f*Mathf.Exp(-Mathf.Pow((r-ring-.021f)/.004f,2));}
+if(k==1){for(int j=0;j<22;j++){float yy=.32f+j*.016f;float xx=.20f+Noise(j,4)*.15f;a+=Line(p,new Vector2(xx,yy),new Vector2(.63f+Noise(j,8)*.16f,yy+.07f),.0018f+Noise(j,2)*.0025f)*.10f;}a*=.3f+n;}
+if(k==2){for(int j=0;j<13;j++){float xx=.15f+Noise(j,1)*.64f,yy=.15f+Noise(j,6)*.54f; a+=Line(p,new Vector2(xx,yy),new Vector2(xx+.06f+Noise(j,12)*.17f,yy+.17f),.0009f+Noise(j,5)*.0012f)*(.28f+n*.35f);}}
+if(k==3){float r=Vector2.Distance(p,new Vector2(.51f,.49f));float edge=.24f+.07f*(broad-.5f)+.025f*Mathf.Sin(Mathf.Atan2(p.y-.49f,p.x-.51f)*5);a=Mathf.Clamp01((edge-r)*70)*(.08f+.16f*broad);a+=.18f*Mathf.Exp(-Mathf.Pow((r-edge)/.005f,2))*n;for(int j=0;j<7;j++){Vector2 c=new Vector2(.18f+Noise(j,9)*.65f,.17f+Noise(j,19)*.65f);a+=.23f*Mathf.Clamp01((.009f+Noise(j,22)*.015f-Vector2.Distance(p,c))*250);}}
+float border=Mathf.Clamp01(Mathf.Min(p.x,p.y,1-p.x,1-p.y)*40);a=Mathf.Clamp01(a*border);
+Color col=k==2?new Color(.62f,.43f,.24f,a): k==1?new Color(.38f,.26f,.16f,a):new Color(.14f,.065f,.025f,a);
+pixels[y*1024+x]=col;}
+tex.SetPixels(pixels);tex.Apply();string path=folder+"/"+names[k]+".png";File.WriteAllBytes(path,tex.EncodeToPNG());UnityEngine.Object.DestroyImmediate(tex);AssetDatabase.ImportAsset(path,ImportAssetOptions.ForceSynchronousImport);
+var imp=(TextureImporter)AssetImporter.GetAtPath(path);imp.alphaSource=TextureImporterAlphaSource.FromInput;imp.alphaIsTransparency=true;imp.wrapMode=TextureWrapMode.Clamp;imp.mipmapEnabled=true;imp.textureCompression=TextureImporterCompression.Uncompressed;imp.maxTextureSize=1024;imp.SaveAndReimport();
+var loaded=AssetDatabase.LoadAssetAtPath<Texture2D>(path);if(loaded.width!=1024||loaded.height!=1024)throw new Exception("Unexpected imported dimensions");
+var mat=new Material(Shader.Find("Universal Render Pipeline/Lit"));mat.name="DeskWear_"+names[k];mat.SetTexture("_BaseMap",loaded);mat.SetColor("_BaseColor",Color.white);mat.SetFloat("_Surface",1);mat.SetFloat("_Blend",0);mat.SetFloat("_SrcBlend",5);mat.SetFloat("_DstBlend",10);mat.SetFloat("_ZWrite",0);mat.SetFloat("_Cull",0);mat.SetFloat("_Smoothness",.16f);mat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");mat.renderQueue=3000;mat.SetOverrideTag("RenderType","Transparent");AssetDatabase.CreateAsset(mat,folder+"/"+names[k]+".mat");mats[k]=mat;paths.Add(path);paths.Add(folder+"/"+names[k]+".mat");result.Log(names[k]+" imported 1024x1024 RGBA; transparent URP/Lit");
+}
+var original=SceneManager.GetActiveScene();bool dirty=original.isDirty;var temp=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Additive);
+try{SceneManager.SetActiveScene(temp);var root=new GameObject("DeskWear_ReviewSheet");var bg=new Material(Shader.Find("Universal Render Pipeline/Lit"));bg.SetColor("_BaseColor",new Color(.20f,.095f,.045f));bg.SetFloat("_Smoothness",.22f);AssetDatabase.CreateAsset(bg,folder+"/ReviewMahogany.mat");
+for(int k=0;k<4;k++){var back=GameObject.CreatePrimitive(PrimitiveType.Quad);back.name=names[k]+"_ReviewBacking";back.transform.SetParent(root.transform,false);back.transform.localPosition=new Vector3((k%2-.5f)*.46f,(.5f-k/2)*.46f,0);back.transform.localScale=Vector3.one*.44f;back.GetComponent<Renderer>().sharedMaterial=bg;UnityEngine.Object.DestroyImmediate(back.GetComponent<Collider>());var face=GameObject.CreatePrimitive(PrimitiveType.Quad);face.name=names[k]+"_Overlay";face.transform.SetParent(back.transform,false);face.transform.localPosition=new Vector3(0,0,-.001f);face.GetComponent<Renderer>().sharedMaterial=mats[k];UnityEngine.Object.DestroyImmediate(face.GetComponent<Collider>());}
+PrefabUtility.SaveAsPrefabAsset(root,folder+"/DeskWearSheet.prefab");
+}finally{SceneManager.SetActiveScene(original);EditorSceneManager.CloseScene(temp,true);}
+if(original.isDirty!=dirty)throw new Exception("Original dirty state changed");
+paths.Insert(0,folder+"/DeskWearSheet.prefab");
+File.WriteAllText(folder+"/review_manifest.json","{\"kind\":\"prefab\",\"prefab_path\":\""+folder+"/DeskWearReview.prefab\",\"asset_paths\":["+string.Join(",",paths.ConvertAll(p=>"\""+p+"\""))+"]}");
+result.Log("Four standalone overlays created; review-only sheet 0.90 x 0.90 metres; original active scene and dirty state preserved.");
+}}

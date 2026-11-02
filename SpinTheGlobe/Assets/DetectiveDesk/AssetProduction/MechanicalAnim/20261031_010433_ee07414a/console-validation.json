@@ -1,9 +1,0 @@
-{
-  "tool": "unity_mcp.Unity_ReadConsole",
-  "types": [
-    "Warning",
-    "Error"
-  ],
-  "retrieved_entries": 0,
-  "executed": true
-}

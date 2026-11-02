@@ -1,0 +1,65 @@
+using System;
+using System.IO;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
+internal class CommandScript:IRunCommand {
+const string F="Assets/DetectiveDesk/Art/VFX/CompletionFX/20261031_082054_a21cd7b6";
+GameObject Node(string name, Transform parent, Vector2 size, Vector2 pos) {
+var g=new GameObject(name,typeof(RectTransform)); g.transform.SetParent(parent,false);
+var r=g.GetComponent<RectTransform>(); r.sizeDelta=size; r.anchoredPosition=pos; return g;
+}
+void Image(string name,Transform parent,Vector2 size,Vector2 pos,Color color) {
+var g=Node(name,parent,size,pos); var i=g.AddComponent<UnityEngine.UI.Image>();i.color=color;i.raycastTarget=false;
+}
+void Curve(AnimationClip c,string path,Type type,string prop,params Keyframe[] keys) { c.SetCurve(path,type,prop,new AnimationCurve(keys)); }
+public void Execute(ExecutionResult result) {
+var original=SceneManager.GetActiveScene(); bool dirty=original.isDirty;
+var temp=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Additive);
+try {
+SceneManager.SetActiveScene(temp);
+var root=new GameObject("CompletionFX",typeof(RectTransform),typeof(Canvas),typeof(CanvasScaler),typeof(CanvasGroup),typeof(Animation));
+var canvas=root.GetComponent<Canvas>(); canvas.renderMode=RenderMode.WorldSpace;
+root.GetComponent<RectTransform>().sizeDelta=new Vector2(900,600);
+root.transform.localScale=Vector3.one*.001f;
+var stamp=Node("SolvedImpression",root.transform,new Vector2(540,170),new Vector2(0,30));
+stamp.transform.localRotation=Quaternion.Euler(0,0,-7);
+var red=new Color(.70f,.065f,.055f,1); var gold=new Color(.94f,.66f,.23f,1);
+Image("TopRule",stamp.transform,new Vector2(540,8),new Vector2(0,81),red);
+Image("BottomRule",stamp.transform,new Vector2(540,8),new Vector2(0,-81),red);
+Image("LeftRule",stamp.transform,new Vector2(8,170),new Vector2(-266,0),red);
+Image("RightRule",stamp.transform,new Vector2(8,170),new Vector2(266,0),red);
+var label=Node("SOLVED",stamp.transform,new Vector2(520,150),Vector2.zero).AddComponent<Text>();
+label.font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");label.text="SOLVED";label.fontSize=105;label.fontStyle=FontStyle.Bold;label.alignment=TextAnchor.MiddleCenter;label.color=red;label.raycastTarget=false;
+var reward=Node("GoldRewards",root.transform,new Vector2(800,500),Vector2.zero);
+for(int i=0;i<16;i++) {
+float a=i*Mathf.PI*2/16; var pos=new Vector2(Mathf.Cos(a)*350,Mathf.Sin(a)*220+30);
+var g=Node("Reward_"+i.ToString("00"),reward.transform,new Vector2(i%2==0?10:6,i%2==0?24:14),pos);
+g.transform.localRotation=Quaternion.Euler(0,0,-a*Mathf.Rad2Deg+45);
+g.AddComponent<UnityEngine.UI.Image>().color=gold;g.GetComponent<UnityEngine.UI.Image>().raycastTarget=false;
+}
+var subtitle=Node("RewardCaption",root.transform,new Vector2(600,60),new Vector2(0,-150)).AddComponent<Text>();
+subtitle.font=label.font;subtitle.text="CASE COMPLETE";subtitle.fontSize=28;subtitle.alignment=TextAnchor.MiddleCenter;subtitle.color=gold;subtitle.raycastTarget=false;
+var clip=new AnimationClip();clip.name="CompletionFX_OneShot";clip.legacy=true;clip.frameRate=60;clip.wrapMode=WrapMode.Once;
+Curve(clip,"",typeof(CanvasGroup),"m_Alpha",new Keyframe(0,0),new Keyframe(.10f,1),new Keyframe(1.7f,1),new Keyframe(2.3f,0));
+foreach(var axis in new[]{"x","y"}) Curve(clip,"SolvedImpression",typeof(Transform),"m_LocalScale."+axis,new Keyframe(0,1.5f),new Keyframe(.14f,.94f),new Keyframe(.23f,1),new Keyframe(2.3f,1));
+foreach(var axis in new[]{"x","y"}) Curve(clip,"GoldRewards",typeof(Transform),"m_LocalScale."+axis,new Keyframe(0,.3f),new Keyframe(.15f,.5f),new Keyframe(.65f,1),new Keyframe(2.3f,1.08f));
+AssetDatabase.CreateAsset(clip,F+"/CompletionFX_OneShot.anim");
+var anim=root.GetComponent<Animation>();anim.AddClip(clip,clip.name);anim.clip=clip;anim.playAutomatically=true;
+clip.SampleAnimation(root,.55f);
+PrefabUtility.SaveAsPrefabAsset(root,F+"/CompletionFX.prefab");
+clip.SampleAnimation(root,.55f);
+if(root.GetComponent<CanvasGroup>().alpha<.99f) throw new Exception("Animation sample failed");
+var sampled=root.transform.Find("GoldRewards").localScale;
+if(sampled.x<.8f) throw new Exception("Reward expansion sample failed");
+clip.SampleAnimation(root,2.3f);
+if(root.GetComponent<CanvasGroup>().alpha>.01f) throw new Exception("Fade sample failed");
+File.WriteAllText(F+"/authoring-validation.json","{\"status\":\"PASS\",\"animation_duration_seconds\":2.3,\"gold_accents\":16,\"sampled_visible_at_seconds\":0.55,\"sampled_hidden_at_seconds\":2.3,\"canvas_size_m\":[0.9,0.6],\"root_pivot\":\"center\",\"runtime_playmode_tested\":false}");
+File.WriteAllText(F+"/review_manifest.json","{\"kind\":\"vfx\",\"asset_paths\":[\""+F+"/CompletionFX.prefab\",\""+F+"/CompletionFX_OneShot.anim\"],\"prefab_path\":\""+F+"/CompletionFX_Review.prefab\"}");
+result.Log("Standalone prefab and legacy animation created; visibility, reward expansion, and fade sampled without Play Mode.");
+} finally {SceneManager.SetActiveScene(original);EditorSceneManager.CloseScene(temp,true);}
+if(original.isDirty!=dirty) throw new Exception("Original scene dirty state changed");
+}
+}

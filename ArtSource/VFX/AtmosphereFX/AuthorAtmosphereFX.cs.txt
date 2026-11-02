@@ -1,0 +1,62 @@
+using System;
+using System.IO;
+using UnityEngine;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
+internal class CommandScript : IRunCommand {
+const string Output="Assets/DetectiveDesk/Art/VFX/AtmosphereFX/20261031_020108_ba47aaf2";
+Material MakeMaterial(string name, bool streak) {
+ var existing=AssetDatabase.LoadAssetAtPath<Material>(Output+"/"+name+".mat");if(existing)return existing;
+ var texture=new Texture2D(64,64,TextureFormat.RGBA32,false); texture.name=name+"Mask";
+ var pixels=new Color[4096];
+ for(int y=0;y<64;y++) for(int x=0;x<64;x++) {
+ float u=(x+0.5f)/32-1, v=(y+0.5f)/32-1;
+ float a=streak ? Mathf.Exp(-u*u*45)*Mathf.Pow(Mathf.Max(0,1-v*v),2) : Mathf.Pow(Mathf.Max(0,1-u*u-v*v),3);
+ pixels[y*64+x]=new Color(1,1,1,a);
+ }
+ texture.SetPixels(pixels);texture.Apply();
+ string path=Output+"/"+name+"Mask.png";File.WriteAllBytes(path,texture.EncodeToPNG());UnityEngine.Object.DestroyImmediate(texture);
+ AssetDatabase.ImportAsset(path,ImportAssetOptions.ForceSynchronousImport);
+ var importer=(TextureImporter)AssetImporter.GetAtPath(path);importer.alphaIsTransparency=true;importer.wrapMode=TextureWrapMode.Clamp;importer.mipmapEnabled=true;importer.SaveAndReimport();
+ var shader=Shader.Find("Universal Render Pipeline/Particles/Unlit");
+ if(!shader || !shader.isSupported) throw new Exception("URP particle shader unavailable");
+ var mat=new Material(shader){name=name};mat.SetFloat("_Surface",1);mat.SetFloat("_Blend",0);mat.SetFloat("_SrcBlend",5);mat.SetFloat("_DstBlend",10);mat.SetFloat("_ZWrite",0);mat.SetFloat("_Cull",0);mat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");mat.renderQueue=3000;mat.SetTexture("_BaseMap",AssetDatabase.LoadAssetAtPath<Texture2D>(path));mat.SetColor("_BaseColor",Color.white);
+ AssetDatabase.CreateAsset(mat,Output+"/"+name+".mat");return mat;
+}
+ParticleSystem Make(GameObject root,string name,Material mat,Vector3 position, Vector3 volume,float rate,float life,float speed,float size,Color color,uint seed) {
+ var go=new GameObject(name);go.transform.SetParent(root.transform,false);go.transform.localPosition=position;
+ var ps=go.AddComponent<ParticleSystem>();ps.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);ps.useAutoRandomSeed=false;ps.randomSeed=seed;
+ var m=ps.main;m.duration=12;m.loop=true;m.prewarm=true;m.playOnAwake=true;m.startLifetime=life;m.startSpeed=speed;m.startSize=new ParticleSystem.MinMaxCurve(size*.55f,size);m.startColor=color;m.maxParticles=1000;m.simulationSpace=ParticleSystemSimulationSpace.Local;
+ var emission=ps.emission;emission.rateOverTime=rate;
+ var shape=ps.shape;shape.shapeType=ParticleSystemShapeType.Box;shape.scale=volume;shape.randomDirectionAmount=0;
+ var alpha=new Gradient();alpha.SetKeys(new[]{new GradientColorKey(Color.white,0),new GradientColorKey(Color.white,1)},new[]{new GradientAlphaKey(0,0),new GradientAlphaKey(1,.18f),new GradientAlphaKey(1,.7f),new GradientAlphaKey(0,1)});
+ var col=ps.colorOverLifetime;col.enabled=true;col.color=alpha;
+ var r=go.GetComponent<ParticleSystemRenderer>();r.sharedMaterial=mat;r.renderMode=ParticleSystemRenderMode.Billboard;
+ return ps;
+}
+public void Execute(ExecutionResult result) {
+ var original=SceneManager.GetActiveScene();bool dirty=original.isDirty;var temporary=default(Scene);RenderTexture rt=null;Texture2D shot=null;var prior=RenderTexture.active;
+ try {
+ temporary=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Additive);SceneManager.SetActiveScene(temporary);
+ var rainMat=MakeMaterial("CoolRain",true);var moteMat=MakeMaterial("WarmMotes",false);var hazeMat=MakeMaterial("CoolHaze",false);
+ var root=new GameObject("AtmosphereFX");
+ var rain=Make(root,"Rain_ExteriorWindow",rainMat,new Vector3(0,1.9f,.18f),new Vector3(1.15f,.05f,.12f),100,.55f,3.2f,.065f,new Color(.48f,.68f,.9f,.45f),3901);
+ rain.transform.localRotation=Quaternion.Euler(90,0,0);var rm=rain.main;rm.startSize3D=true;rm.startSizeX=.013f;rm.startSizeY=.19f;rm.startSizeZ=.013f;
+ var motes=Make(root,"Motes_Interior",moteMat,new Vector3(0,.95f,-.5f),new Vector3(1.25f,1.25f,.65f),5,7,.016f,.018f,new Color(.85f,.73f,.44f,.5f),3902);
+ var noise=motes.noise;noise.enabled=true;noise.strength=.045f;noise.frequency=.35f;noise.scrollSpeed=.12f;
+ var haze=Make(root,"Haze_WindowWash",hazeMat,new Vector3(0,.8f,.3f),new Vector3(1.05f,.85f,.18f),1,9,.012f,.85f,new Color(.26f,.39f,.55f,.055f),3903);
+ var hm=haze.main;hm.startRotation=new ParticleSystem.MinMaxCurve(-3.14f,3.14f);
+ PrefabUtility.SaveAsPrefabAsset(root,Output+"/AtmosphereFX.prefab");
+ int count=0;foreach(var p in root.GetComponentsInChildren<ParticleSystem>()){p.Simulate(8,true,true,true);count+=p.particleCount;}
+ if(count<1)throw new Exception("Particle simulation unexpectedly empty");
+ var cam=new GameObject("SimulationPreviewCamera").AddComponent<Camera>();cam.transform.position=new Vector3(2.2f,1.6f,-3.5f);cam.transform.LookAt(new Vector3(0,1,0));cam.orthographic=true;cam.orthographicSize=1.25f;cam.clearFlags=CameraClearFlags.SolidColor;cam.backgroundColor=new Color(.018f,.025f,.036f);cam.cullingMask=1<<31;
+ foreach(var t in root.GetComponentsInChildren<Transform>())t.gameObject.layer=31;
+ rt=new RenderTexture(1200,900,24);cam.targetTexture=rt;cam.aspect=4f/3;cam.Render();RenderTexture.active=rt;shot=new Texture2D(1200,900,TextureFormat.RGB24,false);shot.ReadPixels(new Rect(0,0,1200,900),0,0);shot.Apply();File.WriteAllBytes(Output+"/simulation-preview.png",shot.EncodeToPNG());cam.targetTexture=null;
+ File.WriteAllText(Output+"/effect-validation.json","{\"status\":\"PASS\",\"systems\":3,\"simulated_seconds\":8,\"live_particles\":"+count+",\"shader\":\"Universal Render Pipeline/Particles/Unlit\",\"root_origin\":[0,0,0],\"texture_dimensions\":[64,64],\"play_mode_used\":false}");
+ result.Log("Created standalone effect; 8-second editor simulation live particles: "+count);
+ } finally {RenderTexture.active=prior;if(shot)UnityEngine.Object.DestroyImmediate(shot);if(rt){rt.Release();UnityEngine.Object.DestroyImmediate(rt);}if(original.IsValid())SceneManager.SetActiveScene(original);if(temporary.IsValid()&&temporary.isLoaded)EditorSceneManager.CloseScene(temporary,true);}
+ if(original.isDirty!=dirty)throw new Exception("Original dirty state changed");
+ result.Log("Original active scene and dirty state restored.");
+}
+}

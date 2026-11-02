@@ -32,7 +32,7 @@ namespace DetectiveDesk
 #if UNITY_EDITOR
             for (int i = 0; i < SkinCount; i++)
                 skinMaterials[i] = UnityEditor.AssetDatabase.LoadAssetAtPath<Material>(
-                    "Assets/DetectiveDesk/Materials/PinSkins/" + SkinNames[i] + ".mat");
+                    "Assets/DetectiveDesk/Art/Props/CollectiblePin/Materials/Skins/" + SkinNames[i] + ".mat");
 #endif
             ApplySkin(skinIndex, false);
         }
