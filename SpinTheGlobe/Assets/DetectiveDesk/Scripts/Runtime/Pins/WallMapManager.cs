@@ -1,16 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using DetectiveDesk.Core;
+using DetectiveDesk.Progression;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace DetectiveDesk.Gameplay
 {
+    /// <summary>
+    /// Pin shooter + wall map. Fires the next ready pin from the pin box to a random spot on the map
+    /// (land / city chances are upgradeable stats), mirrors it onto the globe, pays it out at the
+    /// meridian and lets it fall when its strength runs out. Pins are individual (index 0..11) with
+    /// their own durability and payout upgrades.
+    /// </summary>
     public sealed class WallMapManager : MonoBehaviour
     {
         public GameManager game;
         public GlobeController globe;
         public MeridianTrigger meridian;
         public Camera gameCamera;
+        [Tooltip("Country hit areas from the old aiming prototype. Unused by random landing; kept for reference data.")]
         public CountryTarget[] targets;
         public PinSkin pinPrefab;
         public Transform muzzle, launcherVisual, runtimeRoot, mapSurface;
@@ -24,40 +32,87 @@ namespace DetectiveDesk.Gameplay
         public float dropOutwardSpeed = 1.8f;
         public YarnRenderer yarn;
         public ParticleSystem corkDust;
+
         readonly List<PinInstance> active = new List<PinInstance>();
-        readonly HashSet<string> pending = new HashSet<string>();
+        readonly HashSet<int> busy = new HashSet<int>();          // pins in flight or on the board
         readonly List<GameObject> flightObjects = new List<GameObject>();
         readonly Queue<GameObject> dropped = new Queue<GameObject>();
+        readonly System.Random rng = new System.Random();
         Quaternion launcherRest;
         Vector3 launcherPosition;
         float recoil;
+
+        public float CooldownRemaining { get; private set; }
         public int ActiveCount => active.Count;
-        public int PendingCount => pending.Count;
         public int DroppedCount { get; private set; }
         public int LaunchedCount { get; private set; }
         public IReadOnlyList<PinInstance> ActivePins => active;
+        public bool IsBusy(int index) => busy.Contains(index);
+
+        public int ReadyCount
+        {
+            get
+            {
+                if (!game) return 0;
+                int n = 0, unlocked = game.UnlockedPins;
+                for (int i = 0; i < unlocked; i++) if (!busy.Contains(i)) n++;
+                return n;
+            }
+        }
+
+        /// <summary>Money per full revolution from every pin on the board (HUD estimate).</summary>
         public double ActiveValuePerRevolution
         {
-            get { double value = 0; foreach (var p in active) if (p && p.IsActive) value += p.Country.baseValue * p.PinMultiplier; return value; }
+            get { double v = 0; foreach (var p in active) if (p && p.IsActive) v += PayoutFor(p); return v; }
         }
+
+        public void Bind(GameManager owner) { game = owner; }
 
         void Awake()
         {
             if (launcherVisual) { launcherRest = launcherVisual.localRotation; launcherPosition = launcherVisual.localPosition; }
         }
+
         void Update()
         {
+            if (CooldownRemaining > 0) CooldownRemaining = Mathf.Max(0, CooldownRemaining - Time.deltaTime);
             if (launcherVisual && recoil > 0)
             {
                 recoil = Mathf.MoveTowards(recoil, 0, Time.deltaTime * 5);
                 launcherVisual.localRotation = launcherRest * Quaternion.Euler(-3 * recoil, 0, 0);
                 launcherVisual.localPosition = launcherPosition + Vector3.back * .025f * recoil;
             }
-            if (!game || game.WorldInputBlocked || !Input.GetMouseButtonDown(0) ||
-                (EventSystem.current && EventSystem.current.IsPointerOverGameObject())) return;
-            CountryData country; Vector2 coordinate;
-            if (TryPick(gameCamera.ScreenPointToRay(Input.mousePosition), out country, out coordinate))
-                Launch(country, coordinate.y, coordinate.x);
+            if (game && !game.WorldInputBlocked && Input.GetKeyDown(KeyCode.Space)) game.FirePin();
+        }
+
+        public double PayoutFor(PinInstance pin)
+        {
+            if (!game || !pin) return 0;
+            return game.Balance.pinBasePayout * pin.Landing.Multiplier * game.PinPayoutMultiplier(pin.Index)
+                   * game.Stats.Get(StatId.GlobeMultiplier);
+        }
+
+        /// <summary>Fire the next ready pin. Returns null on success or a message explaining why not.</summary>
+        public string FireNext()
+        {
+            if (!game || !pinPrefab || !globe || !meridian || !runtimeRoot || !isActiveAndEnabled) return "The pin shooter is not set up.";
+            int unlocked = game.UnlockedPins;
+            if (unlocked == 0) return game.Skills.Owns(DefaultSkillTreeFactory.RootId)
+                ? "Buy Pin 1 in the skill tree (T) to load the shooter."
+                : "Unlock the skill tree (T), then buy your first pin.";
+            if (CooldownRemaining > 0) return "Shooter reloading… " + CooldownRemaining.ToString("0.0") + "s";
+            int index = -1;
+            for (int i = 0; i < unlocked; i++) if (!busy.Contains(i)) { index = i; break; }
+            if (index < 0) return "All your pins are on the map. They come back when they fall off.";
+
+            var b = game.Balance;
+            var landing = PinLanding.Sample(rng, game.Stats.Get(StatId.PinLandChance), game.Stats.Get(StatId.PinCityChance),
+                b.cityRadiusDegrees, b.landMultiplier, b.cityMultiplier, minimumLatitude, maximumLatitude);
+            CooldownRemaining = (float)game.Stats.Get(StatId.ShooterCooldown);
+            busy.Add(index);
+            if (game.PinBox) game.PinBox.Refresh();
+            StartCoroutine(Flight(index, landing));
+            return null;
         }
 
         public Vector3 GeographicPoint(float latitude, float longitude)
@@ -66,91 +121,78 @@ namespace DetectiveDesk.Gameplay
             float v = geographicUV.y + Mathf.InverseLerp(minimumLatitude, maximumLatitude, latitude) * geographicUV.height;
             return mapBottomLeft + (mapBottomRight - mapBottomLeft) * u + (mapTopLeft - mapBottomLeft) * v + mapNormal * .008f;
         }
-        public bool TryPick(Ray ray, out CountryData country, out Vector2 longitudeLatitude)
-        {
-            country = null; longitudeLatitude = Vector2.zero;
-            float distance;
-            if (!new Plane(mapNormal, mapBottomLeft).Raycast(ray, out distance) || distance <= 0) return false;
-            foreach (var obstruction in Physics.RaycastAll(ray, distance - .015f, ~4, QueryTriggerInteraction.Ignore))
-            {
-                if (mapSurface && (obstruction.transform == mapSurface || obstruction.transform.IsChildOf(mapSurface))) continue;
-                // The original desk interactions use intentionally generous box hit
-                // volumes. Empty space inside those boxes must not hide the map.
-                // Preserve those colliders and refine only map occlusion against the
-                // active authored visual bounds under that interaction.
-                var interaction = obstruction.collider.GetComponent<DeskInteractable>();
-                if (interaction)
-                {
-                    bool visibleObstruction = false;
-                    foreach (var renderer in interaction.GetComponentsInChildren<Renderer>())
-                    {
-                        if (!renderer.enabled || !renderer.gameObject.activeInHierarchy || renderer is LineRenderer || renderer is ParticleSystemRenderer) continue;
-                        float visualDistance;
-                        if (renderer.bounds.IntersectRay(ray, out visualDistance) && visualDistance > 0 && visualDistance < distance - .015f)
-                        { visibleObstruction = true; break; }
-                    }
-                    if (!visibleObstruction) continue;
-                }
-                return false;
-            }
-            Vector3 p = ray.GetPoint(distance) - mapBottomLeft, x = mapBottomRight - mapBottomLeft, y = mapTopLeft - mapBottomLeft;
-            float u = Vector3.Dot(p, x) / x.sqrMagnitude, v = Vector3.Dot(p, y) / y.sqrMagnitude;
-            if (!geographicUV.Contains(new Vector2(u, v))) return false;
-            float lon = Mathf.Lerp(minimumLongitude, maximumLongitude, (u - geographicUV.x) / geographicUV.width);
-            float lat = Mathf.Lerp(minimumLatitude, maximumLatitude, (v - geographicUV.y) / geographicUV.height);
-            foreach (var target in targets)
-                if (target && target.Contains(lat, lon)) { country = target.data; longitudeLatitude = new Vector2(lon, lat); return true; }
-            return false;
-        }
 
-        public bool Launch(CountryData country, float latitude, float longitude)
+        IEnumerator Flight(int index, PinLanding landing)
         {
-            if (!country || !game || !pinPrefab || !globe || !meridian || !runtimeRoot || !isActiveAndEnabled) return false;
-            if (!country.Contains(latitude, longitude)) { game.legacy.ShowHint("Aim inside the country's boundary."); return false; }
-            if (pending.Contains(country.id) || active.Exists(p => p && p.IsActive && p.Country.id == country.id))
-            { game.legacy.ShowHint(country.displayName + " already has an active pin."); return false; }
-            pending.Add(country.id);
-            int skin = game.SelectedSkin, charges = 1 + game.DurabilityLevel;
-            float multiplier = game.config.SkinMultiplier(skin);
-            StartCoroutine(Flight(country, latitude, longitude, skin, charges, multiplier));
-            return true;
-        }
-        IEnumerator Flight(CountryData country, float latitude, float longitude, int skin, int charges, float multiplier)
-        {
-            Vector3 destination = GeographicPoint(latitude, longitude), start = muzzle ? muzzle.position : destination + mapNormal;
+            int skin = index % PinSkin.SkinCount;
+            Vector3 destination = GeographicPoint(landing.Latitude, landing.Longitude);
+            Vector3 start = muzzle ? muzzle.position : destination + mapNormal;
             var visual = PinVisual.Create(pinPrefab, runtimeRoot, start, mapNormal, boardPinLength, skin);
             flightObjects.Add(visual.gameObject); LaunchedCount++; recoil = 1;
-            game.audioManager?.Launch();
-            float elapsed = 0;
-            while (elapsed < flightSeconds)
+            if (game.audioManager) game.audioManager.Launch();
+            float seconds = game ? game.Balance.pinFlightSeconds : flightSeconds, elapsed = 0;
+            while (elapsed < seconds)
             {
-                elapsed += Time.deltaTime; float t = Mathf.Clamp01(elapsed / Mathf.Max(.01f, flightSeconds));
+                elapsed += Time.deltaTime; float t = Mathf.Clamp01(elapsed / Mathf.Max(.01f, seconds));
                 visual.transform.position = Vector3.Lerp(start, destination, t) + Vector3.up * (Mathf.Sin(t * Mathf.PI) * .18f);
                 yield return null;
             }
             flightObjects.Remove(visual.gameObject); visual.transform.position = destination;
-            var markerGO = new GameObject("Globe marker / " + country.id);
-            var marker = markerGO.AddComponent<GlobePinMarker>(); marker.Initialize(globe, latitude, longitude);
+
+            var markerGO = new GameObject("Globe marker / pin " + (index + 1));
+            var marker = markerGO.AddComponent<GlobePinMarker>(); marker.Initialize(globe, landing.Latitude, landing.Longitude);
             Vector3 outward = (marker.transform.position - globe.Center).normalized;
             marker.Illuminate(PinVisual.Create(pinPrefab, marker.transform, marker.transform.position, outward, markerLength, skin));
+
             var instance = visual.gameObject.AddComponent<PinInstance>();
-            instance.Initialize(this, country, latitude, longitude, marker, charges, multiplier, meridian.NextPass(marker.transform.position));
-            active.Add(instance); pending.Remove(country.id); yarn?.Rebuild(active, mapNormal);
-            game.legacy.ShowHint(country.displayName + " pinned: " + charges + " pass" + (charges == 1 ? "" : "es") + ", €" + (country.baseValue * multiplier * game.GlobalMultiplier).ToString("N2") + " per meridian strike.");
+            int passes = game.PinPasses(index);
+            instance.Initialize(this, index, landing, marker, passes, meridian.NextPass(marker.transform.position));
+            active.Add(instance);
+            if (yarn) yarn.Rebuild(active, mapNormal);
+            game.ShowHint("Pin " + (index + 1) + " landed " + landing.Describe() + ": " + UIFactory.Money(PayoutFor(instance)) +
+                          " per pass, " + passes + " pass" + (passes == 1 ? "" : "es") + ".");
             game.Notify();
         }
+
+        // Called by PinInstance ------------------------------------------------------------
+        public void OnPinPassed(PinInstance pin)
+        {
+            double amount = PayoutFor(pin);
+            game.Credit(amount);
+            EventBus.Publish(new PinPaidOut(pin.Index, amount, pin.RemainingPasses));
+        }
+
+        public void OnPinFell(PinInstance pin)
+        {
+            Unregister(pin);
+            EventBus.Publish(new PinFellOff(pin.Index, game ? game.PinDurabilityRank(pin.Index) : 0));
+        }
+
         public PinInstance[] ActivePinsSnapshot() => active.ToArray();
-        public void Unregister(PinInstance pin) { active.Remove(pin); yarn?.Rebuild(active, mapNormal); if (game) game.Notify(); }
+
+        public void Unregister(PinInstance pin)
+        {
+            active.Remove(pin);
+            busy.Remove(pin.Index);
+            if (yarn) yarn.Rebuild(active, mapNormal);
+            if (game) { if (game.PinBox) game.PinBox.Refresh(); game.Notify(); }
+        }
+
         public void EmitDust(Vector3 position) { if (corkDust) { var emit = new ParticleSystem.EmitParams { position = position }; corkDust.Emit(emit, 9); } }
+
         public void TrackDropped(GameObject pin)
         {
             DroppedCount++; dropped.Enqueue(pin);
             while (dropped.Count > 12) { var old = dropped.Dequeue(); if (old) Destroy(old); }
         }
+
         void OnDisable()
         {
-            StopAllCoroutines(); pending.Clear();
-            foreach (var pin in flightObjects) if (pin) Destroy(pin); flightObjects.Clear();
+            StopAllCoroutines();
+            foreach (var pin in flightObjects) if (pin) Destroy(pin);
+            flightObjects.Clear();
+            busy.Clear();
+            foreach (var p in active) if (p) busy.Add(p.Index);
             if (launcherVisual) { launcherVisual.localRotation = launcherRest; launcherVisual.localPosition = launcherPosition; }
         }
     }

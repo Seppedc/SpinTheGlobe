@@ -5,8 +5,9 @@ namespace DetectiveDesk.Save
 {
     /// <summary>
     /// Everything persisted between sessions. Serialized with JsonUtility, so only public fields /
-    /// [Serializable] types and Lists (no dictionaries). Bump <see cref="CurrentVersion"/> and add a
-    /// migration in SaveStore when the shape changes.
+    /// [Serializable] types and Lists (no dictionaries). New fields default safely when an older
+    /// save is loaded; bump <see cref="CurrentVersion"/> and add a migration in SaveStore only when
+    /// a field changes meaning.
     /// </summary>
     [Serializable]
     public sealed class SaveData
@@ -26,8 +27,23 @@ namespace DetectiveDesk.Save
         // Progression
         public List<SkillRank> skills = new List<SkillRank>();
 
-        // Feature systems append their own sections below as they are built
-        // (pins, case file, whiskey, statues, inventory).
+        // Inventory & lootbox
+        public int iceCubes;
+        public int paperBalls;
+        public int sparePieces;
+        public int lootboxesOpened;
+
+        // Case file
+        public int caseLevel;
+        public int caseEvidence;
+        public float caseCooldown;
+
+        // Whiskey glass
+        public float whiskeyFill;
+        public float whiskeyCooldown;
+
+        // Statues (one entry per pedestal, in scene order)
+        public List<StatueState> statues = new List<StatueState>();
     }
 
     [Serializable]
@@ -35,5 +51,12 @@ namespace DetectiveDesk.Save
     {
         public string id;
         public int rank;
+    }
+
+    [Serializable]
+    public struct StatueState
+    {
+        public int pieces;
+        public float goldFill;
     }
 }

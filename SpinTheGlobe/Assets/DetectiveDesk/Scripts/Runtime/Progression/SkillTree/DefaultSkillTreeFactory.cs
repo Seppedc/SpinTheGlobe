@@ -14,7 +14,7 @@ namespace DetectiveDesk.Progression
     {
         public const string RootId = "root";
         public const int MaxPins = 12;
-        const float Step = 170f;
+        const float Step = 200f;
 
         public static string PinId(int pin) => $"pin_{pin:00}";               // 1-based for readability
         public static string PinDurabilityId(int pin) => $"pin_{pin:00}_durability";

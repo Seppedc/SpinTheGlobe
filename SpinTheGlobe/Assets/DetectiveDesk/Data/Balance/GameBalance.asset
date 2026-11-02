@@ -17,7 +17,7 @@ MonoBehaviour:
   autosaveInterval: 30
   baseStats:
   - stat: 100
-    value: 30
+    value: 60
   - stat: 101
     value: 0
   - stat: 102

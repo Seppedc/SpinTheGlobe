@@ -1,130 +1,272 @@
 using System;
+using System.Collections.Generic;
+using DetectiveDesk.Core;
+using DetectiveDesk.Economy;
+using DetectiveDesk.Progression;
+using DetectiveDesk.Save;
 using UnityEngine;
 
 namespace DetectiveDesk.Gameplay
 {
+    /// <summary>
+    /// Composition root of the game. Owns the economy (wallet, inventory), the stat sheet and the
+    /// skill-tree state, creates the feature systems on its own GameObject, and saves/loads progress.
+    /// Scene references (globe, map, figurines, coffer slots, legacy HUD) are wired in the scene.
+    /// </summary>
     [DefaultExecutionOrder(-100), DisallowMultipleComponent]
     public sealed class GameManager : MonoBehaviour
     {
+        [Header("Scene")]
         public DetectiveGame legacy;
-        public UpgradeConfig config;
         public GlobeController globe;
         public WallMapManager map;
         public FigurinePedestal[] figurines;
-        public GameplayPanel panel;
-        public SkillTreeDefinition skillTree;
-        public SkillTreePanel skillTreePanel;
         public AudioManager audioManager;
         public DeskAssetPresentation archive;
         public PinCofferSlot[] pinSlots;
-        public bool populateEmptyCofferOnStart = true;
-        [SerializeField, Min(0)] int speedLevel, motorLevel, durabilityLevel;
-        [SerializeField, Range(0, 11)] int selectedSkin;
-        public int SpeedLevel => speedLevel;
-        public int MotorLevel => motorLevel;
-        public int DurabilityLevel => durabilityLevel;
-        public int SelectedSkin => selectedSkin;
-        public double Money => legacy ? legacy.money : 0;
-        public double GlobalMultiplier
-        {
-            get { double total = 0; if (figurines != null) foreach (var f in figurines) if (f) total += f.Multiplier; return Math.Max(1, total); }
-        }
-        public bool WorldInputBlocked => (archive && archive.IsArchiveOpen) || (legacy &&
-            ((legacy.settingsPanel && legacy.settingsPanel.activeInHierarchy) || (legacy.upgradesPanel && legacy.upgradesPanel.activeInHierarchy)));
+
+        [Header("Data (optional: defaults are used when empty)")]
+        public GameBalance balance;
+        public SkillTreeAsset skillTreeAsset;
+
+        [Header("Saving")]
+        [Tooltip("Load and write the save file in Application.persistentDataPath.")]
+        public bool useSaveFile = true;
+
+        public Wallet Wallet { get; } = new Wallet();
+        public StatSheet Stats { get; } = new StatSheet();
+        public SkillTreeState Skills { get; } = new SkillTreeState();
+        public Inventory Inventory { get; } = new Inventory();
+        public GameBalance Balance { get; private set; }
+        public SkillTreeAsset Tree { get; private set; }
+
+        public CaseFileSystem Cases { get; private set; }
+        public WhiskeyGlass Whiskey { get; private set; }
+        public LootboxSystem Lootbox { get; private set; }
+        public PaperBallThrower PaperBalls { get; private set; }
+        public StatueHammer Hammer { get; private set; }
+        public PinBox PinBox { get; private set; }
+        public ClickRouter Clicks { get; private set; }
+        public GameHUD Hud { get; private set; }
+        public SkillTreeView TreeView { get; private set; }
+
+        public double Money => Wallet.Money;
+        public double PlayTime { get; private set; }
+        public Camera GameCamera => globe && globe.gameCamera ? globe.gameCamera : Camera.main;
+
+        public bool WorldInputBlocked =>
+            (archive && archive.IsArchiveOpen) || (TreeView && TreeView.IsOpen) || (PaperBalls && PaperBalls.IsAiming) ||
+            (legacy && legacy.settingsPanel && legacy.settingsPanel.activeInHierarchy);
+
         public event Action Changed;
         public event Action<double> CashAwarded;
 
+        SaveStore store;
+        float autosaveTimer;
+        bool loaded;
+
+        // ------------------------------------------------------------------ lifecycle
         void Awake()
         {
+            Balance = balance ? balance : ScriptableObject.CreateInstance<GameBalance>();
+            if (skillTreeAsset) Tree = skillTreeAsset;
+            else
+            {
+                Tree = ScriptableObject.CreateInstance<SkillTreeAsset>();
+                Tree.SetNodes(DefaultSkillTreeFactory.Create());
+            }
+            Balance.ApplyTo(Stats);
+
             if (legacy) { legacy.Gameplay = this; legacy.globeSpeed = 0; }
-            if (!config || !globe || !legacy) { Debug.LogError("Gameplay needs its legacy game, globe and configuration references.", this); enabled = false; }
+            if (!globe) Debug.LogError("GameManager needs its GlobeController reference.", this);
+
+            Clicks = Ensure<ClickRouter>();
+            PinBox = Ensure<PinBox>();
+            Cases = Ensure<CaseFileSystem>();
+            Whiskey = Ensure<WhiskeyGlass>();
+            Lootbox = Ensure<LootboxSystem>();
+            PaperBalls = Ensure<PaperBallThrower>();
+            Hammer = Ensure<StatueHammer>();
+            Hud = Ensure<GameHUD>();
+            TreeView = Ensure<SkillTreeView>();
+
+            Wallet.Changed += (c, b, d) => Notify();
+            Inventory.Changed += Notify;
         }
+
         void OnEnable() { if (globe) globe.RevolutionsCompleted += Revolution; }
         void OnDisable() { if (globe) globe.RevolutionsCompleted -= Revolution; }
+
         void Start()
         {
-            if (populateEmptyCofferOnStart && pinSlots != null)
-                foreach (var slot in pinSlots) if (slot && slot.IsEmpty && slot.PinPrefab) slot.PlacePin((slot.SlotNumber - 1) % PinSkin.SkinCount);
-            Notify(); legacy.ShowHint("Drag the globe left to right. Select a pin color, then click a country on the map.");
+            if (figurines != null) for (int i = 0; i < figurines.Length; i++) if (figurines[i]) figurines[i].Bind(this, i);
+            Clicks.Initialize(this, GameCamera);
+
+            LoadGame();
+            Stats.Rebuild(Tree, Skills);
+
+            PinBox.Initialize(this);
+            Cases.Initialize(this);
+            Whiskey.Initialize(this);
+            Lootbox.Initialize(this);
+            PaperBalls.Initialize(this);
+            Hammer.Initialize(this);
+            Hud.Initialize(this);
+            TreeView.Initialize(this);
+            if (map) map.Bind(this);
+
+            loaded = true;
+            EventBus.Publish(new GameLoaded());
+            Notify();
+            ShowHint(Skills.Owns(DefaultSkillTreeFactory.RootId)
+                ? "Welcome back, detective."
+                : "Drag or click the globe to spin it. Earn " + NumberFormatter.Money(Tree.Find(DefaultSkillTreeFactory.RootId).cost.Cost(0)) + " to open the skill tree (T).");
         }
+
         void Update()
         {
-            if (!legacy || !globe || !config) return;
-            double perTurn = config.baseRevolutionReward + (map ? map.ActiveValuePerRevolution : 0);
-            // HUD estimate only. This value never grants passive money.
-            legacy.moneyPerMinute = perTurn * GlobalMultiplier * globe.CurrentVelocity / 6;
-            legacy.RefreshHUD();
+            if (!loaded) return;
+            PlayTime += Time.unscaledDeltaTime;
+            autosaveTimer += Time.unscaledDeltaTime;
+            if (useSaveFile && autosaveTimer >= Balance.autosaveInterval) { autosaveTimer = 0; SaveGame(); }
+
+            if (legacy)
+            {
+                legacy.moneyPerMinute = EstimatedIncomePerMinute();
+                legacy.RefreshHUD();
+            }
         }
-        void Revolution(long count) { Credit(count * config.baseRevolutionReward * GlobalMultiplier); }
+
+        void OnApplicationPause(bool paused) { if (paused && loaded && useSaveFile) SaveGame(); }
+        void OnApplicationQuit() { if (loaded && useSaveFile) SaveGame(); }
+
+        T Ensure<T>() where T : Component
+        {
+            var c = GetComponent<T>();
+            return c ? c : gameObject.AddComponent<T>();
+        }
+
+        // ------------------------------------------------------------------ economy
+        void Revolution(long count)
+        {
+            Credit(count * Balance.revolutionReward * Stats.Get(StatId.GlobeMultiplier));
+            float fill = (float)(count * Balance.statueGoldFillPerRevolution * Stats.Get(StatId.StatueGoldFillRate));
+            if (figurines != null) foreach (var f in figurines) if (f) f.AddGold(fill);
+            EventBus.Publish(new GlobeRevolutions(count));
+        }
+
         public void Credit(double amount)
         {
-            if (!GameplayMath.Finite(amount) || amount <= 0 || !legacy || !GameplayMath.Finite(legacy.money + amount)) return;
-            legacy.money += amount;
+            if (double.IsNaN(amount) || double.IsInfinity(amount) || amount <= 0) return;
+            Wallet.Add(Currency.Money, amount);
             CashAwarded?.Invoke(amount);
-            audioManager?.Payout();
-            Notify();
+            if (audioManager) audioManager.Payout();
         }
-        public bool TrySpend(double amount)
+
+        public void CreditGold(double amount)
         {
-            if (!GameplayMath.Finite(amount) || amount < 0 || !legacy || !GameplayMath.Finite(legacy.money) || legacy.money + 1e-9 < amount) return false;
-            legacy.money = Math.Max(0, legacy.money - amount); Notify(); return true;
+            if (double.IsNaN(amount) || double.IsInfinity(amount) || amount <= 0) return;
+            Wallet.Add(Currency.Gold, amount);
+            if (audioManager) audioManager.Payout();
         }
-        public int Level(UpgradeKind kind) => kind == UpgradeKind.Speed ? speedLevel : kind == UpgradeKind.AutoMotor ? motorLevel : durabilityLevel;
-        public bool BuyUpgrade(UpgradeKind kind)
+
+        public bool TrySpend(double amount) => Wallet.TrySpend(Currency.Money, amount);
+
+        public double EstimatedIncomePerMinute()
         {
-            if (!Enum.IsDefined(typeof(UpgradeKind), kind)) return false;
-            if (!config || Level(kind) >= config.maximumUpgradeLevel) { legacy?.ShowHint("This upgrade is at maximum level."); return false; }
-            if (skillTree)
-            {
-                string reason; var node = skillTree.UpgradeNode(kind, Level(kind) + 1);
-                if (skillTree.State(this, node, out reason) != SkillNodeState.Available) { legacy?.ShowHint(reason); return false; }
-            }
-            double cost = config.Cost(kind, Level(kind));
-            if (!TrySpend(cost)) { legacy?.ShowHint("Need €" + cost.ToString("N0") + " for this upgrade."); return false; }
-            switch (kind) { case UpgradeKind.Speed: speedLevel++; break; case UpgradeKind.AutoMotor: motorLevel++; break; case UpgradeKind.Durability: durabilityLevel++; break; }
-            globe.EnforceLimits(); audioManager?.Click(); Notify();
-            legacy.ShowHint(kind + " upgraded. Durability upgrades apply to newly fired pins.");
-            return true;
+            if (!globe) return 0;
+            double perTurn = Balance.revolutionReward * Stats.Get(StatId.GlobeMultiplier) + (map ? map.ActiveValuePerRevolution : 0);
+            return perTurn * globe.CurrentVelocity / 6.0; // revolutions per minute = °/s × 60 / 360
         }
-        public bool RestoreFigurine(int index)
-        {
-            if (!config || figurines == null || index < 0 || index >= figurines.Length || !figurines[index]) return false;
-            var f = figurines[index];
-            if (f.Tier >= 3) { legacy.ShowHint("This figurine is fully restored."); return false; }
-            if (skillTree)
-            {
-                string reason; var node = skillTree.RestorationNode(index, f.Tier + 1);
-                if (skillTree.State(this, node, out reason) != SkillNodeState.Available) { legacy.ShowHint(reason); return false; }
-            }
-            double cost = config.RestorationCost(f.Tier);
-            if (!TrySpend(cost)) { legacy.ShowHint("Need €" + cost.ToString("N0") + " to restore this figurine."); return false; }
-            f.SetTier(f.Tier + 1); audioManager?.Click(); Notify(); return true;
-        }
+
+        // ------------------------------------------------------------------ skill tree
         public bool PurchaseSkill(string id)
         {
-            if (!skillTree) return false;
-            var node = skillTree.Find(id); string reason;
-            if (skillTree.State(this, node, out reason) != SkillNodeState.Available) { legacy?.ShowHint(reason); return false; }
-            return node.effect == SkillEffect.Upgrade ? BuyUpgrade(node.upgrade) : RestoreFigurine(node.figurineIndex);
+            if (!Skills.TryPurchase(Tree, id, Wallet, Stats, out string reason)) { ShowHint(reason); return false; }
+            var node = Tree.Find(id);
+            if (globe) globe.EnforceLimits();
+            if (PinBox) PinBox.Refresh();
+            if (audioManager) audioManager.Click();
+            ShowHint(node.title + (node.maxRank > 1 ? " rank " + Skills.Rank(id) : "") + " unlocked.");
+            Notify();
+            return true;
         }
-        public void SelectPin(PinCofferSlot slot)
+
+        // ------------------------------------------------------------------ pins
+        public int UnlockedPins => Mathf.Clamp((int)Math.Round(Stats.Get(StatId.PinSlots)), 0, DefaultSkillTreeFactory.MaxPins);
+        public int PinPasses(int index) => Math.Max(1, (int)Math.Round(Stats.Get(StatId.PinDurability, index)));
+        public int PinDurabilityRank(int index) => Skills.Rank(DefaultSkillTreeFactory.PinDurabilityId(index + 1));
+        public double PinPayoutMultiplier(int index) => Stats.Get(StatId.PinPayout, index);
+
+        public void FirePin()
         {
-            if (slot && slot.Occupant) selectedSkin = slot.Occupant.SkinIndex;
-            legacy.ShowHint(PinSkin.SkinNames[selectedSkin] + " pin selected. Click a country; the coffer keeps your collectible.");
-            audioManager?.Click(); Notify();
+            if (!map) return;
+            string problem = map.FireNext();
+            if (problem != null) ShowHint(problem);
         }
-        public void ArmLauncher() { legacy.ShowHint("Click a country on the wall map to launch the selected " + PinSkin.SkinNames[selectedSkin] + " pin."); }
+
+        // ------------------------------------------------------------------ legacy entry points (desk clicks)
+        public void SelectPin(PinCofferSlot slot) => FirePin();
+        public void ArmLauncher() => FirePin();
         public void InspectFigurine(FigurinePedestal pedestal)
         {
-            if (legacy.upgradesPanel) legacy.upgradesPanel.SetActive(true);
-            panel?.Refresh();
-            if (skillTreePanel)
-            {
-                int index = pedestal && figurines != null ? Array.IndexOf(figurines, pedestal) : -1;
-                if (index >= 0) skillTreePanel.FocusFigurine(index); else skillTreePanel.ShowRestorations();
-            }
-            legacy.ShowHint(pedestal ? pedestal.name + ": " + pedestal.TierName + " — open its restoration path in Upgrades." : "Restore the three figurines in Upgrades.");
+            if (pedestal) pedestal.Click();
+            else ShowHint("Statue pieces come from lootboxes. A finished statue fills with gold as the globe spins.");
         }
-        public void Notify() { if (legacy) legacy.RefreshHUD(); Changed?.Invoke(); }
+
+        public void ShowHint(string message) { if (legacy && !string.IsNullOrEmpty(message)) legacy.ShowHint(message); }
+        public void Notify() { Changed?.Invoke(); }
+
+        // ------------------------------------------------------------------ save / load
+        SaveStore Store => store ?? (store = SaveStore.Default);
+
+        void LoadGame()
+        {
+            if (useSaveFile && Store.TryLoad(out var data))
+            {
+                Wallet.Load(data.money, data.gold, data.lifetimeMoney, data.lifetimeGold);
+                Skills.Load(Tree, data.skills);
+                Inventory.Load(data.iceCubes, data.paperBalls, data.sparePieces);
+                PlayTime = data.playTimeSeconds;
+                Lootbox.LoadState(data);
+                Cases.LoadState(data);
+                Whiskey.LoadState(data);
+                if (figurines != null)
+                    for (int i = 0; i < figurines.Length && i < data.statues.Count; i++)
+                        if (figurines[i]) figurines[i].LoadState(data.statues[i]);
+            }
+            else
+            {
+                Wallet.Load(Balance.startingMoney, Balance.startingGold, Balance.startingMoney, Balance.startingGold);
+            }
+        }
+
+        public void SaveGame()
+        {
+            try
+            {
+                var data = new SaveData
+                {
+                    money = Wallet.Money, gold = Wallet.Gold, lifetimeMoney = Wallet.LifetimeMoney, lifetimeGold = Wallet.LifetimeGold,
+                    skills = Skills.ToSave(), playTimeSeconds = PlayTime,
+                    iceCubes = Inventory.IceCubes, paperBalls = Inventory.PaperBalls, sparePieces = Inventory.SparePieces,
+                    statues = new List<StatueState>(),
+                };
+                Lootbox.SaveState(data);
+                Cases.SaveState(data);
+                Whiskey.SaveState(data);
+                if (figurines != null) foreach (var f in figurines) data.statues.Add(f ? f.SaveState() : default);
+                Store.Save(data);
+            }
+            catch (Exception e) { Debug.LogWarning("Saving failed: " + e.Message); }
+        }
+
+        /// <summary>Deletes the save file and reloads the scene (debug / settings).</summary>
+        public void ResetProgress()
+        {
+            useSaveFile = false;
+            Store.Delete();
+            UnityEngine.SceneManagement.SceneManager.LoadScene(gameObject.scene.buildIndex >= 0 ? gameObject.scene.buildIndex : 0);
+        }
     }
 }

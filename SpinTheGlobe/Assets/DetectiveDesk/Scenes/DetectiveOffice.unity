@@ -627,7 +627,6 @@ MonoBehaviour:
   scatterFrame: {fileID: 36337482}
   scatterCenter: {x: -3.5500002, y: 1.2252702, z: -0.30000004}
   scatterRadius: 0.16
-  tier: 0
 --- !u!1 &36590574
 GameObject:
   m_ObjectHideFlags: 0
@@ -795,7 +794,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1921880845}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreePanel, Assembly-CSharp
         m_MethodName: ShowRestorations
         m_Mode: 0
@@ -1396,7 +1395,6 @@ GameObject:
   - component: {fileID: 60356831}
   - component: {fileID: 60356835}
   - component: {fileID: 60356834}
-  - component: {fileID: 60356833}
   - component: {fileID: 60356832}
   m_Layer: 0
   m_Name: motor_01
@@ -1473,7 +1471,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 60356833}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -1485,27 +1483,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &60356833
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 60356830}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: motor_01
-  owner: {fileID: 1921880845}
-  button: {fileID: 60356832}
-  background: {fileID: 544779103}
-  border: {fileID: 60356834}
-  selection: {fileID: 772799872}
-  title: {fileID: 327918733}
-  state: {fileID: 962810906}
-  cost: {fileID: 1966041802}
 --- !u!114 &60356834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2046,7 +2023,6 @@ GameObject:
   - component: {fileID: 65180104}
   - component: {fileID: 65180108}
   - component: {fileID: 65180107}
-  - component: {fileID: 65180106}
   - component: {fileID: 65180105}
   m_Layer: 0
   m_Name: durability_04
@@ -2123,7 +2099,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 65180106}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -2135,27 +2111,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &65180106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 65180103}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: durability_04
-  owner: {fileID: 1921880845}
-  button: {fileID: 65180105}
-  background: {fileID: 437149375}
-  border: {fileID: 65180107}
-  selection: {fileID: 148823775}
-  title: {fileID: 277515128}
-  state: {fileID: 1354316180}
-  cost: {fileID: 1784611770}
 --- !u!114 &65180107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3467,7 +3422,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1999109301}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.GameplayPanel, Assembly-CSharp
         m_MethodName: BuyMotor
         m_Mode: 0
@@ -4501,7 +4456,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1999109301}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.GameplayPanel, Assembly-CSharp
         m_MethodName: BuyDurability
         m_Mode: 0
@@ -4634,7 +4589,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1999109301}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.GameplayPanel, Assembly-CSharp
         m_MethodName: RestoreThird
         m_Mode: 0
@@ -4939,7 +4894,6 @@ GameObject:
   - component: {fileID: 149008310}
   - component: {fileID: 149008314}
   - component: {fileID: 149008313}
-  - component: {fileID: 149008312}
   - component: {fileID: 149008311}
   m_Layer: 0
   m_Name: durability_03
@@ -5016,7 +4970,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 149008312}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -5028,27 +4982,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &149008312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 149008309}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: durability_03
-  owner: {fileID: 1921880845}
-  button: {fileID: 149008311}
-  background: {fileID: 974984050}
-  border: {fileID: 149008313}
-  selection: {fileID: 1179248774}
-  title: {fileID: 1362245582}
-  state: {fileID: 958496229}
-  cost: {fileID: 1207401464}
 --- !u!114 &149008313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5775,7 +5708,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 214843953}
-  - component: {fileID: 214843954}
   - component: {fileID: 214843955}
   m_Layer: 0
   m_Name: Prerequisite connections
@@ -5803,213 +5735,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 790, y: 1650}
   m_Pivot: {x: 0.5, y: 1}
---- !u!114 &214843954
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 214843952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9af41a00e35e2764bbb0893a887e66b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeLinkGraphic
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  owner: {fileID: 1921880845}
-  links:
-  - source: {fileID: 1496673395}
-    target: {fileID: 295216085}
-    sourceId: 
-    targetId: speed_01
-  - source: {fileID: 295216085}
-    target: {fileID: 1929852090}
-    sourceId: speed_01
-    targetId: speed_02
-  - source: {fileID: 1929852090}
-    target: {fileID: 2055920212}
-    sourceId: speed_02
-    targetId: speed_03
-  - source: {fileID: 2055920212}
-    target: {fileID: 936228735}
-    sourceId: speed_03
-    targetId: speed_04
-  - source: {fileID: 936228735}
-    target: {fileID: 1860309101}
-    sourceId: speed_04
-    targetId: speed_05
-  - source: {fileID: 1860309101}
-    target: {fileID: 248377064}
-    sourceId: speed_05
-    targetId: speed_06
-  - source: {fileID: 248377064}
-    target: {fileID: 582277928}
-    sourceId: speed_06
-    targetId: speed_07
-  - source: {fileID: 582277928}
-    target: {fileID: 272606601}
-    sourceId: speed_07
-    targetId: speed_08
-  - source: {fileID: 272606601}
-    target: {fileID: 1750887706}
-    sourceId: speed_08
-    targetId: speed_09
-  - source: {fileID: 1750887706}
-    target: {fileID: 1138545455}
-    sourceId: speed_09
-    targetId: speed_10
-  - source: {fileID: 1496673395}
-    target: {fileID: 60356831}
-    sourceId: 
-    targetId: motor_01
-  - source: {fileID: 60356831}
-    target: {fileID: 1261355767}
-    sourceId: motor_01
-    targetId: motor_02
-  - source: {fileID: 1261355767}
-    target: {fileID: 228609030}
-    sourceId: motor_02
-    targetId: motor_03
-  - source: {fileID: 295216085}
-    target: {fileID: 228609030}
-    sourceId: speed_01
-    targetId: motor_03
-  - source: {fileID: 228609030}
-    target: {fileID: 1477656992}
-    sourceId: motor_03
-    targetId: motor_04
-  - source: {fileID: 295216085}
-    target: {fileID: 1477656992}
-    sourceId: speed_01
-    targetId: motor_04
-  - source: {fileID: 1477656992}
-    target: {fileID: 1280617728}
-    sourceId: motor_04
-    targetId: motor_05
-  - source: {fileID: 1929852090}
-    target: {fileID: 1280617728}
-    sourceId: speed_02
-    targetId: motor_05
-  - source: {fileID: 1280617728}
-    target: {fileID: 1805087263}
-    sourceId: motor_05
-    targetId: motor_06
-  - source: {fileID: 1929852090}
-    target: {fileID: 1805087263}
-    sourceId: speed_02
-    targetId: motor_06
-  - source: {fileID: 1805087263}
-    target: {fileID: 778992500}
-    sourceId: motor_06
-    targetId: motor_07
-  - source: {fileID: 2055920212}
-    target: {fileID: 778992500}
-    sourceId: speed_03
-    targetId: motor_07
-  - source: {fileID: 778992500}
-    target: {fileID: 728436330}
-    sourceId: motor_07
-    targetId: motor_08
-  - source: {fileID: 2055920212}
-    target: {fileID: 728436330}
-    sourceId: speed_03
-    targetId: motor_08
-  - source: {fileID: 728436330}
-    target: {fileID: 1432025492}
-    sourceId: motor_08
-    targetId: motor_09
-  - source: {fileID: 936228735}
-    target: {fileID: 1432025492}
-    sourceId: speed_04
-    targetId: motor_09
-  - source: {fileID: 1432025492}
-    target: {fileID: 853959780}
-    sourceId: motor_09
-    targetId: motor_10
-  - source: {fileID: 936228735}
-    target: {fileID: 853959780}
-    sourceId: speed_04
-    targetId: motor_10
-  - source: {fileID: 1496673395}
-    target: {fileID: 2048065962}
-    sourceId: 
-    targetId: durability_01
-  - source: {fileID: 2048065962}
-    target: {fileID: 967695322}
-    sourceId: durability_01
-    targetId: durability_02
-  - source: {fileID: 967695322}
-    target: {fileID: 149008310}
-    sourceId: durability_02
-    targetId: durability_03
-  - source: {fileID: 60356831}
-    target: {fileID: 149008310}
-    sourceId: motor_01
-    targetId: durability_03
-  - source: {fileID: 149008310}
-    target: {fileID: 65180104}
-    sourceId: durability_03
-    targetId: durability_04
-  - source: {fileID: 60356831}
-    target: {fileID: 65180104}
-    sourceId: motor_01
-    targetId: durability_04
-  - source: {fileID: 65180104}
-    target: {fileID: 819266354}
-    sourceId: durability_04
-    targetId: durability_05
-  - source: {fileID: 60356831}
-    target: {fileID: 819266354}
-    sourceId: motor_01
-    targetId: durability_05
-  - source: {fileID: 819266354}
-    target: {fileID: 1869849720}
-    sourceId: durability_05
-    targetId: durability_06
-  - source: {fileID: 1261355767}
-    target: {fileID: 1869849720}
-    sourceId: motor_02
-    targetId: durability_06
-  - source: {fileID: 1869849720}
-    target: {fileID: 2106273367}
-    sourceId: durability_06
-    targetId: durability_07
-  - source: {fileID: 1261355767}
-    target: {fileID: 2106273367}
-    sourceId: motor_02
-    targetId: durability_07
-  - source: {fileID: 2106273367}
-    target: {fileID: 1756384375}
-    sourceId: durability_07
-    targetId: durability_08
-  - source: {fileID: 1261355767}
-    target: {fileID: 1756384375}
-    sourceId: motor_02
-    targetId: durability_08
-  - source: {fileID: 1756384375}
-    target: {fileID: 1292088765}
-    sourceId: durability_08
-    targetId: durability_09
-  - source: {fileID: 228609030}
-    target: {fileID: 1292088765}
-    sourceId: motor_03
-    targetId: durability_09
-  - source: {fileID: 1292088765}
-    target: {fileID: 2109911798}
-    sourceId: durability_09
-    targetId: durability_10
-  - source: {fileID: 228609030}
-    target: {fileID: 2109911798}
-    sourceId: motor_03
-    targetId: durability_10
-  thickness: 2
 --- !u!222 &214843955
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6143,7 +5868,6 @@ GameObject:
   - component: {fileID: 228609030}
   - component: {fileID: 228609034}
   - component: {fileID: 228609033}
-  - component: {fileID: 228609032}
   - component: {fileID: 228609031}
   m_Layer: 0
   m_Name: motor_03
@@ -6220,7 +5944,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 228609032}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -6232,27 +5956,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &228609032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 228609029}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: motor_03
-  owner: {fileID: 1921880845}
-  button: {fileID: 228609031}
-  background: {fileID: 736841406}
-  border: {fileID: 228609033}
-  selection: {fileID: 1140374930}
-  title: {fileID: 27593604}
-  state: {fileID: 1647872704}
-  cost: {fileID: 71141573}
 --- !u!114 &228609033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6801,7 +6504,6 @@ GameObject:
   - component: {fileID: 248377064}
   - component: {fileID: 248377068}
   - component: {fileID: 248377067}
-  - component: {fileID: 248377066}
   - component: {fileID: 248377065}
   m_Layer: 0
   m_Name: speed_06
@@ -6878,7 +6580,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 248377066}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -6890,27 +6592,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &248377066
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 248377063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: speed_06
-  owner: {fileID: 1921880845}
-  button: {fileID: 248377065}
-  background: {fileID: 2055999478}
-  border: {fileID: 248377067}
-  selection: {fileID: 528468758}
-  title: {fileID: 454444724}
-  state: {fileID: 942244747}
-  cost: {fileID: 605561312}
 --- !u!114 &248377067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7959,7 +7640,6 @@ GameObject:
   - component: {fileID: 272606601}
   - component: {fileID: 272606605}
   - component: {fileID: 272606604}
-  - component: {fileID: 272606603}
   - component: {fileID: 272606602}
   m_Layer: 0
   m_Name: speed_08
@@ -8036,7 +7716,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 272606603}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -8048,27 +7728,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &272606603
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 272606600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: speed_08
-  owner: {fileID: 1921880845}
-  button: {fileID: 272606602}
-  background: {fileID: 1727621450}
-  border: {fileID: 272606604}
-  selection: {fileID: 654241955}
-  title: {fileID: 767653031}
-  state: {fileID: 1249347825}
-  cost: {fileID: 1704241790}
 --- !u!114 &272606604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8270,7 +7929,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1921880845}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreePanel, Assembly-CSharp
         m_MethodName: ShowEngineering
         m_Mode: 0
@@ -8568,7 +8227,6 @@ GameObject:
   - component: {fileID: 295216085}
   - component: {fileID: 295216089}
   - component: {fileID: 295216088}
-  - component: {fileID: 295216087}
   - component: {fileID: 295216086}
   m_Layer: 0
   m_Name: speed_01
@@ -8645,7 +8303,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 295216087}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -8657,27 +8315,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &295216087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 295216084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: speed_01
-  owner: {fileID: 1921880845}
-  button: {fileID: 295216086}
-  background: {fileID: 1436885314}
-  border: {fileID: 295216088}
-  selection: {fileID: 824480213}
-  title: {fileID: 2068631809}
-  state: {fileID: 2142730707}
-  cost: {fileID: 930771942}
 --- !u!114 &295216088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9365,7 +9002,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1999109301}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.GameplayPanel, Assembly-CSharp
         m_MethodName: RestoreFirst
         m_Mode: 0
@@ -13817,7 +13454,6 @@ MonoBehaviour:
   scatterFrame: {fileID: 444899143}
   scatterCenter: {x: -2.8500001, y: 1.2252703, z: 0.39999995}
   scatterRadius: 0.16
-  tier: 0
 --- !u!1 &446266701
 GameObject:
   m_ObjectHideFlags: 0
@@ -16733,7 +16369,6 @@ GameObject:
   - component: {fileID: 552096875}
   - component: {fileID: 552096879}
   - component: {fileID: 552096878}
-  - component: {fileID: 552096877}
   - component: {fileID: 552096876}
   m_Layer: 0
   m_Name: figure_0_2
@@ -16810,7 +16445,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 552096877}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -16822,27 +16457,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &552096877
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 552096874}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: figure_0_2
-  owner: {fileID: 1921880845}
-  button: {fileID: 552096876}
-  background: {fileID: 1968452299}
-  border: {fileID: 552096878}
-  selection: {fileID: 428662821}
-  title: {fileID: 1591707504}
-  state: {fileID: 2137346458}
-  cost: {fileID: 77403456}
 --- !u!114 &552096878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17476,7 +17090,6 @@ GameObject:
   - component: {fileID: 582277928}
   - component: {fileID: 582277932}
   - component: {fileID: 582277931}
-  - component: {fileID: 582277930}
   - component: {fileID: 582277929}
   m_Layer: 0
   m_Name: speed_07
@@ -17553,7 +17166,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 582277930}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -17565,27 +17178,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &582277930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 582277927}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: speed_07
-  owner: {fileID: 1921880845}
-  button: {fileID: 582277929}
-  background: {fileID: 2112610018}
-  border: {fileID: 582277931}
-  selection: {fileID: 666334049}
-  title: {fileID: 1254726765}
-  state: {fileID: 1742146290}
-  cost: {fileID: 922587000}
 --- !u!114 &582277931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20339,7 +19931,6 @@ GameObject:
   - component: {fileID: 690147116}
   - component: {fileID: 690147120}
   - component: {fileID: 690147119}
-  - component: {fileID: 690147118}
   - component: {fileID: 690147117}
   m_Layer: 0
   m_Name: figure_2_2
@@ -20416,7 +20007,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 690147118}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -20428,27 +20019,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &690147118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 690147115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: figure_2_2
-  owner: {fileID: 1921880845}
-  button: {fileID: 690147117}
-  background: {fileID: 1408585864}
-  border: {fileID: 690147119}
-  selection: {fileID: 563880380}
-  title: {fileID: 1087558197}
-  state: {fileID: 699031789}
-  cost: {fileID: 288126707}
 --- !u!114 &690147119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20812,7 +20382,6 @@ GameObject:
   - component: {fileID: 717843656}
   - component: {fileID: 717843660}
   - component: {fileID: 717843659}
-  - component: {fileID: 717843658}
   - component: {fileID: 717843657}
   m_Layer: 0
   m_Name: figure_2_3
@@ -20889,7 +20458,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 717843658}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -20901,27 +20470,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &717843658
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 717843655}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: figure_2_3
-  owner: {fileID: 1921880845}
-  button: {fileID: 717843657}
-  background: {fileID: 1994653261}
-  border: {fileID: 717843659}
-  selection: {fileID: 1219367431}
-  title: {fileID: 584262080}
-  state: {fileID: 1629993532}
-  cost: {fileID: 830598751}
 --- !u!114 &717843659
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21043,7 +20591,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1921880845}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreePanel, Assembly-CSharp
         m_MethodName: PurchaseSelected
         m_Mode: 0
@@ -21230,7 +20778,6 @@ GameObject:
   - component: {fileID: 728436330}
   - component: {fileID: 728436334}
   - component: {fileID: 728436333}
-  - component: {fileID: 728436332}
   - component: {fileID: 728436331}
   m_Layer: 0
   m_Name: motor_08
@@ -21307,7 +20854,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 728436332}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -21319,27 +20866,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &728436332
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 728436329}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: motor_08
-  owner: {fileID: 1921880845}
-  button: {fileID: 728436331}
-  background: {fileID: 649648788}
-  border: {fileID: 728436333}
-  selection: {fileID: 1359205502}
-  title: {fileID: 1402415614}
-  state: {fileID: 1907330612}
-  cost: {fileID: 881358984}
 --- !u!114 &728436333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22457,7 +21983,6 @@ GameObject:
   - component: {fileID: 778992500}
   - component: {fileID: 778992504}
   - component: {fileID: 778992503}
-  - component: {fileID: 778992502}
   - component: {fileID: 778992501}
   m_Layer: 0
   m_Name: motor_07
@@ -22534,7 +22059,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 778992502}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -22546,27 +22071,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &778992502
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 778992499}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: motor_07
-  owner: {fileID: 1921880845}
-  button: {fileID: 778992501}
-  background: {fileID: 349207487}
-  border: {fileID: 778992503}
-  selection: {fileID: 491905702}
-  title: {fileID: 1857728862}
-  state: {fileID: 246847060}
-  cost: {fileID: 1096354355}
 --- !u!114 &778992503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23026,7 +22530,6 @@ GameObject:
   - component: {fileID: 802725693}
   - component: {fileID: 802725697}
   - component: {fileID: 802725696}
-  - component: {fileID: 802725695}
   - component: {fileID: 802725694}
   m_Layer: 0
   m_Name: figure_0_1
@@ -23103,7 +22606,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 802725695}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -23115,27 +22618,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &802725695
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 802725692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: figure_0_1
-  owner: {fileID: 1921880845}
-  button: {fileID: 802725694}
-  background: {fileID: 983781552}
-  border: {fileID: 802725696}
-  selection: {fileID: 1256377153}
-  title: {fileID: 676041050}
-  state: {fileID: 2094872178}
-  cost: {fileID: 36590576}
 --- !u!114 &802725696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23564,7 +23046,6 @@ GameObject:
   - component: {fileID: 819266354}
   - component: {fileID: 819266358}
   - component: {fileID: 819266357}
-  - component: {fileID: 819266356}
   - component: {fileID: 819266355}
   m_Layer: 0
   m_Name: durability_05
@@ -23641,7 +23122,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 819266356}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -23653,27 +23134,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &819266356
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 819266353}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: durability_05
-  owner: {fileID: 1921880845}
-  button: {fileID: 819266355}
-  background: {fileID: 883854266}
-  border: {fileID: 819266357}
-  selection: {fileID: 1057012620}
-  title: {fileID: 1294138951}
-  state: {fileID: 548702591}
-  cost: {fileID: 330502850}
 --- !u!114 &819266357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24226,7 +23686,6 @@ GameObject:
   - component: {fileID: 846056888}
   - component: {fileID: 846056892}
   - component: {fileID: 846056891}
-  - component: {fileID: 846056890}
   - component: {fileID: 846056889}
   m_Layer: 0
   m_Name: figure_2_1
@@ -24303,7 +23762,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 846056890}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -24315,27 +23774,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &846056890
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 846056887}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: figure_2_1
-  owner: {fileID: 1921880845}
-  button: {fileID: 846056889}
-  background: {fileID: 946318998}
-  border: {fileID: 846056891}
-  selection: {fileID: 2039119522}
-  title: {fileID: 1190050499}
-  state: {fileID: 1063697613}
-  cost: {fileID: 2142749560}
 --- !u!114 &846056891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24571,7 +24009,6 @@ GameObject:
   - component: {fileID: 853959780}
   - component: {fileID: 853959784}
   - component: {fileID: 853959783}
-  - component: {fileID: 853959782}
   - component: {fileID: 853959781}
   m_Layer: 0
   m_Name: motor_10
@@ -24648,7 +24085,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 853959782}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -24660,27 +24097,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &853959782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 853959779}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: motor_10
-  owner: {fileID: 1921880845}
-  button: {fileID: 853959781}
-  background: {fileID: 1329861252}
-  border: {fileID: 853959783}
-  selection: {fileID: 262504561}
-  title: {fileID: 1834605094}
-  state: {fileID: 236873771}
-  cost: {fileID: 1676966589}
 --- !u!114 &853959783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26422,7 +25838,6 @@ GameObject:
   - component: {fileID: 936228735}
   - component: {fileID: 936228739}
   - component: {fileID: 936228738}
-  - component: {fileID: 936228737}
   - component: {fileID: 936228736}
   m_Layer: 0
   m_Name: speed_04
@@ -26499,7 +25914,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 936228737}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -26511,27 +25926,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &936228737
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 936228734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: speed_04
-  owner: {fileID: 1921880845}
-  button: {fileID: 936228736}
-  background: {fileID: 273028005}
-  border: {fileID: 936228738}
-  selection: {fileID: 1169768487}
-  title: {fileID: 1000756815}
-  state: {fileID: 1421767265}
-  cost: {fileID: 1915023810}
 --- !u!114 &936228738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27339,7 +26733,6 @@ GameObject:
   - component: {fileID: 967695322}
   - component: {fileID: 967695326}
   - component: {fileID: 967695325}
-  - component: {fileID: 967695324}
   - component: {fileID: 967695323}
   m_Layer: 0
   m_Name: durability_02
@@ -27416,7 +26809,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 967695324}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -27428,27 +26821,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &967695324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 967695321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: durability_02
-  owner: {fileID: 1921880845}
-  button: {fileID: 967695323}
-  background: {fileID: 902028925}
-  border: {fileID: 967695325}
-  selection: {fileID: 375668082}
-  title: {fileID: 327001263}
-  state: {fileID: 1101642109}
-  cost: {fileID: 1210934580}
 --- !u!114 &967695325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30604,7 +29976,6 @@ GameObject:
   - component: {fileID: 1129141809}
   - component: {fileID: 1129141813}
   - component: {fileID: 1129141812}
-  - component: {fileID: 1129141811}
   - component: {fileID: 1129141810}
   m_Layer: 0
   m_Name: figure_1_1
@@ -30681,7 +30052,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1129141811}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -30693,27 +30064,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1129141811
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1129141808}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: figure_1_1
-  owner: {fileID: 1921880845}
-  button: {fileID: 1129141810}
-  background: {fileID: 394627093}
-  border: {fileID: 1129141812}
-  selection: {fileID: 1765686566}
-  title: {fileID: 1558283409}
-  state: {fileID: 920410133}
-  cost: {fileID: 242095471}
 --- !u!114 &1129141812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30774,7 +30124,6 @@ GameObject:
   - component: {fileID: 1138545455}
   - component: {fileID: 1138545459}
   - component: {fileID: 1138545458}
-  - component: {fileID: 1138545457}
   - component: {fileID: 1138545456}
   m_Layer: 0
   m_Name: speed_10
@@ -30851,7 +30200,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1138545457}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -30863,27 +30212,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1138545457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1138545454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: speed_10
-  owner: {fileID: 1921880845}
-  button: {fileID: 1138545456}
-  background: {fileID: 1035385703}
-  border: {fileID: 1138545458}
-  selection: {fileID: 1024553064}
-  title: {fileID: 2039163267}
-  state: {fileID: 474766104}
-  cost: {fileID: 1308208092}
 --- !u!114 &1138545458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33969,7 +33297,6 @@ GameObject:
   - component: {fileID: 1261355767}
   - component: {fileID: 1261355771}
   - component: {fileID: 1261355770}
-  - component: {fileID: 1261355769}
   - component: {fileID: 1261355768}
   m_Layer: 0
   m_Name: motor_02
@@ -34046,7 +33373,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1261355769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -34058,27 +33385,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1261355769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1261355766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: motor_02
-  owner: {fileID: 1921880845}
-  button: {fileID: 1261355768}
-  background: {fileID: 2104157452}
-  border: {fileID: 1261355770}
-  selection: {fileID: 1556224071}
-  title: {fileID: 1401792087}
-  state: {fileID: 585273885}
-  cost: {fileID: 619757354}
 --- !u!114 &1261355770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34663,7 +33969,6 @@ GameObject:
   - component: {fileID: 1280617728}
   - component: {fileID: 1280617732}
   - component: {fileID: 1280617731}
-  - component: {fileID: 1280617730}
   - component: {fileID: 1280617729}
   m_Layer: 0
   m_Name: motor_05
@@ -34740,7 +34045,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1280617730}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -34752,27 +34057,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1280617730
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1280617727}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: motor_05
-  owner: {fileID: 1921880845}
-  button: {fileID: 1280617729}
-  background: {fileID: 503908861}
-  border: {fileID: 1280617731}
-  selection: {fileID: 1981286416}
-  title: {fileID: 642746717}
-  state: {fileID: 1950665070}
-  cost: {fileID: 868972098}
 --- !u!114 &1280617731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35266,7 +34550,6 @@ GameObject:
   - component: {fileID: 1292088765}
   - component: {fileID: 1292088769}
   - component: {fileID: 1292088768}
-  - component: {fileID: 1292088767}
   - component: {fileID: 1292088766}
   m_Layer: 0
   m_Name: durability_09
@@ -35343,7 +34626,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1292088767}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -35355,27 +34638,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1292088767
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1292088764}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: durability_09
-  owner: {fileID: 1921880845}
-  button: {fileID: 1292088766}
-  background: {fileID: 14688635}
-  border: {fileID: 1292088768}
-  selection: {fileID: 958302361}
-  title: {fileID: 1361304926}
-  state: {fileID: 616378997}
-  cost: {fileID: 1862982070}
 --- !u!114 &1292088768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35773,7 +35035,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1999109301}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.GameplayPanel, Assembly-CSharp
         m_MethodName: BuySpeed
         m_Mode: 0
@@ -39190,7 +38452,6 @@ GameObject:
   - component: {fileID: 1432025492}
   - component: {fileID: 1432025496}
   - component: {fileID: 1432025495}
-  - component: {fileID: 1432025494}
   - component: {fileID: 1432025493}
   m_Layer: 0
   m_Name: motor_09
@@ -39267,7 +38528,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1432025494}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -39279,27 +38540,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1432025494
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1432025491}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: motor_09
-  owner: {fileID: 1921880845}
-  button: {fileID: 1432025493}
-  background: {fileID: 629207882}
-  border: {fileID: 1432025495}
-  selection: {fileID: 1546861097}
-  title: {fileID: 1568118936}
-  state: {fileID: 851991633}
-  cost: {fileID: 298647779}
 --- !u!114 &1432025495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39848,7 +39088,6 @@ GameObject:
   - component: {fileID: 1477656992}
   - component: {fileID: 1477656996}
   - component: {fileID: 1477656995}
-  - component: {fileID: 1477656994}
   - component: {fileID: 1477656993}
   m_Layer: 0
   m_Name: motor_04
@@ -39925,7 +39164,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1477656994}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -39937,27 +39176,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1477656994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1477656991}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: motor_04
-  owner: {fileID: 1921880845}
-  button: {fileID: 1477656993}
-  background: {fileID: 1457955610}
-  border: {fileID: 1477656995}
-  selection: {fileID: 523184525}
-  title: {fileID: 1995788544}
-  state: {fileID: 551932874}
-  cost: {fileID: 369881473}
 --- !u!114 &1477656995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -41308,7 +40526,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1542265551}
-  - component: {fileID: 1542265552}
   - component: {fileID: 1542265553}
   m_Layer: 0
   m_Name: Prerequisite connections
@@ -41336,101 +40553,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 790, y: 660}
   m_Pivot: {x: 0.5, y: 1}
---- !u!114 &1542265552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1542265550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9af41a00e35e2764bbb0893a887e66b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeLinkGraphic
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  owner: {fileID: 1921880845}
-  links:
-  - source: {fileID: 802725693}
-    target: {fileID: 552096875}
-    sourceId: figure_0_1
-    targetId: figure_0_2
-  - source: {fileID: 552096875}
-    target: {fileID: 2136414335}
-    sourceId: figure_0_2
-    targetId: figure_0_3
-  - source: {fileID: 1129141809}
-    target: {fileID: 2095652976}
-    sourceId: figure_1_1
-    targetId: figure_1_2
-  - source: {fileID: 2095652976}
-    target: {fileID: 1889625498}
-    sourceId: figure_1_2
-    targetId: figure_1_3
-  - source: {fileID: 846056888}
-    target: {fileID: 690147116}
-    sourceId: figure_2_1
-    targetId: figure_2_2
-  - source: {fileID: 690147116}
-    target: {fileID: 717843656}
-    sourceId: figure_2_2
-    targetId: figure_2_3
-  - source: {fileID: 1567566272}
-    target: {fileID: 802725693}
-    sourceId: durability_01
-    targetId: figure_0_1
-  - source: {fileID: 378147668}
-    target: {fileID: 552096875}
-    sourceId: motor_01
-    targetId: figure_0_2
-  - source: {fileID: 150767298}
-    target: {fileID: 2136414335}
-    sourceId: speed_03
-    targetId: figure_0_3
-  - source: {fileID: 172676185}
-    target: {fileID: 1129141809}
-    sourceId: durability_01
-    targetId: figure_1_1
-  - source: {fileID: 366726828}
-    target: {fileID: 2095652976}
-    sourceId: motor_01
-    targetId: figure_1_2
-  - source: {fileID: 1170961522}
-    target: {fileID: 1889625498}
-    sourceId: speed_03
-    targetId: figure_1_3
-  - source: {fileID: 1749901112}
-    target: {fileID: 846056888}
-    sourceId: durability_01
-    targetId: figure_2_1
-  - source: {fileID: 2092725839}
-    target: {fileID: 690147116}
-    sourceId: motor_01
-    targetId: figure_2_2
-  - source: {fileID: 1460730386}
-    target: {fileID: 717843656}
-    sourceId: speed_03
-    targetId: figure_2_3
-  - source: {fileID: 744105082}
-    target: {fileID: 802725693}
-    sourceId: 
-    targetId: figure_0_1
-  - source: {fileID: 744105082}
-    target: {fileID: 1129141809}
-    sourceId: 
-    targetId: figure_1_1
-  - source: {fileID: 744105082}
-    target: {fileID: 846056888}
-    sourceId: 
-    targetId: figure_2_1
-  thickness: 2
 --- !u!222 &1542265553
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -49850,7 +48972,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1999109301}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.GameplayPanel, Assembly-CSharp
         m_MethodName: RestoreSecond
         m_Mode: 0
@@ -50153,7 +49275,6 @@ GameObject:
   - component: {fileID: 1750887706}
   - component: {fileID: 1750887710}
   - component: {fileID: 1750887709}
-  - component: {fileID: 1750887708}
   - component: {fileID: 1750887707}
   m_Layer: 0
   m_Name: speed_09
@@ -50230,7 +49351,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1750887708}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -50242,27 +49363,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1750887708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1750887705}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: speed_09
-  owner: {fileID: 1921880845}
-  button: {fileID: 1750887707}
-  background: {fileID: 1114940578}
-  border: {fileID: 1750887709}
-  selection: {fileID: 2015034053}
-  title: {fileID: 1576671219}
-  state: {fileID: 1436541878}
-  cost: {fileID: 1664826871}
 --- !u!114 &1750887709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50391,7 +49491,6 @@ GameObject:
   - component: {fileID: 1756384375}
   - component: {fileID: 1756384379}
   - component: {fileID: 1756384378}
-  - component: {fileID: 1756384377}
   - component: {fileID: 1756384376}
   m_Layer: 0
   m_Name: durability_08
@@ -50468,7 +49567,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1756384377}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -50480,27 +49579,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1756384377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1756384374}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: durability_08
-  owner: {fileID: 1921880845}
-  button: {fileID: 1756384376}
-  background: {fileID: 912801477}
-  border: {fileID: 1756384378}
-  selection: {fileID: 512154576}
-  title: {fileID: 1316497898}
-  state: {fileID: 1326592668}
-  cost: {fileID: 33900671}
 --- !u!114 &1756384378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52528,7 +51606,6 @@ GameObject:
   - component: {fileID: 1805087263}
   - component: {fileID: 1805087267}
   - component: {fileID: 1805087266}
-  - component: {fileID: 1805087265}
   - component: {fileID: 1805087264}
   m_Layer: 0
   m_Name: motor_06
@@ -52605,7 +51682,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1805087265}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -52617,27 +51694,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1805087265
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1805087262}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: motor_06
-  owner: {fileID: 1921880845}
-  button: {fileID: 1805087264}
-  background: {fileID: 1894012842}
-  border: {fileID: 1805087266}
-  selection: {fileID: 1296126246}
-  title: {fileID: 271127987}
-  state: {fileID: 129207147}
-  cost: {fileID: 367333301}
 --- !u!114 &1805087266
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -53792,7 +52848,6 @@ GameObject:
   - component: {fileID: 1860309101}
   - component: {fileID: 1860309105}
   - component: {fileID: 1860309104}
-  - component: {fileID: 1860309103}
   - component: {fileID: 1860309102}
   m_Layer: 0
   m_Name: speed_05
@@ -53869,7 +52924,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1860309103}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -53881,27 +52936,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1860309103
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1860309100}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: speed_05
-  owner: {fileID: 1921880845}
-  button: {fileID: 1860309102}
-  background: {fileID: 582597086}
-  border: {fileID: 1860309104}
-  selection: {fileID: 1035166188}
-  title: {fileID: 1558709832}
-  state: {fileID: 1182876367}
-  cost: {fileID: 658967132}
 --- !u!114 &1860309104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54179,7 +53213,6 @@ GameObject:
   - component: {fileID: 1869849720}
   - component: {fileID: 1869849724}
   - component: {fileID: 1869849723}
-  - component: {fileID: 1869849722}
   - component: {fileID: 1869849721}
   m_Layer: 0
   m_Name: durability_06
@@ -54256,7 +53289,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1869849722}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -54268,27 +53301,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1869849722
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1869849719}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: durability_06
-  owner: {fileID: 1921880845}
-  button: {fileID: 1869849721}
-  background: {fileID: 406763688}
-  border: {fileID: 1869849723}
-  selection: {fileID: 1340054888}
-  title: {fileID: 1795352528}
-  state: {fileID: 1582640613}
-  cost: {fileID: 1336083123}
 --- !u!114 &1869849723
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55114,7 +54126,6 @@ GameObject:
   - component: {fileID: 1889625498}
   - component: {fileID: 1889625502}
   - component: {fileID: 1889625501}
-  - component: {fileID: 1889625500}
   - component: {fileID: 1889625499}
   m_Layer: 0
   m_Name: figure_1_3
@@ -55191,7 +54202,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1889625500}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -55203,27 +54214,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1889625500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1889625497}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: figure_1_3
-  owner: {fileID: 1921880845}
-  button: {fileID: 1889625499}
-  background: {fileID: 1101059408}
-  border: {fileID: 1889625501}
-  selection: {fileID: 1928931459}
-  title: {fileID: 774195337}
-  state: {fileID: 724779133}
-  cost: {fileID: 23482763}
 --- !u!114 &1889625501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55445,6 +54435,7 @@ MonoBehaviour:
   dragCollider: {fileID: 1903570180}
   markerLocalCenter: {x: 0, y: 0, z: 0}
   markerLocalRadius: 0.683
+  clickMaxPixels: 8
 --- !u!1 &1907330610
 GameObject:
   m_ObjectHideFlags: 0
@@ -55726,7 +54717,6 @@ GameObject:
   - component: {fileID: 1921880842}
   - component: {fileID: 1921880844}
   - component: {fileID: 1921880843}
-  - component: {fileID: 1921880845}
   m_Layer: 0
   m_Name: SkillTree content
   m_TagString: Untagged
@@ -55800,80 +54790,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1921880841}
   m_CullTransparentMesh: 1
---- !u!114 &1921880845
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1921880841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2815c6f9a0e3e1b469e9436a5c830e4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreePanel
-  game: {fileID: 1973946901}
-  definition: {fileID: 11400000, guid: b6c0043a2e382c74d9031d6c641058d4, type: 2}
-  engineering: {fileID: 434924119}
-  restorations: {fileID: 360511847}
-  nodeViews:
-  - {fileID: 295216087}
-  - {fileID: 1929852092}
-  - {fileID: 2055920214}
-  - {fileID: 936228737}
-  - {fileID: 1860309103}
-  - {fileID: 248377066}
-  - {fileID: 582277930}
-  - {fileID: 272606603}
-  - {fileID: 1750887708}
-  - {fileID: 1138545457}
-  - {fileID: 60356833}
-  - {fileID: 1261355769}
-  - {fileID: 228609032}
-  - {fileID: 1477656994}
-  - {fileID: 1280617730}
-  - {fileID: 1805087265}
-  - {fileID: 778992502}
-  - {fileID: 728436332}
-  - {fileID: 1432025494}
-  - {fileID: 853959782}
-  - {fileID: 2048065964}
-  - {fileID: 967695324}
-  - {fileID: 149008312}
-  - {fileID: 65180106}
-  - {fileID: 819266356}
-  - {fileID: 1869849722}
-  - {fileID: 2106273369}
-  - {fileID: 1756384377}
-  - {fileID: 1292088767}
-  - {fileID: 2109911800}
-  - {fileID: 802725695}
-  - {fileID: 552096877}
-  - {fileID: 2136414337}
-  - {fileID: 1129141811}
-  - {fileID: 2095652978}
-  - {fileID: 1889625500}
-  - {fileID: 846056890}
-  - {fileID: 690147118}
-  - {fileID: 717843658}
-  connections:
-  - {fileID: 214843954}
-  - {fileID: 1542265552}
-  engineeringScroll: {fileID: 434924121}
-  restorationScroll: {fileID: 360511849}
-  wallet: {fileID: 1171833943}
-  summary: {fileID: 2018508916}
-  detailTitle: {fileID: 1405675661}
-  detailEffect: {fileID: 1238813343}
-  detailRequirements: {fileID: 1799431210}
-  detailPrice: {fileID: 1065938310}
-  detailState: {fileID: 1171036602}
-  buyCaption: {fileID: 1493279632}
-  buyButton: {fileID: 723849762}
-  engineeringTab: {fileID: 274876504}
-  restorationTab: {fileID: 42460758}
-  selectedId: speed_01
-  currentTab: 0
 --- !u!1 &1927723724
 GameObject:
   m_ObjectHideFlags: 0
@@ -56335,7 +55251,6 @@ GameObject:
   - component: {fileID: 1929852090}
   - component: {fileID: 1929852094}
   - component: {fileID: 1929852093}
-  - component: {fileID: 1929852092}
   - component: {fileID: 1929852091}
   m_Layer: 0
   m_Name: speed_02
@@ -56412,7 +55327,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1929852092}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -56424,27 +55339,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1929852092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1929852089}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: speed_02
-  owner: {fileID: 1921880845}
-  button: {fileID: 1929852091}
-  background: {fileID: 452182419}
-  border: {fileID: 1929852093}
-  selection: {fileID: 881819973}
-  title: {fileID: 410749023}
-  state: {fileID: 1090851599}
-  cost: {fileID: 263466201}
 --- !u!114 &1929852093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57156,16 +56050,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.GameManager
   legacy: {fileID: 1973946899}
-  config: {fileID: 11400000, guid: 078de8366ad8b794f9e588b54a340937, type: 2}
   globe: {fileID: 1903570181}
   map: {fileID: 1539327689}
   figurines:
   - {fileID: 36337485}
   - {fileID: 2132926384}
   - {fileID: 444899146}
-  panel: {fileID: 1999109301}
-  skillTree: {fileID: 11400000, guid: b6c0043a2e382c74d9031d6c641058d4, type: 2}
-  skillTreePanel: {fileID: 1921880845}
   audioManager: {fileID: 1539327683}
   archive: {fileID: 1602846178}
   pinSlots:
@@ -57181,11 +56071,9 @@ MonoBehaviour:
   - {fileID: 578758141}
   - {fileID: 342760103}
   - {fileID: 1162695368}
-  populateEmptyCofferOnStart: 1
-  speedLevel: 0
-  motorLevel: 0
-  durabilityLevel: 0
-  selectedSkin: 0
+  balance: {fileID: 11400000, guid: 69bfb3b4702265941af2c8cb46e0e3c6, type: 2}
+  skillTreeAsset: {fileID: 11400000, guid: 136f5551365d8314ca7f1dc7e9107e0a, type: 2}
+  useSaveFile: 1
 --- !u!1 &1979192148
 GameObject:
   m_ObjectHideFlags: 0
@@ -57928,7 +56816,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1999109300}
-  - component: {fileID: 1999109301}
   m_Layer: 0
   m_Name: Gameplay controls
   m_TagString: Untagged
@@ -57970,36 +56857,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1999109301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1999109299}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ede19104039053f47b6241c81e16c34f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.GameplayPanel
-  game: {fileID: 1973946901}
-  upgradeLabels:
-  - {fileID: 1186299096}
-  - {fileID: 548093725}
-  - {fileID: 6676817}
-  figurineLabels:
-  - {fileID: 1838217032}
-  - {fileID: 781558483}
-  - {fileID: 1123312290}
-  upgradeButtons:
-  - {fileID: 1307218941}
-  - {fileID: 104968884}
-  - {fileID: 138793266}
-  figurineButtons:
-  - {fileID: 325282160}
-  - {fileID: 1740847575}
-  - {fileID: 139999462}
-  summary: {fileID: 1059045630}
 --- !u!1 &2003899686
 GameObject:
   m_ObjectHideFlags: 0
@@ -58541,7 +57398,6 @@ GameObject:
   - component: {fileID: 2048065962}
   - component: {fileID: 2048065966}
   - component: {fileID: 2048065965}
-  - component: {fileID: 2048065964}
   - component: {fileID: 2048065963}
   m_Layer: 0
   m_Name: durability_01
@@ -58618,7 +57474,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2048065964}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -58630,27 +57486,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2048065964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2048065961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: durability_01
-  owner: {fileID: 1921880845}
-  button: {fileID: 2048065963}
-  background: {fileID: 299786075}
-  border: {fileID: 2048065965}
-  selection: {fileID: 202125687}
-  title: {fileID: 1529371356}
-  state: {fileID: 1882415779}
-  cost: {fileID: 1191921807}
 --- !u!114 &2048065965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58887,7 +57722,6 @@ GameObject:
   - component: {fileID: 2055920212}
   - component: {fileID: 2055920216}
   - component: {fileID: 2055920215}
-  - component: {fileID: 2055920214}
   - component: {fileID: 2055920213}
   m_Layer: 0
   m_Name: speed_03
@@ -58964,7 +57798,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2055920214}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -58976,27 +57810,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2055920214
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2055920211}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: speed_03
-  owner: {fileID: 1921880845}
-  button: {fileID: 2055920213}
-  background: {fileID: 1896158278}
-  border: {fileID: 2055920215}
-  selection: {fileID: 1269869039}
-  title: {fileID: 287087353}
-  state: {fileID: 837241957}
-  cost: {fileID: 1053854710}
 --- !u!114 &2055920215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59516,7 +58329,6 @@ GameObject:
   - component: {fileID: 2095652976}
   - component: {fileID: 2095652980}
   - component: {fileID: 2095652979}
-  - component: {fileID: 2095652978}
   - component: {fileID: 2095652977}
   m_Layer: 0
   m_Name: figure_1_2
@@ -59593,7 +58405,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2095652978}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -59605,27 +58417,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2095652978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2095652975}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: figure_1_2
-  owner: {fileID: 1921880845}
-  button: {fileID: 2095652977}
-  background: {fileID: 616160716}
-  border: {fileID: 2095652979}
-  selection: {fileID: 1945726583}
-  title: {fileID: 143609682}
-  state: {fileID: 1329789269}
-  cost: {fileID: 1950640764}
 --- !u!114 &2095652979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59941,7 +58732,6 @@ GameObject:
   - component: {fileID: 2106273367}
   - component: {fileID: 2106273371}
   - component: {fileID: 2106273370}
-  - component: {fileID: 2106273369}
   - component: {fileID: 2106273368}
   m_Layer: 0
   m_Name: durability_07
@@ -60018,7 +58808,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2106273369}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -60030,27 +58820,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2106273369
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2106273366}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: durability_07
-  owner: {fileID: 1921880845}
-  button: {fileID: 2106273368}
-  background: {fileID: 1979192150}
-  border: {fileID: 2106273370}
-  selection: {fileID: 1386772969}
-  title: {fileID: 940654961}
-  state: {fileID: 1333325927}
-  cost: {fileID: 1728581603}
 --- !u!114 &2106273370
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60100,7 +58869,6 @@ GameObject:
   - component: {fileID: 2109911798}
   - component: {fileID: 2109911802}
   - component: {fileID: 2109911801}
-  - component: {fileID: 2109911800}
   - component: {fileID: 2109911799}
   m_Layer: 0
   m_Name: durability_10
@@ -60177,7 +58945,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2109911800}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -60189,27 +58957,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2109911800
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2109911797}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: durability_10
-  owner: {fileID: 1921880845}
-  button: {fileID: 2109911799}
-  background: {fileID: 661274682}
-  border: {fileID: 2109911801}
-  selection: {fileID: 606992958}
-  title: {fileID: 1458079305}
-  state: {fileID: 1675048118}
-  cost: {fileID: 517186301}
 --- !u!114 &2109911801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60610,7 +59357,6 @@ MonoBehaviour:
   scatterFrame: {fileID: 2132926381}
   scatterCenter: {x: -2.83, y: 1.2252702, z: -0.30000004}
   scatterRadius: 0.16
-  tier: 0
 --- !u!1 &2136414334
 GameObject:
   m_ObjectHideFlags: 0
@@ -60622,7 +59368,6 @@ GameObject:
   - component: {fileID: 2136414335}
   - component: {fileID: 2136414339}
   - component: {fileID: 2136414338}
-  - component: {fileID: 2136414337}
   - component: {fileID: 2136414336}
   m_Layer: 0
   m_Name: figure_0_3
@@ -60699,7 +59444,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2136414337}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DetectiveDesk.Gameplay.SkillTreeNodeView, Assembly-CSharp
         m_MethodName: Select
         m_Mode: 0
@@ -60711,27 +59456,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2136414337
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2136414334}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8ce6bf090dcf74297ce87f6d9eb781, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DetectiveDesk.Gameplay.SkillTreeNodeView
-  nodeId: figure_0_3
-  owner: {fileID: 1921880845}
-  button: {fileID: 2136414336}
-  background: {fileID: 1225589466}
-  border: {fileID: 2136414338}
-  selection: {fileID: 423385076}
-  title: {fileID: 812219163}
-  state: {fileID: 194490218}
-  cost: {fileID: 332953388}
 --- !u!114 &2136414338
 MonoBehaviour:
   m_ObjectHideFlags: 0

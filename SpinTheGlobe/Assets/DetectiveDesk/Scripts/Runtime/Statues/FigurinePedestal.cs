@@ -1,89 +1,137 @@
 using System.Collections.Generic;
+using DetectiveDesk.Progression;
+using DetectiveDesk.Save;
 using UnityEngine;
 
 namespace DetectiveDesk.Gameplay
 {
+    /// <summary>
+    /// One statue pedestal. Starts empty; statue pieces (from lootboxes) rebuild the statue part by
+    /// part. A complete statue fills with gold as the globe turns; once full it can be smashed with
+    /// the hammer for gold coins, and the pedestal is empty again.
+    /// The authored bust parts are reused as the "pieces": they are shown progressively.
+    /// </summary>
     public sealed class FigurinePedestal : MonoBehaviour
     {
         public GameManager game;
         public Transform bust;
         public Renderer[] bustRenderers;
+        [Tooltip("Old restoration seam lines; hidden by the piece system.")]
         public LineRenderer[] restorationSeams;
         public Material glueMaterial, goldSeamMaterial;
         public GameObject[] authoredTierVisuals;
         public Transform scatterFrame;
         public Vector3 scatterCenter;
         public float scatterRadius = .16f;
-        [SerializeField, Range(0, 3)] int tier;
-        readonly Dictionary<Transform, Vector3> restPositions = new Dictionary<Transform, Vector3>();
-        readonly Dictionary<Transform, Quaternion> restRotations = new Dictionary<Transform, Quaternion>();
-        MaterialPropertyBlock properties;
-        public int Tier => tier;
-        public string TierName => new[] { "Broken rubble", "Glued stone", "Kintsugi", "Gold masterpiece" }[tier];
-        public double Multiplier => new double[] { 1, 1.5, 2, 3 }[tier];
 
-        void Awake()
+        public int Index { get; private set; }
+        public int Pieces { get; private set; }
+        public float GoldFill { get; private set; }
+        public int PiecesRequired => game ? game.Balance.statueBasePieces + game.Balance.statuePiecesPerIndex * Index : 5;
+        public bool IsComplete => Pieces >= PiecesRequired;
+        public bool IsReadyToSmash => IsComplete && GoldFill >= 1f;
+        public bool IsBusy { get; set; }
+        public Bounds VisualBounds => ClickRouter.RendererBounds(bust ? bust : transform, transform.position);
+        public string StatusText =>
+            Pieces == 0 ? "Empty pedestal — statue pieces come from lootboxes."
+            : !IsComplete ? "Statue " + Pieces + " / " + PiecesRequired + " pieces."
+            : !IsReadyToSmash ? "Filling with gold: " + Mathf.FloorToInt(GoldFill * 100) + "% (spin the globe)."
+            : "Solid gold! Click to smash it with the hammer.";
+
+        readonly List<Renderer> parts = new List<Renderer>();
+        MaterialPropertyBlock properties;
+        static readonly Color Stone = new Color(0.62f, 0.60f, 0.55f);
+        static readonly Color Gold = new Color(0.86f, 0.62f, 0.18f);
+
+        public void Bind(GameManager owner, int index)
         {
+            game = owner;
+            Index = index;
+            parts.Clear();
+            if (bustRenderers != null) foreach (var r in bustRenderers) if (r) parts.Add(r);
+            if (parts.Count == 0 && bust) parts.AddRange(bust.GetComponentsInChildren<Renderer>(true));
+            if (authoredTierVisuals != null) foreach (var v in authoredTierVisuals) if (v) v.SetActive(false);
+            if (restorationSeams != null) foreach (var s in restorationSeams) if (s) s.enabled = false;
             properties = new MaterialPropertyBlock();
-            if (bust) foreach (var t in bust.GetComponentsInChildren<Transform>(true))
-            { restPositions[t] = t.localPosition; restRotations[t] = t.localRotation; }
             Apply();
         }
-        public void SetTier(int value) { tier = Mathf.Clamp(value, 0, 3); Apply(); }
+
+        public bool AddPiece()
+        {
+            if (IsComplete) return false;
+            Pieces++;
+            Apply();
+            return true;
+        }
+
+        public void AddGold(float amount)
+        {
+            if (!IsComplete || IsReadyToSmash || amount <= 0) return;
+            bool wasReady = IsReadyToSmash;
+            GoldFill = Mathf.Min(1f, GoldFill + amount);
+            Apply();
+            if (!wasReady && IsReadyToSmash && game) game.ShowHint("Statue " + (Index + 1) + " is solid gold. Smash it with the hammer!");
+        }
+
+        public double GoldReward => game ? game.Balance.statueBaseGold * (Index + 1) * game.Stats.Get(StatId.StatuePayout) : 0;
+
+        /// <summary>Resets the pedestal after smashing and returns the gold earned.</summary>
+        public double Shatter()
+        {
+            double reward = GoldReward;
+            Pieces = 0;
+            GoldFill = 0;
+            Apply();
+            return reward;
+        }
+
+        public void Click()
+        {
+            if (!game) return;
+            if (IsReadyToSmash && !IsBusy && game.Hammer) { game.Hammer.Smash(this); return; }
+            game.ShowHint("Statue " + (Index + 1) + ": " + StatusText);
+        }
+
+        void Update()
+        {
+            if (IsReadyToSmash && properties != null) Tint(Gold, 0.25f + 0.15f * Mathf.Sin(Time.time * 4f));
+        }
+
         void Apply()
         {
-            if (!Application.isPlaying) return; // Scene stays as the approved authored desk in Edit Mode.
-            if (authoredTierVisuals != null && authoredTierVisuals.Length == 4)
+            if (!Application.isPlaying) return; // the authored desk stays untouched in Edit Mode
+            int visible = parts.Count == 0 ? 0 : Mathf.CeilToInt(parts.Count * Mathf.Clamp01(Pieces / (float)Mathf.Max(1, PiecesRequired)));
+            for (int i = 0; i < parts.Count; i++) if (parts[i]) parts[i].enabled = i < visible;
+            Tint(Color.Lerp(Stone, Gold, IsComplete ? GoldFill : 0), IsComplete ? GoldFill * 0.15f : 0);
+        }
+
+        void Tint(Color color, float glow)
+        {
+            if (properties == null) return;
+            float metal = IsComplete ? Mathf.Lerp(0.05f, 0.95f, GoldFill) : 0.05f;
+            foreach (var r in parts)
             {
-                for (int i = 0; i < 4; i++) if (authoredTierVisuals[i]) authoredTierVisuals[i].SetActive(i == tier);
-                return;
-            }
-            // Reuse authored bust parts, never rewrite their meshes or material assets.
-            int index = 0;
-            foreach (var entry in restPositions)
-            {
-                var t = entry.Key; if (!t) continue;
-                t.localPosition = entry.Value; t.localRotation = restRotations[t];
-                if (tier == 0 && t != bust && t.GetComponent<MeshFilter>())
-                {
-                    float a = index++ * 2.399963f;
-                    t.localRotation = Quaternion.Euler(index * 37 % 160, index * 71 % 170, index * 29 % 180);
-                    // Work in the configured plinth frame, independently of imported Z-up axes.
-                    var frame = scatterFrame ? scatterFrame : transform;
-                    Vector3 desired = frame.TransformPoint(scatterCenter + new Vector3(Mathf.Cos(a) * scatterRadius, 0, Mathf.Sin(a) * scatterRadius));
-                    var renderer = t.GetComponent<Renderer>();
-                    if (renderer)
-                    {
-                        // Rest each authored part on the plinth instead of aligning its off-center pivot.
-                        var bounds = renderer.bounds;
-                        t.position += new Vector3(desired.x - bounds.center.x, desired.y - bounds.min.y + index % 3 * .002f, desired.z - bounds.center.z);
-                    }
-                }
-            }
-            if (properties == null) properties = new MaterialPropertyBlock();
-            if (bustRenderers != null) foreach (var r in bustRenderers)
-            {
-                if (!r) continue; r.GetPropertyBlock(properties);
-                properties.SetColor("_BaseColor", tier == 3 ? new Color(.83f, .59f, .18f) : tier == 0 ? new Color(.75f, .72f, .64f) : new Color(.48f, .47f, .42f));
-                properties.SetFloat("_Metallic", tier == 3 ? .93f : .02f);
-                // Existing metal-map keywords must not turn the stone tiers metallic.
-                properties.SetTexture("_MetallicGlossMap", tier == 3 ? Texture2D.whiteTexture : Texture2D.blackTexture);
-                properties.SetFloat("_Smoothness", tier == 3 ? .82f : .28f);
+                if (!r) continue;
+                r.GetPropertyBlock(properties);
+                properties.SetColor("_BaseColor", color);
+                properties.SetFloat("_Metallic", metal);
+                properties.SetTexture("_MetallicGlossMap", metal > 0.5f ? Texture2D.whiteTexture : Texture2D.blackTexture);
+                properties.SetFloat("_Smoothness", Mathf.Lerp(0.3f, 0.85f, metal));
+                properties.SetColor("_EmissionColor", Gold * glow);
                 r.SetPropertyBlock(properties);
             }
-            if (restorationSeams != null) foreach (var seam in restorationSeams)
-            {
-                if (!seam) continue; seam.enabled = tier == 1 || tier == 2;
-                if (tier == 1 && glueMaterial) seam.sharedMaterial = glueMaterial;
-                if (tier == 2 && goldSeamMaterial) seam.sharedMaterial = goldSeamMaterial;
-                seam.startColor = seam.endColor = tier == 2 ? new Color(1, .59f, .10f) : new Color(.035f, .03f, .025f);
-            }
         }
+
         void OnMouseDown()
         {
+            // Pedestals with a DeskInteractable are routed through it instead.
             if (GetComponent<DeskInteractable>()) return;
             if (UnityEngine.EventSystems.EventSystem.current && UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return;
-            game?.InspectFigurine(this);
+            if (game && game.WorldInputBlocked) return;
+            Click();
         }
+
+        public void LoadState(StatueState s) { Pieces = Mathf.Max(0, s.pieces); GoldFill = Mathf.Clamp01(s.goldFill); Apply(); }
+        public StatueState SaveState() => new StatueState { pieces = Pieces, goldFill = GoldFill };
     }
 }

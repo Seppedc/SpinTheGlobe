@@ -1,13 +1,19 @@
+using DetectiveDesk.Economy;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace DetectiveDesk
 {
+    /// <summary>
+    /// Original desk HUD adapter: shows money/gold/income in the authored top-left HUD, hint text,
+    /// settings/upgrades panels, and forwards desk clicks (DeskInteractable) to the GameManager.
+    /// Holds no economy of its own once the GameManager is present.
+    /// </summary>
     public class DetectiveGame : MonoBehaviour
     {
-        [Header("Economy")]
-        public double money = 422;
-        public double moneyPerMinute = 12.5;
+        [Header("Economy (display mirror of the GameManager wallet)")]
+        public double money = 0;
+        public double moneyPerMinute = 0;
         public int gold;
         public Text moneyText, incomeText, goldText, hintText;
         public GameObject settingsPanel, upgradesPanel;
@@ -16,52 +22,95 @@ namespace DetectiveDesk
         public Light globeLight;
         public GameObject stampMark;
         public DetectiveDesk.Gameplay.GameManager Gameplay { get; set; }
-        public void RefreshHUD() { displayedMoney = money; UpdateHUD(); }
-        double displayedMoney;
+
         bool solved;
         public bool IsCaseSolved => solved;
         public event System.Action CaseSolved;
         public event System.Action FilesOpened;
 
-        void Start() { displayedMoney = money; UpdateHUD(); if (stampMark) stampMark.SetActive(false); }
+        bool HasGameplay => Gameplay && Gameplay.isActiveAndEnabled;
+
+        void Start() { UpdateHUD(); if (stampMark) stampMark.SetActive(false); }
+
         void Update()
         {
-            if (!Gameplay || !Gameplay.isActiveAndEnabled)
-            {
-                money += moneyPerMinute * Time.deltaTime / 60d;
-                if (globeRotor) globeRotor.Rotate(Vector3.up, globeSpeed * Time.deltaTime, Space.World);
-            }
+            if (!HasGameplay && globeRotor) globeRotor.Rotate(Vector3.up, globeSpeed * Time.deltaTime, Space.World);
             if (globeLight) globeLight.intensity = 0.45f + Mathf.Sin(Time.time * 1.6f) * 0.14f;
-            if (System.Math.Abs(displayedMoney - money) > .005d) { displayedMoney = money; UpdateHUD(); }
             if (Input.GetKeyDown(KeyCode.Escape)) { if (settingsPanel) settingsPanel.SetActive(false); if (upgradesPanel) upgradesPanel.SetActive(false); }
         }
+
+        public void RefreshHUD()
+        {
+            if (HasGameplay)
+            {
+                money = Gameplay.Wallet.Money;
+                gold = (int)System.Math.Min(int.MaxValue, Gameplay.Wallet.Gold);
+            }
+            UpdateHUD();
+        }
+
         void UpdateHUD()
         {
-            if (moneyText) moneyText.text = "€" + money.ToString("N2");
-            if (incomeText) incomeText.text = "+€" + moneyPerMinute.ToString("N2") + " / min";
-            if (goldText) goldText.text = gold.ToString();
+            if (moneyText) moneyText.text = NumberFormatter.Money(money);
+            if (incomeText) incomeText.text = "+" + NumberFormatter.Money(moneyPerMinute) + " / min";
+            if (goldText) goldText.text = NumberFormatter.Format(HasGameplay ? Gameplay.Wallet.Gold : gold);
         }
+
         public void ToggleSettings() { if (settingsPanel) settingsPanel.SetActive(!settingsPanel.activeSelf); if (upgradesPanel) upgradesPanel.SetActive(false); }
-        public void ToggleUpgrades() { if (upgradesPanel) upgradesPanel.SetActive(!upgradesPanel.activeSelf); if (settingsPanel) settingsPanel.SetActive(false); }
-        public void UpgradeIncome()
+
+        public void ToggleUpgrades()
         {
-            if (Gameplay && Gameplay.isActiveAndEnabled) { Gameplay.BuyUpgrade(DetectiveDesk.Gameplay.UpgradeKind.AutoMotor); return; }
-            if (money < 100) { ShowHint("Need €100 for the income upgrade"); return; }
-            money -= 100; moneyPerMinute += 5; UpdateHUD(); ShowHint("Income increased by €5/min");
+            if (settingsPanel) settingsPanel.SetActive(false);
+            if (HasGameplay && Gameplay.TreeView) { if (upgradesPanel) upgradesPanel.SetActive(false); Gameplay.TreeView.Toggle(); return; }
+            if (upgradesPanel) upgradesPanel.SetActive(!upgradesPanel.activeSelf);
         }
+
+        public void UpgradeIncome() { if (HasGameplay && Gameplay.TreeView) Gameplay.TreeView.Open(); }
+
+        /// <summary>Desk stamp click.</summary>
         public void SolveCase()
         {
-            if (solved) { ShowHint("Case already marked SOLVED"); return; }
-            solved = true; money += 50; if (stampMark) stampMark.SetActive(true);
-            UpdateHUD(); ShowHint("CASE SOLVED  •  +€50");
+            if (HasGameplay && Gameplay.Cases) { Gameplay.Cases.TryStamp(); return; }
+            ShowHint("The case system is not running.");
+        }
+
+        /// <summary>Called by the case file when a case is approved: shows the SOLVED mark and plays the completion effect.</summary>
+        public void PlayCaseSolvedEffects()
+        {
+            solved = true;
+            if (stampMark) stampMark.SetActive(true);
             CaseSolved?.Invoke();
         }
-        public void OpenFiles() { ShowHint("Case file inspected. Click the stamp to solve it."); FilesOpened?.Invoke(); }
-        public void SelectPin(PinCofferSlot slot) { if (Gameplay && Gameplay.isActiveAndEnabled) Gameplay.SelectPin(slot); else SelectPin(); }
-        public void SelectPin() { if (Gameplay && Gameplay.isActiveAndEnabled) { Gameplay.SelectPin(null); return; } ShowHint("Pin selected — launcher prototype is ready."); }
-        public void InspectGlobe() { if (Gameplay && Gameplay.isActiveAndEnabled) { ShowHint("Globe: " + (Gameplay.globe.CurrentVelocity / 6).ToString("0.0") + " RPM. Drag left to right to accelerate."); return; } ShowHint("Mechanical globe • spinning at " + globeSpeed.ToString("0") + "°/s"); }
-        public void InspectStatue() { if (Gameplay && Gameplay.isActiveAndEnabled) { Gameplay.InspectFigurine(null); return; } ShowHint("Collectible statue • display slot"); }
-        public void FirePin() { if (Gameplay && Gameplay.isActiveAndEnabled) { Gameplay.ArmLauncher(); return; } ShowHint("Toy launcher activated — firing animation to add next."); }
+
+        /// <summary>Called when a new case opens.</summary>
+        public void ResetCaseVisual()
+        {
+            solved = false;
+            if (stampMark) stampMark.SetActive(false);
+        }
+
+        public void OpenFiles()
+        {
+            if (HasGameplay && Gameplay.Cases) Gameplay.Cases.ShowStatus();
+            FilesOpened?.Invoke();
+        }
+
+        public void SelectPin(PinCofferSlot slot) { if (HasGameplay) Gameplay.SelectPin(slot); }
+        public void SelectPin() { if (HasGameplay) Gameplay.FirePin(); }
+
+        public void InspectGlobe()
+        {
+            if (HasGameplay && Gameplay.globe)
+            {
+                ShowHint("Globe: " + (Gameplay.globe.CurrentVelocity / 6).ToString("0.0") + " / " + (Gameplay.globe.MaximumVelocity / 6).ToString("0.0") +
+                         " RPM. Drag left to right to spin it fast, or click for a small push.");
+                return;
+            }
+            ShowHint("Mechanical globe • spinning at " + globeSpeed.ToString("0") + "°/s");
+        }
+
+        public void InspectStatue() { if (HasGameplay) Gameplay.InspectFigurine(null); }
+        public void FirePin() { if (HasGameplay) Gameplay.FirePin(); }
         public void ShowHint(string message) { if (hintText) hintText.text = message; }
     }
 }

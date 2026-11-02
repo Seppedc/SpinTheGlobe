@@ -1,9 +1,16 @@
 using System;
+using DetectiveDesk.Progression;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace DetectiveDesk.Gameplay
 {
+    /// <summary>
+    /// The spinning globe: drag (strong) or click (small impulse) to add speed, one direction only,
+    /// exponential friction down to the auto-rotate floor, hard cap at the max-speed stat.
+    /// Raises <see cref="RevolutionsCompleted"/> each time the start line comes round again and
+    /// <see cref="Advanced"/> every frame for pin payouts at the meridian.
+    /// </summary>
     [DefaultExecutionOrder(-80), DisallowMultipleComponent]
     public sealed class GlobeController : MonoBehaviour
     {
@@ -13,18 +20,23 @@ namespace DetectiveDesk.Gameplay
         public Collider dragCollider;
         public Vector3 markerLocalCenter;
         public float markerLocalRadius = .683f;
+        [Tooltip("A press shorter than this (pixels of movement) counts as a click impulse.")]
+        public float clickMaxPixels = 8f;
+
         public double TotalDegrees { get; private set; }
         public double CurrentVelocity { get; private set; }
         public double FirstRevolutionAngle { get; private set; } = 360;
-        public double MaximumVelocity => game && game.config ? game.config.baseMaximumSpeed + game.SpeedLevel * game.config.maximumSpeedPerLevel : 30;
-        public double AutoFloor => game && game.config ? Math.Min(MaximumVelocity, game.MotorLevel * game.config.autoSpeedPerLevel) : 0;
+        public double MaximumVelocity => game ? Math.Max(1, game.Stats.Get(StatId.GlobeMaxSpeed)) : 60;
+        public double AutoFloor => game ? Math.Max(0, Math.Min(MaximumVelocity, game.Stats.Get(StatId.GlobeAutoSpeed))) : 0;
         public bool IsRedline => CurrentVelocity >= MaximumVelocity * .95;
         public Vector3 Axis => rotor && rotor.parent ? rotor.parent.up : Vector3.up;
         public Vector3 Center => rotor ? rotor.TransformPoint(markerLocalCenter) : transform.position;
         public event Action<double, double> Advanced;
         public event Action<long> RevolutionsCompleted;
+
         bool dragging;
         Vector2 pointer;
+        float travelled;
 
         void Start()
         {
@@ -45,14 +57,21 @@ namespace DetectiveDesk.Gameplay
                 {
                     dragging = CanBeginDrag(gameCamera.ScreenPointToRay(Input.mousePosition));
                     pointer = Input.mousePosition;
+                    travelled = 0;
                 }
                 if (dragging && Input.GetMouseButton(0))
                 {
                     Vector2 next = Input.mousePosition;
-                    AddSwipe(next.x - pointer.x);
+                    float dx = next.x - pointer.x;
+                    travelled += (next - pointer).magnitude;
+                    AddSwipe(dx);
                     pointer = next;
                 }
-                if (Input.GetMouseButtonUp(0)) dragging = false;
+                if (Input.GetMouseButtonUp(0))
+                {
+                    if (dragging && travelled <= clickMaxPixels) AddClick();
+                    dragging = false;
+                }
             }
             Advance(Time.deltaTime);
         }
@@ -60,11 +79,9 @@ namespace DetectiveDesk.Gameplay
         public bool CanBeginDrag(Ray ray)
         {
             if (!rotor || !dragCollider || (game && game.WorldInputBlocked)) return false;
-            RaycastHit hit;
-            if (!Physics.Raycast(ray, out hit, 100) || hit.collider != dragCollider) return false;
-            // Preserve the original generous interaction box, but start a spin only
-            // over the visible ball. A visible map country inside that box must not
-            // simultaneously acquire a drag when the player clicks its country.
+            if (!Physics.Raycast(ray, out RaycastHit hit, 100) || hit.collider != dragCollider) return false;
+            // Keep the generous interaction box, but only start on the visible ball so a map click
+            // inside that box never also grabs the globe.
             Vector3 direction = ray.direction.normalized, offset = ray.origin - Center;
             float radius = markerLocalRadius * Mathf.Abs(rotor.lossyScale.x);
             float along = Vector3.Dot(offset, direction);
@@ -72,18 +89,34 @@ namespace DetectiveDesk.Gameplay
             return discriminant >= 0 && -along + Mathf.Sqrt(discriminant) > 0;
         }
 
+        /// <summary>Drag input: positive (west → east) pixels only.</summary>
         public void AddSwipe(float horizontalPixels)
         {
-            if (float.IsNaN(horizontalPixels) || float.IsInfinity(horizontalPixels) || horizontalPixels <= 0 || IsRedline) return;
-            double gain = game && game.config ? game.config.swipeAcceleration : .35;
-            CurrentVelocity = Math.Min(MaximumVelocity, Math.Max(AutoFloor, CurrentVelocity) + horizontalPixels * gain);
+            if (float.IsNaN(horizontalPixels) || float.IsInfinity(horizontalPixels) || horizontalPixels <= 0) return;
+            double gain = game ? game.Balance.dragAcceleration * game.Stats.Get(StatId.GlobeDragPower) : .35;
+            AddVelocity(horizontalPixels * gain);
+        }
+
+        /// <summary>Click input: a fixed impulse, deliberately weaker than a good drag.</summary>
+        public void AddClick()
+        {
+            double impulse = game ? game.Balance.clickImpulse * game.Stats.Get(StatId.GlobeClickPower) : 10;
+            AddVelocity(impulse);
+        }
+
+        void AddVelocity(double amount)
+        {
+            if (amount <= 0 || IsRedline && CurrentVelocity >= MaximumVelocity) return;
+            CurrentVelocity = Math.Min(MaximumVelocity, Math.Max(AutoFloor, CurrentVelocity) + amount);
         }
 
         public void EnforceLimits() { CurrentVelocity = Math.Max(AutoFloor, Math.Min(MaximumVelocity, CurrentVelocity)); }
+
         public void Advance(double seconds)
         {
             double velocity = CurrentVelocity;
-            double delta = GameplayMath.Integrate(ref velocity, seconds, game && game.config ? game.config.frictionAt60Hz : .985, AutoFloor, MaximumVelocity);
+            double friction = game ? game.Balance.frictionAt60Hz : .985;
+            double delta = GameplayMath.Integrate(ref velocity, seconds, friction, AutoFloor, MaximumVelocity);
             CurrentVelocity = velocity;
             if (game && game.legacy) game.legacy.globeSpeed = (float)CurrentVelocity;
             if (delta <= 0 || !rotor) return;

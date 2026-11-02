@@ -91,13 +91,16 @@ namespace DetectiveDesk.Tests
         [Test]
         public void AutoRotate_CannotExceedMaxSpeed()
         {
-            wallet.Add(Currency.Money, 1e12);
+            wallet.Add(Currency.Money, 1e15);
             Buy(DefaultSkillTreeFactory.RootId);
-            Buy("globe_max_speed"); // max 45 °/s
+            double max = stats.Get(StatId.GlobeMaxSpeed);
             var auto = tree.Find("globe_auto");
-            for (int i = 0; i < 7; i++) Assert.IsTrue(Buy("globe_auto"), "auto rank " + (i + 1)); // 42 °/s
-            Assert.AreEqual(NodeStatus.Capped, state.Status(auto, wallet, stats, out _)); // 48 > 45
-            Buy("globe_max_speed"); // max 60 °/s
+            // Buy auto-rotate until the next rank would pass the cap.
+            int bought = 0;
+            while (stats.Get(StatId.GlobeAutoSpeed) + 6 <= max && bought < auto.maxRank) { Assert.IsTrue(Buy("globe_auto"), "auto rank " + (bought + 1)); bought++; }
+            Assert.Greater(bought, 0);
+            Assert.AreEqual(NodeStatus.Capped, state.Status(auto, wallet, stats, out _));
+            Assert.IsTrue(Buy("globe_max_speed"));
             Assert.AreEqual(NodeStatus.Available, state.Status(auto, wallet, stats, out _));
             Assert.LessOrEqual(stats.Get(StatId.GlobeAutoSpeed), stats.Get(StatId.GlobeMaxSpeed));
         }
