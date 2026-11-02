@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Text;
 using DetectiveDesk.Economy;
 using DetectiveDesk.Progression;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +24,7 @@ namespace DetectiveDesk.Gameplay
             public SkillNodeData data;
             public RectTransform rect;
             public Image fill, border;
-            public Text label, rank;
+            public TextMeshProUGUI label, rank;
             public readonly List<Image> links = new List<Image>();
             public float pulse;
         }
@@ -31,7 +32,7 @@ namespace DetectiveDesk.Gameplay
         GameManager game;
         Canvas canvas;
         RectTransform canvasRect, content, tooltip;
-        Text moneyText, tipTitle, tipBody, tipStats, tipCost;
+        TextMeshProUGUI moneyText, tipTitle, tipBody, tipStats, tipCost;
         readonly Dictionary<string, NodeView> views = new Dictionary<string, NodeView>();
         NodeView hovered;
         float tooltipAge;
@@ -112,7 +113,6 @@ namespace DetectiveDesk.Gameplay
             UIFactory.NewTitle("Title", header, "THE DETECTIVE'S LEDGER", 28, TextAnchor.MiddleLeft, UITheme.Gold).rectTransform
                 .Place(new Vector2(0, 0), new Vector2(0.5f, 1), new Vector2(0, 0.5f), new Vector2(70, 0), Vector2.zero);
             moneyText = UIFactory.NewTitle("Money", header, "", 24, TextAnchor.MiddleRight, UITheme.Cream);
-            moneyText.supportRichText = true;
             moneyText.rectTransform.Place(new Vector2(0.5f, 0), new Vector2(1, 1), new Vector2(1, 0.5f), new Vector2(-170, 0), new Vector2(-190, 0));
             UIFactory.NewButton("Close", header, "CLOSE", 18, "close", Close, out _).GetComponent<RectTransform>()
                 .Place(new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(-14, 0), new Vector2(140, 44));
@@ -190,14 +190,14 @@ namespace DetectiveDesk.Gameplay
             rule.raycastTarget = false;
             rule.gameObject.AddComponent<LayoutElement>().preferredHeight = 1;
 
-            tipBody = Line("Description", 18, UIFactory.Ink, FontStyle.Bold);
-            tipStats = Line("Stats", 16, UIFactory.InkDim, FontStyle.Normal);
-            tipCost = Line("Cost", 26, UIFactory.Brass, FontStyle.Normal);
-            tipCost.font = UITheme.DisplayFont;
+            tipBody = Line("Description", 18, UIFactory.Ink, FontStyles.Bold);
+            tipStats = Line("Stats", 16, UIFactory.InkDim, FontStyles.Normal);
+            tipCost = Line("Cost", 26, UIFactory.Brass, FontStyles.Normal);
+            tipCost.font = UITheme.TmpDisplay;
             tooltip.gameObject.SetActive(false);
         }
 
-        Text Line(string name, int size, Color color, FontStyle style)
+        TextMeshProUGUI Line(string name, int size, Color color, FontStyles style)
         {
             var t = UIFactory.NewText(name, tooltip, "", size, TextAnchor.MiddleCenter, color);
             t.fontStyle = style;
@@ -257,7 +257,6 @@ namespace DetectiveDesk.Gameplay
                 case NodeStatus.Unaffordable: tipCost.text = price; tipCost.color = new Color(0.92f, 0.28f, 0.3f); tipCost.fontSize = 26; break;
                 default: tipCost.text = price + "\n<size=15>" + reason + "</size>"; tipCost.color = new Color(0.75f, 0.55f, 0.35f); tipCost.fontSize = 22; break;
             }
-            tipCost.supportRichText = true;
         }
 
         void PlaceTooltip()

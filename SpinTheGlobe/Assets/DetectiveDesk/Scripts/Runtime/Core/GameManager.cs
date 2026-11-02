@@ -49,6 +49,7 @@ namespace DetectiveDesk.Gameplay
         public ClickRouter Clicks { get; private set; }
         public GameHUD Hud { get; private set; }
         public SkillTreeView TreeView { get; private set; }
+        public DeskInfoSystem DeskInfo { get; private set; }
 
         public double Money => Wallet.Money;
         public double PlayTime { get; private set; }
@@ -97,6 +98,7 @@ namespace DetectiveDesk.Gameplay
             Hammer = Ensure<StatueHammer>();
             Hud = Ensure<GameHUD>();
             TreeView = Ensure<SkillTreeView>();
+            DeskInfo = Ensure<DeskInfoSystem>();
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             Ensure<DevCheats>();
 #endif
@@ -125,6 +127,7 @@ namespace DetectiveDesk.Gameplay
             Hud.Initialize(this);
             TreeView.Initialize(this);
             if (map) map.Bind(this);
+            DeskInfo.Initialize(this);
 
             loaded = true;
             EventBus.Publish(new GameLoaded());

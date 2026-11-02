@@ -164,7 +164,13 @@ def stamp(d):
     poly(d, [(24, 60), (104, 60), (104, 82), (24, 82)])
     line(d, [(18, 106), (110, 106)])
 
-for n, f in [("gear", gear), ("money", money), ("chart", chart), ("coin", coin), ("tree", tree), ("pin", pin), ("folder", folder),
+def ice(d):
+    poly(d, [(64, 14), (110, 38), (64, 62), (18, 38)])
+    line(d, [(18, 38), (18, 88), (64, 114), (110, 88), (110, 38)])
+    line(d, [(64, 62), (64, 114)])
+    line(d, [(34, 60), (40, 70)], w=4 * S); line(d, [(84, 76), (94, 70)], w=4 * S)
+
+for n, f in [("ice", ice), ("gear", gear), ("money", money), ("chart", chart), ("coin", coin), ("tree", tree), ("pin", pin), ("folder", folder),
              ("glass", glass), ("box", box), ("paper", paper), ("statue", statue), ("close", close), ("stamp", stamp)]:
     icon(n, f)
 print("ok")

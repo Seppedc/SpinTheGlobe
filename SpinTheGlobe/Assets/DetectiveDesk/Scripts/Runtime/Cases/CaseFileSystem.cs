@@ -21,6 +21,8 @@ namespace DetectiveDesk.Gameplay
 
         GameManager game;
         Transform stamp, folder;
+        public Transform StampTransform => stamp;
+        public Transform FolderTransform => folder;
         readonly List<GameObject> papers = new List<GameObject>();
         Material paperMaterial;
         bool stamping;

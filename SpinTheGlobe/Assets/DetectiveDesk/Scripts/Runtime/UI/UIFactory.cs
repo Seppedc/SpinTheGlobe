@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -9,9 +10,6 @@ namespace DetectiveDesk.Gameplay
     /// <summary>Small helpers to build uGUI hierarchies from code (HUD, skill tree, popups) in the <see cref="UITheme"/> style.</summary>
     public static class UIFactory
     {
-        /// <summary>Body text font (serif).</summary>
-        public static Font Font => UITheme.BodyFont;
-
         public static Color Ink => UITheme.Cream;
         public static Color InkDim => UITheme.CreamDim;
         public static Color Brass => UITheme.Gold;
@@ -68,22 +66,43 @@ namespace DetectiveDesk.Gameplay
             return img;
         }
 
-        public static Text NewText(string name, Transform parent, string value, int size, TextAnchor anchor, Color color)
+        public static TextMeshProUGUI NewText(string name, Transform parent, string value, int size, TextAnchor anchor, Color color)
         {
             var rt = NewRect(name, parent);
-            var t = rt.gameObject.AddComponent<Text>();
-            t.font = Font; t.text = value; t.fontSize = size; t.alignment = anchor; t.color = color;
-            t.horizontalOverflow = HorizontalWrapMode.Wrap; t.verticalOverflow = VerticalWrapMode.Overflow;
+            var t = rt.gameObject.AddComponent<TextMeshProUGUI>();
+            t.font = UITheme.TmpBody; t.text = value; t.fontSize = size; t.alignment = Align(anchor); t.color = color;
+            t.textWrappingMode = TextWrappingModes.Normal;
+            t.overflowMode = TextOverflowModes.Overflow;
+            t.richText = true;
             t.raycastTarget = false;
             return t;
         }
 
         /// <summary>Heading text in the display serif (titles, labels in capitals).</summary>
-        public static Text NewTitle(string name, Transform parent, string value, int size, TextAnchor anchor, Color color)
+        public static TextMeshProUGUI NewTitle(string name, Transform parent, string value, int size, TextAnchor anchor, Color color)
         {
             var t = NewText(name, parent, value, size, anchor, color);
-            t.font = UITheme.DisplayFont;
+            t.font = UITheme.TmpDisplay;
             return t;
+        }
+
+        /// <summary>Single-line text whose width follows its content (for layout rows).</summary>
+        public static TextMeshProUGUI NoWrap(this TextMeshProUGUI t) { t.textWrappingMode = TextWrappingModes.NoWrap; return t; }
+
+        public static TextAlignmentOptions Align(TextAnchor a)
+        {
+            switch (a)
+            {
+                case TextAnchor.UpperLeft: return TextAlignmentOptions.TopLeft;
+                case TextAnchor.UpperCenter: return TextAlignmentOptions.Top;
+                case TextAnchor.UpperRight: return TextAlignmentOptions.TopRight;
+                case TextAnchor.MiddleLeft: return TextAlignmentOptions.Left;
+                case TextAnchor.MiddleRight: return TextAlignmentOptions.Right;
+                case TextAnchor.LowerLeft: return TextAlignmentOptions.BottomLeft;
+                case TextAnchor.LowerCenter: return TextAlignmentOptions.Bottom;
+                case TextAnchor.LowerRight: return TextAlignmentOptions.BottomRight;
+                default: return TextAlignmentOptions.Center;
+            }
         }
 
         /// <summary>Thin gold double border drawn over (and stretched to) <paramref name="parent"/>.</summary>
@@ -149,11 +168,11 @@ namespace DetectiveDesk.Gameplay
             return img;
         }
 
-        public static Button NewButton(string name, Transform parent, string label, int fontSize, UnityAction onClick, out Text labelText) =>
+        public static Button NewButton(string name, Transform parent, string label, int fontSize, UnityAction onClick, out TextMeshProUGUI labelText) =>
             NewButton(name, parent, label, fontSize, null, onClick, out labelText);
 
         /// <summary>Dark, gold-framed button with an optional icon in front of the label.</summary>
-        public static Button NewButton(string name, Transform parent, string label, int fontSize, string iconName, UnityAction onClick, out Text labelText)
+        public static Button NewButton(string name, Transform parent, string label, int fontSize, string iconName, UnityAction onClick, out TextMeshProUGUI labelText)
         {
             var img = NewImage(name, parent, UITheme.ButtonFill);
             var frame = AddFrame(img.transform);
@@ -173,8 +192,7 @@ namespace DetectiveDesk.Gameplay
                 h.childControlWidth = h.childControlHeight = true;
                 h.childForceExpandWidth = h.childForceExpandHeight = false;
                 icon = NewIcon(iconName, row, fontSize * 1.5f);
-                labelText = NewTitle("Label", row, label, fontSize, TextAnchor.MiddleLeft, Ink);
-                labelText.horizontalOverflow = HorizontalWrapMode.Overflow;
+                labelText = NewTitle("Label", row, label, fontSize, TextAnchor.MiddleLeft, Ink).NoWrap();
             }
             else
             {

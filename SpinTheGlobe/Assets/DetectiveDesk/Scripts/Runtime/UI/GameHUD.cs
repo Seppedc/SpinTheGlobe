@@ -1,29 +1,32 @@
 using DetectiveDesk.Economy;
 using DetectiveDesk.Progression;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace DetectiveDesk.Gameplay
 {
     /// <summary>
-    /// Runtime-built HUD in the noir-ledger style (<see cref="UITheme"/>):
-    /// top-left bar (settings | money | income per minute | gold), top-right UPGRADES button,
-    /// bottom bar with the pins, case file, whiskey, desk and lootbox sections, a toast line and a "+€x" payout pop.
-    /// Replaces the authored top-left HUD and buttons of the legacy canvas (they are hidden at start).
+    /// Screen HUD in the noir-ledger style (<see cref="UITheme"/>):
+    /// top-left bar (settings | money | income per minute | gold) with the desk items under it
+    /// (lootbox, paper balls, ice), the UPGRADES button top-right, a toast line and a "+€x" payout pop.
+    /// Everything about the desk objects themselves lives on the desk (<see cref="DeskInfoSystem"/>).
+    /// Replaces the authored top-left HUD and buttons of the legacy canvas (hidden at start).
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class GameHUD : MonoBehaviour
     {
         GameManager game;
         Canvas canvas;
-        Text moneyText, incomeText, goldText, upgradesHint;
-        Text pinsText, caseText, whiskeyText, inventoryText, lootText, popText, toastText;
+        TextMeshProUGUI moneyText, incomeText, goldText, upgradesHint, popText, toastText;
+        TextMeshProUGUI lootLabel, paperLabel, iceLabel;
+        Button lootButton, paperButton;
+        GameObject iceChip;
         CanvasGroup toastGroup;
-        float toastTimer;
-        Button fireButton, stampButton, sipButton, throwButton, lootButton;
-        Image whiskeyBar;
-        float popTimer;
+        float toastTimer, popTimer;
         double popAmount;
+
+        public Canvas Canvas => canvas;
 
         public void Initialize(GameManager owner)
         {
@@ -41,37 +44,41 @@ namespace DetectiveDesk.Gameplay
         {
             canvas = UIFactory.CreateCanvas("Game HUD", 40);
             BuildTopBar();
+            BuildItems();
             BuildUpgradesButton();
-            BuildBottomBar();
 
             popText = UIFactory.NewTitle("Payout pop", canvas.transform, "", 34, TextAnchor.MiddleCenter, UITheme.GoldBright);
-            popText.rectTransform.Place(new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0, 175), new Vector2(500, 50));
-            var shadow = popText.gameObject.AddComponent<Shadow>();
-            shadow.effectColor = new Color(0, 0, 0, 0.85f);
+            popText.rectTransform.Place(new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0, 90), new Vector2(500, 50));
 
             var toast = UIFactory.NewPanel("Message", canvas.transform);
             toast.raycastTarget = false;
-            toast.rectTransform.Place(new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0, 232), new Vector2(1100, 50));
+            toast.rectTransform.Place(new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0, 24), new Vector2(1100, 52));
             toastGroup = toast.gameObject.AddComponent<CanvasGroup>();
             toastGroup.blocksRaycasts = false; toastGroup.interactable = false;
-            toastText = UIFactory.NewText("Text", toast.transform, "", 21, TextAnchor.MiddleCenter, UITheme.Cream);
-            toastText.rectTransform.Stretch(10);
+            toastText = UIFactory.NewText("Text", toast.transform, "", 22, TextAnchor.MiddleCenter, UITheme.Cream);
+            toastText.rectTransform.Stretch(12);
             toast.gameObject.SetActive(false);
 
             HideLegacyHud();
+        }
+
+        static HorizontalLayoutGroup Row(RectTransform rt, int left, int right, int vertical, float spacing)
+        {
+            var h = rt.gameObject.AddComponent<HorizontalLayoutGroup>();
+            h.padding = new RectOffset(left, right, vertical, vertical);
+            h.spacing = spacing;
+            h.childAlignment = TextAnchor.MiddleLeft;
+            h.childControlWidth = h.childControlHeight = true;
+            h.childForceExpandWidth = h.childForceExpandHeight = false;
+            rt.gameObject.AddComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            return h;
         }
 
         void BuildTopBar()
         {
             var bar = UIFactory.NewPanel("Top bar", canvas.transform).rectTransform;
             bar.Place(new Vector2(0, 1), new Vector2(0, 1), new Vector2(0, 1), new Vector2(20, -20), new Vector2(0, 66));
-            var h = bar.gameObject.AddComponent<HorizontalLayoutGroup>();
-            h.padding = new RectOffset(12, 26, 9, 9);
-            h.spacing = 14;
-            h.childAlignment = TextAnchor.MiddleLeft;
-            h.childControlWidth = h.childControlHeight = true;
-            h.childForceExpandWidth = h.childForceExpandHeight = false;
-            bar.gameObject.AddComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            Row(bar, 12, 26, 9, 14);
 
             IconButton(bar, "gear", 44, () => { if (game.legacy) game.legacy.ToggleSettings(); });
             UIFactory.NewDivider(bar, 46);
@@ -85,11 +92,37 @@ namespace DetectiveDesk.Gameplay
             goldText = Value(bar, 28, UITheme.GoldBright, true);
         }
 
-        static Text Value(Transform parent, int size, Color color, bool display)
+        /// <summary>Desk items under the top bar: lootbox (buy), paper balls (throw), ice cubes (used by the glass).</summary>
+        void BuildItems()
+        {
+            var row = UIFactory.NewRect("Items", canvas.transform);
+            row.Place(new Vector2(0, 1), new Vector2(0, 1), new Vector2(0, 1), new Vector2(20, -96), new Vector2(0, 46));
+            Row(row, 0, 0, 0, 10);
+
+            lootButton = Chip(row, "box", out lootLabel, () => game.Lootbox.TryOpen());
+            paperButton = Chip(row, "paper", out paperLabel, () => game.PaperBalls.StartAiming());
+            Chip(row, "ice", out iceLabel, null);
+            iceChip = iceLabel.transform.parent.parent.gameObject;
+        }
+
+        Button Chip(RectTransform parent, string icon, out TextMeshProUGUI label, UnityEngine.Events.UnityAction action)
+        {
+            var b = UIFactory.NewButton("Chip " + icon, parent, "", 19, icon, action, out label);
+            var row = b.transform.Find("Content");
+            if (row) { var r = (RectTransform)row; r.Stretch(); var h = row.GetComponent<HorizontalLayoutGroup>(); h.padding = new RectOffset(12, 14, 6, 6); h.spacing = 8; }
+            label.font = UITheme.TmpBody;
+            var fitter = b.gameObject.AddComponent<HorizontalLayoutGroup>();
+            fitter.childControlWidth = fitter.childControlHeight = true;
+            fitter.childForceExpandWidth = fitter.childForceExpandHeight = true;
+            b.gameObject.AddComponent<LayoutElement>().minHeight = 46;
+            return b;
+        }
+
+        static TextMeshProUGUI Value(Transform parent, int size, Color color, bool display)
         {
             var t = display ? UIFactory.NewTitle("Value", parent, "", size, TextAnchor.MiddleLeft, color)
                             : UIFactory.NewText("Value", parent, "", size, TextAnchor.MiddleLeft, color);
-            t.horizontalOverflow = HorizontalWrapMode.Overflow;
+            t.NoWrap();
             t.gameObject.AddComponent<LayoutElement>().minWidth = 60;
             return t;
         }
@@ -113,63 +146,8 @@ namespace DetectiveDesk.Gameplay
         {
             var b = UIFactory.NewButton("Upgrades", canvas.transform, "UPGRADES", 26, "tree", () => game.TreeView.Toggle(), out _);
             b.GetComponent<RectTransform>().Place(new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(-20, -20), new Vector2(250, 66));
-            upgradesHint = UIFactory.NewText("Hint", canvas.transform, "", 16, TextAnchor.UpperCenter, UITheme.CreamDim);
+            upgradesHint = UIFactory.NewText("Hint", canvas.transform, "", 17, TextAnchor.UpperCenter, UITheme.CreamDim);
             upgradesHint.rectTransform.Place(new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(-20, -92), new Vector2(250, 24));
-        }
-
-        void BuildBottomBar()
-        {
-            var bar = UIFactory.NewPanel("Bottom bar", canvas.transform, true).rectTransform
-                .Place(new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0), new Vector2(0, 0), new Vector2(0, 160));
-            var layout = bar.gameObject.AddComponent<HorizontalLayoutGroup>();
-            layout.padding = new RectOffset(22, 22, 16, 16);
-            layout.spacing = 14;
-            layout.childAlignment = TextAnchor.MiddleCenter;
-            layout.childControlWidth = layout.childControlHeight = true;
-            layout.childForceExpandWidth = false; layout.childForceExpandHeight = true;
-
-            pinsText = Section(bar, "PINS", "pin", "Fire pin  [Space]", () => game.FirePin(), out fireButton);
-            UIFactory.NewDivider(bar, 120);
-            caseText = Section(bar, "CASE FILE", "folder", "Stamp", () => game.Cases.TryStamp(), out stampButton);
-            UIFactory.NewDivider(bar, 120);
-            whiskeyText = Section(bar, "WHISKEY", "glass", "Pour", () => game.Whiskey.Sip(), out sipButton);
-            whiskeyBar = Bar(whiskeyText.transform.parent);
-            UIFactory.NewDivider(bar, 120);
-            inventoryText = Section(bar, "DESK", "statue", "Throw paper ball", () => game.PaperBalls.StartAiming(), out throwButton);
-            UIFactory.NewDivider(bar, 120);
-            lootText = Section(bar, "LOOTBOX", "box", "Open", () => game.Lootbox.TryOpen(), out lootButton);
-        }
-
-        Text Section(RectTransform parent, string title, string icon, string buttonLabel, UnityEngine.Events.UnityAction action, out Button button)
-        {
-            var panel = UIFactory.NewRect(title, parent);
-            panel.gameObject.AddComponent<LayoutElement>().flexibleWidth = 1;
-
-            var head = UIFactory.NewRect("Heading", panel);
-            head.Place(new Vector2(0, 1), new Vector2(1, 1), new Vector2(0, 1), new Vector2(0, 0), new Vector2(0, 28));
-            var h = head.gameObject.AddComponent<HorizontalLayoutGroup>();
-            h.spacing = 8; h.childAlignment = TextAnchor.MiddleLeft;
-            h.childControlWidth = h.childControlHeight = true;
-            h.childForceExpandWidth = h.childForceExpandHeight = false;
-            UIFactory.NewIcon(icon, head, 24);
-            var t = UIFactory.NewTitle("Title", head, title, 19, TextAnchor.MiddleLeft, UITheme.Gold);
-            t.horizontalOverflow = HorizontalWrapMode.Overflow;
-
-            var body = UIFactory.NewText("Body", panel, "", 16, TextAnchor.UpperLeft, UITheme.Cream);
-            body.rectTransform.Place(new Vector2(0, 0), new Vector2(1, 1), new Vector2(0, 1), new Vector2(2, -32), new Vector2(-4, -72));
-            button = UIFactory.NewButton("Button", panel, buttonLabel, 17, action);
-            button.GetComponent<RectTransform>().Place(new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0), new Vector2(0, 0), new Vector2(0, 36));
-            return body;
-        }
-
-        Image Bar(Transform panel)
-        {
-            var back = UIFactory.NewImage("Fill back", panel, new Color(0, 0, 0, 0.6f)).rectTransform
-                .Place(new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0), new Vector2(0, 42), new Vector2(0, 6));
-            var fill = UIFactory.NewImage("Fill", back, new Color(0.86f, 0.55f, 0.18f));
-            fill.rectTransform.Stretch();
-            fill.rectTransform.anchorMax = new Vector2(0, 1);
-            return fill;
         }
 
         /// <summary>The authored legacy HUD (money, upgrades and archive buttons, hint line) is replaced by this HUD.</summary>
@@ -186,7 +164,7 @@ namespace DetectiveDesk.Gameplay
                     t.gameObject.SetActive(false);
         }
 
-        /// <summary>Short message above the HUD bar (replaces the old hint line).</summary>
+        /// <summary>Short message at the bottom of the screen (replaces the old hint line).</summary>
         public void Toast(string message)
         {
             if (!toastText || string.IsNullOrEmpty(message)) return;
@@ -209,44 +187,13 @@ namespace DetectiveDesk.Gameplay
             bool treeOwned = game.Skills.Owns(DefaultSkillTreeFactory.RootId);
             upgradesHint.text = treeOwned ? "" : "Unlock for " + UIFactory.Money(game.Tree.Find(DefaultSkillTreeFactory.RootId).cost.Cost(0)) + "  [T]";
 
-            var map = game.map;
-            int unlocked = game.UnlockedPins;
-            if (unlocked == 0) pinsText.text = "No pins yet.\nBuy Pin 1 under Upgrades.";
-            else
-            {
-                string reload = map && map.CooldownRemaining > 0 ? "Reloading " + map.CooldownRemaining.ToString("0.0") + "s" : "Shooter ready";
-                pinsText.text = (map ? map.ReadyCount : 0) + " / " + unlocked + " in the box · " + (map ? map.ActiveCount : 0) + " on map\n" + reload +
-                                "\nLand " + Pct(game.Stats.Get(StatId.PinLandChance)) + " · City " + Pct(game.Stats.Get(StatId.PinCityChance));
-            }
-            fireButton.interactable = unlocked > 0 && map && map.ReadyCount > 0 && map.CooldownRemaining <= 0;
-
-            var cases = game.Cases;
-            if (cases.OnCooldown) caseText.text = "Case #" + cases.Level + " approved.\nNext case in " + UIFactory.Seconds(cases.Cooldown);
-            else
-                caseText.text = "Case #" + (cases.Level + 1) + ": " + cases.Evidence + " / " + cases.Required + " evidence\n" +
-                                (cases.RequiredDurability > 0 ? "Pins with durability ≥ " + cases.RequiredDurability + "\n" : "Any pin counts\n") +
-                                "Reward " + UIFactory.Money(cases.Reward);
-            stampButton.interactable = !cases.OnCooldown && cases.IsFull;
-
-            var w = game.Whiskey;
-            whiskeyText.text = w.Boosting ? "BOOST ×" + game.Stats.Permanent(StatId.WhiskeyBoostStrength).ToString("0.##") + "  " + UIFactory.Seconds(w.BoostRemaining)
-                : w.Cooldown > 0 ? "Empty glass\nRefill in " + UIFactory.Seconds(w.Cooldown)
-                : "Filled " + Mathf.FloorToInt(w.Fill * 100) + "%" + (w.IceInGlass ? " (ice)" : game.Inventory.IceCubes > 0 ? "\nIce ready: " + game.Inventory.IceCubes : "");
-            whiskeyBar.rectTransform.anchorMax = new Vector2(w.Boosting ? Mathf.Clamp01(w.BoostRemaining / Mathf.Max(0.01f, (float)game.Stats.Get(StatId.WhiskeyBoostDuration))) : w.Fill, 1);
-            sipButton.interactable = !w.Boosting && w.Cooldown <= 0;
-
             var inv = game.Inventory;
-            string statues = "";
-            if (game.figurines != null)
-                foreach (var f in game.figurines)
-                    if (f) statues += (statues.Length > 0 ? " · " : "") + (f.Pieces == 0 ? "—" : !f.IsComplete ? f.Pieces + "/" + f.PiecesRequired : f.IsReadyToSmash ? "GOLD!" : Mathf.FloorToInt(f.GoldFill * 100) + "%");
-            inventoryText.text = "Ice " + inv.IceCubes + " · Paper " + inv.PaperBalls + (inv.SparePieces > 0 ? " · Spare pieces " + inv.SparePieces : "") +
-                                 "\nStatues: " + (statues.Length > 0 ? statues : "none");
-            throwButton.interactable = inv.PaperBalls > 0;
-            throwButton.GetComponentInChildren<Text>().text = game.PaperBalls.IsAiming ? "Click to throw…" : "Throw paper ball";
-
-            lootText.text = "Price " + UIFactory.Money(game.Lootbox.Price) + "\nOpened " + game.Lootbox.Opened;
+            lootLabel.text = "Lootbox  " + UIFactory.Money(game.Lootbox.Price);
             lootButton.interactable = game.Wallet.CanAfford(Currency.Money, game.Lootbox.Price);
+            paperLabel.text = game.PaperBalls.IsAiming ? "Click to throw…" : "× " + inv.PaperBalls;
+            paperButton.gameObject.SetActive(inv.PaperBalls > 0 || game.PaperBalls.IsAiming);
+            iceLabel.text = "× " + inv.IceCubes;
+            iceChip.SetActive(inv.IceCubes > 0);
 
             if (toastTimer > 0)
             {
@@ -260,11 +207,9 @@ namespace DetectiveDesk.Gameplay
                 popTimer -= Time.deltaTime;
                 popText.text = "+" + UIFactory.Money(popAmount);
                 var c = popText.color; c.a = Mathf.Clamp01(popTimer / 0.4f); popText.color = c;
-                popText.rectTransform.anchoredPosition = new Vector2(0, 175 + (1.2f - popTimer) * 25);
+                popText.rectTransform.anchoredPosition = new Vector2(0, 90 + (1.2f - popTimer) * 25);
             }
             else if (popText.text.Length > 0) popText.text = "";
         }
-
-        static string Pct(double v) => Mathf.RoundToInt((float)(v * 100)) + "%";
     }
 }

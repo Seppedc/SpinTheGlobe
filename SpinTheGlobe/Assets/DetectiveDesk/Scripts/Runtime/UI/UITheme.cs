@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.TextCore.LowLevel;
 
 namespace DetectiveDesk.Gameplay
 {
@@ -33,6 +35,40 @@ namespace DetectiveDesk.Gameplay
 
         public static Font DisplayFont => display ? display : (display = LoadFont("UI/Fonts/Display", DisplayFonts));
         public static Font BodyFont => body ? body : (body = LoadFont("UI/Fonts/Body", BodyFonts));
+
+        static TMP_FontAsset tmpDisplay, tmpBody, tmpSymbols;
+        static bool symbolsTried;
+
+        /// <summary>Signed-distance-field versions of the fonts: stay sharp at every size and UI scale.</summary>
+        public static TMP_FontAsset TmpDisplay => tmpDisplay ? tmpDisplay : (tmpDisplay = MakeSdf(DisplayFont, "Display SDF"));
+        public static TMP_FontAsset TmpBody => tmpBody ? tmpBody : (tmpBody = MakeSdf(BodyFont, "Body SDF"));
+
+        static TMP_FontAsset MakeSdf(Font font, string name)
+        {
+            TMP_FontAsset asset = null;
+            try { asset = TMP_FontAsset.CreateFontAsset(font, 72, 8, GlyphRenderMode.SDFAA, 1024, 1024, AtlasPopulationMode.Dynamic, true); }
+            catch (System.Exception e) { Debug.LogWarning("UITheme: could not build SDF font from " + (font ? font.name : "null") + ": " + e.Message); }
+            if (!asset) return TMP_Settings.defaultFontAsset;
+            asset.name = name;
+            var symbols = Symbols();
+            if (symbols) asset.fallbackFontAssetTable = new List<TMP_FontAsset> { symbols };
+            return asset;
+        }
+
+        /// <summary>Fallback for ★, ▸ and other symbols the serif fonts lack.</summary>
+        static TMP_FontAsset Symbols()
+        {
+            if (symbolsTried) return tmpSymbols;
+            symbolsTried = true;
+            foreach (var family in new[] { "Segoe UI Symbol", "Segoe UI", "Arial" })
+            {
+                try { tmpSymbols = TMP_FontAsset.CreateFontAsset(family, "Regular", 72); }
+                catch (System.Exception) { tmpSymbols = null; }
+                if (tmpSymbols) break;
+            }
+            if (!tmpSymbols) tmpSymbols = TMP_Settings.defaultFontAsset;
+            return tmpSymbols;
+        }
 
         static Font LoadFont(string resource, string[] osNames)
         {

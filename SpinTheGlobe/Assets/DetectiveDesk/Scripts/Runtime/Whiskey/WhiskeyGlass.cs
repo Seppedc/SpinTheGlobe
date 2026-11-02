@@ -20,6 +20,7 @@ namespace DetectiveDesk.Gameplay
 
         GameManager game;
         Transform glass;
+        public Transform GlassTransform => glass;
         Renderer[] renderers;
         MaterialPropertyBlock block;
 

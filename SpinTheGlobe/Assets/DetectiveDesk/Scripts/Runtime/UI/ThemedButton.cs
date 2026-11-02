@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ namespace DetectiveDesk.Gameplay
     {
         public Button button;
         public Image background, frame, icon;
-        public Text label;
+        public TextMeshProUGUI label;
         bool hover;
         int lastState = -1;
 
