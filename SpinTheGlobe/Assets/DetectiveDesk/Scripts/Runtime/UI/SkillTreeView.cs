@@ -75,7 +75,7 @@ namespace DetectiveDesk.Gameplay
         {
             canvas = UIFactory.CreateCanvas("Skill Tree", 100);
             canvasRect = (RectTransform)canvas.transform;
-            var back = UIFactory.NewImage("Backdrop", canvas.transform, new Color(0.075f, 0.05f, 0.035f, 0.97f)).rectTransform.Stretch();
+            var back = UIFactory.NewImage("Backdrop", canvas.transform, new Color(0.03f, 0.027f, 0.024f, 0.97f)).rectTransform.Stretch();
 
             var viewport = UIFactory.NewImage("Viewport", back, new Color(0, 0, 0, 0)).rectTransform.Stretch();
             viewport.offsetMax = new Vector2(0, -64);
@@ -105,14 +105,17 @@ namespace DetectiveDesk.Gameplay
             }
 
             // Header
-            var header = UIFactory.NewImage("Header", back, new Color(0.10f, 0.07f, 0.05f, 1)).rectTransform
+            var header = UIFactory.NewPanel("Header", back, true, new Color(0.035f, 0.031f, 0.028f, 1)).rectTransform
                 .Place(new Vector2(0, 1), new Vector2(1, 1), new Vector2(0.5f, 1), Vector2.zero, new Vector2(0, 64));
-            UIFactory.NewText("Title", header, "THE DETECTIVE'S LEDGER", 28, TextAnchor.MiddleLeft, UIFactory.Brass).rectTransform
-                .Place(new Vector2(0, 0), new Vector2(0.5f, 1), new Vector2(0, 0.5f), new Vector2(24, 0), Vector2.zero);
-            moneyText = UIFactory.NewText("Money", header, "", 24, TextAnchor.MiddleRight, UIFactory.Ink);
-            moneyText.rectTransform.Place(new Vector2(0.5f, 0), new Vector2(1, 1), new Vector2(1, 0.5f), new Vector2(-150, 0), new Vector2(-170, 0));
-            UIFactory.NewButton("Close", header, "Close  [T]", 18, Close).GetComponent<RectTransform>()
-                .Place(new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(-16, 0), new Vector2(120, 42));
+            var titleIcon = UIFactory.NewIcon("tree", header, 34);
+            titleIcon.rectTransform.Place(new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(24, 0), new Vector2(34, 34));
+            UIFactory.NewTitle("Title", header, "THE DETECTIVE'S LEDGER", 28, TextAnchor.MiddleLeft, UITheme.Gold).rectTransform
+                .Place(new Vector2(0, 0), new Vector2(0.5f, 1), new Vector2(0, 0.5f), new Vector2(70, 0), Vector2.zero);
+            moneyText = UIFactory.NewTitle("Money", header, "", 24, TextAnchor.MiddleRight, UITheme.Cream);
+            moneyText.supportRichText = true;
+            moneyText.rectTransform.Place(new Vector2(0.5f, 0), new Vector2(1, 1), new Vector2(1, 0.5f), new Vector2(-170, 0), new Vector2(-190, 0));
+            UIFactory.NewButton("Close", header, "CLOSE", 18, "close", Close, out _).GetComponent<RectTransform>()
+                .Place(new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(-14, 0), new Vector2(140, 44));
             UIFactory.NewText("Help", back, "Hover a node to inspect · click to buy · drag to move · scroll to zoom", 16, TextAnchor.LowerLeft, UIFactory.InkDim).rectTransform
                 .Place(new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(20, 14), new Vector2(900, 24));
 
@@ -123,16 +126,14 @@ namespace DetectiveDesk.Gameplay
         {
             float size = node.IsRoot ? RootSize : NodeSize;
             var v = new NodeView { data = node };
-            v.border = UIFactory.NewImage(node.id, parent, Color.white);
-            v.rect = v.border.rectTransform.Place(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), node.position, new Vector2(size, size));
-            v.fill = UIFactory.NewImage("Fill", v.rect, Color.black);
-            v.fill.rectTransform.Stretch(3);
-            v.fill.raycastTarget = false;
+            v.fill = UIFactory.NewImage(node.id, parent, Color.black);
+            v.rect = v.fill.rectTransform.Place(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), node.position, new Vector2(size, size));
+            v.border = UIFactory.AddFrame(v.rect, node.IsRoot || node.currency == Currency.Gold, 0.85f);
 
             v.label = UIFactory.NewText("Label", v.rect, ShortLabel(node), node.IsRoot ? 14 : 12, TextAnchor.MiddleCenter, UIFactory.Ink);
-            v.label.rectTransform.Stretch(6);
+            v.label.rectTransform.Stretch(9);
             v.rank = UIFactory.NewText("Rank", v.rect, "", 11, TextAnchor.LowerCenter, UIFactory.InkDim);
-            v.rank.rectTransform.Place(new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0), new Vector2(0, 3), new Vector2(0, 16));
+            v.rank.rectTransform.Place(new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0), new Vector2(0, 7), new Vector2(0, 16));
 
             if (node.IsRoot) v.rect.localRotation = Quaternion.Euler(0, 0, 45);           // diamond like the reference root
             if (node.IsRoot) { v.label.rectTransform.localRotation = Quaternion.Euler(0, 0, -45); v.rank.rectTransform.localRotation = Quaternion.Euler(0, 0, -45); }
@@ -158,43 +159,41 @@ namespace DetectiveDesk.Gameplay
             img.raycastTarget = false;
             var rt = img.rectTransform;
             Vector2 d = b - a;
-            rt.Place(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), (a + b) * 0.5f, new Vector2(d.magnitude, 4));
+            rt.Place(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), (a + b) * 0.5f, new Vector2(d.magnitude, 3));
             rt.localRotation = Quaternion.Euler(0, 0, Mathf.Atan2(d.y, d.x) * Mathf.Rad2Deg);
             return img;
         }
 
         void BuildTooltip()
         {
-            var card = UIFactory.NewImage("Tooltip", canvas.transform, new Color(0.055f, 0.05f, 0.048f, 0.98f));
+            var card = UIFactory.NewPanel("Tooltip", canvas.transform, true, new Color(0.03f, 0.027f, 0.024f, 0.98f));
             card.raycastTarget = false;
             tooltip = card.rectTransform;
             tooltip.anchorMin = tooltip.anchorMax = new Vector2(0.5f, 0.5f);
             tooltip.pivot = new Vector2(0, 0.5f);
             tooltip.sizeDelta = new Vector2(TooltipWidth, 0);
-            var outline = card.gameObject.AddComponent<Outline>();
-            outline.effectColor = new Color(UIFactory.Brass.r, UIFactory.Brass.g, UIFactory.Brass.b, 0.55f);
-            outline.effectDistance = new Vector2(2, -2);
             var shadow = card.gameObject.AddComponent<Shadow>();
             shadow.effectColor = new Color(0, 0, 0, 0.6f);
             shadow.effectDistance = new Vector2(6, -6);
 
             var layout = card.gameObject.AddComponent<VerticalLayoutGroup>();
-            layout.padding = new RectOffset(0, 0, 0, 14);
+            layout.padding = new RectOffset(18, 18, 10, 18);
             layout.spacing = 8;
             layout.childControlWidth = layout.childControlHeight = true;
             layout.childForceExpandWidth = true; layout.childForceExpandHeight = false;
             var fitter = card.gameObject.AddComponent<ContentSizeFitter>();
             fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            var titleBar = UIFactory.NewImage("Title bar", tooltip, new Color(0.13f, 0.15f, 0.16f, 1));
-            titleBar.raycastTarget = false;
-            titleBar.gameObject.AddComponent<LayoutElement>().preferredHeight = 46;
-            tipTitle = UIFactory.NewText("Title", titleBar.transform, "", 24, TextAnchor.MiddleCenter, UIFactory.Brass);
-            tipTitle.rectTransform.Stretch(6);
+            tipTitle = UIFactory.NewTitle("Title", tooltip, "", 24, TextAnchor.MiddleCenter, UITheme.Gold);
+            tipTitle.gameObject.AddComponent<LayoutElement>().minHeight = 44;
+            var rule = UIFactory.NewImage("Rule", tooltip, UITheme.GoldDim);
+            rule.raycastTarget = false;
+            rule.gameObject.AddComponent<LayoutElement>().preferredHeight = 1;
 
             tipBody = Line("Description", 18, UIFactory.Ink, FontStyle.Bold);
             tipStats = Line("Stats", 16, UIFactory.InkDim, FontStyle.Normal);
-            tipCost = Line("Cost", 26, UIFactory.Brass, FontStyle.Bold);
+            tipCost = Line("Cost", 26, UIFactory.Brass, FontStyle.Normal);
+            tipCost.font = UITheme.DisplayFont;
             tooltip.gameObject.SetActive(false);
         }
 
@@ -241,7 +240,7 @@ namespace DetectiveDesk.Gameplay
                     if (m.stat == StatId.None) continue;
                     double now = game.Stats.Permanent(m.stat, m.pinIndex);
                     sb.Append(StatInfo.Name(m.stat)).Append("     ").Append(StatInfo.Format(m.stat, now));
-                    if (!maxed) sb.Append("  ▸  ").Append(StatInfo.Format(m.stat, game.Stats.Preview(m.stat, node.modifiers, 1, m.pinIndex)));
+                    if (!maxed) sb.Append("  →  ").Append(StatInfo.Format(m.stat, game.Stats.Preview(m.stat, node.modifiers, 1, m.pinIndex)));
                     sb.Append('\n');
                 }
             if (node.maxRank >= DefaultSkillTreeFactory.MasteryRanks) sb.Append("Rank ").Append(rank).Append(" · endless");
@@ -319,7 +318,7 @@ namespace DetectiveDesk.Gameplay
 
         void Refresh()
         {
-            moneyText.text = NumberFormatter.Money(game.Wallet.Money) + "   ·   " + NumberFormatter.Format(game.Wallet.Gold) + " gold";
+            moneyText.text = NumberFormatter.Money(game.Wallet.Money) + "   <color=#8a7550>|</color>   <color=#ffdb8f>" + NumberFormatter.Format(game.Wallet.Gold) + " gold</color>";
             foreach (var v in views.Values)
             {
                 var status = game.Skills.Status(v.data, game.Wallet, game.Stats, out _);
@@ -330,16 +329,16 @@ namespace DetectiveDesk.Gameplay
                 bool owned = rank > 0;
 
                 Color fill, border;
-                if (owned) { fill = Color.Lerp(branch, Color.black, 0.45f); border = branch; }
+                if (owned) { fill = Color.Lerp(branch, Color.black, 0.72f); border = Color.Lerp(branch, UITheme.Gold, 0.45f); }
                 else
                     switch (status)
                     {
-                        case NodeStatus.Available: fill = new Color(0.14f, 0.11f, 0.08f); border = UIFactory.Brass; break;
-                        case NodeStatus.Capped: fill = new Color(0.12f, 0.09f, 0.07f); border = new Color(0.85f, 0.45f, 0.15f); break;
-                        case NodeStatus.Unaffordable: fill = new Color(0.10f, 0.09f, 0.08f); border = new Color(0.35f, 0.3f, 0.25f); break;
-                        default: fill = new Color(0.07f, 0.065f, 0.06f); border = new Color(0.2f, 0.19f, 0.18f); break;
+                        case NodeStatus.Available: fill = new Color(0.075f, 0.064f, 0.054f); border = UITheme.Gold; break;
+                        case NodeStatus.Capped: fill = new Color(0.07f, 0.055f, 0.045f); border = new Color(0.85f, 0.45f, 0.15f); break;
+                        case NodeStatus.Unaffordable: fill = new Color(0.05f, 0.046f, 0.042f); border = new Color(0.45f, 0.38f, 0.27f); break;
+                        default: fill = new Color(0.035f, 0.032f, 0.03f); border = new Color(0.22f, 0.2f, 0.17f); break;
                     }
-                if (owned && status == NodeStatus.Available) border = Color.Lerp(branch, Color.white, 0.35f); // more ranks affordable
+                if (owned && status == NodeStatus.Available) border = UITheme.GoldBright; // more ranks affordable
                 v.fill.color = fill;
                 if (v.pulse >= 0) v.border.color = border;
                 v.label.color = owned || status == NodeStatus.Available ? UIFactory.Ink : status == NodeStatus.Unaffordable ? UIFactory.InkDim : new Color(0.45f, 0.42f, 0.38f);
@@ -349,7 +348,7 @@ namespace DetectiveDesk.Gameplay
                 foreach (var link in v.links)
                 {
                     link.gameObject.SetActive(visible);
-                    link.color = owned ? new Color(0.93f, 0.68f, 0.2f, 0.95f) : new Color(0.32f, 0.29f, 0.26f, 0.7f);
+                    link.color = owned ? new Color(UITheme.Gold.r, UITheme.Gold.g, UITheme.Gold.b, 0.9f) : new Color(0.3f, 0.27f, 0.22f, 0.6f);
                 }
             }
         }

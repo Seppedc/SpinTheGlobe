@@ -6,17 +6,17 @@ using UnityEngine.UI;
 
 namespace DetectiveDesk.Gameplay
 {
-    /// <summary>Small helpers to build uGUI hierarchies from code (HUD, skill tree, popups).</summary>
+    /// <summary>Small helpers to build uGUI hierarchies from code (HUD, skill tree, popups) in the <see cref="UITheme"/> style.</summary>
     public static class UIFactory
     {
-        static Font font;
-        public static Font Font => font ? font : (font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf"));
+        /// <summary>Body text font (serif).</summary>
+        public static Font Font => UITheme.BodyFont;
 
-        public static readonly Color Ink = new Color(0.94f, 0.88f, 0.74f);
-        public static readonly Color InkDim = new Color(0.70f, 0.64f, 0.52f);
-        public static readonly Color Brass = new Color(0.86f, 0.66f, 0.29f);
-        public static readonly Color Panel = new Color(0.07f, 0.055f, 0.045f, 0.86f);
-        public static readonly Color ButtonColor = new Color(0.30f, 0.20f, 0.12f, 0.95f);
+        public static Color Ink => UITheme.Cream;
+        public static Color InkDim => UITheme.CreamDim;
+        public static Color Brass => UITheme.Gold;
+        public static Color Panel => UITheme.PanelColor;
+        public static Color ButtonColor => UITheme.ButtonFill;
 
         public static Canvas CreateCanvas(string name, int sortingOrder)
         {
@@ -78,26 +78,117 @@ namespace DetectiveDesk.Gameplay
             return t;
         }
 
-        public static Button NewButton(string name, Transform parent, string label, int fontSize, UnityAction onClick, out Text labelText)
+        /// <summary>Heading text in the display serif (titles, labels in capitals).</summary>
+        public static Text NewTitle(string name, Transform parent, string value, int size, TextAnchor anchor, Color color)
         {
-            var img = NewImage(name, parent, ButtonColor);
-            var outline = img.gameObject.AddComponent<Outline>();
-            outline.effectColor = new Color(Brass.r, Brass.g, Brass.b, 0.6f);
-            outline.effectDistance = new Vector2(1.5f, -1.5f);
+            var t = NewText(name, parent, value, size, anchor, color);
+            t.font = UITheme.DisplayFont;
+            return t;
+        }
+
+        /// <summary>Thin gold double border drawn over (and stretched to) <paramref name="parent"/>.</summary>
+        public static Image AddFrame(Transform parent, bool ornate = false, float thickness = 1f)
+        {
+            var sprite = ornate ? UITheme.FrameOrnate : UITheme.Frame;
+            var frame = NewImage("Frame", parent, UITheme.Gold);
+            frame.raycastTarget = false;
+            frame.rectTransform.Stretch();
+            frame.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+            if (sprite)
+            {
+                frame.sprite = sprite;
+                frame.type = Image.Type.Sliced;
+                frame.fillCenter = false;
+                frame.pixelsPerUnitMultiplier = 1f / Mathf.Max(0.1f, thickness);
+            }
+            else
+            {
+                // Fallback without the sprite: a plain outline.
+                frame.color = Color.clear;
+                var o = frame.gameObject.AddComponent<Outline>();
+                o.effectColor = UITheme.Gold;
+            }
+            return frame;
+        }
+
+        /// <summary>Dark panel with the gold double border.</summary>
+        public static Image NewPanel(string name, Transform parent, bool ornate = false, Color? color = null)
+        {
+            var img = NewImage(name, parent, color ?? UITheme.PanelColor);
+            AddFrame(img.transform, ornate);
+            return img;
+        }
+
+        /// <summary>Gold line-art icon (gear, money, chart, coin, tree, pin, folder, glass, box, paper, statue, close, stamp).</summary>
+        public static Image NewIcon(string iconName, Transform parent, float size, Color? color = null)
+        {
+            var img = NewImage("Icon " + iconName, parent, color ?? UITheme.Gold);
+            img.sprite = UITheme.Icon(iconName);
+            img.preserveAspect = true;
+            img.raycastTarget = false;
+            if (!img.sprite) img.color = Color.clear;
+            img.rectTransform.sizeDelta = new Vector2(size, size);
+            var le = img.gameObject.AddComponent<LayoutElement>();
+            le.preferredWidth = le.minWidth = size;
+            le.preferredHeight = le.minHeight = size;
+            return img;
+        }
+
+        /// <summary>Thin gold line that fades at the ends (vertical by default) for separating values.</summary>
+        public static Image NewDivider(Transform parent, float length, bool horizontal = false)
+        {
+            var img = NewImage("Divider", parent, UITheme.GoldDim);
+            img.raycastTarget = false;
+            img.sprite = UITheme.Divider;
+            var rt = img.rectTransform;
+            rt.sizeDelta = new Vector2(img.sprite ? 8 : 1, length);
+            if (horizontal) rt.localRotation = Quaternion.Euler(0, 0, 90);
+            var le = img.gameObject.AddComponent<LayoutElement>();
+            le.preferredWidth = le.minWidth = horizontal ? length : (img.sprite ? 8 : 1);
+            le.preferredHeight = horizontal ? 8 : length;
+            return img;
+        }
+
+        public static Button NewButton(string name, Transform parent, string label, int fontSize, UnityAction onClick, out Text labelText) =>
+            NewButton(name, parent, label, fontSize, null, onClick, out labelText);
+
+        /// <summary>Dark, gold-framed button with an optional icon in front of the label.</summary>
+        public static Button NewButton(string name, Transform parent, string label, int fontSize, string iconName, UnityAction onClick, out Text labelText)
+        {
+            var img = NewImage(name, parent, UITheme.ButtonFill);
+            var frame = AddFrame(img.transform);
             var button = img.gameObject.AddComponent<Button>();
-            var colors = button.colors;
-            colors.highlightedColor = new Color(1.25f, 1.15f, 1f);
-            colors.pressedColor = new Color(0.8f, 0.75f, 0.7f);
-            colors.disabledColor = new Color(0.55f, 0.55f, 0.55f, 0.7f);
-            button.colors = colors;
+            button.transition = Selectable.Transition.None;
+            var nav = button.navigation; nav.mode = Navigation.Mode.None; button.navigation = nav;
             if (onClick != null) button.onClick.AddListener(onClick);
-            labelText = NewText("Label", img.transform, label, fontSize, TextAnchor.MiddleCenter, Ink);
-            labelText.rectTransform.Stretch(4);
+
+            Image icon = null;
+            if (!string.IsNullOrEmpty(iconName))
+            {
+                var row = NewRect("Content", img.transform);
+                row.Stretch(6);
+                var h = row.gameObject.AddComponent<HorizontalLayoutGroup>();
+                h.childAlignment = TextAnchor.MiddleCenter;
+                h.spacing = 10;
+                h.childControlWidth = h.childControlHeight = true;
+                h.childForceExpandWidth = h.childForceExpandHeight = false;
+                icon = NewIcon(iconName, row, fontSize * 1.5f);
+                labelText = NewTitle("Label", row, label, fontSize, TextAnchor.MiddleLeft, Ink);
+                labelText.horizontalOverflow = HorizontalWrapMode.Overflow;
+            }
+            else
+            {
+                labelText = NewTitle("Label", img.transform, label, fontSize, TextAnchor.MiddleCenter, Ink);
+                labelText.rectTransform.Stretch(4);
+            }
+
+            var themed = img.gameObject.AddComponent<ThemedButton>();
+            themed.button = button; themed.background = img; themed.frame = frame; themed.icon = icon; themed.label = labelText;
             return button;
         }
 
         public static Button NewButton(string name, Transform parent, string label, int fontSize, UnityAction onClick) =>
-            NewButton(name, parent, label, fontSize, onClick, out _);
+            NewButton(name, parent, label, fontSize, null, onClick, out _);
 
         public static string Money(double v) => DetectiveDesk.Economy.NumberFormatter.Money(v);
         public static string Num(double v) => DetectiveDesk.Economy.NumberFormatter.Format(v);
