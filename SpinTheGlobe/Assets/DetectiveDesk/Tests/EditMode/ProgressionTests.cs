@@ -93,6 +93,7 @@ namespace DetectiveDesk.Tests
         {
             wallet.Add(Currency.Money, 1e15);
             Buy(DefaultSkillTreeFactory.RootId);
+            Assert.IsTrue(Buy("globe_max_speed"), "auto-rotate requires max speed first");
             double max = stats.Get(StatId.GlobeMaxSpeed);
             var auto = tree.Find("globe_auto");
             // Buy auto-rotate until the next rank would pass the cap.

@@ -15,7 +15,9 @@ namespace DetectiveDesk.Gameplay
     {
         GameManager game;
         Canvas canvas;
-        Text pinsText, caseText, whiskeyText, inventoryText, statueText, lootText, treeText, popText;
+        Text pinsText, caseText, whiskeyText, inventoryText, statueText, lootText, treeText, popText, toastText;
+        Image toastBack;
+        float toastTimer;
         Button fireButton, stampButton, sipButton, throwButton, lootButton, treeButton;
         Image whiskeyBar;
         float popTimer;
@@ -56,6 +58,26 @@ namespace DetectiveDesk.Gameplay
             popText.rectTransform.Place(new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0, 165), new Vector2(500, 50));
             var shadow = popText.gameObject.AddComponent<Shadow>();
             shadow.effectColor = new Color(0, 0, 0, 0.8f);
+
+            toastBack = UIFactory.NewImage("Message", canvas.transform, new Color(0.07f, 0.05f, 0.04f, 0.88f));
+            toastBack.raycastTarget = false;
+            toastBack.rectTransform.Place(new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0, 222), new Vector2(1100, 46));
+            toastText = UIFactory.NewText("Text", toastBack.transform, "", 21, TextAnchor.MiddleCenter, UIFactory.Ink);
+            toastText.rectTransform.Stretch(6);
+            toastBack.gameObject.SetActive(false);
+
+            // The authored hint panel sits behind the new bottom bar; messages are shown here instead.
+            if (game.legacy && game.legacy.hintText && game.legacy.hintText.transform.parent && game.legacy.hintText.transform.parent.name == "Hint panel")
+                game.legacy.hintText.transform.parent.gameObject.SetActive(false);
+        }
+
+        /// <summary>Short message above the HUD bar (replaces the old hint line).</summary>
+        public void Toast(string message)
+        {
+            if (!toastText || string.IsNullOrEmpty(message)) return;
+            toastText.text = message;
+            toastTimer = Mathf.Clamp(2.5f + message.Length * 0.03f, 3f, 6f);
+            toastBack.gameObject.SetActive(true);
         }
 
         Text Section(RectTransform parent, string title, string buttonLabel, UnityEngine.Events.UnityAction action, out Button button)
@@ -129,6 +151,15 @@ namespace DetectiveDesk.Gameplay
             double rootCost = game.Tree.Find(DefaultSkillTreeFactory.RootId).cost.Cost(0);
             treeText.text = treeOwned ? "Upgrades for the globe, pins,\ncases, whiskey and statues."
                                       : "Locked. Unlock for " + UIFactory.Money(rootCost) + ".";
+
+            if (toastTimer > 0)
+            {
+                toastTimer -= Time.deltaTime;
+                float a = Mathf.Clamp01(toastTimer / 0.5f);
+                toastBack.color = new Color(0.07f, 0.05f, 0.04f, 0.88f * a);
+                toastText.color = new Color(UIFactory.Ink.r, UIFactory.Ink.g, UIFactory.Ink.b, a);
+                if (toastTimer <= 0) toastBack.gameObject.SetActive(false);
+            }
 
             if (popTimer > 0)
             {

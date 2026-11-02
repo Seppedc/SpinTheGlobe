@@ -12,8 +12,10 @@ namespace DetectiveDesk.Gameplay
     [DisallowMultipleComponent]
     public sealed class PaperBallThrower : MonoBehaviour
     {
-        [Tooltip("Bin position relative to the globe centre, in camera-right / world-up / camera-forward metres.")]
-        public Vector3 binOffset = new Vector3(0.75f, -0.22f, -0.15f);
+        [Tooltip("Where the bin stands, as a point on screen (0..1). A ray from the camera through it finds the desk surface.")]
+        public Vector2 binViewportPoint = new Vector2(0.5f, 0.35f);
+        [Tooltip("Bin height in metres; the width is 80% of it.")]
+        [Min(0.02f)] public float binHeight = 0.5f;
         [Min(0.1f)] public float flightTime = 0.75f;
 
         public bool IsAiming { get; private set; }
@@ -45,7 +47,7 @@ namespace DetectiveDesk.Gameplay
             if (!cam) { IsAiming = false; return; }
             var ray = cam.ScreenPointToRay(Input.mousePosition);
             Vector3 target = Physics.Raycast(ray, out var hit, 20f, ~0, QueryTriggerInteraction.Collide) ? hit.point : ray.GetPoint(1.5f);
-            if (hit.collider && Bin && hit.collider.transform.IsChildOf(Bin)) target = Bin.position + Vector3.up * 0.1f;
+            if (hit.collider && Bin && hit.collider.transform.IsChildOf(Bin)) target = Bin.position + Vector3.up * binHeight;
             if (game.Inventory.TryUsePaperBall()) Throw(cam, target);
             IsAiming = false;
         }
@@ -56,7 +58,7 @@ namespace DetectiveDesk.Gameplay
             var ball = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             ball.name = "Paper ball";
             ball.transform.position = start;
-            ball.transform.localScale = Vector3.one * 0.045f;
+            ball.transform.localScale = Vector3.one * 0.09f;
             ball.GetComponent<Renderer>().sharedMaterial = PaperMaterial();
             ball.AddComponent<PaperBallMarker>();
             var body = ball.AddComponent<Rigidbody>();
@@ -83,9 +85,20 @@ namespace DetectiveDesk.Gameplay
         {
             if (Bin || !game || !game.globe) return;
             var cam = game.GameCamera;
-            Vector3 right = cam ? Vector3.ProjectOnPlane(cam.transform.right, Vector3.up).normalized : Vector3.right;
-            Vector3 forward = cam ? Vector3.ProjectOnPlane(cam.transform.forward, Vector3.up).normalized : Vector3.forward;
-            Vector3 position = game.globe.Center + right * binOffset.x + Vector3.up * binOffset.y + forward * binOffset.z;
+            Vector3 position = game.globe.Center + Vector3.right * 0.6f;
+            if (cam)
+            {
+                // Aim through the chosen screen point, then drop straight down onto the desk collider; repeat once to settle.
+                var ray = cam.ViewportPointToRay(binViewportPoint);
+                float y = game.globe.Center.y - game.globe.markerLocalRadius * Mathf.Abs(game.globe.rotor ? game.globe.rotor.lossyScale.y : 1f) * 1.5f;
+                if (new Plane(Vector3.up, new Vector3(0, y, 0)).Raycast(ray, out float distance) && distance > 0 && distance < 30)
+                {
+                    position = ray.GetPoint(distance);
+                    // Snap onto the desk surface just below/above the estimate.
+                    if (Physics.Raycast(position + Vector3.up * 0.5f, Vector3.down, out var down, 1.5f, ~0, QueryTriggerInteraction.Ignore))
+                        position.y = down.point.y;
+                }
+            }
 
             var root = new GameObject("Waste bin (placeholder)");
             root.transform.SetParent(transform, false);
@@ -95,15 +108,16 @@ namespace DetectiveDesk.Gameplay
             var body = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             body.name = "Bin body";
             body.transform.SetParent(root.transform, false);
-            body.transform.localScale = new Vector3(0.16f, 0.09f, 0.16f); // 0.18 m tall
-            body.transform.localPosition = new Vector3(0, 0.09f, 0);
+            float w = binHeight * 0.8f;
+            body.transform.localScale = new Vector3(w, binHeight * 0.5f, w); // primitive cylinder is 2 units tall
+            body.transform.localPosition = new Vector3(0, binHeight * 0.5f, 0);
             Destroy(body.GetComponent<Collider>());
             body.GetComponent<Renderer>().sharedMaterial = BinMaterial();
 
             var trigger = root.AddComponent<BoxCollider>();
             trigger.isTrigger = true;
-            trigger.center = new Vector3(0, 0.12f, 0);
-            trigger.size = new Vector3(0.14f, 0.1f, 0.14f);
+            trigger.center = new Vector3(0, binHeight * 0.75f, 0);
+            trigger.size = new Vector3(w * 0.9f, binHeight * 0.6f, w * 0.9f);
             root.AddComponent<PaperBallBin>().thrower = this;
         }
 

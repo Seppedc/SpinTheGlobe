@@ -89,6 +89,9 @@ namespace DetectiveDesk.Gameplay
             Hammer = Ensure<StatueHammer>();
             Hud = Ensure<GameHUD>();
             TreeView = Ensure<SkillTreeView>();
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            Ensure<DevCheats>();
+#endif
 
             Wallet.Changed += (c, b, d) => Notify();
             Inventory.Changed += Notify;
@@ -214,7 +217,12 @@ namespace DetectiveDesk.Gameplay
             else ShowHint("Statue pieces come from lootboxes. A finished statue fills with gold as the globe spins.");
         }
 
-        public void ShowHint(string message) { if (legacy && !string.IsNullOrEmpty(message)) legacy.ShowHint(message); }
+        public void ShowHint(string message)
+        {
+            if (string.IsNullOrEmpty(message)) return;
+            if (legacy) legacy.ShowHint(message);
+            if (Hud) Hud.Toast(message);
+        }
         public void Notify() { Changed?.Invoke(); }
 
         // ------------------------------------------------------------------ save / load

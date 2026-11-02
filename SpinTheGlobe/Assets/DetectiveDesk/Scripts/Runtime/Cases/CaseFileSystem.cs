@@ -159,6 +159,16 @@ namespace DetectiveDesk.Gameplay
             }
         }
 
+        /// <summary>Testing only: fills the open case so it can be stamped.</summary>
+        public void DevFill()
+        {
+            if (!game || OnCooldown) return;
+            Evidence = Required;
+            RebuildPapers();
+            game.ShowHint("[dev] case file filled");
+            game.Notify();
+        }
+
         public void LoadState(SaveData d) { Level = Mathf.Max(0, d.caseLevel); Evidence = Mathf.Max(0, d.caseEvidence); Cooldown = Mathf.Max(0, d.caseCooldown); }
         public void SaveState(SaveData d) { d.caseLevel = Level; d.caseEvidence = Evidence; d.caseCooldown = Cooldown; }
     }
