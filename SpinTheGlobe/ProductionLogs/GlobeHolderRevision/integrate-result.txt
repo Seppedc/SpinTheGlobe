@@ -1,5 +1,0 @@
-Integration is **partially applied and blocked**. Source, twelve native meshes, and four prefab files changed; the scene remains unsaved. Captures still show stale holder/gauge geometry.
-
-All 13 sphere meshes, nine materials, runtime scripts, and unrelated scene components passed preservation checks. Runtime validation was not run. Backups and details: [integration-result.json](ProductionLogs/GlobeHolderRevision/integration-result.json).
-
-Automatic approval review rejected the buffer rewrite because it omitted vertex channels, creating a “significant corruption risk.” Unity writes stopped and the writer guard was released. May I continue with a reviewed approach that preserves every vertex channel?

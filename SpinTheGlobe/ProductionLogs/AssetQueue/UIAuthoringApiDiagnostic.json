@@ -1,8 +1,0 @@
-{
-  "cause": "Internal SetTargetSceneForNewGameObjects unsupported in dynamic execution",
-  "verified_public_alternative": "NewScene EmptyScene Additive; SetActiveScene; restore and CloseScene in finally",
-  "mcp_health": "PASS",
-  "gameplay_serialized_components_unchanged": true,
-  "diagnostic_dirty_flag_set": true,
-  "gameplay_scene_saved": false
-}

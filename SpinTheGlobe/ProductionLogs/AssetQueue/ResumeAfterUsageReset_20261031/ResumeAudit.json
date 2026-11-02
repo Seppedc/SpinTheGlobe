@@ -1,8 +1,0 @@
-{
-  "at": "2026-10-31T00:04:31.386142+00:00",
-  "reason": "User requested continuation; read-only Codex availability probe returned READY. Unity reopened, MCP connected and Console clean.",
-  "latest_partial_controller_sha256": "d319801b8f7efd81b05f757244229fb1ce0dfd233209d62262087fda39b747f1",
-  "changed_file_is_unvalidated_partial_output": true,
-  "old_checkpoint_retained": true,
-  "attempt_count_preserved": 2
-}

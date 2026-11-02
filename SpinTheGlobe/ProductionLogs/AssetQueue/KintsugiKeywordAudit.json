@@ -1,9 +1,0 @@
-{
-  "at": "2026-10-31T00:22:52.041658+00:00",
-  "reason": "Only late _EMISSION keyword removal in newly generated review material; all other YAML properties/textures unchanged. Retain current material; emission remains unverified.",
-  "path": "Assets/DetectiveDesk/AssetProduction/KintsugiMaterial/20261031_011641_bff2b921/Kintsugi.mat",
-  "before_sha256": "5df42301bf7d6111144c833622174bf22e7b9e50645c1844ce0e6697be7f8782",
-  "after_sha256": "a0168cc3f22f52cd7dab34f9d82a453f978b1672e0ff20a3d7c4acf6c2102cc7",
-  "permissions_changed": false,
-  "original_checkpoint_retained": true
-}

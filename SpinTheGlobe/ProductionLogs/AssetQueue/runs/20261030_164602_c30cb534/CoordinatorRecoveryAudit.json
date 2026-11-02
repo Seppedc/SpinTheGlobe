@@ -1,6 +1,0 @@
-{
-  "reason": "Coordinator hotfix for delayed Unity metadata; verified sources unchanged. Original checkpoint retained.",
-  "tool": "Tools/AssetQueue/queue.py",
-  "before_sha256": "f4ec8654a311fd9d1aab4ba887874260963c8b1cf48315da895bd00c7cd5f7e7",
-  "after_sha256": "55eee6c8362d102f5ffc8447106197b25486301f483aaf541c1796135161d077"
-}

@@ -1,7 +1,0 @@
-Gameplay wiring is saved, but integration is **blocked**.
-
-- Math and preservation checks passed.
-- Physical pin drops failed; physics-dependent input remains unvalidated.
-- Unity MCP rejected the backend diagnostic’s reflection namespaces. I stopped as instructed and released the writer.
-
-Evidence, screenshots, and exact blocker: [implementation-report.md](/C:/Users/decra/source/Antigravity/SpinTheGlobe/SpinTheGlobe/ProductionLogs/Gameplay/implementation-report.md).

@@ -1,7 +1,0 @@
-{
-  "slug": "Asset1",
-  "pipeline": "Blender",
-  "source_path": "Assets/Source",
-  "output_path": "Assets/Output",
-  "smoke_test": false
-}

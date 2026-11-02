@@ -1,8 +1,0 @@
-{
-  "at": "2026-10-30T21:11:44.712313+00:00",
-  "denied_action": "Dynamic System.Reflection Console diagnostic",
-  "supported_alternative": "Unity_ReadConsole tool; executed, zero entries",
-  "project_health": "MCP connected; Console clean",
-  "permissions_changed": false,
-  "next_step": "Retry asset-local recoil validation with supported tools"
-}

@@ -1,3 +1,0 @@
-Final regression passed: **126 runtime checks and 31 math assertions**, including globe-center drag acceptance and Brazil-ray rejection.
-
-All 4,324 original components and 546 protected files passed preservation checks. Console: zero errors/warnings. Evidence updated; one clean Edit Mode scene remains, with €422, needle pose, and `runInBackground` restored. Writer released.

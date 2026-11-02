@@ -1,2 +1,0 @@
-2026-10-31T00:22:58.638909Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell
-2026-10-31T00:23:46.670351Z ERROR codex_core::tools::router: error=apply_patch verification failed: invalid patch: multiple operations target C:\Users\decra\source\Antigravity\SpinTheGlobe\SpinTheGlobe\Assets\DetectiveDesk\ArtSource\Props\WhiskeyGlass\build_asset.py

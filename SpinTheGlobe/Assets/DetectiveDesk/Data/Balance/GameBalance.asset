@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16514d9470b54159abee5736b84e692a, type: 3}
+  m_Name: GameBalance
+  m_EditorClassIdentifier: DetectiveDesk.Runtime::DetectiveDesk.Progression.GameBalance
+  startingMoney: 0
+  startingGold: 0
+  autosaveInterval: 30
+  baseStats:
+  - stat: 100
+    value: 30
+  - stat: 101
+    value: 0
+  - stat: 102
+    value: 1
+  - stat: 103
+    value: 1
+  - stat: 104
+    value: 1
+  - stat: 200
+    value: 0
+  - stat: 201
+    value: 4
+  - stat: 202
+    value: 0.3
+  - stat: 203
+    value: 0.05
+  - stat: 210
+    value: 1
+  - stat: 211
+    value: 1
+  - stat: 300
+    value: 1
+  - stat: 301
+    value: 30
+  - stat: 302
+    value: 0
+  - stat: 400
+    value: 10
+  - stat: 401
+    value: 60
+  - stat: 402
+    value: 1.5
+  - stat: 500
+    value: 1
+  - stat: 501
+    value: 1

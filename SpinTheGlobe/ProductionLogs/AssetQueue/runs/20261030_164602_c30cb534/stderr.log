@@ -1,2 +1,0 @@
-2026-10-30T15:46:04.125207Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell
-2026-10-30T15:46:56.486378Z ERROR codex_core::tools::router: error=apply_patch verification failed: invalid patch: multiple operations target C:\Users\decra\source\Antigravity\SpinTheGlobe\SpinTheGlobe\Assets\DetectiveDesk\ArtSource\Environment\DeskStructure\build_asset.py

@@ -1,0 +1,1070 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0bdd8a3fd2e41edb362762135aa54c7, type: 3}
+  m_Name: SkillTree
+  m_EditorClassIdentifier: DetectiveDesk.Runtime::DetectiveDesk.Progression.SkillTreeAsset
+  nodes:
+  - id: root
+    title: Skill Tree Unlock
+    description: Open the detective's ledger of upgrades.
+    branch: 0
+    maxRank: 1
+    currency: 0
+    cost:
+      baseCost: 25
+      growth: 1
+      explicitCosts: []
+    prerequisites: []
+    modifiers: []
+    capStat: 0
+    capByStat: 0
+    position: {x: 0, y: 0}
+  - id: globe_max_speed
+    title: Greased Bearings
+    description: "+15\xB0/s maximum spin speed. Caps dragging and auto-rotate."
+    branch: 1
+    maxRank: 15
+    currency: 0
+    cost:
+      baseCost: 15
+      growth: 1.6
+      explicitCosts: []
+    prerequisites:
+    - root
+    modifiers:
+    - stat: 100
+      kind: 0
+      valuePerRank: 15
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: -0.000007430936, y: 170}
+  - id: globe_auto
+    title: Clockwork Motor
+    description: "+6\xB0/s auto-rotate. Can never exceed the maximum spin speed."
+    branch: 1
+    maxRank: 15
+    currency: 0
+    cost:
+      baseCost: 40
+      growth: 1.65
+      explicitCosts: []
+    prerequisites:
+    - globe_max_speed
+    modifiers:
+    - stat: 101
+      kind: 0
+      valuePerRank: 6
+      pinIndex: -1
+    capStat: 101
+    capByStat: 100
+    position: {x: -0.000014861872, y: 340}
+  - id: globe_multiplier
+    title: Cartographer's Cut
+    description: +25% money from globe spins.
+    branch: 1
+    maxRank: 10
+    currency: 0
+    cost:
+      baseCost: 60
+      growth: 1.9
+      explicitCosts: []
+    prerequisites:
+    - globe_auto
+    modifiers:
+    - stat: 104
+      kind: 1
+      valuePerRank: 0.25
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: -0.000022292808, y: 510}
+  - id: globe_drag
+    title: Firm Grip
+    description: +20% speed gained from dragging.
+    branch: 1
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 30
+      growth: 1.8
+      explicitCosts: []
+    prerequisites:
+    - globe_max_speed
+    modifiers:
+    - stat: 102
+      kind: 1
+      valuePerRank: 0.2
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: -170.00002, y: 255}
+  - id: globe_click
+    title: Flick of the Wrist
+    description: +25% speed gained from clicking.
+    branch: 1
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 30
+      growth: 1.8
+      explicitCosts: []
+    prerequisites:
+    - globe_max_speed
+    modifiers:
+    - stat: 103
+      kind: 1
+      valuePerRank: 0.25
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 169.99998, y: 255}
+  - id: pin_01
+    title: Pin 1
+    description: Adds pin #1 to the pin box.
+    branch: 2
+    maxRank: 1
+    currency: 0
+    cost:
+      baseCost: 20
+      growth: 1
+      explicitCosts: []
+    prerequisites:
+    - root
+    modifiers:
+    - stat: 200
+      kind: 0
+      valuePerRank: 1
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 161.67961, y: 52.53289}
+  - id: pin_01_durability
+    title: "Pin 1 \xB7 Durability"
+    description: Pin #1 survives one more pass under the payout line.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 15
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_01
+    modifiers:
+    - stat: 210
+      kind: 0
+      valuePerRank: 1
+      pinIndex: 0
+    capStat: 0
+    capByStat: 0
+    position: {x: 130.15988, y: 149.54066}
+  - id: pin_01_payout
+    title: "Pin 1 \xB7 Payout"
+    description: +50% payout from pin #1.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 15
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_01
+    modifiers:
+    - stat: 211
+      kind: 1
+      valuePerRank: 0.5
+      pinIndex: 0
+    capStat: 0
+    capByStat: 0
+    position: {x: 193.19934, y: -44.474884}
+  - id: pin_02
+    title: Pin 2
+    description: Adds pin #2 to the pin box.
+    branch: 2
+    maxRank: 1
+    currency: 0
+    cost:
+      baseCost: 48.00000190734863
+      growth: 1
+      explicitCosts: []
+    prerequisites:
+    - pin_01
+    modifiers:
+    - stat: 200
+      kind: 0
+      valuePerRank: 1
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 323.35922, y: 105.06578}
+  - id: pin_02_durability
+    title: "Pin 2 \xB7 Durability"
+    description: Pin #2 survives one more pass under the payout line.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 33.00000071525574
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_02
+    modifiers:
+    - stat: 210
+      kind: 0
+      valuePerRank: 1
+      pinIndex: 1
+    capStat: 0
+    capByStat: 0
+    position: {x: 291.83948, y: 202.07355}
+  - id: pin_02_payout
+    title: "Pin 2 \xB7 Payout"
+    description: +50% payout from pin #2.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 33.00000071525574
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_02
+    modifiers:
+    - stat: 211
+      kind: 1
+      valuePerRank: 0.5
+      pinIndex: 1
+    capStat: 0
+    capByStat: 0
+    position: {x: 354.87897, y: 8.058006}
+  - id: pin_03
+    title: Pin 3
+    description: Adds pin #3 to the pin box.
+    branch: 2
+    maxRank: 1
+    currency: 0
+    cost:
+      baseCost: 115.20000457763672
+      growth: 1
+      explicitCosts: []
+    prerequisites:
+    - pin_02
+    modifiers:
+    - stat: 200
+      kind: 0
+      valuePerRank: 1
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 485.03882, y: 157.59866}
+  - id: pin_03_durability
+    title: "Pin 3 \xB7 Durability"
+    description: Pin #3 survives one more pass under the payout line.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 72.60000228881836
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_03
+    modifiers:
+    - stat: 210
+      kind: 0
+      valuePerRank: 1
+      pinIndex: 2
+    capStat: 0
+    capByStat: 0
+    position: {x: 453.51907, y: 254.60645}
+  - id: pin_03_payout
+    title: "Pin 3 \xB7 Payout"
+    description: +50% payout from pin #3.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 72.60000228881836
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_03
+    modifiers:
+    - stat: 211
+      kind: 1
+      valuePerRank: 0.5
+      pinIndex: 2
+    capStat: 0
+    capByStat: 0
+    position: {x: 516.55853, y: 60.59089}
+  - id: pin_04
+    title: Pin 4
+    description: Adds pin #4 to the pin box.
+    branch: 2
+    maxRank: 1
+    currency: 0
+    cost:
+      baseCost: 276.4800262451172
+      growth: 1
+      explicitCosts: []
+    prerequisites:
+    - pin_03
+    modifiers:
+    - stat: 200
+      kind: 0
+      valuePerRank: 1
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 646.71844, y: 210.13156}
+  - id: pin_04_durability
+    title: "Pin 4 \xB7 Durability"
+    description: Pin #4 survives one more pass under the payout line.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 159.7200107574463
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_04
+    modifiers:
+    - stat: 210
+      kind: 0
+      valuePerRank: 1
+      pinIndex: 3
+    capStat: 0
+    capByStat: 0
+    position: {x: 615.1987, y: 307.13934}
+  - id: pin_04_payout
+    title: "Pin 4 \xB7 Payout"
+    description: +50% payout from pin #4.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 159.7200107574463
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_04
+    modifiers:
+    - stat: 211
+      kind: 1
+      valuePerRank: 0.5
+      pinIndex: 3
+    capStat: 0
+    capByStat: 0
+    position: {x: 678.23816, y: 113.12379}
+  - id: pin_05
+    title: Pin 5
+    description: Adds pin #5 to the pin box.
+    branch: 2
+    maxRank: 1
+    currency: 0
+    cost:
+      baseCost: 663.5520935058594
+      growth: 1
+      explicitCosts: []
+    prerequisites:
+    - pin_04
+    modifiers:
+    - stat: 200
+      kind: 0
+      valuePerRank: 1
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 808.3981, y: 262.66446}
+  - id: pin_05_durability
+    title: "Pin 5 \xB7 Durability"
+    description: Pin #5 survives one more pass under the payout line.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 351.38402938842773
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_05
+    modifiers:
+    - stat: 210
+      kind: 0
+      valuePerRank: 1
+      pinIndex: 4
+    capStat: 0
+    capByStat: 0
+    position: {x: 776.87836, y: 359.67224}
+  - id: pin_05_payout
+    title: "Pin 5 \xB7 Payout"
+    description: +50% payout from pin #5.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 351.38402938842773
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_05
+    modifiers:
+    - stat: 211
+      kind: 1
+      valuePerRank: 0.5
+      pinIndex: 4
+    capStat: 0
+    capByStat: 0
+    position: {x: 839.9178, y: 165.65668}
+  - id: pin_06
+    title: Pin 6
+    description: Adds pin #6 to the pin box.
+    branch: 2
+    maxRank: 1
+    currency: 0
+    cost:
+      baseCost: 1592.5251770019531
+      growth: 1
+      explicitCosts: []
+    prerequisites:
+    - pin_05
+    modifiers:
+    - stat: 200
+      kind: 0
+      valuePerRank: 1
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 970.07764, y: 315.19733}
+  - id: pin_06_durability
+    title: "Pin 6 \xB7 Durability"
+    description: Pin #6 survives one more pass under the payout line.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 773.0449104309082
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_06
+    modifiers:
+    - stat: 210
+      kind: 0
+      valuePerRank: 1
+      pinIndex: 5
+    capStat: 0
+    capByStat: 0
+    position: {x: 938.5579, y: 412.2051}
+  - id: pin_06_payout
+    title: "Pin 6 \xB7 Payout"
+    description: +50% payout from pin #6.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 773.0449104309082
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_06
+    modifiers:
+    - stat: 211
+      kind: 1
+      valuePerRank: 0.5
+      pinIndex: 5
+    capStat: 0
+    capByStat: 0
+    position: {x: 1001.59735, y: 218.18954}
+  - id: pin_07
+    title: Pin 7
+    description: Adds pin #7 to the pin box.
+    branch: 2
+    maxRank: 1
+    currency: 0
+    cost:
+      baseCost: 3822.060546875
+      growth: 1
+      explicitCosts: []
+    prerequisites:
+    - pin_06
+    modifiers:
+    - stat: 200
+      kind: 0
+      valuePerRank: 1
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 1131.7573, y: 367.73022}
+  - id: pin_07_durability
+    title: "Pin 7 \xB7 Durability"
+    description: Pin #7 survives one more pass under the payout line.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 1700.6988143920898
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_07
+    modifiers:
+    - stat: 210
+      kind: 0
+      valuePerRank: 1
+      pinIndex: 6
+    capStat: 0
+    capByStat: 0
+    position: {x: 1100.2375, y: 464.738}
+  - id: pin_07_payout
+    title: "Pin 7 \xB7 Payout"
+    description: +50% payout from pin #7.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 1700.6988143920898
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_07
+    modifiers:
+    - stat: 211
+      kind: 1
+      valuePerRank: 0.5
+      pinIndex: 6
+    capStat: 0
+    capByStat: 0
+    position: {x: 1163.2771, y: 270.72244}
+  - id: pin_08
+    title: Pin 8
+    description: Adds pin #8 to the pin box.
+    branch: 2
+    maxRank: 1
+    currency: 0
+    cost:
+      baseCost: 9172.945556640625
+      growth: 1
+      explicitCosts: []
+    prerequisites:
+    - pin_07
+    modifiers:
+    - stat: 200
+      kind: 0
+      valuePerRank: 1
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 1293.4369, y: 420.26312}
+  - id: pin_08_durability
+    title: "Pin 8 \xB7 Durability"
+    description: Pin #8 survives one more pass under the payout line.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 3741.537322998047
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_08
+    modifiers:
+    - stat: 210
+      kind: 0
+      valuePerRank: 1
+      pinIndex: 7
+    capStat: 0
+    capByStat: 0
+    position: {x: 1261.9171, y: 517.2709}
+  - id: pin_08_payout
+    title: "Pin 8 \xB7 Payout"
+    description: +50% payout from pin #8.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 3741.537322998047
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_08
+    modifiers:
+    - stat: 211
+      kind: 1
+      valuePerRank: 0.5
+      pinIndex: 7
+    capStat: 0
+    capByStat: 0
+    position: {x: 1324.9567, y: 323.25534}
+  - id: pin_09
+    title: Pin 9
+    description: Adds pin #9 to the pin box.
+    branch: 2
+    maxRank: 1
+    currency: 0
+    cost:
+      baseCost: 22015.07080078125
+      growth: 1
+      explicitCosts: []
+    prerequisites:
+    - pin_08
+    modifiers:
+    - stat: 200
+      kind: 0
+      valuePerRank: 1
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 1455.1165, y: 472.79602}
+  - id: pin_09_durability
+    title: "Pin 9 \xB7 Durability"
+    description: Pin #9 survives one more pass under the payout line.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 8231.382751464844
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_09
+    modifiers:
+    - stat: 210
+      kind: 0
+      valuePerRank: 1
+      pinIndex: 8
+    capStat: 0
+    capByStat: 0
+    position: {x: 1423.5967, y: 569.8038}
+  - id: pin_09_payout
+    title: "Pin 9 \xB7 Payout"
+    description: +50% payout from pin #9.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 8231.382751464844
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_09
+    modifiers:
+    - stat: 211
+      kind: 1
+      valuePerRank: 0.5
+      pinIndex: 8
+    capStat: 0
+    capByStat: 0
+    position: {x: 1486.6362, y: 375.78824}
+  - id: pin_10
+    title: Pin 10
+    description: Adds pin #10 to the pin box.
+    branch: 2
+    maxRank: 1
+    currency: 0
+    cost:
+      baseCost: 52836.171875
+      growth: 1
+      explicitCosts: []
+    prerequisites:
+    - pin_09
+    modifiers:
+    - stat: 200
+      kind: 0
+      valuePerRank: 1
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 1616.7961, y: 525.3289}
+  - id: pin_10_durability
+    title: "Pin 10 \xB7 Durability"
+    description: Pin #10 survives one more pass under the payout line.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 18109.041137695312
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_10
+    modifiers:
+    - stat: 210
+      kind: 0
+      valuePerRank: 1
+      pinIndex: 9
+    capStat: 0
+    capByStat: 0
+    position: {x: 1585.2764, y: 622.3367}
+  - id: pin_10_payout
+    title: "Pin 10 \xB7 Payout"
+    description: +50% payout from pin #10.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 18109.041137695312
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_10
+    modifiers:
+    - stat: 211
+      kind: 1
+      valuePerRank: 0.5
+      pinIndex: 9
+    capStat: 0
+    capByStat: 0
+    position: {x: 1648.3159, y: 428.32114}
+  - id: pin_11
+    title: Pin 11
+    description: Adds pin #11 to the pin box.
+    branch: 2
+    maxRank: 1
+    currency: 0
+    cost:
+      baseCost: 126806.81640625
+      growth: 1
+      explicitCosts: []
+    prerequisites:
+    - pin_10
+    modifiers:
+    - stat: 200
+      kind: 0
+      valuePerRank: 1
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 1778.4757, y: 577.8618}
+  - id: pin_11_durability
+    title: "Pin 11 \xB7 Durability"
+    description: Pin #11 survives one more pass under the payout line.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 39839.893798828125
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_11
+    modifiers:
+    - stat: 210
+      kind: 0
+      valuePerRank: 1
+      pinIndex: 10
+    capStat: 0
+    capByStat: 0
+    position: {x: 1746.9559, y: 674.86957}
+  - id: pin_11_payout
+    title: "Pin 11 \xB7 Payout"
+    description: +50% payout from pin #11.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 39839.893798828125
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_11
+    modifiers:
+    - stat: 211
+      kind: 1
+      valuePerRank: 0.5
+      pinIndex: 10
+    capStat: 0
+    capByStat: 0
+    position: {x: 1809.9955, y: 480.85403}
+  - id: pin_12
+    title: Pin 12
+    description: Adds pin #12 to the pin box.
+    branch: 2
+    maxRank: 1
+    currency: 0
+    cost:
+      baseCost: 304336.3671875
+      growth: 1
+      explicitCosts: []
+    prerequisites:
+    - pin_11
+    modifiers:
+    - stat: 200
+      kind: 0
+      valuePerRank: 1
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 1940.1553, y: 630.39465}
+  - id: pin_12_durability
+    title: "Pin 12 \xB7 Durability"
+    description: Pin #12 survives one more pass under the payout line.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 87647.7685546875
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_12
+    modifiers:
+    - stat: 210
+      kind: 0
+      valuePerRank: 1
+      pinIndex: 11
+    capStat: 0
+    capByStat: 0
+    position: {x: 1908.6355, y: 727.4024}
+  - id: pin_12_payout
+    title: "Pin 12 \xB7 Payout"
+    description: +50% payout from pin #12.
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 87647.7685546875
+      growth: 1.7
+      explicitCosts: []
+    prerequisites:
+    - pin_12
+    modifiers:
+    - stat: 211
+      kind: 1
+      valuePerRank: 0.5
+      pinIndex: 11
+    capStat: 0
+    capByStat: 0
+    position: {x: 1971.675, y: 533.3869}
+  - id: shooter_cooldown
+    title: Oiled Spring
+    description: -8% pin shooter cooldown.
+    branch: 2
+    maxRank: 10
+    currency: 0
+    cost:
+      baseCost: 35
+      growth: 1.75
+      explicitCosts: []
+    prerequisites:
+    - pin_01
+    modifiers:
+    - stat: 201
+      kind: 1
+      valuePerRank: -0.08
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 158.46678, y: 337.4867}
+  - id: pin_land_chance
+    title: Steady Aim
+    description: +8% chance a pin lands on land (land pays more).
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 80
+      growth: 2
+      explicitCosts: []
+    prerequisites:
+    - pin_02
+    modifiers:
+    - stat: 202
+      kind: 0
+      valuePerRank: 0.08
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 320.1464, y: 390.0196}
+  - id: pin_city_chance
+    title: Big City Lights
+    description: +5% chance a pin lands near a big city (cities pay more).
+    branch: 2
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 150
+      growth: 2.1
+      explicitCosts: []
+    prerequisites:
+    - pin_land_chance
+    modifiers:
+    - stat: 203
+      kind: 0
+      valuePerRank: 0.05
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 481.826, y: 442.5525}
+  - id: case_payout
+    title: Bigger Retainers
+    description: +25% money from approved cases.
+    branch: 3
+    maxRank: 10
+    currency: 0
+    cost:
+      baseCost: 50
+      growth: 1.8
+      explicitCosts: []
+    prerequisites:
+    - root
+    modifiers:
+    - stat: 300
+      kind: 1
+      valuePerRank: 0.25
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 99.9235, y: -137.5329}
+  - id: case_cooldown
+    title: Efficient Paperwork
+    description: -7% wait before the next case opens.
+    branch: 3
+    maxRank: 10
+    currency: 0
+    cost:
+      baseCost: 70
+      growth: 1.8
+      explicitCosts: []
+    prerequisites:
+    - case_payout
+    modifiers:
+    - stat: 301
+      kind: 1
+      valuePerRank: -0.07
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 282.36676, y: -215.1117}
+  - id: case_autostamp
+    title: Rubber-Stamp Clerk
+    description: +5% chance a full case stamps itself.
+    branch: 3
+    maxRank: 10
+    currency: 0
+    cost:
+      baseCost: 120
+      growth: 1.9
+      explicitCosts: []
+    prerequisites:
+    - case_payout
+    modifiers:
+    - stat: 302
+      kind: 0
+      valuePerRank: 0.05
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: 117.327255, y: -335.0199}
+  - id: statue_gold_fill
+    title: Molten Pour
+    description: +20% gold fill speed from globe spins.
+    branch: 5
+    maxRank: 10
+    currency: 0
+    cost:
+      baseCost: 100
+      growth: 1.85
+      explicitCosts: []
+    prerequisites:
+    - root
+    modifiers:
+    - stat: 500
+      kind: 1
+      valuePerRank: 0.2
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: -99.923485, y: -137.5329}
+  - id: statue_payout
+    title: Heavier Gold
+    description: +25% gold from smashed statues.
+    branch: 5
+    maxRank: 10
+    currency: 0
+    cost:
+      baseCost: 150
+      growth: 1.9
+      explicitCosts: []
+    prerequisites:
+    - statue_gold_fill
+    modifiers:
+    - stat: 501
+      kind: 1
+      valuePerRank: 0.25
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: -199.84697, y: -275.0658}
+  - id: whiskey_duration
+    title: Slow Sipper
+    description: +2 s boost duration.
+    branch: 4
+    maxRank: 10
+    currency: 0
+    cost:
+      baseCost: 60
+      growth: 1.8
+      explicitCosts: []
+    prerequisites:
+    - root
+    modifiers:
+    - stat: 400
+      kind: 0
+      valuePerRank: 2
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: -161.6796, y: 52.532894}
+  - id: whiskey_cooldown
+    title: Quick Refill
+    description: -6% whiskey cooldown.
+    branch: 4
+    maxRank: 10
+    currency: 0
+    cost:
+      baseCost: 80
+      growth: 1.8
+      explicitCosts: []
+    prerequisites:
+    - whiskey_duration
+    modifiers:
+    - stat: 401
+      kind: 1
+      valuePerRank: -0.06
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: -354.87894, y: 8.058029}
+  - id: whiskey_strength
+    title: Top Shelf
+    description: "+0.25\xD7 boost strength."
+    branch: 4
+    maxRank: 5
+    currency: 0
+    cost:
+      baseCost: 200
+      growth: 2.2
+      explicitCosts: []
+    prerequisites:
+    - whiskey_duration
+    modifiers:
+    - stat: 402
+      kind: 0
+      valuePerRank: 0.25
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: -291.83945, y: 202.07355}

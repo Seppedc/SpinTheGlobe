@@ -1,1 +1,0 @@
-{"outcome":"project_error","summary":"Preflight and coordinator import guard passed. Failure details recorded in Assets/DetectiveDesk/AssetProduction/WorldMap/20261030_172313_a2e63920/asset-report.md. Asset creation and review remain unexecuted.","error":"Unity MCP relay unavailable: named pipe socket not found: \\\\.\\pipe\\unity-mcp-6522600d-26180"}
