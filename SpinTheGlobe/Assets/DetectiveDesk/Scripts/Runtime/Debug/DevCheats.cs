@@ -5,7 +5,7 @@ namespace DetectiveDesk.Gameplay
     /// <summary>
     /// Testing shortcuts, only in the Editor and development builds:
     /// F1 +€1,000 (Shift: +€100,000) · F2 +1 ice, paper ball and statue piece · F3 complete and gild all statues
-    /// · F4 +10 gold · F5 fill the case file.
+    /// · F4 +10 gold · F5 fill the case file · F6 show the whole skill tree.
     /// </summary>
     public sealed class DevCheats : MonoBehaviour
     {
@@ -32,6 +32,11 @@ namespace DetectiveDesk.Gameplay
             }
             if (Input.GetKeyDown(KeyCode.F4)) { game.CreditGold(10); game.ShowHint("[dev] gold added"); }
             if (Input.GetKeyDown(KeyCode.F5) && game.Cases) game.Cases.DevFill();
+            if (Input.GetKeyDown(KeyCode.F6) && game.TreeView)
+            {
+                game.TreeView.RevealAll = !game.TreeView.RevealAll;
+                game.ShowHint("[dev] skill tree: " + (game.TreeView.RevealAll ? "showing all nodes" : "normal reveal"));
+            }
         }
 #endif
     }

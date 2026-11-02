@@ -39,6 +39,10 @@ namespace DetectiveDesk.Gameplay
 
         public bool IsOpen => canvas && canvas.gameObject.activeSelf;
 
+        /// <summary>Testing: show every node, including ones not discovered yet (F6 in the Editor).</summary>
+        public bool RevealAll { get => revealAll; set { revealAll = value; dirty = true; } }
+        bool revealAll;
+
         public void Initialize(GameManager owner)
         {
             game = owner;
@@ -158,7 +162,7 @@ namespace DetectiveDesk.Gameplay
             foreach (var v in views.Values)
             {
                 var status = game.Skills.Status(v.data, game.Wallet, game.Stats, out _);
-                bool visible = status != NodeStatus.Hidden;
+                bool visible = revealAll || status != NodeStatus.Hidden;
                 v.rect.gameObject.SetActive(visible);
                 Color border = BranchColor(v.data.branch);
                 Color fill;
