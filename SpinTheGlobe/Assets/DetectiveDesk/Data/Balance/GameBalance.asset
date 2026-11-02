@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16514d9470b54159abee5736b84e692a, type: 3}
   m_Name: GameBalance
   m_EditorClassIdentifier: DetectiveDesk.Runtime::DetectiveDesk.Progression.GameBalance
-  startingMoney: 0
+  startingMoney: 1000
   startingGold: 0
   autosaveInterval: 30
   baseStats:
