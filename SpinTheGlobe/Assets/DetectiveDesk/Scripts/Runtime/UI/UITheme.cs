@@ -88,6 +88,7 @@ namespace DetectiveDesk.Gameplay
         public static Sprite FrameOrnate => Get("UI/Frames/frame_ornate", FrameBorder);
         public static Sprite Fill => Get("UI/Frames/fill", FillBorder);
         public static Sprite Divider => Get("UI/Frames/divider", 0);
+        public static Sprite Ring => Get("UI/Frames/ring", 0);
         public static Sprite Icon(string name) => Get("UI/Icons/" + name, 0);
 
         static Sprite Get(string path, float border)

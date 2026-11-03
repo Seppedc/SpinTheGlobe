@@ -54,6 +54,11 @@ for y in range(128):
 os.makedirs(os.path.join(OUT, "Frames"), exist_ok=True)
 div.save(os.path.join(OUT, "Frames/divider.png"))
 
+# ring (for radial progress), 128 px, thick stroke
+im = canvas(128); d = ImageDraw.Draw(im)
+d.ellipse([10 * S, 10 * S, 118 * S - 1, 118 * S - 1], outline=W, width=14 * S)
+save(im, 128, "Frames/ring.png")
+
 # ------------------------------------------------------------------ icons (128 px, ~6 px lines)
 PX = 128
 LW = 6 * S

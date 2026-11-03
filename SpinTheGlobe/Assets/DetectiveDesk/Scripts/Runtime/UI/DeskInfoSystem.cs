@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DetectiveDesk.Economy;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DetectiveDesk.Gameplay
 {
@@ -30,6 +31,14 @@ namespace DetectiveDesk.Gameplay
         }
 
         readonly List<Tag> tags = new List<Tag>();
+
+        // Reload ring by the pin shooter (screen-space, follows the barrel).
+        Canvas ringCanvas;
+        RectTransform ring;
+        Image ringFill, ringBack;
+        CanvasGroup ringGroup;
+        Vector3 ringAnchor;
+        float ringReadyFade, lastCooldown;
         GameManager game;
         Transform root;
         Material brassMaterial, rimMaterial;
@@ -46,6 +55,7 @@ namespace DetectiveDesk.Gameplay
 
         void OnDestroy()
         {
+            if (ringCanvas) Destroy(ringCanvas.gameObject);
             if (brassMaterial) Destroy(brassMaterial);
             if (rimMaterial) Destroy(rimMaterial);
         }
@@ -53,15 +63,8 @@ namespace DetectiveDesk.Gameplay
         // ------------------------------------------------------------------ tags
         void RegisterTags()
         {
-            var map = game.map;
-            if (map && map.launcherVisual)
-                Add("Shooter", InFront(map.launcherVisual), () =>
-                {
-                    int unlocked = game.UnlockedPins;
-                    if (unlocked == 0) return "NO PINS";
-                    if (map.CooldownRemaining > 0) return "RELOAD " + map.CooldownRemaining.ToString("0.0");
-                    return map.ReadyCount > 0 ? map.ReadyCount + " / " + unlocked + " READY" : "BOX EMPTY";
-                });
+            // The pin shooter shows its reload as a ring by the barrel (see BuildReloadRing).
+            BuildReloadRing();
 
             var cases = game.Cases;
             if (cases && cases.FolderTransform)
@@ -150,6 +153,68 @@ namespace DetectiveDesk.Gameplay
             tags.Add(tag);
         }
 
+        void BuildReloadRing()
+        {
+            var map = game.map;
+            if (!map || !map.launcherVisual || !UITheme.Ring) return;
+            var b = ClickRouter.RendererBounds(map.launcherVisual, map.launcherVisual.position);
+            // Beside the cannon, level with the wheel, so it doesn't sit on the wall map.
+            ringAnchor = new Vector3(b.max.x + b.size.x * 0.12f, b.min.y + b.size.y * 0.45f, b.center.z);
+
+            ringCanvas = UIFactory.CreateCanvas("Shooter reload ring", 34);
+            ringCanvas.GetComponent<GraphicRaycaster>().enabled = false;
+            ring = UIFactory.NewRect("Ring", ringCanvas.transform);
+            ring.anchorMin = ring.anchorMax = new Vector2(0.5f, 0.5f);
+            ring.sizeDelta = new Vector2(34, 34);
+            ringGroup = ring.gameObject.AddComponent<CanvasGroup>();
+            ringGroup.blocksRaycasts = false;
+
+            ringBack = UIFactory.NewImage("Track", ring, new Color(0, 0, 0, 0.45f));
+            ringBack.sprite = UITheme.Ring; ringBack.raycastTarget = false;
+            ringBack.rectTransform.Stretch();
+            ringFill = UIFactory.NewImage("Fill", ring, UITheme.Gold);
+            ringFill.sprite = UITheme.Ring; ringFill.raycastTarget = false;
+            ringFill.type = Image.Type.Filled;
+            ringFill.fillMethod = Image.FillMethod.Radial360;
+            ringFill.fillOrigin = (int)Image.Origin360.Top;
+            ringFill.fillClockwise = true;
+            ringFill.rectTransform.Stretch();
+            ringGroup.alpha = 0;
+        }
+
+        /// <summary>Shown while the shooter reloads; fills clockwise, flashes when ready, then fades away.</summary>
+        void UpdateReloadRing()
+        {
+            if (!ring) return;
+            var map = game.map;
+            var cam = game.GameCamera;
+            bool hidden = !cam || !map || game.UnlockedPins == 0 || (game.TreeView && game.TreeView.IsOpen);
+            float cd = map ? map.CooldownRemaining : 0;
+            float total = Mathf.Max(0.05f, (float)game.Stats.Get(DetectiveDesk.Progression.StatId.ShooterCooldown));
+            if (cd > 0)
+            {
+                ringFill.fillAmount = 1 - Mathf.Clamp01(cd / total);
+                ringFill.color = UITheme.Gold;
+                ringGroup.alpha = Mathf.MoveTowards(ringGroup.alpha, 0.85f, Time.deltaTime * 6);
+                ringReadyFade = 0.6f;
+            }
+            else if (ringReadyFade > 0)
+            {
+                if (lastCooldown > 0) ringFill.fillAmount = 1;
+                ringReadyFade -= Time.deltaTime;
+                ringFill.color = Color.Lerp(UITheme.Gold, UITheme.GoldBright, Mathf.PingPong(ringReadyFade * 6, 1));
+                ringGroup.alpha = Mathf.Clamp01(ringReadyFade / 0.6f) * 0.85f;
+            }
+            else ringGroup.alpha = 0;
+            lastCooldown = cd;
+
+            if (hidden) { ringGroup.alpha = 0; return; }
+            Vector3 screen = cam.WorldToScreenPoint(ringAnchor);
+            if (screen.z <= 0) { ringGroup.alpha = 0; return; }
+            RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)ringCanvas.transform, screen, null, out Vector2 local);
+            ring.anchoredPosition = local;
+        }
+
         static Material MakeMaterial(string name, Color color, float metallic, float smoothness)
         {
             var shader = Shader.Find("Universal Render Pipeline/Lit");
@@ -165,6 +230,7 @@ namespace DetectiveDesk.Gameplay
         void LateUpdate()
         {
             if (!game) return;
+            UpdateReloadRing();
             foreach (var tag in tags)
             {
                 string s = tag.text();
