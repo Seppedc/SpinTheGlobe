@@ -52,6 +52,12 @@ namespace DetectiveDesk.Gameplay
             parts.Clear();
             if (bustRenderers != null) foreach (var r in bustRenderers) if (r) parts.Add(r);
             if (parts.Count == 0 && bust) parts.AddRange(bust.GetComponentsInChildren<Renderer>(true));
+            // Pieces appear from the bottom up: base and body first, the head last.
+            parts.Sort((a, b) =>
+            {
+                int c = a.bounds.min.y.CompareTo(b.bounds.min.y);
+                return c != 0 ? c : a.bounds.center.y.CompareTo(b.bounds.center.y);
+            });
             if (authoredTierVisuals != null) foreach (var v in authoredTierVisuals) if (v) v.SetActive(false);
             if (restorationSeams != null) foreach (var s in restorationSeams) if (s) s.enabled = false;
             properties = new MaterialPropertyBlock();
