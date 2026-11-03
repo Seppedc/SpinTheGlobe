@@ -10,9 +10,8 @@ namespace DetectiveDesk.Editor
         const string FolderName = "Generated_CaseFiles";
 
         /// <summary>
-        /// Turns the case folder a quarter turn on the desk (portrait ⇄ landscape) around its centre, together with the
-        /// SOLVED mark (a sibling under CaseFiles stays put; the click box is fitted to the folder at runtime),
-        /// then keeps its front edge where it was.
+        /// Turns the case folder a quarter turn on the desk (portrait ⇄ landscape) around its centre and keeps its
+        /// front edge where it was. Only the folder model turns; the clickable CaseFiles box is fitted to it at runtime.
         /// </summary>
         [MenuItem("Tools/Spin The Globe/Layout/Rotate Case Folder 90°")]
         public static void RotateCaseFolder()
@@ -43,6 +42,33 @@ namespace DetectiveDesk.Editor
             }
             EditorSceneManager.MarkSceneDirty(folder.scene);
             Debug.Log($"Case folder rotated. Now x {after.min.x:0.00}..{after.max.x:0.00}, z {after.min.z:0.00}..{after.max.z:0.00}.{fit} Save the scene to keep it.");
+        }
+
+        /// <summary>
+        /// Clears the desk in the editor: deletes the desk-wear decals (they render as grey boxes) and hides the loose
+        /// case evidence (photos, memos, manila placeholders). The hidden photos and memos stay in the scene because the
+        /// case folder clones them as clues at runtime.
+        /// </summary>
+        [MenuItem("Tools/Spin The Globe/Layout/Clean Desk")]
+        public static void CleanDesk()
+        {
+            if (Application.isPlaying) { Debug.LogWarning("Stop Play mode first."); return; }
+            int removed = 0, hidden = 0;
+            var all = Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (var t in all)
+            {
+                if (!t) continue;
+                string n = t.name;
+                if (n.StartsWith("DeskWear_")) { Undo.DestroyObjectImmediate(t.gameObject); removed++; }
+                else if ((n.StartsWith("EvidencePhoto_") || n.StartsWith("EvidenceMemo_") || n.StartsWith("MemoParchmentBacking_") || n.StartsWith("Manila file ")) && t.gameObject.activeSelf)
+                {
+                    Undo.RecordObject(t.gameObject, "Clean desk");
+                    t.gameObject.SetActive(false);
+                    hidden++;
+                }
+            }
+            EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+            Debug.Log($"Clean desk: removed {removed} desk-wear object(s), hid {hidden} loose evidence object(s). Save the scene to keep it.");
         }
 
         /// <summary>World bounds from the meshes and the current transforms (Renderer.bounds can lag a frame in the editor).</summary>

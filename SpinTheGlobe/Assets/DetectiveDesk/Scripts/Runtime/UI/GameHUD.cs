@@ -100,7 +100,7 @@ namespace DetectiveDesk.Gameplay
             Row(row, 0, 0, 0, 10);
 
             lootButton = Chip(row, "box", out lootLabel, () => game.Lootbox.TryOpen());
-            paperButton = Chip(row, "paper", out paperLabel, () => game.PaperBalls.StartAiming());
+            paperButton = Chip(row, "paper", out paperLabel, () => game.PaperBalls.Use());
             Chip(row, "ice", out iceLabel, null);
             iceChip = iceLabel.transform.parent.parent.gameObject;
         }
@@ -211,8 +211,8 @@ namespace DetectiveDesk.Gameplay
             var inv = game.Inventory;
             lootLabel.text = "Lootbox  " + UIFactory.Money(game.Lootbox.Price);
             lootButton.interactable = game.Wallet.CanAfford(Currency.Money, game.Lootbox.Price);
-            paperLabel.text = game.PaperBalls.IsAiming ? "Click to throw…" : "× " + inv.PaperBalls;
-            paperButton.gameObject.SetActive(inv.PaperBalls > 0 || game.PaperBalls.IsAiming);
+            paperLabel.text = "× " + inv.PaperBalls;
+            paperButton.gameObject.SetActive(inv.PaperBalls > 0);
             iceLabel.text = "× " + inv.IceCubes;
             iceChip.SetActive(inv.IceCubes > 0);
 
