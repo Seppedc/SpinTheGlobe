@@ -10,7 +10,7 @@ namespace DetectiveDesk.Gameplay
 {
     /// <summary>
     /// Settings menu (gear button or Esc): language, master / effects / music volume, display options
-    /// (window mode, resolution, VSync, frame-rate limit, graphics quality, UI scale), Save &amp; Exit, and
+    /// (window mode, resolution, frame-rate limit, UI scale), Save &amp; Exit, and
     /// Restart game behind two confirmations. Built at runtime in the noir-ledger style.
     /// </summary>
     [DisallowMultipleComponent]
@@ -108,11 +108,11 @@ namespace DetectiveDesk.Gameplay
             SliderRow("Background music", () => GameSettings.Music, x => { GameSettings.Music = x; GameSettings.Apply(); });
 
             Section("DISPLAY");
-            Selector("Window mode", GameSettings.WindowModes, () => GameSettings.WindowMode, i => { GameSettings.WindowMode = i; GameSettings.Apply(); });
+            Selector("Window mode", GameSettings.WindowModes, () => GameSettings.WindowMode, i => { GameSettings.WindowMode = i; GameSettings.Apply(); }, EditorNote);
             var sizes = GameSettings.Resolutions();
             var sizeNames = new string[sizes.Count];
             for (int i = 0; i < sizes.Count; i++) sizeNames[i] = sizes[i].x + " × " + sizes[i].y;
-            Selector("Resolution", sizeNames, () => Mathf.Max(0, sizes.IndexOf(GameSettings.Resolution)) , i => { GameSettings.Resolution = sizes[i]; GameSettings.Apply(); });
+            Selector("Resolution", sizeNames, () => Mathf.Max(0, sizes.IndexOf(GameSettings.Resolution)) , i => { GameSettings.Resolution = sizes[i]; GameSettings.Apply(); }, EditorNote);
             var fps = new string[GameSettings.FrameRates.Length];
             for (int i = 0; i < fps.Length; i++) fps[i] = GameSettings.FrameRates[i] < 0 ? "Unlimited" : GameSettings.FrameRates[i] + " FPS";
             Selector("Frame-rate limit", fps, () => GameSettings.FrameRateIndex, i => { GameSettings.FrameRateIndex = i; GameSettings.Apply(); });
@@ -219,6 +219,9 @@ namespace DetectiveDesk.Gameplay
             slider.onValueChanged.AddListener(x => { set(x); value.text = Mathf.RoundToInt(x * 100) + "%"; });
             refreshers.Add(() => { slider.SetValueWithoutNotify(get()); value.text = Mathf.RoundToInt(get() * 100) + "%"; });
         }
+
+        // The editor's Game view can't resize its own window; these two apply in the built game.
+        static string EditorNote() => Application.isEditor ? "in the built game" : null;
 
         void RefreshAll() { foreach (var r in refreshers) r(); }
 

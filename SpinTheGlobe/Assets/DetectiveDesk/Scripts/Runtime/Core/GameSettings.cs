@@ -60,7 +60,8 @@ namespace DetectiveDesk.Gameplay
         static FullScreenMode UnityMode(int mode) =>
             mode == 0 ? FullScreenMode.ExclusiveFullScreen : mode == 1 ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed;
 
-        /// <summary>Pushes every setting into Unity. Safe to call any time (display changes only apply in a build).</summary>
+        /// <summary>Pushes every setting into Unity. Safe to call any time (window mode and resolution only apply in a
+        /// built game: the Unity editor's Game view cannot change its own window).</summary>
         public static void Apply()
         {
             AudioListener.volume = Master;
@@ -68,8 +69,12 @@ namespace DetectiveDesk.Gameplay
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = FrameRates[FrameRateIndex];
 #if !UNITY_EDITOR
+            // Only touch the window when the mode or size really changed (no flicker when a slider moves).
             var res = Resolution;
-            Screen.SetResolution(res.x, res.y, UnityMode(WindowMode));
+            var mode = UnityMode(WindowMode);
+            // Borderless and exclusive fullscreen always cover the whole monitor at the chosen render size.
+            if (Screen.fullScreenMode != mode || Screen.width != res.x || Screen.height != res.y)
+                Screen.SetResolution(res.x, res.y, mode);
 #endif
             PlayerPrefs.Save();
             Changed?.Invoke();

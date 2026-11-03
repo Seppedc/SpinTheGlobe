@@ -24,6 +24,7 @@ namespace DetectiveDesk.Gameplay
             if (needle) needle.localRotation = Quaternion.Euler(0, 0, Mathf.Lerp(135, -135, Ratio));
             if (gaugeFace)
             {
+                properties ??= new MaterialPropertyBlock();   // lost when scripts recompile during Play
                 gaugeFace.GetPropertyBlock(properties);
                 float pulse = globe.IsRedline ? .20f + .12f * Mathf.Sin(Time.unscaledTime * 11) : 0;
                 properties.SetColor("_EmissionColor", restingEmission + new Color(pulse, pulse * .035f, 0));

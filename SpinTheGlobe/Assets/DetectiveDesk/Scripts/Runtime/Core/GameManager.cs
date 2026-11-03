@@ -52,6 +52,7 @@ namespace DetectiveDesk.Gameplay
         public DeskInfoSystem DeskInfo { get; private set; }
         public DeskLamp Lamp { get; private set; }
         public SettingsMenu Settings { get; private set; }
+        public MusicPlayer Music { get; private set; }
 
         public double Money => Wallet.Money;
         public double PlayTime { get; private set; }
@@ -103,6 +104,7 @@ namespace DetectiveDesk.Gameplay
             DeskInfo = Ensure<DeskInfoSystem>();
             Lamp = Ensure<DeskLamp>();
             Settings = Ensure<SettingsMenu>();
+            Music = Ensure<MusicPlayer>();
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             Ensure<DevCheats>();
 #endif
@@ -149,6 +151,7 @@ namespace DetectiveDesk.Gameplay
             Lamp.Initialize(this);
             DeskInfo.Initialize(this);
             Settings.Initialize(this);
+            Music.Initialize(this);
 
             loaded = true;
             EventBus.Publish(new GameLoaded());
