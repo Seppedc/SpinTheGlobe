@@ -35,7 +35,60 @@ namespace DetectiveDesk.Progression
             BuildStatues(nodes, Direction(-90));
             BuildLootbox(nodes, Direction(-150));
             BuildWhiskey(nodes, Direction(150));
+            ApplyLayout(nodes);
             return nodes;
+        }
+
+        /// <summary>Grid spacing of the layout in tree units (a node is 78 wide, so cells leave clear gaps).</summary>
+        public const float Cell = 160f;
+
+        /// <summary>
+        /// Clean grid layout (cell coordinates; x right, y up). Every node sits at least one cell from every other
+        /// node and no link runs through a node (checked with Tools/skilltree_layout.py).
+        /// Root in the middle; Globe up, Pins to the right (pin chain with durability above and payout below,
+        /// shooter upgrades on a track underneath), Case File left, Whiskey up-left, Lootbox down-left, Statues down.
+        /// </summary>
+        static void ApplyLayout(List<SkillNodeData> nodes)
+        {
+            var at = new Dictionary<string, Vector2>
+            {
+                [RootId] = new Vector2(0, 0),
+                // Globe
+                ["globe_max_speed"] = new Vector2(0, 1),
+                ["globe_drag"] = new Vector2(-1, 2), ["globe_auto"] = new Vector2(0, 2), ["globe_click"] = new Vector2(1, 2),
+                ["globe_multiplier"] = new Vector2(0, 3), ["globe_gilded_axis"] = new Vector2(0, 4),
+                ["globe_golden_meridian"] = new Vector2(1, 4), ["globe_mastery"] = new Vector2(0, 5),
+                // Pins: shooter track
+                ["shooter_cooldown"] = new Vector2(3, -2), ["pin_autoloader"] = new Vector2(3, -3),
+                ["pin_land_chance"] = new Vector2(4, -2), ["pin_city_chance"] = new Vector2(5, -2),
+                ["pin_steel_tips"] = new Vector2(6, -2), ["pin_twin_barrel"] = new Vector2(7, -2),
+                ["pin_mastery"] = new Vector2(MaxPins + 2, 0),
+                // Case file
+                ["case_payout"] = new Vector2(-1, 0),
+                ["case_cooldown"] = new Vector2(-2, 0.5f), ["case_autostamp"] = new Vector2(-2, -0.5f),
+                ["case_cold_cases"] = new Vector2(-3, 0.5f), ["case_press"] = new Vector2(-3, -0.5f), ["case_mastery"] = new Vector2(-4, 0.5f),
+                // Whiskey
+                ["whiskey_duration"] = new Vector2(-2, 2),
+                ["whiskey_cooldown"] = new Vector2(-3, 2.5f), ["whiskey_strength"] = new Vector2(-3, 1.5f),
+                ["whiskey_bottomless"] = new Vector2(-4, 2.5f), ["whiskey_mastery"] = new Vector2(-4, 1.5f),
+                // Statues
+                ["statue_gold_fill"] = new Vector2(0, -1), ["statue_payout"] = new Vector2(0, -2),
+                ["statue_fast_casting"] = new Vector2(1, -2.5f), ["statue_mastery"] = new Vector2(0, -3),
+                // Lootbox
+                ["loot_bulk"] = new Vector2(-2, -2), ["loot_luck"] = new Vector2(-3, -2),
+                ["loot_double"] = new Vector2(-4, -1.5f), ["loot_mastery"] = new Vector2(-4, -2.5f),
+            };
+            for (int pin = 1; pin <= MaxPins; pin++)
+            {
+                at[PinId(pin)] = new Vector2(pin + 1, 0);
+                at[PinDurabilityId(pin)] = new Vector2(pin + 1, 1);
+                at[PinPayoutId(pin)] = new Vector2(pin + 1, -1);
+            }
+            var byId = new Dictionary<string, SkillNodeData>();
+            foreach (var node in nodes) byId[node.id] = node;
+            foreach (var kv in at) if (byId.TryGetValue(kv.Key, out var node)) node.position = kv.Value * Cell;
+            // Track prerequisites follow the track so its links stay short and never cross the pin rows.
+            if (byId.TryGetValue("pin_autoloader", out var loader)) loader.prerequisites = new[] { "shooter_cooldown" };
         }
 
         // ------------------------------------------------------------------ branches

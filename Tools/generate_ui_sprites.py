@@ -182,7 +182,14 @@ def lamp(d):
     line(d, [(92, 58), (92, 84)], w=3 * S)
     circle(d, 92, 88, 4, fill=W)
 
-for n, f in [("ice", ice), ("lamp", lamp), ("gear", gear), ("money", money), ("chart", chart), ("coin", coin), ("tree", tree), ("pin", pin), ("folder", folder),
+def globe(d):
+    circle(d, 64, 58, 40)
+    d.ellipse([P(48, 18), P(80, 98)], outline=W, width=4 * S)
+    line(d, [(24, 58), (104, 58)], w=4 * S)
+    line(d, [(30, 38), (98, 38)], w=3 * S); line(d, [(30, 78), (98, 78)], w=3 * S)
+    line(d, [(64, 98), (64, 110)]); line(d, [(42, 114), (86, 114)])
+
+for n, f in [("ice", ice), ("lamp", lamp), ("globe", globe), ("gear", gear), ("money", money), ("chart", chart), ("coin", coin), ("tree", tree), ("pin", pin), ("folder", folder),
              ("glass", glass), ("box", box), ("paper", paper), ("statue", statue), ("close", close), ("stamp", stamp)]:
     icon(n, f)
 print("ok")

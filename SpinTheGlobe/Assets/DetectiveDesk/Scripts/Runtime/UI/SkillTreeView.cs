@@ -25,6 +25,7 @@ namespace DetectiveDesk.Gameplay
             public RectTransform rect;
             public Image fill, border;
             public TextMeshProUGUI label, rank;
+            public Image icon;
             public readonly List<Image> links = new List<Image>();
             public float pulse;
         }
@@ -76,7 +77,7 @@ namespace DetectiveDesk.Gameplay
         {
             canvas = UIFactory.CreateCanvas("Skill Tree", 100);
             canvasRect = (RectTransform)canvas.transform;
-            var back = UIFactory.NewImage("Backdrop", canvas.transform, new Color(0.03f, 0.027f, 0.024f, 0.97f)).rectTransform.Stretch();
+            var back = UIFactory.NewImage("Backdrop", canvas.transform, new Color(0.03f, 0.027f, 0.024f, 1f)).rectTransform.Stretch();
 
             var viewport = UIFactory.NewImage("Viewport", back, new Color(0, 0, 0, 0)).rectTransform.Stretch();
             viewport.offsetMax = new Vector2(0, -64);
@@ -89,11 +90,12 @@ namespace DetectiveDesk.Gameplay
 
             var linkLayer = UIFactory.NewRect("Links", content);
             var nodeLayer = UIFactory.NewRect("Nodes", content);
+            var labelLayer = UIFactory.NewRect("Labels", content);   // above nodes and links, so names stay readable
 
             foreach (var node in game.Tree.Nodes)
             {
                 if (node == null || string.IsNullOrEmpty(node.id)) continue;
-                views[node.id] = CreateNode(node, nodeLayer);
+                views[node.id] = CreateNode(node, nodeLayer, labelLayer);
             }
             foreach (var v in views.Values)
             {
@@ -122,7 +124,7 @@ namespace DetectiveDesk.Gameplay
             BuildTooltip();
         }
 
-        NodeView CreateNode(SkillNodeData node, RectTransform parent)
+        NodeView CreateNode(SkillNodeData node, RectTransform parent, RectTransform labels)
         {
             float size = node.IsRoot ? RootSize : NodeSize;
             var v = new NodeView { data = node };
@@ -130,13 +132,23 @@ namespace DetectiveDesk.Gameplay
             v.rect = v.fill.rectTransform.Place(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), node.position, new Vector2(size, size));
             v.border = UIFactory.AddFrame(v.rect, node.IsRoot || node.currency == Currency.Gold, 0.85f);
 
-            v.label = UIFactory.NewText("Label", v.rect, ShortLabel(node), node.IsRoot ? 14 : 12, TextAnchor.MiddleCenter, UIFactory.Ink);
-            v.label.rectTransform.Stretch(9);
+            // Inside the node: the branch icon (a coin for gold nodes) and the rank. The name sits underneath.
+            v.icon = UIFactory.NewIcon(NodeIcon(node), v.rect, size * 0.42f);
+            v.icon.rectTransform.Place(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0, 5), new Vector2(size * 0.42f, size * 0.42f));
             v.rank = UIFactory.NewText("Rank", v.rect, "", 11, TextAnchor.LowerCenter, UIFactory.InkDim);
-            v.rank.rectTransform.Place(new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0), new Vector2(0, 7), new Vector2(0, 16));
+            v.rank.rectTransform.Place(new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0), new Vector2(0, 6), new Vector2(0, 16));
 
-            if (node.IsRoot) v.rect.localRotation = Quaternion.Euler(0, 0, 45);           // diamond like the reference root
-            if (node.IsRoot) { v.label.rectTransform.localRotation = Quaternion.Euler(0, 0, -45); v.rank.rectTransform.localRotation = Quaternion.Euler(0, 0, -45); }
+            float below = node.IsRoot ? size * 0.71f : size * 0.5f;
+            v.label = UIFactory.NewText("Label " + node.id, labels, "", 13, TextAnchor.UpperCenter, UIFactory.Ink);
+            v.label.rectTransform.Place(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 1), node.position - new Vector2(0, below + 5), new Vector2(150, 40));
+            v.label.text = "<mark=#0b0a09E6 padding=\"6,6,2,2\">" + ShortLabel(node) + "</mark>";
+
+            if (node.IsRoot)
+            {
+                v.rect.localRotation = Quaternion.Euler(0, 0, 45);           // diamond like the reference root
+                v.icon.rectTransform.localRotation = Quaternion.Euler(0, 0, -45);
+                v.rank.rectTransform.localRotation = Quaternion.Euler(0, 0, -45);
+            }
 
             var widget = v.rect.gameObject.AddComponent<SkillNodeWidget>();
             widget.nodeId = node.id;
@@ -144,6 +156,22 @@ namespace DetectiveDesk.Gameplay
             widget.Exited = w => { if (hovered != null && hovered.data.id == w.nodeId) HideTooltip(); };
             widget.Clicked = w => Buy(views[w.nodeId]);
             return v;
+        }
+
+        static string NodeIcon(SkillNodeData node)
+        {
+            if (node.IsRoot) return "tree";
+            if (node.currency == Currency.Gold) return "coin";
+            switch (node.branch)
+            {
+                case SkillBranch.Globe: return "globe";
+                case SkillBranch.Pins: return "pin";
+                case SkillBranch.CaseFile: return "folder";
+                case SkillBranch.Whiskey: return "glass";
+                case SkillBranch.Statues: return "statue";
+                case SkillBranch.Lootbox: return "box";
+                default: return "tree";
+            }
         }
 
         static string ShortLabel(SkillNodeData node)
@@ -323,6 +351,7 @@ namespace DetectiveDesk.Gameplay
                 var status = game.Skills.Status(v.data, game.Wallet, game.Stats, out _);
                 bool visible = revealAll || status != NodeStatus.Hidden;
                 v.rect.gameObject.SetActive(visible);
+                v.label.gameObject.SetActive(visible);
                 int rank = game.Skills.Rank(v.data.id);
                 Color branch = BranchColor(v.data.branch);
                 bool owned = rank > 0;
@@ -341,6 +370,8 @@ namespace DetectiveDesk.Gameplay
                 v.fill.color = fill;
                 if (v.pulse >= 0) v.border.color = border;
                 v.label.color = owned || status == NodeStatus.Available ? UIFactory.Ink : status == NodeStatus.Unaffordable ? UIFactory.InkDim : new Color(0.45f, 0.42f, 0.38f);
+                v.icon.color = owned ? Color.Lerp(branch, UITheme.GoldBright, 0.5f) : status == NodeStatus.Available ? UITheme.Gold
+                             : status == NodeStatus.Unaffordable ? new Color(UITheme.Gold.r, UITheme.Gold.g, UITheme.Gold.b, 0.55f) : new Color(0.4f, 0.37f, 0.32f, 0.6f);
                 v.rank.text = v.data.maxRank >= DefaultSkillTreeFactory.MasteryRanks ? (rank > 0 ? "Lv " + rank : "∞")
                             : v.data.maxRank > 1 ? rank + "/" + v.data.maxRank : "";
 

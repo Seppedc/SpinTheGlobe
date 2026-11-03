@@ -47,7 +47,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -0.000008305164, y: 190}
+    position: {x: 0, y: 160}
   - id: globe_auto
     title: Clockwork Motor
     description: +1 RPM auto-rotate. Never faster than the maximum spin speed.
@@ -67,7 +67,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 101
     capByStat: 100
-    position: {x: -0.000016610327, y: 380}
+    position: {x: 0, y: 320}
   - id: globe_drag
     title: Firm Grip
     description: +20% speed gained from dragging.
@@ -87,7 +87,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -190.00002, y: 285}
+    position: {x: -160, y: 320}
   - id: globe_click
     title: Flick of the Wrist
     description: +25% speed gained from clicking.
@@ -107,7 +107,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 189.99998, y: 285}
+    position: {x: 160, y: 320}
   - id: globe_multiplier
     title: Cartographer's Cut
     description: +25% globe earnings (turns and pins).
@@ -127,7 +127,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -0.000024915491, y: 570}
+    position: {x: 0, y: 480}
   - id: globe_gilded_axis
     title: Gilded Axis
     description: Doubles all globe earnings.
@@ -147,7 +147,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -0.000033220655, y: 760}
+    position: {x: 0, y: 640}
   - id: globe_golden_meridian
     title: "\u2605 Golden Meridian"
     description: "\xD71.5 on every source of income."
@@ -167,7 +167,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -190.00003, y: 760}
+    position: {x: 160, y: 640}
   - id: globe_mastery
     title: Globe Mastery
     description: +5% globe earnings per rank, compounding. Never maxes out.
@@ -187,7 +187,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -0.00004152582, y: 950}
+    position: {x: 0, y: 800}
   - id: pin_01
     title: Pin 1
     description: Adds pin #1 to the pin box.
@@ -207,7 +207,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 164.54483, y: 95}
+    position: {x: 320, y: 0}
   - id: pin_01_durability
     title: "Pin 1 \xB7 Durability"
     description: Pin #1 survives one more pass under the payout line.
@@ -227,7 +227,7 @@ MonoBehaviour:
       pinIndex: 0
     capStat: 0
     capByStat: 0
-    position: {x: 112.29483, y: 185.49966}
+    position: {x: 320, y: 160}
   - id: pin_01_payout
     title: "Pin 1 \xB7 Payout"
     description: +50% payout from pin #1.
@@ -247,7 +247,7 @@ MonoBehaviour:
       pinIndex: 0
     capStat: 0
     capByStat: 0
-    position: {x: 216.79483, y: 4.5003433}
+    position: {x: 320, y: -160}
   - id: pin_02
     title: Pin 2
     description: Adds pin #2 to the pin box.
@@ -267,7 +267,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 329.08966, y: 190}
+    position: {x: 480, y: 0}
   - id: pin_02_durability
     title: "Pin 2 \xB7 Durability"
     description: Pin #2 survives one more pass under the payout line.
@@ -287,7 +287,7 @@ MonoBehaviour:
       pinIndex: 1
     capStat: 0
     capByStat: 0
-    position: {x: 276.83966, y: 280.49966}
+    position: {x: 480, y: 160}
   - id: pin_02_payout
     title: "Pin 2 \xB7 Payout"
     description: +50% payout from pin #2.
@@ -307,7 +307,7 @@ MonoBehaviour:
       pinIndex: 1
     capStat: 0
     capByStat: 0
-    position: {x: 381.33966, y: 99.50034}
+    position: {x: 480, y: -160}
   - id: pin_03
     title: Pin 3
     description: Adds pin #3 to the pin box.
@@ -327,7 +327,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 493.6345, y: 285}
+    position: {x: 640, y: 0}
   - id: pin_03_durability
     title: "Pin 3 \xB7 Durability"
     description: Pin #3 survives one more pass under the payout line.
@@ -347,7 +347,7 @@ MonoBehaviour:
       pinIndex: 2
     capStat: 0
     capByStat: 0
-    position: {x: 441.3845, y: 375.49966}
+    position: {x: 640, y: 160}
   - id: pin_03_payout
     title: "Pin 3 \xB7 Payout"
     description: +50% payout from pin #3.
@@ -367,7 +367,7 @@ MonoBehaviour:
       pinIndex: 2
     capStat: 0
     capByStat: 0
-    position: {x: 545.8845, y: 194.50034}
+    position: {x: 640, y: -160}
   - id: pin_04
     title: Pin 4
     description: Adds pin #4 to the pin box.
@@ -387,7 +387,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 658.1793, y: 380}
+    position: {x: 800, y: 0}
   - id: pin_04_durability
     title: "Pin 4 \xB7 Durability"
     description: Pin #4 survives one more pass under the payout line.
@@ -407,7 +407,7 @@ MonoBehaviour:
       pinIndex: 3
     capStat: 0
     capByStat: 0
-    position: {x: 605.9293, y: 470.49966}
+    position: {x: 800, y: 160}
   - id: pin_04_payout
     title: "Pin 4 \xB7 Payout"
     description: +50% payout from pin #4.
@@ -427,7 +427,7 @@ MonoBehaviour:
       pinIndex: 3
     capStat: 0
     capByStat: 0
-    position: {x: 710.4293, y: 289.50034}
+    position: {x: 800, y: -160}
   - id: pin_05
     title: Pin 5
     description: Adds pin #5 to the pin box.
@@ -447,7 +447,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 822.7241, y: 475}
+    position: {x: 960, y: 0}
   - id: pin_05_durability
     title: "Pin 5 \xB7 Durability"
     description: Pin #5 survives one more pass under the payout line.
@@ -467,7 +467,7 @@ MonoBehaviour:
       pinIndex: 4
     capStat: 0
     capByStat: 0
-    position: {x: 770.4741, y: 565.49963}
+    position: {x: 960, y: 160}
   - id: pin_05_payout
     title: "Pin 5 \xB7 Payout"
     description: +50% payout from pin #5.
@@ -487,7 +487,7 @@ MonoBehaviour:
       pinIndex: 4
     capStat: 0
     capByStat: 0
-    position: {x: 874.9741, y: 384.50034}
+    position: {x: 960, y: -160}
   - id: pin_06
     title: Pin 6
     description: Adds pin #6 to the pin box.
@@ -507,7 +507,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 987.269, y: 570}
+    position: {x: 1120, y: 0}
   - id: pin_06_durability
     title: "Pin 6 \xB7 Durability"
     description: Pin #6 survives one more pass under the payout line.
@@ -527,7 +527,7 @@ MonoBehaviour:
       pinIndex: 5
     capStat: 0
     capByStat: 0
-    position: {x: 935.019, y: 660.49963}
+    position: {x: 1120, y: 160}
   - id: pin_06_payout
     title: "Pin 6 \xB7 Payout"
     description: +50% payout from pin #6.
@@ -547,7 +547,7 @@ MonoBehaviour:
       pinIndex: 5
     capStat: 0
     capByStat: 0
-    position: {x: 1039.519, y: 479.50034}
+    position: {x: 1120, y: -160}
   - id: pin_07
     title: Pin 7
     description: Adds pin #7 to the pin box.
@@ -567,7 +567,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 1151.8138, y: 665}
+    position: {x: 1280, y: 0}
   - id: pin_07_durability
     title: "Pin 7 \xB7 Durability"
     description: Pin #7 survives one more pass under the payout line.
@@ -587,7 +587,7 @@ MonoBehaviour:
       pinIndex: 6
     capStat: 0
     capByStat: 0
-    position: {x: 1099.5638, y: 755.49963}
+    position: {x: 1280, y: 160}
   - id: pin_07_payout
     title: "Pin 7 \xB7 Payout"
     description: +50% payout from pin #7.
@@ -607,7 +607,7 @@ MonoBehaviour:
       pinIndex: 6
     capStat: 0
     capByStat: 0
-    position: {x: 1204.0638, y: 574.50037}
+    position: {x: 1280, y: -160}
   - id: pin_08
     title: Pin 8
     description: Adds pin #8 to the pin box.
@@ -627,7 +627,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 1316.3586, y: 760}
+    position: {x: 1440, y: 0}
   - id: pin_08_durability
     title: "Pin 8 \xB7 Durability"
     description: Pin #8 survives one more pass under the payout line.
@@ -647,7 +647,7 @@ MonoBehaviour:
       pinIndex: 7
     capStat: 0
     capByStat: 0
-    position: {x: 1264.1086, y: 850.49963}
+    position: {x: 1440, y: 160}
   - id: pin_08_payout
     title: "Pin 8 \xB7 Payout"
     description: +50% payout from pin #8.
@@ -667,7 +667,7 @@ MonoBehaviour:
       pinIndex: 7
     capStat: 0
     capByStat: 0
-    position: {x: 1368.6086, y: 669.50037}
+    position: {x: 1440, y: -160}
   - id: pin_09
     title: Pin 9
     description: Adds pin #9 to the pin box.
@@ -687,7 +687,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 1480.9034, y: 855}
+    position: {x: 1600, y: 0}
   - id: pin_09_durability
     title: "Pin 9 \xB7 Durability"
     description: Pin #9 survives one more pass under the payout line.
@@ -707,7 +707,7 @@ MonoBehaviour:
       pinIndex: 8
     capStat: 0
     capByStat: 0
-    position: {x: 1428.6534, y: 945.49963}
+    position: {x: 1600, y: 160}
   - id: pin_09_payout
     title: "Pin 9 \xB7 Payout"
     description: +50% payout from pin #9.
@@ -727,7 +727,7 @@ MonoBehaviour:
       pinIndex: 8
     capStat: 0
     capByStat: 0
-    position: {x: 1533.1534, y: 764.50037}
+    position: {x: 1600, y: -160}
   - id: pin_10
     title: Pin 10
     description: Adds pin #10 to the pin box.
@@ -747,7 +747,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 1645.4482, y: 950}
+    position: {x: 1760, y: 0}
   - id: pin_10_durability
     title: "Pin 10 \xB7 Durability"
     description: Pin #10 survives one more pass under the payout line.
@@ -767,7 +767,7 @@ MonoBehaviour:
       pinIndex: 9
     capStat: 0
     capByStat: 0
-    position: {x: 1593.1982, y: 1040.4996}
+    position: {x: 1760, y: 160}
   - id: pin_10_payout
     title: "Pin 10 \xB7 Payout"
     description: +50% payout from pin #10.
@@ -787,7 +787,7 @@ MonoBehaviour:
       pinIndex: 9
     capStat: 0
     capByStat: 0
-    position: {x: 1697.6982, y: 859.50037}
+    position: {x: 1760, y: -160}
   - id: pin_11
     title: Pin 11
     description: Adds pin #11 to the pin box.
@@ -807,7 +807,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 1809.9932, y: 1045}
+    position: {x: 1920, y: 0}
   - id: pin_11_durability
     title: "Pin 11 \xB7 Durability"
     description: Pin #11 survives one more pass under the payout line.
@@ -827,7 +827,7 @@ MonoBehaviour:
       pinIndex: 10
     capStat: 0
     capByStat: 0
-    position: {x: 1757.7432, y: 1135.4996}
+    position: {x: 1920, y: 160}
   - id: pin_11_payout
     title: "Pin 11 \xB7 Payout"
     description: +50% payout from pin #11.
@@ -847,7 +847,7 @@ MonoBehaviour:
       pinIndex: 10
     capStat: 0
     capByStat: 0
-    position: {x: 1862.2432, y: 954.50037}
+    position: {x: 1920, y: -160}
   - id: pin_12
     title: Pin 12
     description: Adds pin #12 to the pin box.
@@ -867,7 +867,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 1974.538, y: 1140}
+    position: {x: 2080, y: 0}
   - id: pin_12_durability
     title: "Pin 12 \xB7 Durability"
     description: Pin #12 survives one more pass under the payout line.
@@ -887,7 +887,7 @@ MonoBehaviour:
       pinIndex: 11
     capStat: 0
     capByStat: 0
-    position: {x: 1922.288, y: 1230.4996}
+    position: {x: 2080, y: 160}
   - id: pin_12_payout
     title: "Pin 12 \xB7 Payout"
     description: +50% payout from pin #12.
@@ -907,7 +907,7 @@ MonoBehaviour:
       pinIndex: 11
     capStat: 0
     capByStat: 0
-    position: {x: 2026.788, y: 1049.5004}
+    position: {x: 2080, y: -160}
   - id: shooter_cooldown
     title: Oiled Spring
     description: -8% pin shooter reload time.
@@ -927,7 +927,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 109.067245, y: 381.09003}
+    position: {x: 480, y: -320}
   - id: pin_land_chance
     title: Steady Aim
     description: "+8% chance a pin lands on land (land pays \xD72)."
@@ -947,7 +947,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 273.61206, y: 476.09003}
+    position: {x: 640, y: -320}
   - id: pin_city_chance
     title: Big City Lights
     description: "+5% chance a pin lands near a big city (up to \xD76)."
@@ -967,7 +967,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 438.15692, y: 571.09}
+    position: {x: 800, y: -320}
   - id: pin_autoloader
     title: Auto-loader
     description: The shooter fires a pin by itself whenever one is ready.
@@ -987,7 +987,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 602.7017, y: 666.09}
+    position: {x: 480, y: -480}
   - id: pin_steel_tips
     title: "\u2605 Steel Tips"
     description: +1 durability for every pin.
@@ -1007,7 +1007,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 767.2466, y: 761.09}
+    position: {x: 960, y: -320}
   - id: pin_twin_barrel
     title: "\u2605 Twin Barrel"
     description: 20% chance a shot fires two pins.
@@ -1027,7 +1027,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 931.7914, y: 856.09}
+    position: {x: 1120, y: -320}
   - id: pin_mastery
     title: Pin Mastery
     description: +5% payout for every pin per rank, compounding. Never maxes out.
@@ -1047,7 +1047,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 2139.0828, y: 1235}
+    position: {x: 2240, y: 0}
   - id: case_payout
     title: Bigger Retainers
     description: +25% money from approved cases.
@@ -1067,7 +1067,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 164.54483, y: -95}
+    position: {x: -160, y: 0}
   - id: case_cooldown
     title: Efficient Paperwork
     description: -7% wait before the next case opens.
@@ -1087,7 +1087,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 386.08966, y: -91.273094}
+    position: {x: -320, y: 80}
   - id: case_autostamp
     title: Rubber-Stamp Clerk
     description: +5% chance a full case stamps itself.
@@ -1107,7 +1107,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 272.08966, y: -288.7269}
+    position: {x: -320, y: -80}
   - id: case_cold_cases
     title: Cold Cases
     description: Every case needs one less piece of evidence.
@@ -1127,7 +1127,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 550.6345, y: -186.2731}
+    position: {x: -480, y: 80}
   - id: case_press
     title: "\u2605 Press Coverage"
     description: Every approved case also pays 2 gold (more for later cases).
@@ -1147,7 +1147,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 436.6345, y: -383.7269}
+    position: {x: -480, y: -80}
   - id: case_mastery
     title: Case Mastery
     description: +5% case rewards per rank, compounding. Never maxes out.
@@ -1167,7 +1167,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 658.1793, y: -380}
+    position: {x: -640, y: 80}
   - id: statue_gold_fill
     title: Molten Pour
     description: +20% gold fill speed from globe spins.
@@ -1187,7 +1187,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -0.000008305164, y: -190}
+    position: {x: 0, y: -160}
   - id: statue_payout
     title: Heavier Gold
     description: +25% gold from smashed statues.
@@ -1207,7 +1207,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -0.000016610327, y: -380}
+    position: {x: 0, y: -320}
   - id: statue_fast_casting
     title: "\u2605 Fast Casting"
     description: Statues need 2 fewer pieces.
@@ -1227,7 +1227,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: 189.99998, y: -380}
+    position: {x: 160, y: -400}
   - id: statue_mastery
     title: Statue Mastery
     description: +5% statue gold per rank, compounding. Never maxes out.
@@ -1247,7 +1247,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -0.000024915491, y: -570}
+    position: {x: 0, y: -480}
   - id: loot_bulk
     title: Bulk Order
     description: -6% lootbox price.
@@ -1267,7 +1267,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -164.54483, y: -95.00001}
+    position: {x: -320, y: -320}
   - id: loot_luck
     title: Lucky Charm
     description: +20% odds for statue pieces and gold.
@@ -1287,7 +1287,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -329.08966, y: -190.00002}
+    position: {x: -480, y: -320}
   - id: loot_double
     title: "\u2605 Double Box"
     description: 15% chance a lootbox gives two rewards.
@@ -1307,7 +1307,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -234.08966, y: -354.54486}
+    position: {x: -640, y: -240}
   - id: loot_mastery
     title: Lootbox Mastery
     description: +5% lootbox luck per rank. Never maxes out.
@@ -1327,7 +1327,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -493.6345, y: -285.00003}
+    position: {x: -640, y: -400}
   - id: whiskey_duration
     title: Slow Sipper
     description: +2 s boost duration.
@@ -1347,7 +1347,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -164.54483, y: 95.00001}
+    position: {x: -320, y: 320}
   - id: whiskey_cooldown
     title: Quick Refill
     description: -6% whiskey cooldown.
@@ -1367,7 +1367,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -386.08966, y: 91.27311}
+    position: {x: -480, y: 400}
   - id: whiskey_strength
     title: Top Shelf
     description: "+0.25\xD7 boost strength."
@@ -1387,7 +1387,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -272.08966, y: 288.72693}
+    position: {x: -480, y: 240}
   - id: whiskey_bottomless
     title: "\u2605 Bottomless Glass"
     description: The glass refills itself after the cooldown.
@@ -1407,7 +1407,7 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -550.6345, y: 186.27313}
+    position: {x: -640, y: 400}
   - id: whiskey_mastery
     title: Whiskey Mastery
     description: +1 s boost duration per rank. Never maxes out.
@@ -1427,4 +1427,4 @@ MonoBehaviour:
       pinIndex: -1
     capStat: 0
     capByStat: 0
-    position: {x: -436.6345, y: 383.72693}
+    position: {x: -640, y: 240}
