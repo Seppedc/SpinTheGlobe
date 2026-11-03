@@ -42,6 +42,9 @@ namespace DetectiveDesk.Save
         public float whiskeyFill;
         public float whiskeyCooldown;
 
+        // Desk
+        public bool lampOff;
+
         // Statues (one entry per pedestal, in scene order)
         public List<StatueState> statues = new List<StatueState>();
     }

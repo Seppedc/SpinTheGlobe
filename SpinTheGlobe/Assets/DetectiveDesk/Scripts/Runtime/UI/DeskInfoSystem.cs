@@ -91,7 +91,7 @@ namespace DetectiveDesk.Gameplay
 
             var cases = game.Cases;
             if (cases && cases.FolderTransform)
-                Add("CASE FILE", "folder", cases.FolderTransform, Top(cases.FolderTransform),
+                Add("CASE FILE", "folder", cases.FolderTransform, () => cases.FolderLabelAnchor,
                     () => cases.OnCooldown ? "Next case " + UIFactory.Seconds(cases.Cooldown) : cases.Evidence + " / " + cases.Required,
                     () => cases.OnCooldown
                         ? "Case #" + cases.Level + " approved.\nNext case in " + UIFactory.Seconds(cases.Cooldown)
@@ -129,6 +129,12 @@ namespace DetectiveDesk.Gameplay
                               (game.Inventory.SparePieces > 0 ? "\nSpare pieces: " + game.Inventory.SparePieces : ""),
                         () => f.IsReadyToSmash ? "Click to smash" : "Pieces come from lootboxes");
                 }
+
+            var lamp = game.Lamp;
+            if (lamp && lamp.Handle)
+                Add("DESK LAMP", "lamp", lamp.Handle, () => lamp.Handle.position + Vector3.up * 0.15f, null,
+                    () => lamp.IsOn ? "The lamp is on." : "The lamp is off.",
+                    () => "Drag the pull chain down to switch it");
         }
 
         void Add(string title, string icon, Transform root, Func<Vector3> anchor, Func<string> label, Func<string> body, Func<string> hint)

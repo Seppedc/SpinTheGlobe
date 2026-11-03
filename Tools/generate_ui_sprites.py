@@ -170,7 +170,14 @@ def ice(d):
     line(d, [(64, 62), (64, 114)])
     line(d, [(34, 60), (40, 70)], w=4 * S); line(d, [(84, 76), (94, 70)], w=4 * S)
 
-for n, f in [("ice", ice), ("gear", gear), ("money", money), ("chart", chart), ("coin", coin), ("tree", tree), ("pin", pin), ("folder", folder),
+def lamp(d):
+    poly(d, [(30, 30), (98, 30), (112, 58), (16, 58)])
+    line(d, [(64, 58), (64, 104)])
+    line(d, [(36, 112), (92, 112)])
+    line(d, [(92, 58), (92, 84)], w=3 * S)
+    circle(d, 92, 88, 4, fill=W)
+
+for n, f in [("ice", ice), ("lamp", lamp), ("gear", gear), ("money", money), ("chart", chart), ("coin", coin), ("tree", tree), ("pin", pin), ("folder", folder),
              ("glass", glass), ("box", box), ("paper", paper), ("statue", statue), ("close", close), ("stamp", stamp)]:
     icon(n, f)
 print("ok")

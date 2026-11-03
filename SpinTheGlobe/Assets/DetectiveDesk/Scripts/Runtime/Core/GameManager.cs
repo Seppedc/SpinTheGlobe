@@ -50,6 +50,7 @@ namespace DetectiveDesk.Gameplay
         public GameHUD Hud { get; private set; }
         public SkillTreeView TreeView { get; private set; }
         public DeskInfoSystem DeskInfo { get; private set; }
+        public DeskLamp Lamp { get; private set; }
 
         public double Money => Wallet.Money;
         public double PlayTime { get; private set; }
@@ -99,6 +100,7 @@ namespace DetectiveDesk.Gameplay
             Hud = Ensure<GameHUD>();
             TreeView = Ensure<SkillTreeView>();
             DeskInfo = Ensure<DeskInfoSystem>();
+            Lamp = Ensure<DeskLamp>();
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             Ensure<DevCheats>();
 #endif
@@ -127,6 +129,7 @@ namespace DetectiveDesk.Gameplay
             Hud.Initialize(this);
             TreeView.Initialize(this);
             if (map) map.Bind(this);
+            Lamp.Initialize(this);
             DeskInfo.Initialize(this);
 
             loaded = true;
@@ -266,6 +269,7 @@ namespace DetectiveDesk.Gameplay
                 Lootbox.LoadState(data);
                 Cases.LoadState(data);
                 Whiskey.LoadState(data);
+                Lamp.LoadState(data);
                 if (figurines != null)
                     for (int i = 0; i < figurines.Length && i < data.statues.Count; i++)
                         if (figurines[i]) figurines[i].LoadState(data.statues[i]);
@@ -290,6 +294,7 @@ namespace DetectiveDesk.Gameplay
                 Lootbox.SaveState(data);
                 Cases.SaveState(data);
                 Whiskey.SaveState(data);
+                Lamp.SaveState(data);
                 if (figurines != null) foreach (var f in figurines) data.statues.Add(f ? f.SaveState() : default);
                 Store.Save(data);
             }
