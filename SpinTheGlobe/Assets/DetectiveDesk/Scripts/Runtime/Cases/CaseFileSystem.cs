@@ -21,10 +21,12 @@ namespace DetectiveDesk.Gameplay
 
         GameManager game;
         Transform stamp, folder;
+        CaseFolderVisual visual;
         public Transform StampTransform => stamp;
+        /// <summary>The clickable case-file object on the desk (hover/click target).</summary>
         public Transform FolderTransform => folder;
-        readonly List<GameObject> papers = new List<GameObject>();
-        Material paperMaterial;
+        /// <summary>Top of the folder's current stack (moves up as clues arrive).</summary>
+        public Vector3 FolderLabelAnchor => visual && visual.IsValid ? visual.LabelAnchor : folder ? folder.position : Vector3.zero;
         bool stamping;
         readonly System.Random rng = new System.Random();
 
@@ -46,12 +48,15 @@ namespace DetectiveDesk.Gameplay
             game = owner;
             stamp = ClickRouter.FindByName("SOLVED Stamp", "Stamp body");
             folder = ClickRouter.FindByName("CaseFiles", "Case file");
+            visual = gameObject.AddComponent<CaseFolderVisual>();
+            visual.Initialize(ClickRouter.FindByName("Generated_CaseFiles", "CaseFiles_Review"));
+            if (!folder) folder = visual.Folder;
             EventBus.Subscribe<PinFellOff>(OnPinFell);
             if (game.legacy) game.legacy.ResetCaseVisual();
-            RebuildPapers();
+            if (visual) visual.SetCount(Evidence, Level, false);
         }
 
-        void OnDestroy() { EventBus.Unsubscribe<PinFellOff>(OnPinFell); if (paperMaterial) Destroy(paperMaterial); }
+        void OnDestroy() { EventBus.Unsubscribe<PinFellOff>(OnPinFell); }
 
         void Update()
         {
@@ -78,7 +83,7 @@ namespace DetectiveDesk.Gameplay
                 return;
             }
             Evidence++;
-            RebuildPapers();
+            if (visual) visual.SetCount(Evidence, Level, true);
             if (IsFull)
             {
                 if (rng.NextDouble() < game.Stats.Get(StatId.CaseAutoStampChance)) Stamp(true);
@@ -120,7 +125,7 @@ namespace DetectiveDesk.Gameplay
                 Level++;
                 Evidence = 0;
                 Cooldown = (float)game.Stats.Get(StatId.CaseCooldown);
-                RebuildPapers();
+                if (visual) visual.ClearAnimated();
                 stamping = false;
                 EventBus.Publish(new CaseStamped(level, reward, automatic));
                 game.Notify();
@@ -140,42 +145,12 @@ namespace DetectiveDesk.Gameplay
             stamp.position = rest;
         }
 
-        /// <summary>Thin paper sheets stacked on the case folder, one per evidence item.</summary>
-        void RebuildPapers()
-        {
-            foreach (var p in papers) if (p) Destroy(p);
-            papers.Clear();
-            if (!folder) return;
-            var bounds = ClickRouter.RendererBounds(folder, folder.position);
-            if (!paperMaterial)
-            {
-                var shader = Shader.Find("Universal Render Pipeline/Lit");
-                if (!shader) return;
-                paperMaterial = new Material(shader) { name = "Runtime evidence paper" };
-                paperMaterial.SetColor("_BaseColor", new Color(0.93f, 0.89f, 0.78f));
-            }
-            float w = Mathf.Max(0.02f, bounds.size.x * 0.55f), d = Mathf.Max(0.02f, bounds.size.z * 0.55f);
-            for (int i = 0; i < Evidence; i++)
-            {
-                var sheet = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                sheet.name = "Evidence " + (i + 1);
-                Destroy(sheet.GetComponent<Collider>());
-                sheet.GetComponent<Renderer>().sharedMaterial = paperMaterial;
-                sheet.transform.SetParent(transform, true);
-                float jitterX = ((i * 37) % 7 - 3) * w * 0.03f, jitterZ = ((i * 53) % 5 - 2) * d * 0.04f;
-                sheet.transform.position = new Vector3(bounds.center.x + jitterX, bounds.max.y + 0.002f + i * 0.0025f, bounds.center.z + jitterZ);
-                sheet.transform.rotation = Quaternion.Euler(0, (i * 47) % 9 - 4, 0);
-                sheet.transform.localScale = new Vector3(w, 0.002f, d);
-                papers.Add(sheet);
-            }
-        }
-
         /// <summary>Testing only: fills the open case so it can be stamped.</summary>
         public void DevFill()
         {
             if (!game || OnCooldown) return;
             Evidence = Required;
-            RebuildPapers();
+            if (visual) visual.SetCount(Evidence, Level, true);
             game.ShowHint("[dev] case file filled");
             game.Notify();
         }
