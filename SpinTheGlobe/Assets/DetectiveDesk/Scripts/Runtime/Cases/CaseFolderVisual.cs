@@ -29,7 +29,7 @@ namespace DetectiveDesk.Gameplay
         readonly List<GameObject> paperTemplates = new List<GameObject>(), photoTemplates = new List<GameObject>(), memoTemplates = new List<GameObject>();
         Transform folder, clip, runtimeRoot;
         Vector3 up, right, forward, stackBase, clipBase, expose, lateral;
-        float exposeExtent, lateralExtent;
+        float exposeExtent, lateralExtent, sideSign = 1;
         Bounds backBounds;
         float coverLift, coverTarget, emptyDrop;
         int level;
@@ -87,6 +87,8 @@ namespace DetectiveDesk.Gameplay
             }
             lateral = Vector3.Cross(up, expose).normalized;
             exposeExtent = HalfLength(expose);
+            // Clues stick out on the side that faces the middle of the desk.
+            sideSign = Vector3.Dot(lateral, new Vector3(-stackBase.x, 0, 0)) >= 0 ? 1 : -1;
             lateralExtent = HalfLength(lateral);
 
             // The "SOLVED" mark sits on the cover, so it rides with it.
@@ -113,6 +115,19 @@ namespace DetectiveDesk.Gameplay
             }
             photoTemplates.Sort((a, b) => string.CompareOrdinal(a.name, b.name));
             memoTemplates.Sort((a, b) => string.CompareOrdinal(a.name, b.name));
+        }
+
+        /// <summary>Makes the clickable case-file box match the folder, whatever way the folder is turned.</summary>
+        public void FitClickCollider(Transform clickRoot)
+        {
+            if (!folder || !clickRoot) return;
+            var box = clickRoot.GetComponent<BoxCollider>();
+            if (!box) return;
+            var b = ClickRouter.RendererBounds(folder, folder.position);
+            b.Expand(new Vector3(0.05f, 0.25f, 0.05f));
+            box.center = clickRoot.InverseTransformPoint(b.center);
+            var s = clickRoot.lossyScale;
+            box.size = new Vector3(b.size.x / Mathf.Max(1e-4f, Mathf.Abs(s.x)), b.size.y / Mathf.Max(1e-4f, Mathf.Abs(s.y)), b.size.z / Mathf.Max(1e-4f, Mathf.Abs(s.z)));
         }
 
         // ------------------------------------------------------------------ public API
@@ -170,19 +185,21 @@ namespace DetectiveDesk.Gameplay
             var b = ClickRouter.RendererBounds(t, t.position);
             Vector3 centerOffset = t.position - b.center;
             float layer = StackHeight(index) + Mathf.Min(index, maxVisualItems) * 0.0001f;
-            float along = sz * exposeExtent;
+            float along = sz * exposeExtent, side = sx * lateralExtent;
             if (kind != Kind.Paper)
             {
-                // Photos and memos poke out past the open edge so the later sheets on top don't hide them.
-                float half = Mathf.Abs(expose.x) * b.extents.x + Mathf.Abs(expose.z) * b.extents.z;
-                along = exposeExtent - half + exposeExtent * Mathf.Lerp(0.1f, 0.28f, Hash(index + 41, level));
+                // Photos and memos poke out of the side edge that faces the middle of the desk, where the camera sees them,
+                // so the later sheets on top don't hide them.
+                float halfSide = Mathf.Abs(lateral.x) * b.extents.x + Mathf.Abs(lateral.z) * b.extents.z;
+                side = sideSign * (lateralExtent - halfSide + lateralExtent * Mathf.Lerp(0.12f, 0.32f, Hash(index + 41, level)));
+                along = Mathf.Lerp(-0.45f, 0.45f, Hash(index + 23, level)) * exposeExtent;
             }
-            Vector3 targetCenter = stackBase + up * (layer + b.extents.y) + lateral * (sx * lateralExtent) + expose * along;
+            Vector3 targetCenter = stackBase + up * (layer + b.extents.y) + lateral * side + expose * along;
             Vector3 target = targetCenter + centerOffset;
             items.Add(t);
             if (logLayout) Debug.Log($"[CaseFolder] {go.name} from {template.name}: size {b.size:F2} → {target:F2}");
 
-            if (animate) StartCoroutine(Slide(t, target + expose * exposeExtent * 1.2f + up * 0.12f, target));
+            if (animate) StartCoroutine(Slide(t, target + lateral * sideSign * lateralExtent * 1.2f + up * 0.12f, target));
             else t.position = target;
         }
 

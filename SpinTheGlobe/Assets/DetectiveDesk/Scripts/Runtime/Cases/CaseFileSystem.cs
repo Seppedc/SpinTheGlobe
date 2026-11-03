@@ -51,6 +51,7 @@ namespace DetectiveDesk.Gameplay
             visual = gameObject.AddComponent<CaseFolderVisual>();
             visual.Initialize(ClickRouter.FindByName("Generated_CaseFiles", "CaseFiles_Review"));
             if (!folder) folder = visual.Folder;
+            else visual.FitClickCollider(folder);
             EventBus.Subscribe<PinFellOff>(OnPinFell);
             if (game.legacy) game.legacy.ResetCaseVisual();
             if (visual) visual.SetCount(Evidence, Level, false);
