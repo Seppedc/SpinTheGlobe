@@ -46,19 +46,18 @@ namespace DetectiveDesk
 
         void OnEnable()
         {
-            if (game) { game.FilesOpened += OpenArchive; game.CaseSolved += PlayCompletion; }
+            if (game) game.CaseSolved += PlayCompletion;   // the archive pop-up is no longer opened from the desk
             foreach (var slot in slots) if (slot) slot.Selected += SlotSelected;
         }
 
         void OnDisable()
         {
-            if (game) { game.FilesOpened -= OpenArchive; game.CaseSolved -= PlayCompletion; }
+            if (game) game.CaseSolved -= PlayCompletion;
             foreach (var slot in slots) if (slot) slot.Selected -= SlotSelected;
         }
 
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.I)) ToggleArchive();
             if (Input.GetKeyDown(KeyCode.Escape)) CloseArchive();
             if (IsArchiveOpen) RefreshPins();
         }
