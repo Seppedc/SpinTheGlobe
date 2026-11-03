@@ -24,9 +24,7 @@ namespace DetectiveDesk.Gameplay
         public static int WindowMode { get => Get("win.mode", 1); set => Set("win.mode", Mathf.Clamp(value, 0, WindowModes.Length - 1)); }
         public static int ResolutionWidth { get => Get("win.w", 0); set => Set("win.w", value); }
         public static int ResolutionHeight { get => Get("win.h", 0); set => Set("win.h", value); }
-        public static bool VSync { get => Get("vsync", 1) == 1; set => Set("vsync", value ? 1 : 0); }
         public static int FrameRateIndex { get => Get("fps", 1); set => Set("fps", Mathf.Clamp(value, 0, FrameRates.Length - 1)); }
-        public static int Quality { get => Get("quality", QualitySettings.GetQualityLevel()); set => Set("quality", Mathf.Clamp(value, 0, QualitySettings.names.Length - 1)); }
         public static int UiScaleIndex { get => Get("ui.scale", 2); set => Set("ui.scale", Mathf.Clamp(value, 0, UiScales.Length - 1)); }
 
         /// <summary>Effective volumes (master × channel) for sound effects and music.</summary>
@@ -66,9 +64,9 @@ namespace DetectiveDesk.Gameplay
         public static void Apply()
         {
             AudioListener.volume = Master;
-            QualitySettings.SetQualityLevel(Quality, true);
-            QualitySettings.vSyncCount = VSync ? 1 : 0;
-            Application.targetFrameRate = VSync ? -1 : FrameRates[FrameRateIndex];
+            // VSync off so the frame-rate limit is what decides the frame rate.
+            QualitySettings.vSyncCount = 0;
+            Application.targetFrameRate = FrameRates[FrameRateIndex];
 #if !UNITY_EDITOR
             var res = Resolution;
             Screen.SetResolution(res.x, res.y, UnityMode(WindowMode));

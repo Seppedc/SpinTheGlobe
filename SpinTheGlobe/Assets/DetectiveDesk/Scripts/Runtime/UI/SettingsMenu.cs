@@ -113,12 +113,9 @@ namespace DetectiveDesk.Gameplay
             var sizeNames = new string[sizes.Count];
             for (int i = 0; i < sizes.Count; i++) sizeNames[i] = sizes[i].x + " × " + sizes[i].y;
             Selector("Resolution", sizeNames, () => Mathf.Max(0, sizes.IndexOf(GameSettings.Resolution)) , i => { GameSettings.Resolution = sizes[i]; GameSettings.Apply(); });
-            Selector("VSync", new[] { "Off", "On" }, () => GameSettings.VSync ? 1 : 0, i => { GameSettings.VSync = i == 1; GameSettings.Apply(); });
             var fps = new string[GameSettings.FrameRates.Length];
             for (int i = 0; i < fps.Length; i++) fps[i] = GameSettings.FrameRates[i] < 0 ? "Unlimited" : GameSettings.FrameRates[i] + " FPS";
-            Selector("Frame-rate limit", fps, () => GameSettings.FrameRateIndex, i => { GameSettings.FrameRateIndex = i; GameSettings.Apply(); },
-                     () => GameSettings.VSync ? "follows VSync" : null);
-            Selector("Graphics quality", QualitySettings.names, () => GameSettings.Quality, i => { GameSettings.Quality = i; GameSettings.Apply(); });
+            Selector("Frame-rate limit", fps, () => GameSettings.FrameRateIndex, i => { GameSettings.FrameRateIndex = i; GameSettings.Apply(); });
             var scales = new string[GameSettings.UiScales.Length];
             for (int i = 0; i < scales.Length; i++) scales[i] = Mathf.RoundToInt(GameSettings.UiScales[i] * 100) + "%";
             Selector("Interface size", scales, () => GameSettings.UiScaleIndex, i => { GameSettings.UiScaleIndex = i; GameSettings.Apply(); });
