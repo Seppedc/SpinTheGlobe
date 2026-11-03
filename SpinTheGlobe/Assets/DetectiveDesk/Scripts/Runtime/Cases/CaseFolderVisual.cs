@@ -22,12 +22,14 @@ namespace DetectiveDesk.Gameplay
         /// <summary>The stack stops growing after this many clues (later clues still slide in, on top).</summary>
         public int maxVisualItems = 24;
         public float slideSeconds = 0.35f;
+        public bool logLayout;
 
         readonly List<Transform> items = new List<Transform>();
         readonly List<(Transform t, Vector3 basePos)> cover = new List<(Transform, Vector3)>();
         readonly List<GameObject> paperTemplates = new List<GameObject>(), photoTemplates = new List<GameObject>(), memoTemplates = new List<GameObject>();
         Transform folder, clip, runtimeRoot;
-        Vector3 up, right, forward, stackBase, clipBase;
+        Vector3 up, right, forward, stackBase, clipBase, expose, lateral;
+        float exposeExtent, lateralExtent;
         Bounds backBounds;
         float coverLift, coverTarget, emptyDrop;
         int level;
@@ -37,7 +39,7 @@ namespace DetectiveDesk.Gameplay
         public bool IsValid => folder;
 
         /// <summary>Top centre of the folder (for the desk label).</summary>
-        public Vector3 LabelAnchor => folder ? stackBase + up * (Mathf.Max(coverLift, 0) + 0.03f) - forward * backBounds.extents.z * 0.2f : Vector3.zero;
+        public Vector3 LabelAnchor => folder ? stackBase + up * (Mathf.Max(coverLift, 0) + 0.03f) : Vector3.zero;
 
         public void Initialize(Transform folderRoot)
         {
@@ -75,11 +77,25 @@ namespace DetectiveDesk.Gameplay
                 emptyDrop = Mathf.Max(0, fb.min.y - backBounds.max.y - 0.0005f);
             }
 
+            // Clues stick out on the side the cover leaves open (the top margin of the authored sheets), so they stay visible.
+            expose = forward;
+            if (frontCover)
+            {
+                var fb = ClickRouter.RendererBounds(frontCover, frontCover.position);
+                var d = Vector3.ProjectOnPlane(backBounds.center - fb.center, up);
+                if (d.sqrMagnitude > 1e-6f) expose = d.normalized;
+            }
+            lateral = Vector3.Cross(up, expose).normalized;
+            exposeExtent = HalfLength(expose);
+            lateralExtent = HalfLength(lateral);
+
             // The "SOLVED" mark sits on the cover, so it rides with it.
             var solved = ClickRouter.FindByName("SOLVED indication (appears after stamping)", "SOLVED indication");
             if (solved) cover.Add((solved, solved.position));
 
             CollectDeskEvidence();
+            if (logLayout)
+                Debug.Log($"[CaseFolder] papers {paperTemplates.Count}, photos {photoTemplates.Count}, memos {memoTemplates.Count}; base {stackBase:F2}, size {backBounds.size:F2}, expose {expose:F2} ({exposeExtent:F2}), lateral ({lateralExtent:F2}), emptyDrop {emptyDrop:F3}, cover parts {cover.Count}");
             ApplyCover(0);
             if (clip) clip.gameObject.SetActive(false);
         }
@@ -141,12 +157,12 @@ namespace DetectiveDesk.Gameplay
             // stick out of the top and side edges so the clues are visible under the cover.
             float h = Hash(index, level);
             float yaw, sx, sz;
-            Vector3 ext = backBounds.extents;
+            // sx: sideways across the folder, sz: towards the open edge (fractions of the folder's half size).
             switch (kind)
             {
-                case Kind.Photo: yaw = Mathf.Lerp(-14, 14, h); sx = Mathf.Lerp(-0.35f, 0.45f, Hash(index + 11, level)); sz = Mathf.Lerp(0.25f, 0.55f, Hash(index + 23, level)); break;
-                case Kind.Memo: yaw = Mathf.Lerp(-9, 9, h); sx = Mathf.Lerp(0.2f, 0.55f, Hash(index + 5, level)); sz = Mathf.Lerp(-0.1f, 0.35f, Hash(index + 31, level)); break;
-                default: yaw = Mathf.Lerp(-2.5f, 2.5f, h); sx = Mathf.Lerp(-0.03f, 0.03f, Hash(index + 3, level)); sz = Mathf.Lerp(-0.02f, 0.05f, Hash(index + 7, level)); break;
+                case Kind.Photo: yaw = Mathf.Lerp(-14, 14, h); sx = Mathf.Lerp(-0.5f, 0.5f, Hash(index + 11, level)); sz = Mathf.Lerp(0.45f, 0.75f, Hash(index + 23, level)); break;
+                case Kind.Memo: yaw = Mathf.Lerp(-9, 9, h); sx = Mathf.Lerp(-0.45f, 0.45f, Hash(index + 5, level)); sz = Mathf.Lerp(0.35f, 0.6f, Hash(index + 31, level)); break;
+                default: yaw = Mathf.Lerp(-2.5f, 2.5f, h); sx = Mathf.Lerp(-0.03f, 0.03f, Hash(index + 3, level)); sz = Mathf.Lerp(0.0f, 0.06f, Hash(index + 7, level)); break;
             }
             if (kind != Kind.Paper) FitInside(t, 0.62f);
             t.rotation = Quaternion.AngleAxis(yaw, up) * t.rotation;
@@ -154,13 +170,23 @@ namespace DetectiveDesk.Gameplay
             var b = ClickRouter.RendererBounds(t, t.position);
             Vector3 centerOffset = t.position - b.center;
             float layer = StackHeight(index) + Mathf.Min(index, maxVisualItems) * 0.0001f;
-            Vector3 targetCenter = stackBase + up * (layer + b.extents.y) + right * (sx * ext.x) + forward * (sz * ext.z);
+            float along = sz * exposeExtent;
+            if (kind != Kind.Paper)
+            {
+                // Photos and memos poke out past the open edge so the later sheets on top don't hide them.
+                float half = Mathf.Abs(expose.x) * b.extents.x + Mathf.Abs(expose.z) * b.extents.z;
+                along = exposeExtent - half + exposeExtent * Mathf.Lerp(0.1f, 0.28f, Hash(index + 41, level));
+            }
+            Vector3 targetCenter = stackBase + up * (layer + b.extents.y) + lateral * (sx * lateralExtent) + expose * along;
             Vector3 target = targetCenter + centerOffset;
             items.Add(t);
+            if (logLayout) Debug.Log($"[CaseFolder] {go.name} from {template.name}: size {b.size:F2} → {target:F2}");
 
-            if (animate) StartCoroutine(Slide(t, target + right * ext.x * 0.9f + up * 0.12f + forward * ext.z * 0.3f, target));
+            if (animate) StartCoroutine(Slide(t, target + expose * exposeExtent * 1.2f + up * 0.12f, target));
             else t.position = target;
         }
+
+        float HalfLength(Vector3 dir) => Mathf.Abs(dir.x) * backBounds.extents.x + Mathf.Abs(dir.z) * backBounds.extents.z;
 
         /// <summary>Scales a photo/memo down if it is bigger than <paramref name="fraction"/> of the folder.</summary>
         void FitInside(Transform t, float fraction)
@@ -197,7 +223,7 @@ namespace DetectiveDesk.Gameplay
             {
                 float e = k * k;
                 for (int i = 0; i < leaving.Count; i++)
-                    if (leaving[i]) leaving[i].position = starts[i] - right * e * backBounds.size.x * 1.4f + up * Mathf.Sin(k * Mathf.PI) * 0.05f;
+                    if (leaving[i]) leaving[i].position = starts[i] + lateral * e * lateralExtent * 2.8f + up * Mathf.Sin(k * Mathf.PI) * 0.05f;
                 ApplyCover(Mathf.Lerp(lift, 0, e));
                 yield return null;
             }
