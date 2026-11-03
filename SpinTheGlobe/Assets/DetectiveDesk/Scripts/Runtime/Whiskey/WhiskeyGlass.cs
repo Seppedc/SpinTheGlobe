@@ -30,7 +30,8 @@ namespace DetectiveDesk.Gameplay
         public float liftSeconds = 0.45f, drinkSeconds = 1.1f, returnSeconds = 0.45f;
 
         GameManager game;
-        Transform glass;
+        Transform glass;                                   // the visible glass model
+        readonly List<Transform> carried = new List<Transform>();   // everything that moves with it when drinking
         public Transform GlassTransform => glass;
         Renderer[] renderers;
         MaterialPropertyBlock block;
@@ -49,11 +50,17 @@ namespace DetectiveDesk.Gameplay
         public void Initialize(GameManager owner)
         {
             game = owner;
-            glass = ClickRouter.FindByName("Whiskey glass", "WhiskeyGlass");
+            // The authored model (Generated_WhiskeyGlass) is what the player sees; the older "Whiskey glass"
+            // placeholder and its rim still carry the click collider, so all of them are clickable and move together.
+            var model = ClickRouter.FindByName("Generated_WhiskeyGlass");
+            var placeholder = ClickRouter.FindByName("Whiskey glass", "WhiskeyGlass");
+            var rim = ClickRouter.FindByName("Glass rim");
+            glass = model ? model : placeholder;
             block = new MaterialPropertyBlock();
             if (!glass) return;
 
-            game.Clicks.Register(glass, Sip);
+            foreach (var t in new[] { glass, placeholder, rim })
+                if (t && !carried.Contains(t)) { carried.Add(t); game.Clicks.Register(t, Sip); }
             var glow = new List<Renderer>();
             foreach (var t in glass.GetComponentsInChildren<Transform>(true))
             {
@@ -113,6 +120,14 @@ namespace DetectiveDesk.Gameplay
                 float h = Mathf.Max(0.05f, b.size.y);
                 Vector3 startPos = glass.position;
                 Quaternion startRot = glass.rotation;
+                var others = new List<(Transform t, Vector3 p, Quaternion r)>();
+                foreach (var t in carried) if (t && t != glass) others.Add((t, t.position, t.rotation));
+                void SetPose(Vector3 p, Quaternion r)
+                {
+                    glass.position = p; glass.rotation = r;
+                    var delta = r * Quaternion.Inverse(startRot);
+                    foreach (var (t, op, or) in others) { t.position = p + delta * (op - startPos); t.rotation = delta * or; }
+                }
                 Vector3 toCam = cam ? Vector3.ProjectOnPlane(cam.transform.position - b.center, Vector3.up).normalized : Vector3.back;
                 Vector3 side = Vector3.Cross(Vector3.up, toCam).normalized;
                 Vector3 liftPos = startPos + Vector3.up * h * 2.6f + toCam * h * 2.2f;
@@ -122,15 +137,14 @@ namespace DetectiveDesk.Gameplay
                 for (float t = 0; t < 1; t += Time.deltaTime / liftSeconds)
                 {
                     float e = Smooth(t);
-                    glass.position = Vector3.Lerp(startPos, liftPos, e);
-                    glass.rotation = Quaternion.Slerp(startRot, Quaternion.AngleAxis(-25f, side) * startRot, e);
+                    SetPose(Vector3.Lerp(startPos, liftPos, e), Quaternion.Slerp(startRot, Quaternion.AngleAxis(-25f, side) * startRot, e));
                     yield return null;
                 }
                 for (float t = 0; t < 1; t += Time.deltaTime / drinkSeconds)
                 {
                     float e = Smooth(t);
-                    glass.rotation = Quaternion.Slerp(Quaternion.AngleAxis(-25f, side) * startRot, tipped, Smooth(Mathf.Min(1, t * 1.6f)));
-                    glass.position = liftPos + Vector3.up * Mathf.Sin(t * Mathf.PI) * h * 0.25f;
+                    SetPose(liftPos + Vector3.up * Mathf.Sin(t * Mathf.PI) * h * 0.25f,
+                            Quaternion.Slerp(Quaternion.AngleAxis(-25f, side) * startRot, tipped, Smooth(Mathf.Min(1, t * 1.6f))));
                     shownLevel = 1 - e;
                     ApplyLiquid(shownLevel);
                     yield return null;
@@ -141,12 +155,10 @@ namespace DetectiveDesk.Gameplay
                 for (float t = 0; t < 1; t += Time.deltaTime / returnSeconds)
                 {
                     float e = Smooth(t);
-                    glass.position = Vector3.Lerp(liftPos, startPos, e);
-                    glass.rotation = Quaternion.Slerp(from, startRot, e);
+                    SetPose(Vector3.Lerp(liftPos, startPos, e), Quaternion.Slerp(from, startRot, e));
                     yield return null;
                 }
-                glass.position = startPos;
-                glass.rotation = startRot;
+                SetPose(startPos, startRot);
                 if (game.audioManager) game.audioManager.Click();   // glass set down
             }
 
@@ -231,6 +243,17 @@ namespace DetectiveDesk.Gameplay
                 block.SetColor("_EmissionColor", emission);
                 r.SetPropertyBlock(block);
             }
+        }
+
+        /// <summary>Testing only: ends any boost/cooldown and fills the glass to one pour from full.</summary>
+        public void DevAlmostFull()
+        {
+            if (!game || Drinking) return;
+            if (Boosting) { BoostRemaining = 0; foreach (var s in Boosted) game.Stats.SetTemporaryMultiplier(s, 1); }
+            Cooldown = 0;
+            Fill = Mathf.Max(0, 1 - game.Balance.whiskeyFillPerClick);
+            game.ShowHint("[dev] whiskey glass almost full");
+            game.Notify();
         }
 
         void OnDisable() { if (game && Boosting) foreach (var s in Boosted) game.Stats.SetTemporaryMultiplier(s, 1); }

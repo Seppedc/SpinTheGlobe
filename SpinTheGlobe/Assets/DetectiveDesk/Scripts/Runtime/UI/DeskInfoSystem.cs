@@ -78,12 +78,7 @@ namespace DetectiveDesk.Gameplay
             if (cases && cases.StampTransform)
                 Add("Stamp", InFront(cases.StampTransform), () => cases.IsFull && !cases.OnCooldown ? "STAMP!" : null);
 
-            var w = game.Whiskey;
-            if (w && w.GlassTransform)
-                Add("Whiskey", InFront(w.GlassTransform), () =>
-                    w.Boosting ? "BOOST " + UIFactory.Seconds(w.BoostRemaining)
-                    : w.Cooldown > 0 ? "REFILL " + UIFactory.Seconds(w.Cooldown)
-                    : Mathf.FloorToInt(w.Fill * 100) + " %");
+            // The whiskey glass shows its state itself: the whiskey level inside the glass.
 
             if (game.figurines != null)
                 foreach (var f in game.figurines)
