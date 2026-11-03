@@ -10,7 +10,7 @@ namespace DetectiveDesk.Gameplay
 {
     /// <summary>
     /// Settings menu (gear button or Esc): language, master / effects / music volume, display options
-    /// (window mode, resolution, frame-rate limit, UI scale), Save &amp; Exit, and
+    /// (window mode, resolution, frame-rate limit), Save &amp; Quit, and
     /// Restart game behind two confirmations. Built at runtime in the noir-ledger style.
     /// </summary>
     [DisallowMultipleComponent]
@@ -116,9 +116,6 @@ namespace DetectiveDesk.Gameplay
             var fps = new string[GameSettings.FrameRates.Length];
             for (int i = 0; i < fps.Length; i++) fps[i] = GameSettings.FrameRates[i] < 0 ? "Unlimited" : GameSettings.FrameRates[i] + " FPS";
             Selector("Frame-rate limit", fps, () => GameSettings.FrameRateIndex, i => { GameSettings.FrameRateIndex = i; GameSettings.Apply(); });
-            var scales = new string[GameSettings.UiScales.Length];
-            for (int i = 0; i < scales.Length; i++) scales[i] = Mathf.RoundToInt(GameSettings.UiScales[i] * 100) + "%";
-            Selector("Interface size", scales, () => GameSettings.UiScaleIndex, i => { GameSettings.UiScaleIndex = i; GameSettings.Apply(); });
 
             // Bottom buttons.
             var spacer = UIFactory.NewRect("Spacer", panel);
@@ -128,7 +125,7 @@ namespace DetectiveDesk.Gameplay
             var restart = UIFactory.NewButton("Restart", buttons, "RESTART GAME", 18, AskRestart, out var restartLabel);
             restartLabel.color = UITheme.Bad;
             Flexible(restart.gameObject);
-            Flexible(UIFactory.NewButton("Save and exit", buttons, "SAVE & EXIT", 18, SaveAndExit, out _).gameObject);
+            Flexible(UIFactory.NewButton("Save and quit", buttons, "SAVE & QUIT", 18, SaveAndQuit, out _).gameObject);
             Flexible(UIFactory.NewButton("Back", buttons, "BACK TO DESK", 18, Close, out _).gameObject);
 
             BuildDialog();
@@ -240,8 +237,8 @@ namespace DetectiveDesk.Gameplay
             le.preferredHeight = 48;
         }
 
-        // ------------------------------------------------------------------ save & exit
-        void SaveAndExit()
+        // ------------------------------------------------------------------ save & quit
+        void SaveAndQuit()
         {
             game.SaveGame();
             PlayerPrefs.Save();

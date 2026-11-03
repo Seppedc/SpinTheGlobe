@@ -5,7 +5,7 @@ using UnityEngine;
 namespace DetectiveDesk.Gameplay
 {
     /// <summary>
-    /// Player settings (language, audio, display, UI scale). Stored per machine in PlayerPrefs, separate from the
+    /// Player settings (language, audio, display). Stored per machine in PlayerPrefs, separate from the
     /// game save, so restarting the game keeps them. <see cref="Apply"/> pushes them into Unity.
     /// </summary>
     public static class GameSettings
@@ -13,7 +13,6 @@ namespace DetectiveDesk.Gameplay
         public static readonly string[] Languages = { "English", "Nederlands", "Français", "Deutsch", "Español" };
         public static readonly string[] WindowModes = { "Fullscreen", "Borderless window", "Windowed" };
         public static readonly int[] FrameRates = { 30, 60, 120, 144, 240, -1 };
-        public static readonly float[] UiScales = { 0.8f, 0.9f, 1f, 1.1f, 1.25f, 1.4f };
 
         public static event Action Changed;
 
@@ -25,12 +24,10 @@ namespace DetectiveDesk.Gameplay
         public static int ResolutionWidth { get => Get("win.w", 0); set => Set("win.w", value); }
         public static int ResolutionHeight { get => Get("win.h", 0); set => Set("win.h", value); }
         public static int FrameRateIndex { get => Get("fps", 1); set => Set("fps", Mathf.Clamp(value, 0, FrameRates.Length - 1)); }
-        public static int UiScaleIndex { get => Get("ui.scale", 2); set => Set("ui.scale", Mathf.Clamp(value, 0, UiScales.Length - 1)); }
 
         /// <summary>Effective volumes (master × channel) for sound effects and music.</summary>
         public static float EffectsVolume => Master * Effects;
         public static float MusicVolume => Master * Music;
-        public static float UiScale => UiScales[UiScaleIndex];
 
         /// <summary>Distinct screen sizes the monitor supports, largest last.</summary>
         public static List<Vector2Int> Resolutions()
