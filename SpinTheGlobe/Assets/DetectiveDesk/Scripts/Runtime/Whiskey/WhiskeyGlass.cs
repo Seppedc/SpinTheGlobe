@@ -258,7 +258,9 @@ namespace DetectiveDesk.Gameplay
 
         void OnDisable() { if (game && Boosting) foreach (var s in Boosted) game.Stats.SetTemporaryMultiplier(s, 1); }
 
-        public void LoadState(SaveData d) { Fill = Mathf.Clamp01(d.whiskeyFill); Cooldown = Mathf.Max(0, d.whiskeyCooldown); if (Fill >= 1) Fill = 0.99f; }
+        // Every session starts with the glass ready to pour: a saved refill cooldown is not carried over
+        // (could later become an unlock bought with gold).
+        public void LoadState(SaveData d) { Fill = Mathf.Clamp01(d.whiskeyFill); Cooldown = 0; if (Fill >= 1) Fill = 0.99f; }
         // A boost in progress is not saved; it ends as if it had run out.
         public void SaveState(SaveData d) { d.whiskeyFill = Boosting || Drinking ? 0 : Fill; d.whiskeyCooldown = Boosting || Drinking ? (float)game.Stats.Get(StatId.WhiskeyCooldown) : Cooldown; }
     }
