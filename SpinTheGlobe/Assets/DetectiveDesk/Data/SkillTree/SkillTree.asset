@@ -70,7 +70,8 @@ MonoBehaviour:
     position: {x: 0, y: 320}
   - id: globe_drag
     title: Firm Grip
-    description: +20% speed gained from dragging.
+    description: +30% speed gained from dragging. (Dragging always beats clicking
+      at the same upgrade level.)
     branch: 1
     maxRank: 5
     currency: 0
@@ -83,14 +84,14 @@ MonoBehaviour:
     modifiers:
     - stat: 102
       kind: 1
-      valuePerRank: 0.2
+      valuePerRank: 0.3
       pinIndex: -1
     capStat: 0
     capByStat: 0
     position: {x: -160, y: 320}
   - id: globe_click
     title: Flick of the Wrist
-    description: +25% speed gained from clicking.
+    description: +20% speed gained from clicking.
     branch: 1
     maxRank: 5
     currency: 0
@@ -103,7 +104,7 @@ MonoBehaviour:
     modifiers:
     - stat: 103
       kind: 1
-      valuePerRank: 0.25
+      valuePerRank: 0.2
       pinIndex: -1
     capStat: 0
     capByStat: 0
@@ -1130,7 +1131,8 @@ MonoBehaviour:
     position: {x: -480, y: 80}
   - id: case_press
     title: "\u2605 Press Coverage"
-    description: Every approved case also pays 2 gold (more for later cases).
+    description: Approved cases get a 2% chance to also drop gold (5+, more for later
+      cases).
     branch: 3
     maxRank: 1
     currency: 1
@@ -1141,13 +1143,37 @@ MonoBehaviour:
     prerequisites:
     - case_autostamp
     modifiers:
+    - stat: 305
+      kind: 0
+      valuePerRank: 0.02
+      pinIndex: -1
     - stat: 304
       kind: 0
-      valuePerRank: 2
+      valuePerRank: 5
       pinIndex: -1
     capStat: 0
     capByStat: 0
     position: {x: -480, y: -80}
+  - id: case_headlines
+    title: Front Page News
+    description: +1% chance an approved case drops gold. Never above 10%.
+    branch: 3
+    maxRank: 8
+    currency: 0
+    cost:
+      baseCost: 5000
+      growth: 1.9
+      explicitCosts: []
+    prerequisites:
+    - case_press
+    modifiers:
+    - stat: 305
+      kind: 0
+      valuePerRank: 0.01
+      pinIndex: -1
+    capStat: 0
+    capByStat: 0
+    position: {x: -640, y: -80}
   - id: case_mastery
     title: Case Mastery
     description: +5% case rewards per rank, compounding. Never maxes out.

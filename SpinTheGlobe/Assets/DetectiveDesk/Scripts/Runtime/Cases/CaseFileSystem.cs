@@ -41,6 +41,9 @@ namespace DetectiveDesk.Gameplay
             ? System.Math.Max(B.caseBaseReward * (Level + 1) * game.Stats.Get(StatId.IncomeMultiplier), B.caseIncomeSeconds * game.IncomeRate)
               * game.Stats.Get(StatId.CasePayout)
             : 0;
+        /// <summary>Chance an approved case also drops gold (Press Coverage), never above the balance cap (10%).</summary>
+        public double GoldChance => game ? System.Math.Min(B.caseGoldChanceCap, game.Stats.Get(StatId.CaseGoldChance)) : 0;
+        /// <summary>Gold paid when a case drops gold.</summary>
         public double GoldReward => game ? System.Math.Round(game.Stats.Get(StatId.CaseGold) * (1 + Level / (double)B.caseGoldLevelDivisor)) : 0;
 
         public void Initialize(GameManager owner)
@@ -124,7 +127,7 @@ namespace DetectiveDesk.Gameplay
         IEnumerator StampSequence(bool automatic)
         {
             double reward = Reward;
-            double gold = GoldReward;
+            double gold = rng.NextDouble() < GoldChance ? GoldReward : 0;
             int level = Level;
 
             Vector3 target = visual && visual.IsValid ? visual.StampPoint : (folder ? folder.position : Vector3.zero);

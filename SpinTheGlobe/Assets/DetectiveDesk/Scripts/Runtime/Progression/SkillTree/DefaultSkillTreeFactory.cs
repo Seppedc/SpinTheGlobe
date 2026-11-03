@@ -67,6 +67,7 @@ namespace DetectiveDesk.Progression
                 ["case_payout"] = new Vector2(-1, 0),
                 ["case_cooldown"] = new Vector2(-2, 0.5f), ["case_autostamp"] = new Vector2(-2, -0.5f),
                 ["case_cold_cases"] = new Vector2(-3, 0.5f), ["case_press"] = new Vector2(-3, -0.5f), ["case_mastery"] = new Vector2(-4, 0.5f),
+                ["case_headlines"] = new Vector2(-4, -0.5f),
                 // Whiskey
                 ["whiskey_duration"] = new Vector2(-2, 2),
                 ["whiskey_cooldown"] = new Vector2(-3, 2.5f), ["whiskey_strength"] = new Vector2(-3, 1.5f),
@@ -100,10 +101,10 @@ namespace DetectiveDesk.Progression
             var auto = Add(n, "globe_auto", "Clockwork Motor", "+1 RPM auto-rotate. Never faster than the maximum spin speed.",
                 SkillBranch.Globe, 20, Money(60, 1.45), dir * Step * 2, new[] { "globe_max_speed" }, StatModifier.Add(StatId.GlobeAutoSpeed, 6));
             auto.capStat = StatId.GlobeAutoSpeed; auto.capByStat = StatId.GlobeMaxSpeed;
-            Add(n, "globe_drag", "Firm Grip", "+20% speed gained from dragging.",
-                SkillBranch.Globe, 5, Money(40, 1.8), dir * Step * 1.5f + side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeDragPower, 0.2));
-            Add(n, "globe_click", "Flick of the Wrist", "+25% speed gained from clicking.",
-                SkillBranch.Globe, 5, Money(40, 1.8), dir * Step * 1.5f - side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeClickPower, 0.25));
+            Add(n, "globe_drag", "Firm Grip", "+30% speed gained from dragging. (Dragging always beats clicking at the same upgrade level.)",
+                SkillBranch.Globe, 5, Money(40, 1.8), dir * Step * 1.5f + side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeDragPower, 0.3));
+            Add(n, "globe_click", "Flick of the Wrist", "+20% speed gained from clicking.",
+                SkillBranch.Globe, 5, Money(40, 1.8), dir * Step * 1.5f - side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeClickPower, 0.2));
             Add(n, "globe_multiplier", "Cartographer's Cut", "+25% globe earnings (turns and pins).",
                 SkillBranch.Globe, 25, Money(150, 1.42), dir * Step * 3, new[] { "globe_auto" }, StatModifier.Percent(StatId.GlobeMultiplier, 0.25));
             Add(n, "globe_gilded_axis", "Gilded Axis", "Doubles all globe earnings.",
@@ -160,8 +161,11 @@ namespace DetectiveDesk.Progression
                 SkillBranch.CaseFile, 10, Money(250, 1.7), dir * Step * 2 - side * Step * 0.6f, new[] { "case_payout" }, StatModifier.Add(StatId.CaseAutoStampChance, 0.05));
             Add(n, "case_cold_cases", "Cold Cases", "Every case needs one less piece of evidence.",
                 SkillBranch.CaseFile, 3, Money(1000, 3), dir * Step * 3 + side * Step * 0.6f, new[] { "case_cooldown" }, StatModifier.Add(StatId.CaseEvidenceReduction, 1));
-            Add(n, "case_press", "★ Press Coverage", "Every approved case also pays 2 gold (more for later cases).",
-                SkillBranch.CaseFile, 1, Gold(40), dir * Step * 3 - side * Step * 0.6f, new[] { "case_autostamp" }, StatModifier.Add(StatId.CaseGold, 2)).currency = Currency.Gold;
+            Add(n, "case_press", "★ Press Coverage", "Approved cases get a 2% chance to also drop gold (5+, more for later cases).",
+                SkillBranch.CaseFile, 1, Gold(40), dir * Step * 3 - side * Step * 0.6f, new[] { "case_autostamp" },
+                StatModifier.Add(StatId.CaseGoldChance, 0.02), StatModifier.Add(StatId.CaseGold, 5)).currency = Currency.Gold;
+            Add(n, "case_headlines", "Front Page News", "+1% chance an approved case drops gold. Never above 10%.",
+                SkillBranch.CaseFile, 8, Money(5000, 1.9), dir * Step * 4 - side * Step * 0.6f, new[] { "case_press" }, StatModifier.Add(StatId.CaseGoldChance, 0.01));
             Add(n, "case_mastery", "Case Mastery", "+5% case rewards per rank, compounding. Never maxes out.",
                 SkillBranch.CaseFile, MasteryRanks, Money(1e6, 1.25), dir * Step * 4, new[] { "case_cold_cases" }, StatModifier.Multiply(StatId.CasePayout, 1.05));
         }

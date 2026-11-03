@@ -37,6 +37,7 @@ namespace DetectiveDesk.Gameplay
         bool dragging;
         Vector2 pointer;
         float travelled;
+        double dragAdded;   // speed requested by the current drag
 
         void Start()
         {
@@ -58,6 +59,7 @@ namespace DetectiveDesk.Gameplay
                     dragging = CanBeginDrag(gameCamera.ScreenPointToRay(Input.mousePosition));
                     pointer = Input.mousePosition;
                     travelled = 0;
+                    dragAdded = 0;
                 }
                 if (dragging && Input.GetMouseButton(0))
                 {
@@ -70,6 +72,7 @@ namespace DetectiveDesk.Gameplay
                 if (Input.GetMouseButtonUp(0))
                 {
                     if (dragging && travelled <= clickMaxPixels) AddClick();
+                    else if (dragging) FinishDrag();
                     dragging = false;
                 }
             }
@@ -94,7 +97,19 @@ namespace DetectiveDesk.Gameplay
         {
             if (float.IsNaN(horizontalPixels) || float.IsInfinity(horizontalPixels) || horizontalPixels <= 0) return;
             double gain = game ? game.Balance.dragAcceleration * game.Stats.Get(StatId.GlobeDragPower) : .35;
+            dragAdded += horizontalPixels * gain;
             AddVelocity(horizontalPixels * gain);
+        }
+
+        /// <summary>
+        /// Rule: dragging is always more rewarding than clicking. A drag in the spin direction gives at least
+        /// <see cref="GameBalance.dragOverClick"/> × a click's impulse, using the (always higher) drag power.
+        /// </summary>
+        void FinishDrag()
+        {
+            if (dragAdded <= 0 || !game) return;
+            double minimum = game.Balance.clickImpulse * game.Balance.dragOverClick * game.Stats.Get(StatId.GlobeDragPower);
+            if (dragAdded < minimum) AddVelocity(minimum - dragAdded);
         }
 
         /// <summary>Click input: a fixed impulse, deliberately weaker than a good drag.</summary>

@@ -32,7 +32,8 @@ namespace DetectiveDesk.Gameplay
                 case StatId.PinAutoFire: return "Auto-fire";
                 case StatId.PinDoubleShotChance: return "Double-shot chance";
                 case StatId.CaseEvidenceReduction: return "Evidence saved";
-                case StatId.CaseGold: return "Gold per case";
+                case StatId.CaseGold: return "Gold when it drops";
+                case StatId.CaseGoldChance: return "Gold drop chance";
                 case StatId.WhiskeyAutoRefill: return "Auto-refill";
                 case StatId.StatuePieceReduction: return "Pieces saved";
                 case StatId.LootboxPrice: return "Lootbox price";
@@ -70,6 +71,7 @@ namespace DetectiveDesk.Gameplay
                 case StatId.PinLandChance:
                 case StatId.PinCityChance:
                 case StatId.CaseAutoStampChance:
+                case StatId.CaseGoldChance:
                     return (v * 100).ToString("0.#") + "%";
                 default:
                     return "×" + v.ToString("0.##");

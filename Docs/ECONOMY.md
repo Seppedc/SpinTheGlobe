@@ -12,7 +12,7 @@ The numbers live in `Data/Balance/GameBalance.asset` and `Data/SkillTree/SkillTr
 | Paper ball in the bin | €25 × income scale | small |
 | Statue smash | **gold** 10 × statue# × statue gold | gold |
 | Lootbox gold | 2–8 gold | gold |
-| ★ Press Coverage | CaseGold × (1 + case#/10) gold per case | gold |
+| ★ Press Coverage | 2% chance per approved case (up to 10% with Front Page News) to drop 5 × (1 + case#/10) gold | gold |
 
 - *Income scale* = Globe earnings × All income.
 - *Location*: sea ×1, land ×2, near a city up to ×6.
@@ -23,14 +23,15 @@ The numbers live in `Data/Balance/GameBalance.asset` and `Data/SkillTree/SkillTr
 ## Stat formula
 final = (base + Σ add) × max(0.05, 1 + Σ percent) × Π (multiply^rank) × temporary buffs (whiskey)
 
-## Skill tree (71 nodes)
+## Skill tree (72 nodes)
 Costs are written as *base × growth per rank*. ★ nodes cost gold.
 
 **Globe**
 - Greased Bearings: +2 RPM max speed. 20 ranks, €20 ×1.42.
 - Clockwork Motor: +1 RPM auto-rotate, never above max speed. 20 ranks, €60 ×1.45.
-- Firm Grip: +20% drag. 5 ranks, €40 ×1.8.
-- Flick of the Wrist: +25% click. 5 ranks, €40 ×1.8.
+- Firm Grip: +30% drag. 5 ranks, €40 ×1.8.
+- Flick of the Wrist: +20% click. 5 ranks, €40 ×1.8.
+- **Rule:** dragging always beats clicking. At the same upgrade level drag power ≥ click power, and every drag gives at least 1.5 clicks' worth of speed (checked by a unit test).
 - Cartographer's Cut: +25% globe earnings. 25 ranks, €150 ×1.42.
 - Gilded Axis: ×2 globe earnings. 1 rank, €5M.
 - ★ Golden Meridian: ×1.5 all income. 150 gold.
@@ -53,7 +54,8 @@ Costs are written as *base × growth per rank*. ★ nodes cost gold.
 - Efficient Paperwork: −7% cooldown. 10 ranks, €100 ×1.7.
 - Rubber-Stamp Clerk: +5% auto-stamp. 10 ranks, €250 ×1.7.
 - Cold Cases: −1 evidence needed. 3 ranks, €1K ×3.
-- ★ Press Coverage: gold per case. 40 gold.
+- ★ Press Coverage: 2% chance an approved case drops gold. 40 gold.
+- Front Page News: +1% gold-drop chance, 8 ranks (max 10% total, hard cap). €5K ×1.9.
 - Case Mastery: ×1.05 case reward per rank, endless. €1M ×1.25.
 
 **Statues**

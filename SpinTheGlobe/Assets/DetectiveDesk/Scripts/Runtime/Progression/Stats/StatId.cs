@@ -32,7 +32,8 @@ namespace DetectiveDesk.Progression
         CaseCooldown = 301,         // seconds before the next case opens
         CaseAutoStampChance = 302,  // probability a full case stamps itself
         CaseEvidenceReduction = 303,// fewer evidence needed per case
-        CaseGold = 304,             // gold paid per approved case
+        CaseGold = 304,             // gold paid when an approved case drops gold
+        CaseGoldChance = 305,       // chance (0..1) an approved case drops gold, capped at GameBalance.caseGoldChanceCap
 
         // Whiskey glass
         WhiskeyBoostDuration = 400, // seconds

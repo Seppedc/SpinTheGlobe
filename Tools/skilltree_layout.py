@@ -15,7 +15,7 @@ a('shooter_cooldown',3,-2,['pin_01'],'P'); a('pin_autoloader',3,-3,['shooter_coo
 a('pin_land_chance',4,-2,['pin_02'],'P'); a('pin_city_chance',5,-2,['pin_land_chance'],'P'); a('pin_steel_tips',6,-2,['pin_city_chance'],'P'); a('pin_twin_barrel',7,-2,['pin_steel_tips'],'P')
 # Case (left)
 a('case_payout',-1,0,['root'],'C'); a('case_cooldown',-2,0.5,['case_payout'],'C'); a('case_autostamp',-2,-0.5,['case_payout'],'C')
-a('case_cold_cases',-3,0.5,['case_cooldown'],'C'); a('case_press',-3,-0.5,['case_autostamp'],'C'); a('case_mastery',-4,0.5,['case_cold_cases'],'C')
+a('case_cold_cases',-3,0.5,['case_cooldown'],'C'); a('case_press',-3,-0.5,['case_autostamp'],'C'); a('case_mastery',-4,0.5,['case_cold_cases'],'C'); a('case_headlines',-4,-0.5,['case_press'],'C')
 # Whiskey (up-left)
 a('whiskey_duration',-2,2,['root'],'W'); a('whiskey_cooldown',-3,2.5,['whiskey_duration'],'W'); a('whiskey_strength',-3,1.5,['whiskey_duration'],'W')
 a('whiskey_bottomless',-4,2.5,['whiskey_cooldown'],'W'); a('whiskey_mastery',-4,1.5,['whiskey_strength'],'W')

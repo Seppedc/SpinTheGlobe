@@ -44,6 +44,8 @@ namespace DetectiveDesk.Progression
         [Min(0)] public float dragAcceleration = 0.35f;
         [Tooltip("°/s gained per click on the globe (× Click Power). Smaller than a good drag.")]
         [Min(0)] public float clickImpulse = 10f;
+        [Tooltip("A drag always gives at least this many clicks' worth of speed (with drag power), so dragging beats clicking.")]
+        [Min(1)] public float dragOverClick = 1.5f;
         [Tooltip("Money for each full revolution past the start line (× Globe Multiplier).")]
         [Min(0)] public double revolutionReward = 1.5;
 
@@ -69,6 +71,8 @@ namespace DetectiveDesk.Progression
         [Min(0)] public float caseIncomeSeconds = 12;
         [Tooltip("Gold per approved case is CaseGold × (1 + case number / this).")]
         [Min(1)] public float caseGoldLevelDivisor = 10;
+        [Tooltip("Highest chance an approved case drops gold (Press Coverage and its upgrades never go above this).")]
+        [Range(0, 1)] public float caseGoldChanceCap = 0.10f;
 
         [Header("Whiskey glass")]
         [Range(0.01f, 1)] public float whiskeyFillPerClick = 0.1f;
@@ -132,6 +136,7 @@ namespace DetectiveDesk.Progression
             new StatBase(StatId.CaseAutoStampChance, 0),
             new StatBase(StatId.CaseEvidenceReduction, 0),
             new StatBase(StatId.CaseGold, 0),
+            new StatBase(StatId.CaseGoldChance, 0),
 
             new StatBase(StatId.WhiskeyBoostDuration, 10),
             new StatBase(StatId.WhiskeyCooldown, 60),

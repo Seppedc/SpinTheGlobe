@@ -234,6 +234,7 @@ namespace DetectiveDesk.Gameplay
         void Glow()
         {
             if (renderers == null) return;
+            if (block == null) block = new MaterialPropertyBlock();   // e.g. after a script reload in Play mode
             float pulse = Boosting ? 0.35f + 0.2f * Mathf.Sin(Time.time * 6) : 0;
             var emission = new Color(0.9f, 0.45f, 0.08f) * pulse;
             foreach (var r in renderers)

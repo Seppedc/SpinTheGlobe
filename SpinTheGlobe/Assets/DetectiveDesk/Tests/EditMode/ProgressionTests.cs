@@ -142,6 +142,40 @@ namespace DetectiveDesk.Tests
         }
 
         [Test]
+        public void Dragging_AlwaysBeatsClicking_AtEveryEqualUpgradeLevel()
+        {
+            var drag = tree.Find("globe_drag");
+            var click = tree.Find("globe_click");
+            Assert.AreEqual(drag.maxRank, click.maxRank);
+            for (int level = 0; level <= drag.maxRank; level++)
+            {
+                double dragPower = stats.Preview(StatId.GlobeDragPower, drag.modifiers, level);
+                double clickPower = stats.Preview(StatId.GlobeClickPower, click.modifiers, level);
+                // The weakest drag gets dragOverClick clicks' worth with drag power; a click gets one with click power.
+                double weakestDrag = balance.clickImpulse * balance.dragOverClick * dragPower;
+                double click1 = balance.clickImpulse * clickPower;
+                Assert.Greater(weakestDrag, click1, "level " + level);
+                Assert.GreaterOrEqual(dragPower, clickPower, "level " + level);
+            }
+        }
+
+        [Test]
+        public void PressCoverage_GoldChance_NeverExceedsTenPercent()
+        {
+            var press = tree.Find("case_press");
+            var news = tree.Find("case_headlines");
+            Assert.AreEqual(Currency.Gold, press.currency);
+            CollectionAssert.Contains(news.prerequisites, "case_press");
+            double chance = stats.Preview(StatId.CaseGoldChance, press.modifiers, 1);
+            double max = 0;
+            foreach (var m in press.modifiers) if (m.stat == StatId.CaseGoldChance) max += m.valuePerRank;
+            foreach (var m in news.modifiers) if (m.stat == StatId.CaseGoldChance) max += m.valuePerRank * news.maxRank;
+            Assert.Greater(chance, 0);
+            Assert.LessOrEqual(max, balance.caseGoldChanceCap + 1e-6);
+            Assert.AreEqual(0.10, balance.caseGoldChanceCap, 1e-6);
+        }
+
+        [Test]
         public void TemporaryMultiplier_LayersOnTopOfPermanentValue()
         {
             stats.SetTemporaryMultiplier(StatId.GlobeMultiplier, 1.5);
