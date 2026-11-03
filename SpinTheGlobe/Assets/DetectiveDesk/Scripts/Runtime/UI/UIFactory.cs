@@ -24,10 +24,23 @@ namespace DetectiveDesk.Gameplay
             canvas.sortingOrder = sortingOrder;
             var scaler = go.GetComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920, 1080);
+            scaler.referenceResolution = ReferenceResolution;
             scaler.matchWidthOrHeight = 0.5f;
+            Scalers.RemoveAll(s => !s);
+            Scalers.Add(scaler);
+            if (!scaleHooked) { scaleHooked = true; GameSettings.Changed += ApplyUiScale; }
             EnsureEventSystem();
             return canvas;
+        }
+
+        // Interface size setting: a smaller reference resolution makes every runtime canvas larger.
+        static readonly System.Collections.Generic.List<CanvasScaler> Scalers = new System.Collections.Generic.List<CanvasScaler>();
+        static bool scaleHooked;
+        static Vector2 ReferenceResolution => new Vector2(1920, 1080) / Mathf.Max(0.1f, GameSettings.UiScale);
+        static void ApplyUiScale()
+        {
+            Scalers.RemoveAll(s => !s);
+            foreach (var s in Scalers) s.referenceResolution = ReferenceResolution;
         }
 
         public static void EnsureEventSystem()

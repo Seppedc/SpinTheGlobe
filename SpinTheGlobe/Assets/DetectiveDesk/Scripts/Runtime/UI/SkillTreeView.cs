@@ -65,9 +65,14 @@ namespace DetectiveDesk.Gameplay
             dirty = true;
         }
 
+        /// <summary>True during the frame the tree was closed (so the same Esc press doesn't open the settings).</summary>
+        public bool ClosedThisFrame => closedFrame == Time.frameCount;
+        int closedFrame = -1;
+
         public void Close()
         {
             if (!canvas) return;
+            if (IsOpen) closedFrame = Time.frameCount;
             HideTooltip();
             canvas.gameObject.SetActive(false);
         }

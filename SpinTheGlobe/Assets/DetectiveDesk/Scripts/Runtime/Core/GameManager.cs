@@ -51,13 +51,14 @@ namespace DetectiveDesk.Gameplay
         public SkillTreeView TreeView { get; private set; }
         public DeskInfoSystem DeskInfo { get; private set; }
         public DeskLamp Lamp { get; private set; }
+        public SettingsMenu Settings { get; private set; }
 
         public double Money => Wallet.Money;
         public double PlayTime { get; private set; }
         public Camera GameCamera => globe && globe.gameCamera ? globe.gameCamera : Camera.main;
 
         public bool WorldInputBlocked =>
-            (archive && archive.IsArchiveOpen) || (TreeView && TreeView.IsOpen) || (PaperBalls && PaperBalls.IsAiming) ||
+            (archive && archive.IsArchiveOpen) || (TreeView && TreeView.IsOpen) || (Settings && Settings.IsOpen) || (PaperBalls && PaperBalls.IsAiming) ||
             (legacy && legacy.settingsPanel && legacy.settingsPanel.activeInHierarchy);
 
         public event Action Changed;
@@ -101,6 +102,7 @@ namespace DetectiveDesk.Gameplay
             TreeView = Ensure<SkillTreeView>();
             DeskInfo = Ensure<DeskInfoSystem>();
             Lamp = Ensure<DeskLamp>();
+            Settings = Ensure<SettingsMenu>();
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             Ensure<DevCheats>();
 #endif
@@ -146,6 +148,7 @@ namespace DetectiveDesk.Gameplay
             if (map) map.Bind(this);
             Lamp.Initialize(this);
             DeskInfo.Initialize(this);
+            Settings.Initialize(this);
 
             loaded = true;
             EventBus.Publish(new GameLoaded());

@@ -80,7 +80,7 @@ namespace DetectiveDesk.Gameplay
             bar.Place(new Vector2(0, 1), new Vector2(0, 1), new Vector2(0, 1), new Vector2(20, -20), new Vector2(0, 66));
             Row(bar, 12, 26, 9, 14);
 
-            IconButton(bar, "gear", 44, () => { if (game.legacy) game.legacy.ToggleSettings(); });
+            IconButton(bar, "gear", 44, () => { if (game.Settings) game.Settings.Toggle(); });
             UIFactory.NewDivider(bar, 46);
             UIFactory.NewIcon("money", bar, 34);
             moneyText = Value(bar, 30, UITheme.Cream, true, 150);
@@ -166,6 +166,7 @@ namespace DetectiveDesk.Gameplay
         {
             var legacy = game.legacy;
             if (!legacy) return;
+            if (legacy.settingsPanel) legacy.settingsPanel.SetActive(false);
             Transform root = null;
             if (legacy.moneyText) root = legacy.moneyText.canvas ? legacy.moneyText.canvas.rootCanvas.transform : legacy.moneyText.transform.root;
             else if (legacy.hintText) root = legacy.hintText.transform.root;
