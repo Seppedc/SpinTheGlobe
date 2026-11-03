@@ -55,7 +55,25 @@ namespace DetectiveDesk.Gameplay
             if (authoredTierVisuals != null) foreach (var v in authoredTierVisuals) if (v) v.SetActive(false);
             if (restorationSeams != null) foreach (var s in restorationSeams) if (s) s.enabled = false;
             properties = new MaterialPropertyBlock();
+            FitClickBox();
             Apply();
+        }
+
+        /// <summary>
+        /// Shrinks the click box to this statue's own models, so a statue standing behind another one can still be
+        /// clicked over the front one's shoulder.
+        /// </summary>
+        void FitClickBox()
+        {
+            var box = GetComponent<BoxCollider>();
+            if (!box) return;
+            var renderers = GetComponentsInChildren<Renderer>(true);
+            if (renderers.Length == 0) return;
+            var b = renderers[0].bounds;
+            foreach (var r in renderers) if (!(r is ParticleSystemRenderer)) b.Encapsulate(r.bounds);
+            var s = transform.lossyScale;
+            box.center = transform.InverseTransformPoint(b.center);
+            box.size = new Vector3(b.size.x / Mathf.Max(1e-4f, Mathf.Abs(s.x)), b.size.y / Mathf.Max(1e-4f, Mathf.Abs(s.y)), b.size.z / Mathf.Max(1e-4f, Mathf.Abs(s.z)));
         }
 
         public bool AddPiece()

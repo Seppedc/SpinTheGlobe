@@ -109,12 +109,27 @@ namespace DetectiveDesk.Gameplay
             Inventory.Changed += Notify;
         }
 
+        /// <summary>
+        /// All statue pedestals in the scene: the ones wired in <see cref="figurines"/> first (their order is the save order),
+        /// then any other FigurinePedestal found, sorted by name. Adding a statue = adding a pedestal to the scene.
+        /// </summary>
+        FigurinePedestal[] CollectStatues()
+        {
+            var list = new List<FigurinePedestal>();
+            if (figurines != null) foreach (var f in figurines) if (f && !list.Contains(f)) list.Add(f);
+            var found = new List<FigurinePedestal>(FindObjectsByType<FigurinePedestal>(FindObjectsInactive.Exclude, FindObjectsSortMode.None));
+            found.Sort((a, b) => string.CompareOrdinal(a.name, b.name));
+            foreach (var f in found) if (!list.Contains(f)) list.Add(f);
+            return list.ToArray();
+        }
+
         void OnEnable() { if (globe) globe.RevolutionsCompleted += Revolution; }
         void OnDisable() { if (globe) globe.RevolutionsCompleted -= Revolution; }
 
         void Start()
         {
-            if (figurines != null) for (int i = 0; i < figurines.Length; i++) if (figurines[i]) figurines[i].Bind(this, i);
+            figurines = CollectStatues();
+            for (int i = 0; i < figurines.Length; i++) figurines[i].Bind(this, i);
             Clicks.Initialize(this, GameCamera);
 
             LoadGame();
@@ -243,8 +258,38 @@ namespace DetectiveDesk.Gameplay
         public void ArmLauncher() => FirePin();
         public void InspectFigurine(FigurinePedestal pedestal)
         {
+            pedestal = StatueUnderMouse(pedestal);
             if (pedestal) pedestal.Click();
             else ShowHint("Statue pieces come from lootboxes. A finished statue fills with gold as the globe spins.");
+        }
+
+        /// <summary>
+        /// Statues stand close together and overlap on screen, so the clicked collider can belong to the statue in
+        /// front. Of the statues under the mouse, take the one whose middle is closest to the cursor.
+        /// </summary>
+        FigurinePedestal StatueUnderMouse(FigurinePedestal fallback)
+        {
+            var cam = GameCamera;
+            if (!cam || figurines == null) return fallback;
+            Vector2 mouse = Input.mousePosition;
+            FigurinePedestal best = fallback;
+            float bestDistance = float.MaxValue;
+            foreach (var f in figurines)
+            {
+                if (!f) continue;
+                var b = f.VisualBounds;
+                Vector2 min = new Vector2(float.MaxValue, float.MaxValue), max = new Vector2(float.MinValue, float.MinValue);
+                for (int i = 0; i < 8; i++)
+                {
+                    var corner = b.center + Vector3.Scale(b.extents, new Vector3((i & 1) == 0 ? -1 : 1, (i & 2) == 0 ? -1 : 1, (i & 4) == 0 ? -1 : 1));
+                    Vector3 sp = cam.WorldToScreenPoint(corner);
+                    min = Vector2.Min(min, sp); max = Vector2.Max(max, sp);
+                }
+                if (mouse.x < min.x || mouse.x > max.x || mouse.y < min.y || mouse.y > max.y) continue;
+                float d = Vector2.Distance(mouse, (min + max) * 0.5f);
+                if (d < bestDistance) { bestDistance = d; best = f; }
+            }
+            return best;
         }
 
         public void ShowHint(string message)

@@ -1,47 +1,106 @@
 using System.Collections;
+using System.Collections.Generic;
 using DetectiveDesk.Core;
 using DetectiveDesk.Economy;
 using UnityEngine;
 
 namespace DetectiveDesk.Gameplay
 {
-    /// <summary>Swings the desk's jeweler hammer at a golden statue, bursts it into gold shards and pays gold.</summary>
+    /// <summary>
+    /// Picks up the jeweler hammer, carries it over the golden statue that was clicked, winds up and strikes,
+    /// bursts the statue into gold shards (paying gold) and puts the hammer back exactly where it was.
+    /// Works for any number of statues: the target comes from the clicked statue's bounds.
+    /// Only the hammer moves (the visible model plus its old placeholder parts), never its parent group.
+    /// </summary>
     [DisallowMultipleComponent]
     public sealed class StatueHammer : MonoBehaviour
     {
+        [Tooltip("Seconds: pick up and carry, wind up, strike, put back.")]
+        public float carrySeconds = 0.4f, windUpSeconds = 0.18f, strikeSeconds = 0.08f, returnSeconds = 0.45f;
+        [Tooltip("Degrees the hammer leans back before the strike and forward on impact.")]
+        public float windUpAngle = 55f, strikeAngle = 30f;
+
         GameManager game;
-        Transform hammer;
+        Transform hammer;                                            // visible model (moved by its bounds centre)
+        readonly List<Transform> carried = new List<Transform>();    // everything that moves with it
         Material shardMaterial;
+        bool busy;
 
         public void Initialize(GameManager owner)
         {
             game = owner;
-            var head = ClickRouter.FindByName("Hammer head", "hammer head");
-            hammer = head ? (head.parent ? head.parent : head) : ClickRouter.FindByName("JewelerHammer", "hammer");
+            var model = ClickRouter.FindByName("Generated_JewelerHammer", "JewelerHammer");
+            var head = ClickRouter.FindByName("Hammer head");
+            var handle = ClickRouter.FindByName("Small jeweler hammer handle");
+            hammer = model ? model : head;
+            foreach (var t in new[] { hammer, head, handle })
+                if (t && !carried.Contains(t) && !IsGroupOfOthers(t)) carried.Add(t);
         }
+
+        /// <summary>Never carry a container such as "Decorations" (it holds the glass and the bottle too).</summary>
+        static bool IsGroupOfOthers(Transform t) => t.name == "Decorations" || t.name == "GameplayObjects" || t.name == "Environment";
 
         public void Smash(FigurinePedestal statue)
         {
-            if (!statue || statue.IsBusy) return;
+            if (!statue || statue.IsBusy || busy) return;
             StartCoroutine(SmashRoutine(statue));
         }
 
         IEnumerator SmashRoutine(FigurinePedestal statue)
         {
+            busy = true;
             statue.IsBusy = true;
             var target = statue.VisualBounds;
-            Vector3 impact = target.center + Vector3.up * target.extents.y * 0.6f;
+            Vector3 impact = target.center + Vector3.up * target.extents.y * 0.55f;
 
-            Vector3 restPos = Vector3.zero; Quaternion restRot = Quaternion.identity;
             if (hammer)
             {
-                restPos = hammer.position; restRot = hammer.rotation;
-                Vector3 above = impact + Vector3.up * 0.18f + Vector3.back * 0.05f;
-                yield return Move(hammer, restPos, above, restRot, restRot * Quaternion.Euler(-35, 0, 0), 0.25f);
-                yield return Move(hammer, above, impact, hammer.rotation, restRot * Quaternion.Euler(25, 0, 0), 0.09f);
-            }
+                var cam = game.GameCamera;
+                var hb = ClickRouter.RendererBounds(hammer, hammer.position);
+                Vector3 startCenter = hb.center;
+                Quaternion startRot = hammer.rotation;
+                var poses = new List<(Transform t, Vector3 offset, Quaternion rot)>();
+                foreach (var t in carried) if (t) poses.Add((t, t.position - startCenter, t.rotation));
 
+                // Hold the hammer upright-ish, head over the statue, swinging in the plane facing the camera.
+                Vector3 toCam = cam ? Vector3.ProjectOnPlane(cam.transform.position - impact, Vector3.up).normalized : Vector3.back;
+                Vector3 swingAxis = Vector3.Cross(Vector3.up, toCam).normalized;              // horizontal, across the view
+                float reach = Mathf.Max(hb.extents.x, hb.extents.z);
+                Vector3 overStatue = impact + Vector3.up * (reach * 0.9f) + toCam * reach * 0.25f;
+                Quaternion held = Quaternion.AngleAxis(-20f, swingAxis) * startRot;
+                Quaternion wound = Quaternion.AngleAxis(-windUpAngle, swingAxis) * startRot;
+                Quaternion struck = Quaternion.AngleAxis(strikeAngle, swingAxis) * startRot;
+                Vector3 lifted = startCenter + Vector3.up * reach * 0.6f;
+
+                void Pose(Vector3 center, Quaternion rot)
+                {
+                    var delta = rot * Quaternion.Inverse(startRot);
+                    foreach (var (t, offset, r) in poses) if (t) t.SetPositionAndRotation(center + delta * offset, delta * r);
+                }
+
+                yield return Animate(carrySeconds * 0.35f, e => Pose(Vector3.Lerp(startCenter, lifted, e), Quaternion.Slerp(startRot, held, e)));
+                yield return Animate(carrySeconds, e => Pose(Vector3.Lerp(lifted, overStatue, e) + Vector3.up * Mathf.Sin(e * Mathf.PI) * reach * 0.3f, held));
+                yield return Animate(windUpSeconds, e => Pose(overStatue + Vector3.up * reach * 0.25f * e, Quaternion.Slerp(held, wound, e)));
+                yield return Animate(strikeSeconds, e => Pose(Vector3.Lerp(overStatue + Vector3.up * reach * 0.25f, impact + Vector3.up * reach * 0.35f, e * e), Quaternion.Slerp(wound, struck, e * e)));
+
+                Shatter(statue, target);
+
+                yield return new WaitForSeconds(0.12f);
+                Vector3 after = impact + Vector3.up * reach * 0.35f;
+                yield return Animate(returnSeconds * 0.4f, e => Pose(Vector3.Lerp(after, overStatue, e), Quaternion.Slerp(struck, held, e)));
+                yield return Animate(returnSeconds, e => Pose(Vector3.Lerp(overStatue, startCenter, e) + Vector3.up * Mathf.Sin(e * Mathf.PI) * reach * 0.3f, Quaternion.Slerp(held, startRot, e)));
+                Pose(startCenter, startRot);
+            }
+            else Shatter(statue, target);
+
+            statue.IsBusy = false;
+            busy = false;
+        }
+
+        void Shatter(FigurinePedestal statue, Bounds target)
+        {
             Burst(target);
+            if (game.audioManager) game.audioManager.Click();
             double gold = statue.Shatter();
             game.CreditGold(gold);
             if (game.Inventory.SparePieces > 0)
@@ -49,24 +108,16 @@ namespace DetectiveDesk.Gameplay
             game.ShowHint("Statue " + (statue.Index + 1) + " smashed: +" + NumberFormatter.Format(gold) + " gold!");
             EventBus.Publish(new StatueSmashed(statue.Index, gold));
             game.Notify();
-
-            if (hammer)
-            {
-                yield return new WaitForSeconds(0.1f);
-                yield return Move(hammer, hammer.position, restPos, hammer.rotation, restRot, 0.35f);
-            }
-            statue.IsBusy = false;
         }
 
-        static IEnumerator Move(Transform t, Vector3 from, Vector3 to, Quaternion fromRot, Quaternion toRot, float seconds)
+        static IEnumerator Animate(float seconds, System.Action<float> step)
         {
             for (float k = 0; k < 1; k += Time.deltaTime / Mathf.Max(0.01f, seconds))
             {
-                float e = k * k * (3 - 2 * k);
-                t.SetPositionAndRotation(Vector3.Lerp(from, to, e), Quaternion.Slerp(fromRot, toRot, e));
+                step(k * k * (3 - 2 * k));
                 yield return null;
             }
-            t.SetPositionAndRotation(to, toRot);
+            step(1);
         }
 
         void Burst(Bounds b)

@@ -14,6 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: DetectiveDesk.Runtime::DetectiveDesk.Progression.GameBalance
   startingMoney: 1000
   startingGold: 0
+  lootboxCost:
+    baseCost: 1
+    growth: 1
+    explicitCosts: []
+  lootTable:
+  - kind: 2
+    weight: 100
   autosaveInterval: 30
   baseStats:
   - stat: 100
