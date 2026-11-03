@@ -63,9 +63,9 @@ namespace DetectiveDesk.Gameplay
                     t.gameObject.SetActive(false);
                 }
                 else if (n.StartsWith("Sheet_") || n.StartsWith("Document_Rule")) t.gameObject.SetActive(false);   // print on the top sheet
-                else if (n.StartsWith("PaperClip")) { clip = t; clipBase = t.position; }
+                else if (n.StartsWith("PaperClip")) { clip = t; clipBase = folder.InverseTransformPoint(t.position); }
                 else if (n.StartsWith("Folder_FrontCover") || n.StartsWith("Folder_SpineFold") || n.StartsWith("Scored_Fold") || n.StartsWith("Cover_"))
-                    cover.Add((t, t.position));
+                    cover.Add((t, folder.InverseTransformPoint(t.position)));
             }
 
             backBounds = back ? ClickRouter.RendererBounds(back, folder.position) : ClickRouter.RendererBounds(folder, folder.position);
@@ -91,9 +91,10 @@ namespace DetectiveDesk.Gameplay
             sideSign = Vector3.Dot(lateral, new Vector3(-stackBase.x, 0, 0)) >= 0 ? 1 : -1;
             lateralExtent = HalfLength(lateral);
 
-            // The "SOLVED" mark sits on the cover, so it rides with it.
+            // The old red "SOLVED indication" bar is replaced by the stamped mark on the cover (BuildSolvedMark).
             var solved = ClickRouter.FindByName("SOLVED indication (appears after stamping)", "SOLVED indication");
-            if (solved) cover.Add((solved, solved.position));
+            if (solved) solved.gameObject.SetActive(false);
+            BuildSolvedMark();
 
             CollectDeskEvidence();
             if (logLayout)
@@ -148,6 +149,120 @@ namespace DetectiveDesk.Gameplay
             if (!folder) return;
             if (clearing != null) StopCoroutine(clearing);
             clearing = StartCoroutine(ClearRoutine());
+        }
+
+        // ------------------------------------------------------------------ stamping
+        Transform solvedMark;
+        float solvedYaw;
+        Vector3 folderHome, contentsHome;
+
+        /// <summary>Where the stamp presses down: the middle of the cover, on top of the current stack.</summary>
+        public Vector3 StampPoint => folder ? CoverTop() : Vector3.zero;
+
+        Vector3 CoverTop()
+        {
+            // Middle of the cover (offset towards the spine, away from the open edge) at the current stack height.
+            Vector3 home = stackBase - expose * exposeExtent * 0.15f + up * (Mathf.Max(coverLift, 0) + 0.006f);
+            return home + (folder.position - folderHome);
+        }
+
+        /// <summary>A red "SOLVED" stamp impression (text in a double frame) lying on the cover. Hidden until stamped.</summary>
+        void BuildSolvedMark()
+        {
+            folderHome = folder.position;
+            solvedMark = new GameObject("SOLVED stamp mark").transform;
+            solvedMark.SetParent(runtimeRoot, false);   // unscaled parent; moves with the folder contents
+            float w = Mathf.Min(lateralExtent, exposeExtent) * 1.1f;
+            var red = new Color(0.62f, 0.07f, 0.06f, 0.92f);
+
+            var text = new GameObject("Text", typeof(RectTransform)).AddComponent<TMPro.TextMeshPro>();
+            text.transform.SetParent(solvedMark, false);
+            text.rectTransform.sizeDelta = new Vector2(w * 0.86f, w * 0.3f);
+            text.font = UITheme.TmpDisplay;
+            text.fontStyle = TMPro.FontStyles.Bold;
+            text.alignment = TMPro.TextAlignmentOptions.Center;
+            text.textWrappingMode = TMPro.TextWrappingModes.NoWrap;
+            text.enableAutoSizing = true; text.fontSizeMin = 0.05f; text.fontSizeMax = 20f;
+            text.characterSpacing = 6;
+            text.color = red;
+            text.text = "SOLVED";
+
+            var frameSprite = UITheme.Frame;
+            if (frameSprite)
+            {
+                // Double border around the word, drawn from the UI frame sprite (9-sliced so the lines stay thin).
+                var frame = new GameObject("Frame").AddComponent<SpriteRenderer>();
+                frame.transform.SetParent(solvedMark, false);
+                frame.transform.localPosition = new Vector3(0, 0, 0.0005f);
+                frame.sprite = frameSprite;
+                frame.drawMode = SpriteDrawMode.Sliced;
+                frame.transform.localScale = Vector3.one * (w / 3f);              // sprite borders are 16 px at 100 px/unit
+                frame.size = new Vector2(3f, 3f * 0.36f);
+                frame.color = red;
+            }
+            solvedMark.gameObject.SetActive(false);
+        }
+
+        void PlaceSolvedMark()
+        {
+            solvedMark.position = CoverTop() + up * 0.002f;
+            // Lie flat on the cover, readable from the camera, slightly crooked like a real stamp.
+            Vector3 face = -up;                                           // text faces up (its -Z towards the sky)
+            Vector3 readUp = Vector3.ProjectOnPlane(lateral.sqrMagnitude > 0 ? -expose : forward, up).normalized;
+            var cam = Camera.main;
+            if (cam) readUp = Vector3.ProjectOnPlane(cam.transform.forward, up).normalized;   // top of the word points away from the viewer
+            solvedMark.rotation = Quaternion.AngleAxis(solvedYaw, up) * Quaternion.LookRotation(face, readUp);
+        }
+
+        /// <summary>The stamp hit the folder: the red SOLVED mark appears with a small pop.</summary>
+        public void ShowSolvedMark(int caseLevel)
+        {
+            if (!solvedMark) return;
+            solvedYaw = Mathf.Lerp(-12f, 12f, Hash(caseLevel, 99));
+            solvedMark.gameObject.SetActive(true);
+            PlaceSolvedMark();
+            StartCoroutine(Pop(solvedMark));
+        }
+
+        static IEnumerator Pop(Transform t)
+        {
+            for (float k = 0; k < 1; k += Time.deltaTime / 0.18f)
+            {
+                if (!t) yield break;
+                t.localScale = Vector3.one * Mathf.Lerp(1.25f, 1f, 1 - (1 - k) * (1 - k));
+                yield return null;
+            }
+            if (t) t.localScale = Vector3.one;
+        }
+
+        /// <summary>The solved folder is slid off the desk and a fresh, empty folder is set down in its place.</summary>
+        public IEnumerator SwapFolder()
+        {
+            if (!folder) yield break;
+            contentsHome = runtimeRoot.position;
+            Vector3 away = Vector3.right * backBounds.size.x * 2.6f + up * 0.05f;
+            for (float k = 0; k < 1; k += Time.deltaTime / 0.55f)
+            {
+                float e = k * k;
+                folder.position = folderHome + away * e;
+                runtimeRoot.position = contentsHome + away * e;
+                yield return null;
+            }
+            // Off the desk: empty it and drop a "new" folder in from above.
+            solvedMark.gameObject.SetActive(false);
+            runtimeRoot.position = contentsHome;
+            ClearImmediate();
+            if (clip) clip.gameObject.SetActive(false);
+            Vector3 drop = up * 0.5f;
+            for (float k = 0; k < 1; k += Time.deltaTime / 0.4f)
+            {
+                float e = 1 - (1 - k) * (1 - k);
+                folder.position = folderHome + drop * (1 - e);
+                ApplyCover(0);
+                yield return null;
+            }
+            folder.position = folderHome;
+            ApplyCover(0);
         }
 
         // ------------------------------------------------------------------ items
@@ -264,8 +379,9 @@ namespace DetectiveDesk.Gameplay
         {
             coverLift = lift;
             Vector3 delta = up * (lift - emptyDrop);
-            foreach (var (t, basePos) in cover) if (t) t.position = basePos + delta;
-            if (clip) clip.position = clipBase + delta;
+            foreach (var (t, baseLocal) in cover) if (t) t.position = folder.TransformPoint(baseLocal) + delta;
+            if (clip) clip.position = folder.TransformPoint(clipBase) + delta;
+            if (solvedMark && solvedMark.gameObject.activeSelf) PlaceSolvedMark();
         }
 
         static float Hash(int a, int b)

@@ -112,39 +112,81 @@ namespace DetectiveDesk.Gameplay
 
         void Stamp(bool automatic)
         {
+            if (stamping) return;
+            stamping = true;
+            StartCoroutine(StampSequence(automatic));
+        }
+
+        /// <summary>
+        /// The stamp lifts off its spot, swings over the case folder, presses SOLVED onto the cover and returns home.
+        /// Then the solved folder is slid away and a fresh, empty one is set down.
+        /// </summary>
+        IEnumerator StampSequence(bool automatic)
+        {
             double reward = Reward;
             double gold = GoldReward;
             int level = Level;
-            stamping = true;
-            StartCoroutine(StampAnimation(() =>
+
+            Vector3 target = visual && visual.IsValid ? visual.StampPoint : (folder ? folder.position : Vector3.zero);
+            if (stamp && target != Vector3.zero)
             {
-                game.Credit(reward);
-                if (gold > 0) game.CreditGold(gold);
-                if (game.legacy) game.legacy.PlayCaseSolvedEffects();
-                game.ShowHint((automatic ? "Auto-stamped! " : "") + "Case #" + (level + 1) + " APPROVED: +" + UIFactory.Money(reward) +
-                              (gold > 0 ? " and " + UIFactory.Num(gold) + " gold" : ""));
-                Level++;
-                Evidence = 0;
-                Cooldown = (float)game.Stats.Get(StatId.CaseCooldown);
-                if (visual) visual.ClearAnimated();
-                stamping = false;
-                EventBus.Publish(new CaseStamped(level, reward, automatic));
-                game.Notify();
-            }));
+                Vector3 rest = stamp.position;
+                var b = ClickRouter.RendererBounds(stamp, rest);
+                // The stamp's pivot is not on the model, so place it by the model's bounds: centre over the folder.
+                Vector3 pivotToCenter = b.center - rest;
+                Vector3 hover = target + Vector3.up * (b.extents.y + b.size.y * 0.6f) - pivotToCenter;
+                Vector3 press = target + Vector3.up * b.extents.y - pivotToCenter;
+                Vector3 lift = rest + Vector3.up * b.size.y * 0.8f;
+
+                for (float t = 0; t < 1; t += Time.deltaTime / 0.18f) { stamp.position = Vector3.Lerp(rest, lift, Smooth(t)); yield return null; }
+                for (float t = 0; t < 1; t += Time.deltaTime / 0.38f)
+                {
+                    float e = Smooth(t);
+                    stamp.position = Vector3.Lerp(lift, hover, e) + Vector3.up * Mathf.Sin(t * Mathf.PI) * b.size.y * 0.5f;
+                    yield return null;
+                }
+                yield return new WaitForSeconds(0.08f);
+                for (float t = 0; t < 1; t += Time.deltaTime / 0.09f) { stamp.position = Vector3.Lerp(hover, press, t * t); yield return null; }
+                stamp.position = press;
+
+                Approve(automatic, reward, gold, level);
+                yield return new WaitForSeconds(0.18f);
+
+                for (float t = 0; t < 1; t += Time.deltaTime / 0.15f) { stamp.position = Vector3.Lerp(press, hover, Smooth(t)); yield return null; }
+                for (float t = 0; t < 1; t += Time.deltaTime / 0.42f)
+                {
+                    float e = Smooth(t);
+                    stamp.position = Vector3.Lerp(hover, lift, e) + Vector3.up * Mathf.Sin(t * Mathf.PI) * b.size.y * 0.4f;
+                    yield return null;
+                }
+                for (float t = 0; t < 1; t += Time.deltaTime / 0.18f) { stamp.position = Vector3.Lerp(lift, rest, Smooth(t)); yield return null; }
+                stamp.position = rest;
+            }
+            else Approve(automatic, reward, gold, level);
+
+            // Let the player see the stamped folder, then swap it for a new empty one.
+            yield return new WaitForSeconds(0.7f);
+            if (visual && visual.IsValid) yield return visual.SwapFolder();
+            stamping = false;
         }
 
-        IEnumerator StampAnimation(System.Action onImpact)
+        /// <summary>The stamp hits the folder: pay out, mark the folder SOLVED and start the next case.</summary>
+        void Approve(bool automatic, double reward, double gold, int level)
         {
-            if (!stamp) { onImpact(); yield break; }
-            Vector3 rest = stamp.position;
-            Vector3 down = rest + Vector3.down * 0.05f;
-            for (float t = 0; t < 1; t += Time.deltaTime / 0.15f) { stamp.position = Vector3.Lerp(rest, down, t * t); yield return null; }
-            stamp.position = down;
-            onImpact();
-            yield return new WaitForSeconds(0.12f);
-            for (float t = 0; t < 1; t += Time.deltaTime / 0.25f) { stamp.position = Vector3.Lerp(down, rest, 1 - (1 - t) * (1 - t)); yield return null; }
-            stamp.position = rest;
+            game.Credit(reward);
+            if (gold > 0) game.CreditGold(gold);
+            if (visual) visual.ShowSolvedMark(level);
+            if (game.audioManager) game.audioManager.Click();
+            game.ShowHint((automatic ? "Auto-stamped! " : "") + "Case #" + (level + 1) + " solved: +" + UIFactory.Money(reward) +
+                          (gold > 0 ? " and " + UIFactory.Num(gold) + " gold" : ""));
+            Level++;
+            Evidence = 0;
+            Cooldown = (float)game.Stats.Get(StatId.CaseCooldown);
+            EventBus.Publish(new CaseStamped(level, reward, automatic));
+            game.Notify();
         }
+
+        static float Smooth(float t) { t = Mathf.Clamp01(t); return t * t * (3 - 2 * t); }
 
         /// <summary>Testing only: fills the open case so it can be stamped.</summary>
         public void DevFill()

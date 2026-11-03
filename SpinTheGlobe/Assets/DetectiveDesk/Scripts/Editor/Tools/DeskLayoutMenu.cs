@@ -60,7 +60,7 @@ namespace DetectiveDesk.Editor
                 if (!t) continue;
                 string n = t.name;
                 if (n.StartsWith("DeskWear_")) { Undo.DestroyObjectImmediate(t.gameObject); removed++; }
-                else if ((n.StartsWith("EvidencePhoto_") || n.StartsWith("EvidenceMemo_") || n.StartsWith("MemoParchmentBacking_") || n.StartsWith("Manila file ")) && t.gameObject.activeSelf)
+                else if ((n.StartsWith("EvidencePhoto_") || n.StartsWith("EvidenceMemo_") || n.StartsWith("MemoParchmentBacking_") || n.StartsWith("Manila file ") || n.StartsWith("SOLVED indication")) && t.gameObject.activeSelf)
                 {
                     Undo.RecordObject(t.gameObject, "Clean desk");
                     t.gameObject.SetActive(false);
