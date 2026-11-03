@@ -57,39 +57,70 @@ namespace DetectiveDesk.Gameplay
             {
                 var cam = game.GameCamera;
                 var hb = ClickRouter.RendererBounds(hammer, hammer.position);
-                Vector3 startCenter = hb.center;
-                Quaternion startRot = hammer.rotation;
+                Vector3 restCenter = hb.center;
                 var poses = new List<(Transform t, Vector3 offset, Quaternion rot)>();
-                foreach (var t in carried) if (t) poses.Add((t, t.position - startCenter, t.rotation));
+                foreach (var t in carried) if (t) poses.Add((t, t.position - restCenter, t.rotation));
 
-                // Hold the hammer upright-ish, head over the statue, swinging in the plane facing the camera.
-                Vector3 toCam = cam ? Vector3.ProjectOnPlane(cam.transform.position - impact, Vector3.up).normalized : Vector3.back;
-                Vector3 swingAxis = Vector3.Cross(Vector3.up, toCam).normalized;              // horizontal, across the view
-                float reach = Mathf.Max(hb.extents.x, hb.extents.z);
-                Vector3 overStatue = impact + Vector3.up * (reach * 0.9f) + toCam * reach * 0.25f;
-                Quaternion held = Quaternion.AngleAxis(-20f, swingAxis) * startRot;
-                Quaternion wound = Quaternion.AngleAxis(-windUpAngle, swingAxis) * startRot;
-                Quaternion struck = Quaternion.AngleAxis(strikeAngle, swingAxis) * startRot;
-                Vector3 lifted = startCenter + Vector3.up * reach * 0.6f;
-
-                void Pose(Vector3 center, Quaternion rot)
+                // Find the head and the grip end of the hammer model, and which way the striking face points.
+                Vector3 head = restCenter, face = Vector3.down;
+                var headPart = Find(hammer, "Head_BrassBody") ?? Find(hammer, "Head");
+                if (headPart) head = ClickRouter.RendererBounds(headPart, headPart.position).center;
+                var strike = Find(hammer, "Head_StrikingFace");
+                if (strike) face = (ClickRouter.RendererBounds(strike, strike.position).center - head).normalized;
+                Vector3 shaft = head - restCenter;
+                if (shaft.sqrMagnitude < 1e-6f) shaft = hammer.forward;
+                // The far end of the handle: the handle part's point furthest from the head, else mirror the head through the middle.
+                Vector3 grip = restCenter - shaft;
+                var handlePart = Find(hammer, "Handle_Walnut") ?? Find(hammer, "Handle");
+                if (handlePart)
                 {
-                    var delta = rot * Quaternion.Inverse(startRot);
-                    foreach (var (t, offset, r) in poses) if (t) t.SetPositionAndRotation(center + delta * offset, delta * r);
+                    var hbnd = ClickRouter.RendererBounds(handlePart, handlePart.position);
+                    grip = hbnd.center - (head - hbnd.center).normalized * hbnd.extents.magnitude;
                 }
+                Vector3 shaftDir = (head - grip).normalized;
+                float length = (head - grip).magnitude;
+                face = Vector3.ProjectOnPlane(face, shaftDir).normalized;
+                if (face.sqrMagnitude < 0.5f) face = Vector3.ProjectOnPlane(Vector3.down, shaftDir).normalized;
+                Quaternion restBasis = Quaternion.LookRotation(shaftDir, face);
 
-                yield return Animate(carrySeconds * 0.35f, e => Pose(Vector3.Lerp(startCenter, lifted, e), Quaternion.Slerp(startRot, held, e)));
-                yield return Animate(carrySeconds, e => Pose(Vector3.Lerp(lifted, overStatue, e) + Vector3.up * Mathf.Sin(e * Mathf.PI) * reach * 0.3f, held));
-                yield return Animate(windUpSeconds, e => Pose(overStatue + Vector3.up * reach * 0.25f * e, Quaternion.Slerp(held, wound, e)));
-                yield return Animate(strikeSeconds, e => Pose(Vector3.Lerp(overStatue + Vector3.up * reach * 0.25f, impact + Vector3.up * reach * 0.35f, e * e), Quaternion.Slerp(wound, struck, e * e)));
+                // At impact the hammer is seen side-on: the grip is to the right of the statue (screen right), the handle
+                // runs leftwards to the head nearly level, and the striking face points straight down onto the statue.
+                // The swing therefore happens in the plane of the screen, where it reads clearly.
+                Vector3 screenRight = cam ? Vector3.ProjectOnPlane(cam.transform.right, Vector3.up).normalized : Vector3.right;
+                Vector3 hitShaft = (-screenRight + Vector3.down * 0.12f).normalized;
+                Quaternion hitBasis = Quaternion.LookRotation(hitShaft, Vector3.ProjectOnPlane(Vector3.down, hitShaft));
+                Quaternion hitRot = hitBasis * Quaternion.Inverse(restBasis);
+                float headRadius = headPart ? ClickRouter.RendererBounds(headPart, headPart.position).extents.magnitude * 0.5f : length * 0.08f;
+                Vector3 headAtImpact = impact + Vector3.up * headRadius;
+                Vector3 gripAtImpact = headAtImpact - hitShaft * length;
+                Vector3 liftAxis = Vector3.Cross(hitShaft, Vector3.up).normalized;           // turning about it raises the head
+
+                // Places the hammer so that its grip end is at gripPos, turned by rot (relative to how it lies on the desk).
+                void Pose(Vector3 gripPos, Quaternion rot)
+                {
+                    Vector3 center = gripPos - rot * (grip - restCenter);
+                    foreach (var (t, offset, r) in poses) if (t) t.SetPositionAndRotation(center + rot * offset, rot * r);
+                }
+                Quaternion Raised(float degrees) => Quaternion.AngleAxis(degrees, liftAxis) * hitRot;
+
+                Vector3 gripRest = grip;
+                Vector3 gripLifted = grip + Vector3.up * length * 0.4f;
+                Vector3 gripReady = gripAtImpact + Vector3.up * length * 0.15f;
+                Quaternion ready = Raised(windUpAngle * 0.5f), wound = Raised(windUpAngle), struck = Raised(-6f);
+
+                yield return Animate(carrySeconds * 0.35f, e => Pose(Vector3.Lerp(gripRest, gripLifted, e), Quaternion.Slerp(Quaternion.identity, ready, e * 0.5f)));
+                yield return Animate(carrySeconds, e => Pose(Vector3.Lerp(gripLifted, gripReady, e) + Vector3.up * Mathf.Sin(e * Mathf.PI) * length * 0.2f,
+                                                              Quaternion.Slerp(Quaternion.Slerp(Quaternion.identity, ready, 0.5f), ready, e)));
+                yield return Animate(windUpSeconds, e => Pose(Vector3.Lerp(gripReady, gripAtImpact, e), Quaternion.Slerp(ready, wound, e)));
+                yield return Animate(strikeSeconds, e => Pose(gripAtImpact, Quaternion.Slerp(wound, struck, e * e)));
 
                 Shatter(statue, target);
 
                 yield return new WaitForSeconds(0.12f);
-                Vector3 after = impact + Vector3.up * reach * 0.35f;
-                yield return Animate(returnSeconds * 0.4f, e => Pose(Vector3.Lerp(after, overStatue, e), Quaternion.Slerp(struck, held, e)));
-                yield return Animate(returnSeconds, e => Pose(Vector3.Lerp(overStatue, startCenter, e) + Vector3.up * Mathf.Sin(e * Mathf.PI) * reach * 0.3f, Quaternion.Slerp(held, startRot, e)));
-                Pose(startCenter, startRot);
+                yield return Animate(returnSeconds * 0.35f, e => Pose(Vector3.Lerp(gripAtImpact, gripReady, e), Quaternion.Slerp(struck, ready, e)));
+                yield return Animate(returnSeconds, e => Pose(Vector3.Lerp(gripReady, gripRest, e) + Vector3.up * Mathf.Sin(e * Mathf.PI) * length * 0.25f,
+                                                              Quaternion.Slerp(ready, Quaternion.identity, e)));
+                Pose(gripRest, Quaternion.identity);
             }
             else Shatter(statue, target);
 
@@ -108,6 +139,12 @@ namespace DetectiveDesk.Gameplay
             game.ShowHint("Statue " + (statue.Index + 1) + " smashed: +" + NumberFormatter.Format(gold) + " gold!");
             EventBus.Publish(new StatueSmashed(statue.Index, gold));
             game.Notify();
+        }
+
+        static Transform Find(Transform root, string prefix)
+        {
+            foreach (var t in root.GetComponentsInChildren<Transform>(true)) if (t.name.StartsWith(prefix) && t.GetComponent<Renderer>()) return t;
+            return null;
         }
 
         static IEnumerator Animate(float seconds, System.Action<float> step)
