@@ -27,8 +27,8 @@ final = (base + Σ add) × max(0.05, 1 + Σ percent) × Π (multiply^rank) × te
 Costs are written as *base × growth per rank*. ★ nodes cost gold.
 
 **Globe**
-- Clockwork Motor (first node after the root): +10 RPM auto-rotate per level, 50 levels, €6 ×1.22 (cheap, bought one after another). Capped by the max speed: Greased Bearings opens room for more motor levels.
-- Greased Bearings (after Clockwork Motor): +25 RPM max speed per level, 20 levels: 15 RPM → 515 RPM (about 10× the old 50 RPM top). €15 ×1.6. Drag and click impulses scale with max speed (÷ 90°/s), so hand spinning stays useful.
+- Clockwork Motor (first node after the root): +10 RPM auto-rotate per level, 50 levels, €10 ×1.3 (cheap, bought one after another). Capped by the max speed: Greased Bearings opens room for more motor levels.
+- Greased Bearings (after Clockwork Motor): +20 RPM max speed per level, 25 levels: 15 RPM → 515 RPM (about 10× the old 50 RPM top), reached over roughly two hours of a run. €40 ×1.75. Drag and click impulses scale with max speed (÷ 90°/s).
 - Firm Grip: +30% drag. 5 ranks, €12 ×1.8.
 - Flick of the Wrist: +20% click. 5 ranks, €12 ×1.8.
 - **Rule:** dragging always beats clicking. At the same upgrade level drag power ≥ click power, and every drag gives at least 1.5 clicks' worth of speed (checked by a unit test).

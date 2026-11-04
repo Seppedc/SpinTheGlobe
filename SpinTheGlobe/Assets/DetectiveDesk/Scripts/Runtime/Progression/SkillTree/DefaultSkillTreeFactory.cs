@@ -100,11 +100,11 @@ namespace DetectiveDesk.Progression
             // turning (and earning) without constant clicking. 50 cheap levels of +10 RPM, bought one after another;
             // capped by the max speed, so Greased Bearings opens room for more motor levels.
             var auto = Add(n, "globe_auto", "Clockwork Motor", "+10 RPM auto-rotate: the globe keeps turning by itself. Never faster than the maximum spin speed (Greased Bearings).",
-                SkillBranch.Globe, 50, Money(6, 1.22), dir * Step, new[] { RootId }, StatModifier.Add(StatId.GlobeAutoSpeed, 60));
+                SkillBranch.Globe, 50, Money(10, 1.3), dir * Step, new[] { RootId }, StatModifier.Add(StatId.GlobeAutoSpeed, 60));
             auto.capStat = StatId.GlobeAutoSpeed; auto.capByStat = StatId.GlobeMaxSpeed;
-            // 20 steady levels of +25 RPM each: 15 → 515 RPM at level 20 (about 10× the old top speed).
-            Add(n, "globe_max_speed", "Greased Bearings", "+25 RPM maximum spin speed. Drag, click and auto-rotate all scale with it.",
-                SkillBranch.Globe, 20, Money(15, 1.6), dir * Step * 2, new[] { "globe_auto" }, StatModifier.Add(StatId.GlobeMaxSpeed, 150));
+            // 25 steady levels of +20 RPM each: 15 → 515 RPM at level 25 (about 10× the old top speed), spread over the run.
+            Add(n, "globe_max_speed", "Greased Bearings", "+20 RPM maximum spin speed. Drag, click and auto-rotate all scale with it.",
+                SkillBranch.Globe, 25, Money(40, 1.75), dir * Step * 2, new[] { "globe_auto" }, StatModifier.Add(StatId.GlobeMaxSpeed, 120));
             Add(n, "globe_drag", "Firm Grip", "+30% speed gained from dragging. (Dragging always beats clicking at the same upgrade level.)",
                 SkillBranch.Globe, 5, Money(12, 1.8), dir * Step * 1.5f + side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeDragPower, 0.3));
             Add(n, "globe_click", "Flick of the Wrist", "+20% speed gained from clicking.",

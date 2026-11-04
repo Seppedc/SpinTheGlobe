@@ -31,25 +31,25 @@ MonoBehaviour:
     position: {x: 0, y: 0}
   - id: globe_auto
     title: Clockwork Motor
-    description: The globe keeps turning by itself at +20% of its maximum spin speed
-      per rank (100% at rank 5).
+    description: '+10 RPM auto-rotate: the globe keeps turning by itself. Never faster
+      than the maximum spin speed (Greased Bearings).'
     branch: 1
-    maxRank: 5
+    maxRank: 50
     currency: 0
     cost:
       baseCost: 6
-      growth: 2
+      growth: 1.22
       explicitCosts: []
     prerequisites:
     - root
     modifiers:
-    - stat: 106
+    - stat: 101
       kind: 0
-      valuePerRank: 0.2
+      valuePerRank: 60
       pinIndex: -1
     requiresUnlock: 
-    capStat: 0
-    capByStat: 0
+    capStat: 101
+    capByStat: 100
     position: {x: 0, y: 160}
   - id: globe_max_speed
     title: Greased Bearings
