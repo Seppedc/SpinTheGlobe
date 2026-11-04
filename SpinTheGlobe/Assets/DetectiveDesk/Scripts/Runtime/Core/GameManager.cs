@@ -85,6 +85,8 @@ namespace DetectiveDesk.Gameplay
         /// <summary>Every gold payout (statues, lootboxes, Press Coverage).</summary>
         public event Action<double> GoldAwarded;
         public PayoutPopups Popups { get; private set; }
+        /// <summary>World point the current payout comes from (null = the globe), read by the payout popups.</summary>
+        public Vector3? PayoutOrigin { get; private set; }
 
         SaveStore store;
         float autosaveTimer;
@@ -230,11 +232,14 @@ namespace DetectiveDesk.Gameplay
             EventBus.Publish(new GlobeRevolutions(count));
         }
 
-        public void Credit(double amount)
+        /// <param name="origin">Where the payout number should float up (e.g. the case file); null = above the globe.</param>
+        public void Credit(double amount, Vector3? origin = null)
         {
             if (double.IsNaN(amount) || double.IsInfinity(amount) || amount <= 0) return;
             Wallet.Add(Currency.Money, amount);
+            PayoutOrigin = origin;
             CashAwarded?.Invoke(amount);
+            PayoutOrigin = null;
             if (audioManager) audioManager.Payout();
         }
 
@@ -246,11 +251,13 @@ namespace DetectiveDesk.Gameplay
             Credit(amount);
         }
 
-        public void CreditGold(double amount)
+        public void CreditGold(double amount, Vector3? origin = null)
         {
             if (double.IsNaN(amount) || double.IsInfinity(amount) || amount <= 0) return;
             Wallet.Add(Currency.Gold, amount);
+            PayoutOrigin = origin;
             GoldAwarded?.Invoke(amount);
+            PayoutOrigin = null;
             if (audioManager) audioManager.Payout();
         }
 

@@ -31,7 +31,7 @@ namespace DetectiveDesk.Gameplay
             public float age, life, drift, size;
             public Vector2 start;
             public double amount;
-            public bool gold;
+            public bool gold, located;
         }
 
         GameManager game;
@@ -77,8 +77,9 @@ namespace DetectiveDesk.Gameplay
         void Spawn(double amount, bool gold)
         {
             if (!root || amount <= 0) return;
-            // Late game: merge rapid payouts into the newest money number rather than flooding the screen.
-            if (!gold && newest != null && !newest.gold && newest.age < 0.25f && (sinceLast < minimumGap || active.Count >= maxActive))
+            Vector3? origin = game.PayoutOrigin;
+            // Late game: merge rapid globe payouts into the newest money number rather than flooding the screen.
+            if (!gold && origin == null && newest != null && !newest.gold && !newest.located && newest.age < 0.25f && (sinceLast < minimumGap || active.Count >= maxActive))
             {
                 newest.amount += amount;
                 newest.text.text = Label(newest.amount, false);
@@ -90,6 +91,7 @@ namespace DetectiveDesk.Gameplay
             var p = pool.Count > 0 ? pool.Pop() : Create();
             p.amount = amount;
             p.gold = gold;
+            p.located = origin != null;
             p.age = 0;
             p.life = lifetime * (gold ? 1.5f : 1f) * Random.Range(0.9f, 1.1f);
             p.drift = Random.Range(-25f, 25f);
@@ -100,7 +102,9 @@ namespace DetectiveDesk.Gameplay
             p.text.fontSize = p.size;
             p.text.color = gold ? UITheme.GoldBright : big ? new Color(1f, 0.86f, 0.45f) : new Color(0.98f, 0.93f, 0.78f);
             p.text.text = Label(amount, gold);
-            p.start = AnchorPoint() + new Vector2(Random.Range(-spread, spread), Random.Range(-12f, 18f));
+            p.start = origin != null
+                ? AnchorPoint(origin.Value) + new Vector2(Random.Range(-20f, 20f), gold ? 46 : 0)
+                : AnchorPoint() + new Vector2(Random.Range(-spread, spread), Random.Range(-12f, 18f));
             p.rect.anchoredPosition = p.start;
             p.text.gameObject.SetActive(true);
             p.rect.SetAsLastSibling();
@@ -129,6 +133,19 @@ namespace DetectiveDesk.Gameplay
             if (newest == p) newest = null;
             p.text.gameObject.SetActive(false);
             pool.Push(p);
+        }
+
+        /// <summary>A world point (e.g. the case file) in canvas coordinates, a little above it.</summary>
+        Vector2 AnchorPoint(Vector3 world)
+        {
+            var cam = game.GameCamera;
+            if (cam)
+            {
+                Vector3 screen = cam.WorldToScreenPoint(world);
+                if (screen.z > 0 && RectTransformUtility.ScreenPointToLocalPointInRectangle(root, screen, null, out var local))
+                    return local + new Vector2(0, 30);
+            }
+            return AnchorPoint();
         }
 
         /// <summary>Just above the top of the globe, in canvas coordinates (falls back to upper middle).</summary>

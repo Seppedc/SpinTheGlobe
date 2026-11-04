@@ -133,7 +133,7 @@ namespace DetectiveDesk.Gameplay
             Burst(target);
             if (game.audioManager) game.audioManager.Click();
             double gold = statue.Shatter();
-            game.CreditGold(gold);
+            game.CreditGold(gold, new Vector3(target.center.x, target.max.y, target.center.z));
             if (game.Inventory.SparePieces > 0)
                 while (!statue.IsComplete && game.Inventory.TryUseSparePiece()) statue.AddPiece();
             game.ShowHint("Statue " + (statue.Index + 1) + " smashed: +" + NumberFormatter.Format(gold) + " gold!");

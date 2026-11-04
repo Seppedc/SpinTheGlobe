@@ -176,8 +176,12 @@ namespace DetectiveDesk.Gameplay
         /// <summary>The stamp hits the folder: pay out, mark the folder SOLVED and start the next case.</summary>
         void Approve(bool automatic, double reward, double gold, int level)
         {
-            game.Credit(reward);
-            if (gold > 0) game.CreditGold(gold);
+            // The payout numbers float up from the case file, not the globe.
+            Vector3? at = null;
+            var folder = visual && visual.Folder ? visual.Folder : FolderTransform;
+            if (folder) { var b = ClickRouter.RendererBounds(folder, folder.position); at = new Vector3(b.center.x, b.max.y, b.center.z); }
+            game.Credit(reward, at);
+            if (gold > 0) game.CreditGold(gold, at);
             if (visual) visual.ShowSolvedMark(level);
             if (game.audioManager) game.audioManager.Click();
             game.ShowHint((automatic ? "Auto-stamped! " : "") + "Case #" + (level + 1) + " solved: +" + UIFactory.Money(reward) +
