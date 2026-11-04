@@ -92,6 +92,17 @@ Costs are written as *base × growth per rank*. ★ nodes cost gold.
 - Lootboxes drop no statue pieces until a statue is unlocked (they pay money instead).
 - Old saves: owned ★ nodes become their Gold shop items; statues that already had pieces get their pedestal unlock.
 
+## Simulated prestige pacing (Tools/prestige_sim.py, ideal play, rough)
+| Run | Run length | Total time | Gold shop |
+|---|---|---|---|
+| 1 | ~2 h | 2 h | Kept Ledger, First Pedestal, Wound Clockwork |
+| 5 | ~50 min | ~6 h | 9 of 13 items |
+| 7 | ~1.5 h | ~8.5 h | all 13 items, tiers starting |
+| 10 | ~1 h | ~12 h | everything incl. all statue tiers (Reputation and Mastery keep going) |
+| 20 | ~35 min | ~20 h | Legend of the Bureau (top rank) |
+
+Real players: roughly 1.5–2× these times. Statue gold is modelled crudely (~2 smashes/h per statue).
+
 ## Simulated pacing (active player, best-value purchases)
 | Time | Milestone | Income |
 |---|---|---|
