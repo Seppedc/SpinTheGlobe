@@ -27,8 +27,8 @@ final = (base + Σ add) × max(0.05, 1 + Σ percent) × Π (multiply^rank) × te
 Costs are written as *base × growth per rank*. ★ nodes cost gold.
 
 **Globe**
-- Greased Bearings: +2 RPM max speed. 20 ranks, €10 ×1.42.
-- Clockwork Motor: +1 RPM auto-rotate, never above max speed. 20 ranks, €40 ×1.45.
+- Clockwork Motor (first node after the root): +2 RPM auto-rotate, never above max speed. 20 ranks, €8 ×1.6.
+- Greased Bearings (after Clockwork Motor): +2 RPM max speed. 20 ranks, €10 ×1.42.
 - Firm Grip: +30% drag. 5 ranks, €20 ×1.8.
 - Flick of the Wrist: +20% click. 5 ranks, €20 ×1.8.
 - **Rule:** dragging always beats clicking. At the same upgrade level drag power ≥ click power, and every drag gives at least 1.5 clicks' worth of speed (checked by a unit test).
@@ -82,14 +82,13 @@ Costs are written as *base × growth per rank*. ★ nodes cost gold.
 ## Simulated pacing (active player, best-value purchases)
 | Time | Milestone | Income |
 |---|---|---|
-| 1 min | skill tree unlocked (root €10) | €10/min |
-| 2 min | Pin 1 | |
-| 13 min | Pin 3 | |
+| 1 min | skill tree unlocked (root €10), then Clockwork Motor (€8) | €10/min |
+| 2.7 min | Pin 1 | |
+| 13.5 min | Pin 3 | |
 | 28 min | Pin 6 | |
-| 30 min | 6 pins | ~€27K/min |
-| 45 min | Auto-loader | |
-| 55 min | Pin 9 | ~€100K/min |
-| ~5.4 h | Gilded Axis, Pin 12 | ~€500K/min |
-| 7.5 h+ | about 95% of the finite tree done; Mastery nodes keep going | |
+| 38 min | Auto-loader | |
+| 47 min | Pin 9 | ~€100K/min |
+| ~4 h | Gilded Axis, Pin 12 | ~€500K/min |
+| later | rest of the finite tree; Mastery nodes keep going | |
 
 **Next step for long-term play:** prestige, "Retire the agency". You reset money and the tree in exchange for permanent *Reputation* bonuses.

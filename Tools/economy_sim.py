@@ -7,9 +7,9 @@ N=[]
 def node(i,b,r,c,g,eff,cur='€',req=None): N.append(dict(id=i,b=b,max=r,c=c,g=g,eff=eff,cur=cur,req=req))
 node('root','root',1,10,1,None)
 # Globe
-node('max_speed','globe',20,10,1.42,('maxspd',12),req='root')
-node('auto','globe',20,40,1.45,('auto',6),req='max_speed')
-node('globe_mult','globe',25,150,1.42,('gmult_add',0.25),req='auto')
+node('max_speed','globe',20,10,1.42,('maxspd',12),req='auto')
+node('auto','globe',20,8,1.6,('auto',12),req='root')
+node('globe_mult','globe',25,150,1.42,('gmult_add',0.25),req='max_speed')
 node('drag','globe',5,20,1.8,None,req='max_speed')
 node('click','globe',5,20,1.8,None,req='max_speed')
 node('gilded_axis','globe',1,5e6,1,('gmult_x',2),req='globe_mult')
@@ -48,7 +48,7 @@ def cost(n,r): return math.ceil(n['c']*n['g']**r)
 B=dict(maxspd=60, rev=1.6, pin=3, landM=2, cityM=3, reload=4, land=0.3, city=0.05, wh_dur=10, wh_cd=60, wh_str=1.5,
        case_base=40, case_growth=1.32, loot_base=150, loot_g=1.12)
 def stats(R):
-    s=dict(B); s['maxspd']+=12*R['max_speed']; s['auto']=min(s['maxspd'],6*R['auto'])
+    s=dict(B); s['maxspd']+=12*R['max_speed']; s['auto']=min(s['maxspd'],12*R['auto'])
     s['gmult']=(1+0.25*R['globe_mult'])*(2 if R['gilded_axis'] else 1)*(1.5 if R['golden_meridian'] else 1)
     s['pins']=sum(R[f'pin{i+1}'] for i in range(12))
     s['dur']=[1+R[f'dur{i+1}']+R['steel_tips'] for i in range(12)]

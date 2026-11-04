@@ -3,8 +3,8 @@ N={}  # id: (x,y,parents,branch)
 def a(i,x,y,p,b): N[i]=(x,y,p,b)
 a('root',0,0,[],'R')
 # Globe (up)
-a('globe_max_speed',0,1,['root'],'G'); a('globe_drag',-1,2,['globe_max_speed'],'G'); a('globe_auto',0,2,['globe_max_speed'],'G'); a('globe_click',1,2,['globe_max_speed'],'G')
-a('globe_multiplier',0,3,['globe_auto'],'G'); a('globe_gilded_axis',0,4,['globe_multiplier'],'G'); a('globe_golden_meridian',1,4,['globe_gilded_axis'],'G'); a('globe_mastery',0,5,['globe_gilded_axis'],'G')
+a('globe_auto',0,1,['root'],'G'); a('globe_drag',-1,2,['globe_max_speed'],'G'); a('globe_max_speed',0,2,['globe_auto'],'G'); a('globe_click',1,2,['globe_max_speed'],'G')
+a('globe_multiplier',0,3,['globe_max_speed'],'G'); a('globe_gilded_axis',0,4,['globe_multiplier'],'G'); a('globe_golden_meridian',1,4,['globe_gilded_axis'],'G'); a('globe_mastery',0,5,['globe_gilded_axis'],'G')
 # Pins (right)
 prev='root'
 for k in range(1,13):

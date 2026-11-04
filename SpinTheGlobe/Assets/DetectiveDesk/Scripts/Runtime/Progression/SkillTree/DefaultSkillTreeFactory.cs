@@ -55,8 +55,8 @@ namespace DetectiveDesk.Progression
             {
                 [RootId] = new Vector2(0, 0),
                 // Globe
-                ["globe_max_speed"] = new Vector2(0, 1),
-                ["globe_drag"] = new Vector2(-1, 2), ["globe_auto"] = new Vector2(0, 2), ["globe_click"] = new Vector2(1, 2),
+                ["globe_auto"] = new Vector2(0, 1),
+                ["globe_drag"] = new Vector2(-1, 2), ["globe_max_speed"] = new Vector2(0, 2), ["globe_click"] = new Vector2(1, 2),
                 ["globe_multiplier"] = new Vector2(0, 3), ["globe_gilded_axis"] = new Vector2(0, 4),
                 ["globe_golden_meridian"] = new Vector2(1, 4), ["globe_mastery"] = new Vector2(0, 5),
                 // Pins: shooter track
@@ -97,17 +97,19 @@ namespace DetectiveDesk.Progression
         static void BuildGlobe(List<SkillNodeData> n, Vector2 dir)
         {
             Vector2 side = Perpendicular(dir);
+            // Clockwork Motor comes first: it is meant to be the player's first purchase, so the globe keeps
+            // turning (and earning) without constant clicking. It is capped by the maximum spin speed.
+            var auto = Add(n, "globe_auto", "Clockwork Motor", "+2 RPM auto-rotate: the globe keeps turning by itself. Never faster than the maximum spin speed.",
+                SkillBranch.Globe, 20, Money(8, 1.6), dir * Step, new[] { RootId }, StatModifier.Add(StatId.GlobeAutoSpeed, 12));
             Add(n, "globe_max_speed", "Greased Bearings", "+2 RPM maximum spin speed. Caps dragging and auto-rotate.",
-                SkillBranch.Globe, 20, Money(10, 1.42), dir * Step, new[] { RootId }, StatModifier.Add(StatId.GlobeMaxSpeed, 12));
-            var auto = Add(n, "globe_auto", "Clockwork Motor", "+1 RPM auto-rotate. Never faster than the maximum spin speed.",
-                SkillBranch.Globe, 20, Money(40, 1.45), dir * Step * 2, new[] { "globe_max_speed" }, StatModifier.Add(StatId.GlobeAutoSpeed, 6));
+                SkillBranch.Globe, 20, Money(10, 1.42), dir * Step * 2, new[] { "globe_auto" }, StatModifier.Add(StatId.GlobeMaxSpeed, 12));
             auto.capStat = StatId.GlobeAutoSpeed; auto.capByStat = StatId.GlobeMaxSpeed;
             Add(n, "globe_drag", "Firm Grip", "+30% speed gained from dragging. (Dragging always beats clicking at the same upgrade level.)",
                 SkillBranch.Globe, 5, Money(20, 1.8), dir * Step * 1.5f + side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeDragPower, 0.3));
             Add(n, "globe_click", "Flick of the Wrist", "+20% speed gained from clicking.",
                 SkillBranch.Globe, 5, Money(20, 1.8), dir * Step * 1.5f - side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeClickPower, 0.2));
             Add(n, "globe_multiplier", "Cartographer's Cut", "+25% globe earnings (turns and pins).",
-                SkillBranch.Globe, 25, Money(150, 1.42), dir * Step * 3, new[] { "globe_auto" }, StatModifier.Percent(StatId.GlobeMultiplier, 0.25));
+                SkillBranch.Globe, 25, Money(150, 1.42), dir * Step * 3, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeMultiplier, 0.25));
             Add(n, "globe_gilded_axis", "Gilded Axis", "Doubles all globe earnings.",
                 SkillBranch.Globe, 1, Money(5e6, 1), dir * Step * 4, new[] { "globe_multiplier" }, StatModifier.Multiply(StatId.GlobeMultiplier, 2));
             Add(n, "globe_golden_meridian", "★ Golden Meridian", "×1.5 on every source of income.",
