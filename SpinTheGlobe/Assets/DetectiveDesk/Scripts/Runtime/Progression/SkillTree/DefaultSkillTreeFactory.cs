@@ -134,8 +134,9 @@ namespace DetectiveDesk.Progression
             }
             // Shooter and landing upgrades run on a parallel track beside the pin chain.
             Vector2 track = side * Step * 1.45f;
-            Add(n, "shooter_cooldown", "Oiled Spring", "-8% pin shooter reload time.",
-                SkillBranch.Pins, 10, Money(25, 1.6), dir * Step * 1.5f + track, new[] { PinId(1) }, StatModifier.Percent(StatId.ShooterCooldown, -0.08));
+            // 15 ranks × -6% = -90% at most (above -95% the stat floor would make the last ranks useless).
+            Add(n, "shooter_cooldown", "Oiled Spring", "-6% pin shooter reload time.",
+                SkillBranch.Pins, 15, Money(25, 1.45), dir * Step * 1.5f + track, new[] { PinId(1) }, StatModifier.Percent(StatId.ShooterCooldown, -0.06));
             Add(n, "pin_land_chance", "Steady Aim", "+8% chance a pin lands on land (land pays ×2).",
                 SkillBranch.Pins, 5, Money(80, 1.9), dir * Step * 2.5f + track, new[] { PinId(2) }, StatModifier.Add(StatId.PinLandChance, 0.08));
             Add(n, "pin_city_chance", "Big City Lights", "+5% chance a pin lands near a big city (up to ×6).",

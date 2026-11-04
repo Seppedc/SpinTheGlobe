@@ -936,20 +936,20 @@ MonoBehaviour:
     position: {x: 2080, y: -160}
   - id: shooter_cooldown
     title: Oiled Spring
-    description: -8% pin shooter reload time.
+    description: -6% pin shooter reload time.
     branch: 2
-    maxRank: 10
+    maxRank: 15
     currency: 0
     cost:
       baseCost: 25
-      growth: 1.6
+      growth: 1.45
       explicitCosts: []
     prerequisites:
     - pin_01
     modifiers:
     - stat: 201
       kind: 1
-      valuePerRank: -0.08
+      valuePerRank: -0.06
       pinIndex: -1
     requiresUnlock: 
     capStat: 0

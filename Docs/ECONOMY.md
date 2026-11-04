@@ -41,7 +41,7 @@ Costs are written as *base × growth per rank*. ★ nodes cost gold.
 - Pin n: €20 × 3.1^(n−1), except Pin 1 at €10 (fast first shot). Pin 1 €10, Pin 3 €192, Pin 6 €5.7K, Pin 9 €171K, Pin 12 €5.1M.
 - Pin n · Durability: +1 pass. 5 ranks, 1.5 × the pin's price, ×1.6 per rank.
 - Pin n · Payout: +50% for that pin. 10 ranks, 1.25 × the pin's price, ×1.45 per rank.
-- Oiled Spring: −8% reload. 10 ranks, €25 ×1.6.
+- Oiled Spring: −6% reload. 15 ranks (up to −90%), €25 ×1.45.
 - Steady Aim: +8% land chance. 5 ranks, €80 ×1.9.
 - Big City Lights: +5% city chance. 5 ranks, €200 ×2.
 - Auto-loader: fires pins automatically. €50K.

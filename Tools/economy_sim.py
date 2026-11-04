@@ -19,7 +19,7 @@ for i in range(12):
     node(f'pin{i+1}','pins',1,(20*3.1**i if i else 10),1,('pin',i),req=('root' if i==0 else f'pin{i}'))
     node(f'dur{i+1}','pins',5,30*3.1**i,1.6,('dur',i),req=f'pin{i+1}')
     node(f'pay{i+1}','pins',10,25*3.1**i,1.45,('pay',i),req=f'pin{i+1}')
-node('reload','pins',10,25,1.6,('reload',0.08),req='pin1')
+node('reload','pins',15,25,1.45,('reload',0.06),req='pin1')
 node('autoloader','pins',1,50000,1,('autofire',1),req='reload')
 node('land','pins',5,80,1.9,('land',0.08),req='pin2')
 node('city','pins',5,200,2.0,('city',0.05),req='land')
@@ -53,7 +53,7 @@ def stats(R):
     s['pins']=sum(R[f'pin{i+1}'] for i in range(12))
     s['dur']=[1+R[f'dur{i+1}']+R['steel_tips'] for i in range(12)]
     s['pay']=[1+0.5*R[f'pay{i+1}'] for i in range(12)]
-    s['reload']=4*max(0.05,1-0.08*R['reload']); s['autofire']=R['autoloader']
+    s['reload']=4*max(0.05,1-0.06*R['reload']); s['autofire']=R['autoloader']
     s['land']=0.3+0.08*R['land']; s['city']=0.05+0.05*R['city']
     s['case_x']=1+0.25*R['case_pay']; s['case_need_minus']=R['cold_cases']
     s['wh_dur']=10+2*R['wh_dur']; s['wh_cd']=60*max(0.05,1-0.06*R['wh_cd']); s['wh_str']=1.5+0.25*R['wh_str']
