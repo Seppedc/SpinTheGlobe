@@ -73,6 +73,7 @@ namespace DetectiveDesk.Gameplay
             if (IsOpen) { Close(); return; }
             // Esc that just closed the skill tree should not also open the settings.
             if (game.TreeView && (game.TreeView.IsOpen || game.TreeView.ClosedThisFrame)) return;
+            if (game.ShopView && (game.ShopView.IsOpen || game.ShopView.ClosedThisFrame)) return;
             Open();
         }
 

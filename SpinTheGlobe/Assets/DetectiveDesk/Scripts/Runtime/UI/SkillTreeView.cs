@@ -61,6 +61,7 @@ namespace DetectiveDesk.Gameplay
         {
             if (!canvas) return;
             if (game.legacy && game.legacy.upgradesPanel) game.legacy.upgradesPanel.SetActive(false);
+            if (game.ShopView && game.ShopView.IsOpen) game.ShopView.Close();
             canvas.gameObject.SetActive(true);
             dirty = true;
         }

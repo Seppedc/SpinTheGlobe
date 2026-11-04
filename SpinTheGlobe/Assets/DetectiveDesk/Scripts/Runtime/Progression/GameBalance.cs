@@ -35,6 +35,13 @@ namespace DetectiveDesk.Progression
         [Tooltip("Seconds between automatic saves.")]
         [Min(5)] public float autosaveInterval = 30;
 
+        [Header("Prestige (Retire the agency)")]
+        [Tooltip("Money that must be earned in a run before retiring is possible.")]
+        [Min(1)] public double prestigeThreshold = 1_000_000;
+        [Tooltip("Gold for retiring = floor(scale × (earned this run ÷ threshold)^exponent).")]
+        [Min(0)] public double prestigeGoldScale = 25;
+        [Range(0.1f, 1f)] public double prestigeExponent = 0.5;
+
         [Header("Base stats (before upgrades)")]
         public List<StatBase> baseStats = new List<StatBase>(Defaults());
 

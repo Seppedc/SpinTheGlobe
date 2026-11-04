@@ -35,6 +35,9 @@ namespace DetectiveDesk.Progression
 
         public StatModifier[] modifiers = Array.Empty<StatModifier>();
 
+        [Tooltip("Optional Gold shop item id that must be owned before this node is shown at all (e.g. statue nodes need the first pedestal).")]
+        public string requiresUnlock;
+
         [Tooltip("Optional cap: buying a rank is blocked if it would push this stat above the stat below " +
                  "(e.g. Auto-rotate speed can never exceed Max speed).")]
         public StatId capStat;

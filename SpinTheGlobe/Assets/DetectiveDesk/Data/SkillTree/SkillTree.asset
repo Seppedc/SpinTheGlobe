@@ -20,14 +20,37 @@ MonoBehaviour:
     maxRank: 1
     currency: 0
     cost:
-      baseCost: 25
+      baseCost: 10
       growth: 1
       explicitCosts: []
     prerequisites: []
     modifiers: []
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 0, y: 0}
+  - id: globe_auto
+    title: Clockwork Motor
+    description: '+2 RPM auto-rotate: the globe keeps turning by itself. Never faster
+      than the maximum spin speed.'
+    branch: 1
+    maxRank: 20
+    currency: 0
+    cost:
+      baseCost: 8
+      growth: 1.6
+      explicitCosts: []
+    prerequisites:
+    - root
+    modifiers:
+    - stat: 101
+      kind: 0
+      valuePerRank: 12
+      pinIndex: -1
+    requiresUnlock: 
+    capStat: 101
+    capByStat: 100
+    position: {x: 0, y: 160}
   - id: globe_max_speed
     title: Greased Bearings
     description: +2 RPM maximum spin speed. Caps dragging and auto-rotate.
@@ -35,38 +58,19 @@ MonoBehaviour:
     maxRank: 20
     currency: 0
     cost:
-      baseCost: 20
+      baseCost: 10
       growth: 1.42
       explicitCosts: []
     prerequisites:
-    - root
+    - globe_auto
     modifiers:
     - stat: 100
       kind: 0
       valuePerRank: 12
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
-    position: {x: 0, y: 160}
-  - id: globe_auto
-    title: Clockwork Motor
-    description: +1 RPM auto-rotate. Never faster than the maximum spin speed.
-    branch: 1
-    maxRank: 20
-    currency: 0
-    cost:
-      baseCost: 60
-      growth: 1.45
-      explicitCosts: []
-    prerequisites:
-    - globe_max_speed
-    modifiers:
-    - stat: 101
-      kind: 0
-      valuePerRank: 6
-      pinIndex: -1
-    capStat: 101
-    capByStat: 100
     position: {x: 0, y: 320}
   - id: globe_drag
     title: Firm Grip
@@ -76,7 +80,7 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 40
+      baseCost: 20
       growth: 1.8
       explicitCosts: []
     prerequisites:
@@ -86,6 +90,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: 0.3
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: -160, y: 320}
@@ -96,7 +101,7 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 40
+      baseCost: 20
       growth: 1.8
       explicitCosts: []
     prerequisites:
@@ -106,6 +111,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: 0.2
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 160, y: 320}
@@ -120,12 +126,13 @@ MonoBehaviour:
       growth: 1.42
       explicitCosts: []
     prerequisites:
-    - globe_auto
+    - globe_max_speed
     modifiers:
     - stat: 104
       kind: 1
       valuePerRank: 0.25
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 0, y: 480}
@@ -146,29 +153,10 @@ MonoBehaviour:
       kind: 2
       valuePerRank: 2
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 0, y: 640}
-  - id: globe_golden_meridian
-    title: "\u2605 Golden Meridian"
-    description: "\xD71.5 on every source of income."
-    branch: 1
-    maxRank: 1
-    currency: 1
-    cost:
-      baseCost: 150
-      growth: 1
-      explicitCosts: []
-    prerequisites:
-    - globe_gilded_axis
-    modifiers:
-    - stat: 105
-      kind: 2
-      valuePerRank: 1.5
-      pinIndex: -1
-    capStat: 0
-    capByStat: 0
-    position: {x: 160, y: 640}
   - id: globe_mastery
     title: Globe Mastery
     description: +5% globe earnings per rank, compounding. Never maxes out.
@@ -186,6 +174,7 @@ MonoBehaviour:
       kind: 2
       valuePerRank: 1.05
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 0, y: 800}
@@ -196,7 +185,7 @@ MonoBehaviour:
     maxRank: 1
     currency: 0
     cost:
-      baseCost: 20
+      baseCost: 10
       growth: 1
       explicitCosts: []
     prerequisites:
@@ -206,6 +195,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 320, y: 0}
@@ -216,7 +206,7 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 30
+      baseCost: 15
       growth: 1.6
       explicitCosts: []
     prerequisites:
@@ -226,6 +216,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: 0
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 320, y: 160}
@@ -236,7 +227,7 @@ MonoBehaviour:
     maxRank: 10
     currency: 0
     cost:
-      baseCost: 25
+      baseCost: 12.5
       growth: 1.45
       explicitCosts: []
     prerequisites:
@@ -246,6 +237,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: 0.5
       pinIndex: 0
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 320, y: -160}
@@ -266,6 +258,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 480, y: 0}
@@ -286,6 +279,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: 1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 480, y: 160}
@@ -306,6 +300,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: 0.5
       pinIndex: 1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 480, y: -160}
@@ -326,6 +321,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 640, y: 0}
@@ -346,6 +342,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: 2
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 640, y: 160}
@@ -366,6 +363,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: 0.5
       pinIndex: 2
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 640, y: -160}
@@ -386,6 +384,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 800, y: 0}
@@ -406,6 +405,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: 3
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 800, y: 160}
@@ -426,6 +426,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: 0.5
       pinIndex: 3
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 800, y: -160}
@@ -446,6 +447,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 960, y: 0}
@@ -466,6 +468,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: 4
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 960, y: 160}
@@ -486,6 +489,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: 0.5
       pinIndex: 4
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 960, y: -160}
@@ -506,6 +510,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1120, y: 0}
@@ -526,6 +531,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: 5
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1120, y: 160}
@@ -546,6 +552,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: 0.5
       pinIndex: 5
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1120, y: -160}
@@ -566,6 +573,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1280, y: 0}
@@ -586,6 +594,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: 6
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1280, y: 160}
@@ -606,6 +615,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: 0.5
       pinIndex: 6
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1280, y: -160}
@@ -626,6 +636,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1440, y: 0}
@@ -646,6 +657,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: 7
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1440, y: 160}
@@ -666,6 +678,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: 0.5
       pinIndex: 7
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1440, y: -160}
@@ -686,6 +699,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1600, y: 0}
@@ -706,6 +720,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: 8
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1600, y: 160}
@@ -726,6 +741,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: 0.5
       pinIndex: 8
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1600, y: -160}
@@ -746,6 +762,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1760, y: 0}
@@ -766,6 +783,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: 9
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1760, y: 160}
@@ -786,6 +804,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: 0.5
       pinIndex: 9
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1760, y: -160}
@@ -806,6 +825,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1920, y: 0}
@@ -826,6 +846,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: 10
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1920, y: 160}
@@ -846,6 +867,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: 0.5
       pinIndex: 10
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 1920, y: -160}
@@ -866,6 +888,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 2080, y: 0}
@@ -886,6 +909,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: 11
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 2080, y: 160}
@@ -906,6 +930,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: 0.5
       pinIndex: 11
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 2080, y: -160}
@@ -916,7 +941,7 @@ MonoBehaviour:
     maxRank: 10
     currency: 0
     cost:
-      baseCost: 35
+      baseCost: 25
       growth: 1.6
       explicitCosts: []
     prerequisites:
@@ -926,6 +951,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: -0.08
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 480, y: -320}
@@ -946,6 +972,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 0.08
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 640, y: -320}
@@ -966,6 +993,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 0.05
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 800, y: -320}
@@ -986,49 +1014,10 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 480, y: -480}
-  - id: pin_steel_tips
-    title: "\u2605 Steel Tips"
-    description: +1 durability for every pin.
-    branch: 2
-    maxRank: 1
-    currency: 1
-    cost:
-      baseCost: 60
-      growth: 1
-      explicitCosts: []
-    prerequisites:
-    - pin_city_chance
-    modifiers:
-    - stat: 210
-      kind: 0
-      valuePerRank: 1
-      pinIndex: -1
-    capStat: 0
-    capByStat: 0
-    position: {x: 960, y: -320}
-  - id: pin_twin_barrel
-    title: "\u2605 Twin Barrel"
-    description: 20% chance a shot fires two pins.
-    branch: 2
-    maxRank: 1
-    currency: 1
-    cost:
-      baseCost: 120
-      growth: 1
-      explicitCosts: []
-    prerequisites:
-    - pin_steel_tips
-    modifiers:
-    - stat: 221
-      kind: 0
-      valuePerRank: 0.2
-      pinIndex: -1
-    capStat: 0
-    capByStat: 0
-    position: {x: 1120, y: -320}
   - id: pin_mastery
     title: Pin Mastery
     description: +5% payout for every pin per rank, compounding. Never maxes out.
@@ -1046,6 +1035,7 @@ MonoBehaviour:
       kind: 2
       valuePerRank: 1.05
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 2240, y: 0}
@@ -1066,6 +1056,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: 0.25
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: -160, y: 0}
@@ -1086,6 +1077,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: -0.07
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: -320, y: 80}
@@ -1106,6 +1098,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 0.05
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: -320, y: -80}
@@ -1126,37 +1119,14 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: -480, y: 80}
-  - id: case_press
-    title: "\u2605 Press Coverage"
-    description: Approved cases get a 2% chance to also drop gold (5+, more for later
-      cases).
-    branch: 3
-    maxRank: 1
-    currency: 1
-    cost:
-      baseCost: 40
-      growth: 1
-      explicitCosts: []
-    prerequisites:
-    - case_autostamp
-    modifiers:
-    - stat: 305
-      kind: 0
-      valuePerRank: 0.02
-      pinIndex: -1
-    - stat: 304
-      kind: 0
-      valuePerRank: 5
-      pinIndex: -1
-    capStat: 0
-    capByStat: 0
-    position: {x: -480, y: -80}
   - id: case_headlines
     title: Front Page News
-    description: +1% chance an approved case drops gold. Never above 10%.
+    description: +1% chance an approved case drops gold (needs Press Coverage from
+      the Gold shop). Never above 10%.
     branch: 3
     maxRank: 8
     currency: 0
@@ -1165,15 +1135,16 @@ MonoBehaviour:
       growth: 1.9
       explicitCosts: []
     prerequisites:
-    - case_press
+    - case_autostamp
     modifiers:
     - stat: 305
       kind: 0
       valuePerRank: 0.01
       pinIndex: -1
+    requiresUnlock: unlock_press_coverage
     capStat: 0
     capByStat: 0
-    position: {x: -640, y: -80}
+    position: {x: -480, y: -80}
   - id: case_mastery
     title: Case Mastery
     description: +5% case rewards per rank, compounding. Never maxes out.
@@ -1191,6 +1162,7 @@ MonoBehaviour:
       kind: 2
       valuePerRank: 1.05
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: -640, y: 80}
@@ -1211,6 +1183,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: 0.2
       pinIndex: -1
+    requiresUnlock: unlock_statue_1
     capStat: 0
     capByStat: 0
     position: {x: 0, y: -160}
@@ -1231,29 +1204,10 @@ MonoBehaviour:
       kind: 1
       valuePerRank: 0.25
       pinIndex: -1
+    requiresUnlock: unlock_statue_1
     capStat: 0
     capByStat: 0
     position: {x: 0, y: -320}
-  - id: statue_fast_casting
-    title: "\u2605 Fast Casting"
-    description: Statues need 2 fewer pieces.
-    branch: 5
-    maxRank: 1
-    currency: 1
-    cost:
-      baseCost: 250
-      growth: 1
-      explicitCosts: []
-    prerequisites:
-    - statue_payout
-    modifiers:
-    - stat: 502
-      kind: 0
-      valuePerRank: 2
-      pinIndex: -1
-    capStat: 0
-    capByStat: 0
-    position: {x: 160, y: -400}
   - id: statue_mastery
     title: Statue Mastery
     description: +5% statue gold per rank, compounding. Never maxes out.
@@ -1271,6 +1225,7 @@ MonoBehaviour:
       kind: 2
       valuePerRank: 1.05
       pinIndex: -1
+    requiresUnlock: unlock_statue_1
     capStat: 0
     capByStat: 0
     position: {x: 0, y: -480}
@@ -1291,6 +1246,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: -0.06
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: -320, y: -320}
@@ -1311,29 +1267,10 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 0.2
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: -480, y: -320}
-  - id: loot_double
-    title: "\u2605 Double Box"
-    description: 15% chance a lootbox gives two rewards.
-    branch: 6
-    maxRank: 1
-    currency: 1
-    cost:
-      baseCost: 100
-      growth: 1
-      explicitCosts: []
-    prerequisites:
-    - loot_luck
-    modifiers:
-    - stat: 602
-      kind: 0
-      valuePerRank: 0.15
-      pinIndex: -1
-    capStat: 0
-    capByStat: 0
-    position: {x: -640, y: -240}
   - id: loot_mastery
     title: Lootbox Mastery
     description: +5% lootbox luck per rank. Never maxes out.
@@ -1351,9 +1288,10 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 0.05
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
-    position: {x: -640, y: -400}
+    position: {x: -640, y: -320}
   - id: whiskey_duration
     title: Slow Sipper
     description: +2 s boost duration.
@@ -1371,6 +1309,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 2
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: -320, y: 320}
@@ -1391,6 +1330,7 @@ MonoBehaviour:
       kind: 1
       valuePerRank: -0.06
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: -480, y: 400}
@@ -1411,29 +1351,10 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 0.25
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: -480, y: 240}
-  - id: whiskey_bottomless
-    title: "\u2605 Bottomless Glass"
-    description: The glass refills itself after the cooldown.
-    branch: 4
-    maxRank: 1
-    currency: 1
-    cost:
-      baseCost: 200
-      growth: 1
-      explicitCosts: []
-    prerequisites:
-    - whiskey_cooldown
-    modifiers:
-    - stat: 403
-      kind: 0
-      valuePerRank: 1
-      pinIndex: -1
-    capStat: 0
-    capByStat: 0
-    position: {x: -640, y: 400}
   - id: whiskey_mastery
     title: Whiskey Mastery
     description: +1 s boost duration per rank. Never maxes out.
@@ -1451,6 +1372,7 @@ MonoBehaviour:
       kind: 0
       valuePerRank: 1
       pinIndex: -1
+    requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: -640, y: 240}

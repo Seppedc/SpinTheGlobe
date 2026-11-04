@@ -6,8 +6,8 @@ namespace DetectiveDesk.Progression
 {
     /// <summary>
     /// Builds the default skill tree: one root ("Skill Tree Unlock") with six branches radiating outward
-    /// (Globe, Pins, Case File, Statues, Lootbox, Whiskey). Each branch ends in an endless Mastery node, and
-    /// most branches have a ★ golden node bought with gold.
+    /// (Globe, Pins, Case File, Statues, Lootbox, Whiskey). Each branch ends in an endless Mastery node.
+    /// The tree is money only: everything bought with gold lives in the Gold shop (<see cref="GoldShopCatalog"/>).
     /// Numbers come from the economy simulation (Docs/ECONOMY.md); tune them in the asset afterwards.
     /// </summary>
     public static class DefaultSkillTreeFactory
@@ -58,27 +58,26 @@ namespace DetectiveDesk.Progression
                 ["globe_auto"] = new Vector2(0, 1),
                 ["globe_drag"] = new Vector2(-1, 2), ["globe_max_speed"] = new Vector2(0, 2), ["globe_click"] = new Vector2(1, 2),
                 ["globe_multiplier"] = new Vector2(0, 3), ["globe_gilded_axis"] = new Vector2(0, 4),
-                ["globe_golden_meridian"] = new Vector2(1, 4), ["globe_mastery"] = new Vector2(0, 5),
+                ["globe_mastery"] = new Vector2(0, 5),
                 // Pins: shooter track
                 ["shooter_cooldown"] = new Vector2(3, -2), ["pin_autoloader"] = new Vector2(3, -3),
                 ["pin_land_chance"] = new Vector2(4, -2), ["pin_city_chance"] = new Vector2(5, -2),
-                ["pin_steel_tips"] = new Vector2(6, -2), ["pin_twin_barrel"] = new Vector2(7, -2),
                 ["pin_mastery"] = new Vector2(MaxPins + 2, 0),
                 // Case file
                 ["case_payout"] = new Vector2(-1, 0),
                 ["case_cooldown"] = new Vector2(-2, 0.5f), ["case_autostamp"] = new Vector2(-2, -0.5f),
-                ["case_cold_cases"] = new Vector2(-3, 0.5f), ["case_press"] = new Vector2(-3, -0.5f), ["case_mastery"] = new Vector2(-4, 0.5f),
-                ["case_headlines"] = new Vector2(-4, -0.5f),
+                ["case_cold_cases"] = new Vector2(-3, 0.5f), ["case_mastery"] = new Vector2(-4, 0.5f),
+                ["case_headlines"] = new Vector2(-3, -0.5f),
                 // Whiskey
                 ["whiskey_duration"] = new Vector2(-2, 2),
                 ["whiskey_cooldown"] = new Vector2(-3, 2.5f), ["whiskey_strength"] = new Vector2(-3, 1.5f),
-                ["whiskey_bottomless"] = new Vector2(-4, 2.5f), ["whiskey_mastery"] = new Vector2(-4, 1.5f),
+                ["whiskey_mastery"] = new Vector2(-4, 1.5f),
                 // Statues
                 ["statue_gold_fill"] = new Vector2(0, -1), ["statue_payout"] = new Vector2(0, -2),
-                ["statue_fast_casting"] = new Vector2(1, -2.5f), ["statue_mastery"] = new Vector2(0, -3),
+                ["statue_mastery"] = new Vector2(0, -3),
                 // Lootbox
                 ["loot_bulk"] = new Vector2(-2, -2), ["loot_luck"] = new Vector2(-3, -2),
-                ["loot_double"] = new Vector2(-4, -1.5f), ["loot_mastery"] = new Vector2(-4, -2.5f),
+                ["loot_mastery"] = new Vector2(-4, -2),
             };
             for (int pin = 1; pin <= MaxPins; pin++)
             {
@@ -112,8 +111,6 @@ namespace DetectiveDesk.Progression
                 SkillBranch.Globe, 25, Money(150, 1.42), dir * Step * 3, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeMultiplier, 0.25));
             Add(n, "globe_gilded_axis", "Gilded Axis", "Doubles all globe earnings.",
                 SkillBranch.Globe, 1, Money(5e6, 1), dir * Step * 4, new[] { "globe_multiplier" }, StatModifier.Multiply(StatId.GlobeMultiplier, 2));
-            Add(n, "globe_golden_meridian", "★ Golden Meridian", "×1.5 on every source of income.",
-                SkillBranch.Globe, 1, Gold(150), dir * Step * 4 + side * Step, new[] { "globe_gilded_axis" }, StatModifier.Multiply(StatId.IncomeMultiplier, 1.5)).currency = Currency.Gold;
             Add(n, "globe_mastery", "Globe Mastery", "+5% globe earnings per rank, compounding. Never maxes out.",
                 SkillBranch.Globe, MasteryRanks, Money(2e6, 1.25), dir * Step * 5, new[] { "globe_gilded_axis" }, StatModifier.Multiply(StatId.GlobeMultiplier, 1.05));
         }
@@ -145,10 +142,6 @@ namespace DetectiveDesk.Progression
                 SkillBranch.Pins, 5, Money(200, 2.0), dir * Step * 3.5f + track, new[] { "pin_land_chance" }, StatModifier.Add(StatId.PinCityChance, 0.05));
             Add(n, "pin_autoloader", "Auto-loader", "The shooter fires a pin by itself whenever one is ready.",
                 SkillBranch.Pins, 1, Money(50000, 1), dir * Step * 4.5f + track, new[] { "shooter_cooldown" }, StatModifier.Add(StatId.PinAutoFire, 1));
-            Add(n, "pin_steel_tips", "★ Steel Tips", "+1 durability for every pin.",
-                SkillBranch.Pins, 1, Gold(60), dir * Step * 5.5f + track, new[] { "pin_city_chance" }, StatModifier.Add(StatId.PinDurability, 1)).currency = Currency.Gold;
-            Add(n, "pin_twin_barrel", "★ Twin Barrel", "20% chance a shot fires two pins.",
-                SkillBranch.Pins, 1, Gold(120), dir * Step * 6.5f + track, new[] { "pin_steel_tips" }, StatModifier.Add(StatId.PinDoubleShotChance, 0.2)).currency = Currency.Gold;
             Add(n, "pin_mastery", "Pin Mastery", "+5% payout for every pin per rank, compounding. Never maxes out.",
                 SkillBranch.Pins, MasteryRanks, Money(5e6, 1.25), dir * Step * (MaxPins + 1), new[] { PinId(MaxPins) }, StatModifier.Multiply(StatId.PinPayout, 1.05));
         }
@@ -164,11 +157,8 @@ namespace DetectiveDesk.Progression
                 SkillBranch.CaseFile, 10, Money(250, 1.7), dir * Step * 2 - side * Step * 0.6f, new[] { "case_payout" }, StatModifier.Add(StatId.CaseAutoStampChance, 0.05));
             Add(n, "case_cold_cases", "Cold Cases", "Every case needs one less piece of evidence.",
                 SkillBranch.CaseFile, 3, Money(1000, 3), dir * Step * 3 + side * Step * 0.6f, new[] { "case_cooldown" }, StatModifier.Add(StatId.CaseEvidenceReduction, 1));
-            Add(n, "case_press", "★ Press Coverage", "Approved cases get a 2% chance to also drop gold (5+, more for later cases).",
-                SkillBranch.CaseFile, 1, Gold(40), dir * Step * 3 - side * Step * 0.6f, new[] { "case_autostamp" },
-                StatModifier.Add(StatId.CaseGoldChance, 0.02), StatModifier.Add(StatId.CaseGold, 5)).currency = Currency.Gold;
-            Add(n, "case_headlines", "Front Page News", "+1% chance an approved case drops gold. Never above 10%.",
-                SkillBranch.CaseFile, 8, Money(5000, 1.9), dir * Step * 4 - side * Step * 0.6f, new[] { "case_press" }, StatModifier.Add(StatId.CaseGoldChance, 0.01));
+            Add(n, "case_headlines", "Front Page News", "+1% chance an approved case drops gold (needs Press Coverage from the Gold shop). Never above 10%.",
+                SkillBranch.CaseFile, 8, Money(5000, 1.9), dir * Step * 3 - side * Step * 0.6f, new[] { "case_autostamp" }, StatModifier.Add(StatId.CaseGoldChance, 0.01)).requiresUnlock = GoldShopCatalog.PressCoverage;
             Add(n, "case_mastery", "Case Mastery", "+5% case rewards per rank, compounding. Never maxes out.",
                 SkillBranch.CaseFile, MasteryRanks, Money(1e6, 1.25), dir * Step * 4, new[] { "case_cold_cases" }, StatModifier.Multiply(StatId.CasePayout, 1.05));
         }
@@ -177,13 +167,11 @@ namespace DetectiveDesk.Progression
         {
             Vector2 side = Perpendicular(dir);
             Add(n, "statue_gold_fill", "Molten Pour", "+20% gold fill speed from globe spins.",
-                SkillBranch.Statues, 10, Money(150, 1.6), dir * Step, new[] { RootId }, StatModifier.Percent(StatId.StatueGoldFillRate, 0.2));
+                SkillBranch.Statues, 10, Money(150, 1.6), dir * Step, new[] { RootId }, StatModifier.Percent(StatId.StatueGoldFillRate, 0.2)).requiresUnlock = GoldShopCatalog.Statue1;
             Add(n, "statue_payout", "Heavier Gold", "+25% gold from smashed statues.",
-                SkillBranch.Statues, 10, Money(250, 1.6), dir * Step * 2, new[] { "statue_gold_fill" }, StatModifier.Percent(StatId.StatuePayout, 0.25));
-            Add(n, "statue_fast_casting", "★ Fast Casting", "Statues need 2 fewer pieces.",
-                SkillBranch.Statues, 1, Gold(250), dir * Step * 2 + side * Step, new[] { "statue_payout" }, StatModifier.Add(StatId.StatuePieceReduction, 2)).currency = Currency.Gold;
+                SkillBranch.Statues, 10, Money(250, 1.6), dir * Step * 2, new[] { "statue_gold_fill" }, StatModifier.Percent(StatId.StatuePayout, 0.25)).requiresUnlock = GoldShopCatalog.Statue1;
             Add(n, "statue_mastery", "Statue Mastery", "+5% statue gold per rank, compounding. Never maxes out.",
-                SkillBranch.Statues, MasteryRanks, Money(1e6, 1.25), dir * Step * 3, new[] { "statue_payout" }, StatModifier.Multiply(StatId.StatuePayout, 1.05));
+                SkillBranch.Statues, MasteryRanks, Money(1e6, 1.25), dir * Step * 3, new[] { "statue_payout" }, StatModifier.Multiply(StatId.StatuePayout, 1.05)).requiresUnlock = GoldShopCatalog.Statue1;
         }
 
         static void BuildLootbox(List<SkillNodeData> n, Vector2 dir)
@@ -193,8 +181,6 @@ namespace DetectiveDesk.Progression
                 SkillBranch.Lootbox, 5, Money(300, 2), dir * Step, new[] { RootId }, StatModifier.Percent(StatId.LootboxPrice, -0.06));
             Add(n, "loot_luck", "Lucky Charm", "+20% odds for statue pieces and gold.",
                 SkillBranch.Lootbox, 5, Money(500, 2), dir * Step * 2, new[] { "loot_bulk" }, StatModifier.Add(StatId.LootLuck, 0.2));
-            Add(n, "loot_double", "★ Double Box", "15% chance a lootbox gives two rewards.",
-                SkillBranch.Lootbox, 1, Gold(100), dir * Step * 2 + side * Step, new[] { "loot_luck" }, StatModifier.Add(StatId.LootDoubleChance, 0.15)).currency = Currency.Gold;
             Add(n, "loot_mastery", "Lootbox Mastery", "+5% lootbox luck per rank. Never maxes out.",
                 SkillBranch.Lootbox, MasteryRanks, Money(1e6, 1.25), dir * Step * 3, new[] { "loot_luck" }, StatModifier.Add(StatId.LootLuck, 0.05));
         }
@@ -208,15 +194,12 @@ namespace DetectiveDesk.Progression
                 SkillBranch.Whiskey, 10, Money(120, 1.55), dir * Step * 2 + side * Step * 0.6f, new[] { "whiskey_duration" }, StatModifier.Percent(StatId.WhiskeyCooldown, -0.06));
             Add(n, "whiskey_strength", "Top Shelf", "+0.25× boost strength.",
                 SkillBranch.Whiskey, 5, Money(400, 2.2), dir * Step * 2 - side * Step * 0.6f, new[] { "whiskey_duration" }, StatModifier.Add(StatId.WhiskeyBoostStrength, 0.25));
-            Add(n, "whiskey_bottomless", "★ Bottomless Glass", "The glass refills itself after the cooldown.",
-                SkillBranch.Whiskey, 1, Gold(200), dir * Step * 3 + side * Step * 0.6f, new[] { "whiskey_cooldown" }, StatModifier.Add(StatId.WhiskeyAutoRefill, 1)).currency = Currency.Gold;
             Add(n, "whiskey_mastery", "Whiskey Mastery", "+1 s boost duration per rank. Never maxes out.",
                 SkillBranch.Whiskey, MasteryRanks, Money(1e6, 1.25), dir * Step * 3 - side * Step * 0.6f, new[] { "whiskey_strength" }, StatModifier.Add(StatId.WhiskeyBoostDuration, 1));
         }
 
         // ------------------------------------------------------------------ helpers
         static CostCurve Money(double baseCost, double growth) => new CostCurve(baseCost, growth);
-        static CostCurve Gold(double cost) => new CostCurve(cost, 1);
 
         static SkillNodeData Add(List<SkillNodeData> n, string id, string title, string description, SkillBranch branch, int maxRank,
             CostCurve cost, Vector2 position, string[] prerequisites, params StatModifier[] modifiers)

@@ -31,11 +31,15 @@ namespace DetectiveDesk.Gameplay
             ? Mathf.Max(2, game.Balance.statueBasePieces + game.Balance.statuePiecesPerIndex * Index - Mathf.RoundToInt((float)game.Stats.Get(StatId.StatuePieceReduction)))
             : 5;
         public bool IsComplete => Pieces >= PiecesRequired;
+        /// <summary>Statues are bought in the Gold shop before lootboxes drop pieces for them.</summary>
+        public bool Unlocked => !game || game.Shop.Owns(DetectiveDesk.Progression.GoldShopCatalog.StatueUnlockId(Index));
+        public string UnlockTitle => DetectiveDesk.Progression.GoldShopCatalog.Find(DetectiveDesk.Progression.GoldShopCatalog.StatueUnlockId(Index))?.title ?? "a pedestal";
         public bool IsReadyToSmash => IsComplete && GoldFill >= 1f;
         public bool IsBusy { get; set; }
         public Bounds VisualBounds => ClickRouter.RendererBounds(bust ? bust : transform, transform.position);
         public string StatusText =>
-            Pieces == 0 ? "Empty pedestal — statue pieces come from lootboxes."
+            !Unlocked ? "Locked. Buy " + UnlockTitle + " in the Gold shop to build this statue."
+            : Pieces == 0 ? "Empty pedestal — statue pieces come from lootboxes."
             : !IsComplete ? "Statue " + Pieces + " / " + PiecesRequired + " pieces."
             : !IsReadyToSmash ? "Filling with gold: " + Mathf.FloorToInt(GoldFill * 100) + "% (spin the globe)."
             : "Solid gold! Click to smash it with the hammer.";

@@ -24,6 +24,11 @@ namespace DetectiveDesk.Save
         public double lifetimeMoney;
         public double lifetimeGold;
 
+        // Prestige ("Retire the agency"): money earned in the current run, retirements so far, Gold shop ranks.
+        public double runMoney;
+        public int prestiges;
+        public List<SkillRank> goldShop = new List<SkillRank>();
+
         // Progression
         public List<SkillRank> skills = new List<SkillRank>();
 

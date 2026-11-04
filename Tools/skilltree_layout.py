@@ -4,7 +4,7 @@ def a(i,x,y,p,b): N[i]=(x,y,p,b)
 a('root',0,0,[],'R')
 # Globe (up)
 a('globe_auto',0,1,['root'],'G'); a('globe_drag',-1,2,['globe_max_speed'],'G'); a('globe_max_speed',0,2,['globe_auto'],'G'); a('globe_click',1,2,['globe_max_speed'],'G')
-a('globe_multiplier',0,3,['globe_max_speed'],'G'); a('globe_gilded_axis',0,4,['globe_multiplier'],'G'); a('globe_golden_meridian',1,4,['globe_gilded_axis'],'G'); a('globe_mastery',0,5,['globe_gilded_axis'],'G')
+a('globe_multiplier',0,3,['globe_max_speed'],'G'); a('globe_gilded_axis',0,4,['globe_multiplier'],'G'); a('globe_mastery',0,5,['globe_gilded_axis'],'G')
 # Pins (right)
 prev='root'
 for k in range(1,13):
@@ -12,17 +12,17 @@ for k in range(1,13):
     a(f'pin_{k:02}',x,0,[prev],'P'); a(f'pin_{k:02}_durability',x,1,[f'pin_{k:02}'],'P'); a(f'pin_{k:02}_payout',x,-1,[f'pin_{k:02}'],'P'); prev=f'pin_{k:02}'
 a('pin_mastery',14,0,['pin_12'],'P')
 a('shooter_cooldown',3,-2,['pin_01'],'P'); a('pin_autoloader',3,-3,['shooter_cooldown'],'P')
-a('pin_land_chance',4,-2,['pin_02'],'P'); a('pin_city_chance',5,-2,['pin_land_chance'],'P'); a('pin_steel_tips',6,-2,['pin_city_chance'],'P'); a('pin_twin_barrel',7,-2,['pin_steel_tips'],'P')
+a('pin_land_chance',4,-2,['pin_02'],'P'); a('pin_city_chance',5,-2,['pin_land_chance'],'P');
 # Case (left)
 a('case_payout',-1,0,['root'],'C'); a('case_cooldown',-2,0.5,['case_payout'],'C'); a('case_autostamp',-2,-0.5,['case_payout'],'C')
-a('case_cold_cases',-3,0.5,['case_cooldown'],'C'); a('case_press',-3,-0.5,['case_autostamp'],'C'); a('case_mastery',-4,0.5,['case_cold_cases'],'C'); a('case_headlines',-4,-0.5,['case_press'],'C')
+a('case_cold_cases',-3,0.5,['case_cooldown'],'C'); a('case_mastery',-4,0.5,['case_cold_cases'],'C'); a('case_headlines',-3,-0.5,['case_autostamp'],'C')
 # Whiskey (up-left)
 a('whiskey_duration',-2,2,['root'],'W'); a('whiskey_cooldown',-3,2.5,['whiskey_duration'],'W'); a('whiskey_strength',-3,1.5,['whiskey_duration'],'W')
-a('whiskey_bottomless',-4,2.5,['whiskey_cooldown'],'W'); a('whiskey_mastery',-4,1.5,['whiskey_strength'],'W')
+a('whiskey_mastery',-4,1.5,['whiskey_strength'],'W')
 # Statues (down)
-a('statue_gold_fill',0,-1,['root'],'S'); a('statue_payout',0,-2,['statue_gold_fill'],'S'); a('statue_fast_casting',1,-2.5,['statue_payout'],'S'); a('statue_mastery',0,-3,['statue_payout'],'S')
+a('statue_gold_fill',0,-1,['root'],'S'); a('statue_payout',0,-2,['statue_gold_fill'],'S'); a('statue_mastery',0,-3,['statue_payout'],'S')
 # Lootbox (down-left)
-a('loot_bulk',-2,-2,['root'],'L'); a('loot_luck',-3,-2,['loot_bulk'],'L'); a('loot_double',-4,-1.5,['loot_luck'],'L'); a('loot_mastery',-4,-2.5,['loot_luck'],'L')
+a('loot_bulk',-2,-2,['root'],'L'); a('loot_luck',-3,-2,['loot_bulk'],'L'); a('loot_mastery',-4,-2,['loot_luck'],'L')
 ids=list(N)
 bad=[]
 for i in range(len(ids)):

@@ -21,6 +21,9 @@ namespace DetectiveDesk.Progression
 
         public event Action Changed;
 
+        /// <summary>Extra permanent modifiers outside the skill tree (the Gold shop). Read on every rebuild.</summary>
+        public Func<IEnumerable<(StatModifier modifier, int rank)>> ExtraSource;
+
         public void SetBase(StatId stat, double value) { baseValues[stat] = value; Changed?.Invoke(); }
 
         public double GetBase(StatId stat) => baseValues.TryGetValue(stat, out var v) ? v : 0;
@@ -59,6 +62,8 @@ namespace DetectiveDesk.Progression
                     foreach (var m in node.modifiers) Accumulate(m, rank);
                 }
             }
+            var extra = ExtraSource?.Invoke();
+            if (extra != null) foreach (var (m, rank) in extra) if (rank > 0) Accumulate(m, rank);
             Changed?.Invoke();
         }
 

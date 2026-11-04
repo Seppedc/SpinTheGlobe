@@ -89,7 +89,8 @@ namespace DetectiveDesk.Gameplay
                     if (!f) continue;
                     var fig = f;
                     Add("Statue", InFront(fig.transform), () =>
-                        fig.Pieces == 0 ? "0 / " + fig.PiecesRequired
+                        !fig.Unlocked ? "LOCKED"
+                        : fig.Pieces == 0 ? "0 / " + fig.PiecesRequired
                         : !fig.IsComplete ? fig.Pieces + " / " + fig.PiecesRequired
                         : fig.IsReadyToSmash ? "SMASH" : Mathf.FloorToInt(fig.GoldFill * 100) + " % GOLD");
                 }

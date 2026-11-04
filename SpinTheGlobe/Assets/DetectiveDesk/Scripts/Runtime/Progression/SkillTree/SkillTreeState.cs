@@ -26,6 +26,9 @@ namespace DetectiveDesk.Progression
 
         public event Action<SkillNodeData, int> Purchased;
 
+        /// <summary>Answers whether a Gold shop unlock is owned (see <see cref="SkillNodeData.requiresUnlock"/>).</summary>
+        public Func<string, bool> UnlockCheck;
+
         public int Rank(string id) => id != null && ranks.TryGetValue(id, out var r) ? r : 0;
         public bool Owns(string id) => Rank(id) > 0;
 
@@ -37,6 +40,8 @@ namespace DetectiveDesk.Progression
             if (node == null) { reason = "Unknown skill."; return NodeStatus.Hidden; }
             int rank = Rank(node.id);
             if (rank >= node.maxRank) { reason = "Maxed."; return NodeStatus.Maxed; }
+            if (!string.IsNullOrEmpty(node.requiresUnlock) && !(UnlockCheck != null && UnlockCheck(node.requiresUnlock)))
+            { reason = "Unlock it in the Gold shop first."; return NodeStatus.Hidden; }
 
             if (!node.IsRoot)
             {

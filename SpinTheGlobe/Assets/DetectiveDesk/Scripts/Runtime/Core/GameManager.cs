@@ -36,6 +36,7 @@ namespace DetectiveDesk.Gameplay
         public Wallet Wallet { get; } = new Wallet();
         public StatSheet Stats { get; } = new StatSheet();
         public SkillTreeState Skills { get; } = new SkillTreeState();
+        public GoldShopState Shop { get; } = new GoldShopState();
         public Inventory Inventory { get; } = new Inventory();
         public GameBalance Balance { get; private set; }
         public SkillTreeAsset Tree { get; private set; }
@@ -53,13 +54,24 @@ namespace DetectiveDesk.Gameplay
         public DeskLamp Lamp { get; private set; }
         public SettingsMenu Settings { get; private set; }
         public MusicPlayer Music { get; private set; }
+        public GoldShopView ShopView { get; private set; }
+
+        // ------------------------------------------------------------------ prestige state
+        /// <summary>Money earned since the last retirement (drives the prestige gold).</summary>
+        public double RunEarnings { get; private set; }
+        /// <summary>How many times the agency has been retired.</summary>
+        public int Prestiges { get; private set; }
+        /// <summary>Gold the player would get for retiring right now.</summary>
+        public double PrestigeGold => Prestige.GoldFor(RunEarnings, Balance);
+        public bool CanRetire => PrestigeGold >= 1;
+        bool retiring;
 
         public double Money => Wallet.Money;
         public double PlayTime { get; private set; }
         public Camera GameCamera => globe && globe.gameCamera ? globe.gameCamera : Camera.main;
 
         public bool WorldInputBlocked =>
-            (archive && archive.IsArchiveOpen) || (TreeView && TreeView.IsOpen) || (Settings && Settings.IsOpen) || (PaperBalls && PaperBalls.IsAiming) ||
+            (archive && archive.IsArchiveOpen) || (TreeView && TreeView.IsOpen) || (Settings && Settings.IsOpen) || (ShopView && ShopView.IsOpen) || (PaperBalls && PaperBalls.IsAiming) ||
             (legacy && legacy.settingsPanel && legacy.settingsPanel.activeInHierarchy);
 
         public event Action Changed;
@@ -88,6 +100,9 @@ namespace DetectiveDesk.Gameplay
                 Tree.SetNodes(DefaultSkillTreeFactory.Create());
             }
             Balance.ApplyTo(Stats);
+            // Gold shop bonuses count like skills; statue and Press Coverage nodes stay hidden until their unlock is bought.
+            Stats.ExtraSource = Shop.Modifiers;
+            Skills.UnlockCheck = Shop.Owns;
 
             if (legacy) { legacy.Gameplay = this; legacy.globeSpeed = 0; }
             if (!globe) Debug.LogError("GameManager needs its GlobeController reference.", this);
@@ -105,11 +120,12 @@ namespace DetectiveDesk.Gameplay
             Lamp = Ensure<DeskLamp>();
             Settings = Ensure<SettingsMenu>();
             Music = Ensure<MusicPlayer>();
+            ShopView = Ensure<GoldShopView>();
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             Ensure<DevCheats>();
 #endif
 
-            Wallet.Changed += (c, b, d) => Notify();
+            Wallet.Changed += (c, b, d) => { if (c == Currency.Money && d > 0) RunEarnings += d; Notify(); };
             Inventory.Changed += Notify;
         }
 
@@ -152,6 +168,7 @@ namespace DetectiveDesk.Gameplay
             DeskInfo.Initialize(this);
             Settings.Initialize(this);
             Music.Initialize(this);
+            ShopView.Initialize(this);
 
             loaded = true;
             EventBus.Publish(new GameLoaded());
@@ -314,6 +331,11 @@ namespace DetectiveDesk.Gameplay
             if (useSaveFile && Store.TryLoad(out var data))
             {
                 Wallet.Load(data.money, data.gold, data.lifetimeMoney, data.lifetimeGold);
+                Shop.Load(data.goldShop);
+                Prestiges = Mathf.Max(0, data.prestiges);
+                // Saves from before prestige existed: the whole history counts as this run.
+                RunEarnings = data.runMoney > 0 || Prestiges > 0 ? data.runMoney : data.lifetimeMoney;
+                MigrateGoldNodes(data);
                 Skills.Load(Tree, data.skills);
                 Inventory.Load(data.iceCubes, data.paperBalls, data.sparePieces);
                 PlayTime = data.playTimeSeconds;
@@ -333,11 +355,13 @@ namespace DetectiveDesk.Gameplay
 
         public void SaveGame()
         {
+            if (retiring) return;
             try
             {
                 var data = new SaveData
                 {
                     money = Wallet.Money, gold = Wallet.Gold, lifetimeMoney = Wallet.LifetimeMoney, lifetimeGold = Wallet.LifetimeGold,
+                    runMoney = RunEarnings, prestiges = Prestiges, goldShop = Shop.ToSave(),
                     skills = Skills.ToSave(), playTimeSeconds = PlayTime,
                     iceCubes = Inventory.IceCubes, paperBalls = Inventory.PaperBalls, sparePieces = Inventory.SparePieces,
                     statues = new List<StatueState>(),
@@ -350,6 +374,89 @@ namespace DetectiveDesk.Gameplay
                 Store.Save(data);
             }
             catch (Exception e) { Debug.LogWarning("Saving failed: " + e.Message); }
+        }
+
+        /// <summary>
+        /// Gold upgrades used to be ★ nodes in the skill tree. A save that owns one gets the matching Gold shop item,
+        /// and a save from before statues were locked keeps the statues it already started.
+        /// </summary>
+        void MigrateGoldNodes(SaveData data)
+        {
+            if (data.goldShop != null && data.goldShop.Count > 0) return;
+            var map = new Dictionary<string, string>
+            {
+                ["globe_golden_meridian"] = "golden_meridian", ["pin_steel_tips"] = "steel_tips", ["pin_twin_barrel"] = "twin_barrel",
+                ["case_press"] = GoldShopCatalog.PressCoverage, ["statue_fast_casting"] = "fast_casting",
+                ["loot_double"] = "double_box", ["whiskey_bottomless"] = "bottomless_glass",
+            };
+            var grant = new List<SkillRank>();
+            if (data.skills != null)
+                foreach (var s in data.skills)
+                    if (s.rank > 0 && map.TryGetValue(s.id, out var shopId)) grant.Add(new SkillRank { id = shopId, rank = 1 });
+            if (Prestiges == 0 && data.statues != null)
+                for (int i = 0; i < data.statues.Count; i++)
+                    if (data.statues[i].pieces > 0)
+                        for (int k = 0; k <= Mathf.Min(i, 2); k++) grant.Add(new SkillRank { id = GoldShopCatalog.StatueUnlockId(k), rank = 1 });
+            if (grant.Count > 0) Shop.Load(grant);
+        }
+
+        // ------------------------------------------------------------------ prestige
+        /// <summary>
+        /// Retire the agency: bank the prestige gold and start a new run. Money, the skill tree, pins, cases, the whiskey
+        /// glass, lootbox prices and items reset; gold, the Gold shop, statues, settings and the lamp are kept.
+        /// Fresh-start items from the Gold shop give the new run its head start.
+        /// </summary>
+        public void Retire()
+        {
+            if (!CanRetire) { ShowHint("Earn " + NumberFormatter.Money(Balance.prestigeThreshold) + " in this run to retire."); return; }
+            if (!useSaveFile) { ShowHint("Retiring needs the save file (useSaveFile is off)."); return; }
+            double gain = PrestigeGold;
+            var data = new SaveData
+            {
+                money = Balance.startingMoney + GoldShopCatalog.SeedMoneyAmounts[Mathf.Clamp(Shop.Rank(GoldShopCatalog.SeedMoney), 0, GoldShopCatalog.SeedMoneyAmounts.Length - 1)],
+                gold = Wallet.Gold + gain,
+                lifetimeMoney = Wallet.LifetimeMoney,
+                lifetimeGold = Wallet.LifetimeGold + gain,
+                runMoney = 0,
+                prestiges = Prestiges + 1,
+                goldShop = Shop.ToSave(),
+                skills = FreshStartSkills(),
+                playTimeSeconds = PlayTime,
+                sparePieces = Inventory.SparePieces,
+                statues = new List<StatueState>(),
+            };
+            Lamp.SaveState(data);
+            if (figurines != null) foreach (var f in figurines) data.statues.Add(f ? f.SaveState() : default);
+            try { Store.Save(data); }
+            catch (Exception e) { Debug.LogWarning("Retiring failed: " + e.Message); ShowHint("Retiring failed: the game could not be saved."); return; }
+            retiring = true;
+            Time.timeScale = 1;
+            UnityEngine.SceneManagement.SceneManager.LoadScene(gameObject.scene.buildIndex >= 0 ? gameObject.scene.buildIndex : 0);
+        }
+
+        /// <summary>Skill ranks a new run starts with, from the Gold shop's fresh-start items.</summary>
+        List<SkillRank> FreshStartSkills()
+        {
+            var list = new List<SkillRank>();
+            if (!Shop.Owns(GoldShopCatalog.KeptLedger)) return list;
+            list.Add(new SkillRank { id = DefaultSkillTreeFactory.RootId, rank = 1 });
+            if (Shop.Owns(GoldShopCatalog.WoundClockwork)) list.Add(new SkillRank { id = "globe_auto", rank = GoldShopCatalog.WoundClockworkRanks });
+            if (Shop.Owns(GoldShopCatalog.SparePin)) list.Add(new SkillRank { id = DefaultSkillTreeFactory.PinId(1), rank = 1 });
+            return list;
+        }
+
+        // ------------------------------------------------------------------ gold shop
+        public bool PurchaseShopItem(string id)
+        {
+            if (!Shop.TryBuy(id, Wallet, out string reason)) { ShowHint(reason); return false; }
+            Stats.Rebuild(Tree, Skills);
+            if (globe) globe.EnforceLimits();
+            if (PinBox) PinBox.Refresh();
+            if (audioManager) audioManager.Click();
+            var item = GoldShopCatalog.Find(id);
+            ShowHint(item.title + (item.maxRank > 1 ? " rank " + Shop.Rank(id) : "") + " bought.");
+            Notify();
+            return true;
         }
 
         /// <summary>Deletes the save file and reloads the scene (debug / settings).</summary>

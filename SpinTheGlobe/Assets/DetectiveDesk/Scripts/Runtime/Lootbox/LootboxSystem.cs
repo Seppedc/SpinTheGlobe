@@ -48,11 +48,14 @@ namespace DetectiveDesk.Gameplay
         {
             var table = game.Balance.lootTable;
             float luck = Mathf.Max(0, (float)game.Stats.Get(StatId.LootLuck));
+            // No statue pieces until a statue is unlocked in the Gold shop (and has room for one).
+            bool pieces = FirstIncompleteStatue();
             float Weight(GameBalance.LootEntry e) =>
+                e.kind == LootKind.StatuePiece && !pieces ? 0 :
                 Mathf.Max(0, e.weight) * (e.kind == LootKind.StatuePiece || e.kind == LootKind.Gold ? 1 + luck : 1);
             float total = 0;
             foreach (var e in table) total += Weight(e);
-            if (table.Count == 0 || total <= 0) return LootKind.Money;
+            if (table.Count == 0 || total <= 0) return LootKind.Money;   // e.g. a table with only statue pieces while statues are locked
             double pick = rng.NextDouble() * total;
             foreach (var e in table)
             {
@@ -80,6 +83,7 @@ namespace DetectiveDesk.Gameplay
                 {
                     var target = FirstIncompleteStatue();
                     if (target) { target.AddPiece(); return new LootOpened(kind, 1, "a statue piece for statue " + (target.Index + 1) + " (" + target.Pieces + "/" + target.PiecesRequired + ")."); }
+                    if (!AnyStatueUnlocked()) goto default;   // statues are still locked: pay out money instead
                     game.Inventory.AddSparePiece();
                     return new LootOpened(kind, 1, "a statue piece (kept until a pedestal is free).");
                 }
@@ -96,10 +100,16 @@ namespace DetectiveDesk.Gameplay
             }
         }
 
+        bool AnyStatueUnlocked()
+        {
+            if (game.figurines != null) foreach (var f in game.figurines) if (f && f.Unlocked) return true;
+            return false;
+        }
+
         FigurinePedestal FirstIncompleteStatue()
         {
             if (game.figurines == null) return null;
-            foreach (var f in game.figurines) if (f && !f.IsComplete && !f.IsBusy) return f;
+            foreach (var f in game.figurines) if (f && f.Unlocked && !f.IsComplete && !f.IsBusy) return f;
             return null;
         }
 
