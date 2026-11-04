@@ -27,12 +27,20 @@ namespace DetectiveDesk.Gameplay
         public double CurrentVelocity { get; private set; }
         public double FirstRevolutionAngle { get; private set; } = 360;
         public double MaximumVelocity => game ? Math.Max(1, game.Stats.Get(StatId.GlobeMaxSpeed)) : 60;
-        public double AutoFloor => game ? Math.Max(0, Math.Min(MaximumVelocity, game.Stats.Get(StatId.GlobeAutoSpeed))) : 0;
+        /// <summary>Auto-rotate floor: Clockwork Motor's share of the max speed (or a fixed speed, whichever is higher).</summary>
+        public double AutoFloor => game
+            ? Math.Max(0, Math.Min(MaximumVelocity, Math.Max(game.Stats.Get(StatId.GlobeAutoSpeed),
+                                                             MaximumVelocity * Math.Min(1, game.Stats.Get(StatId.GlobeAutoShare)))))
+            : 0;
+        /// <summary>Hand spinning scales with the max speed, so dragging stays worthwhile on a fast globe.</summary>
+        double ImpulseScale => game ? Math.Max(1, MaximumVelocity / Math.Max(1, game.Balance.impulseReferenceSpeed)) : 1;
         public bool IsRedline => CurrentVelocity >= MaximumVelocity * .95;
         public Vector3 Axis => rotor && rotor.parent ? rotor.parent.up : Vector3.up;
         public Vector3 Center => rotor ? rotor.TransformPoint(markerLocalCenter) : transform.position;
         public event Action<double, double> Advanced;
         public event Action<long> RevolutionsCompleted;
+        /// <summary>Payout ticks (several per revolution, see GameBalance.globeTicksPerRevolution).</summary>
+        public event Action<long> TicksCompleted;
 
         bool dragging;
         Vector2 pointer;
@@ -96,7 +104,7 @@ namespace DetectiveDesk.Gameplay
         public void AddSwipe(float horizontalPixels)
         {
             if (float.IsNaN(horizontalPixels) || float.IsInfinity(horizontalPixels) || horizontalPixels <= 0) return;
-            double gain = game ? game.Balance.dragAcceleration * game.Stats.Get(StatId.GlobeDragPower) : .35;
+            double gain = game ? game.Balance.dragAcceleration * game.Stats.Get(StatId.GlobeDragPower) * ImpulseScale : .35;
             dragAdded += horizontalPixels * gain;
             AddVelocity(horizontalPixels * gain);
         }
@@ -108,14 +116,14 @@ namespace DetectiveDesk.Gameplay
         void FinishDrag()
         {
             if (dragAdded <= 0 || !game) return;
-            double minimum = game.Balance.clickImpulse * game.Balance.dragOverClick * game.Stats.Get(StatId.GlobeDragPower);
+            double minimum = game.Balance.clickImpulse * game.Balance.dragOverClick * game.Stats.Get(StatId.GlobeDragPower) * ImpulseScale;
             if (dragAdded < minimum) AddVelocity(minimum - dragAdded);
         }
 
         /// <summary>Click input: a fixed impulse, deliberately weaker than a good drag.</summary>
         public void AddClick()
         {
-            double impulse = game ? game.Balance.clickImpulse * game.Stats.Get(StatId.GlobeClickPower) : 10;
+            double impulse = game ? game.Balance.clickImpulse * game.Stats.Get(StatId.GlobeClickPower) * ImpulseScale : 10;
             AddVelocity(impulse);
         }
 
@@ -141,6 +149,9 @@ namespace DetectiveDesk.Gameplay
             rotor.Rotate(Vector3.up, -(float)(delta % 360), Space.Self);
             long completed = GameplayMath.Crossings(previous, TotalDegrees, FirstRevolutionAngle);
             if (completed > 0) RevolutionsCompleted?.Invoke(completed);
+            int ticks = game ? Math.Max(1, game.Balance.globeTicksPerRevolution) : 1;
+            long tickCount = GameplayMath.Crossings(previous, TotalDegrees, FirstRevolutionAngle - 360 + 360.0 / ticks, 360.0 / ticks);
+            if (tickCount > 0) TicksCompleted?.Invoke(tickCount);
             Advanced?.Invoke(previous, TotalDegrees);
         }
 

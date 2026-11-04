@@ -48,7 +48,7 @@ namespace DetectiveDesk.Progression
         /// <summary>Starting money per Seed Money rank (rank 0 = nothing extra).</summary>
         public static readonly double[] SeedMoneyAmounts = { 0, 100, 1_000, 10_000, 100_000, 1_000_000 };
         /// <summary>Clockwork Motor ranks a new run starts with when Wound Clockwork is owned.</summary>
-        public const int WoundClockworkRanks = 3;
+        public const int WoundClockworkRanks = 2;
 
         static List<GoldShopItem> items;
         public static IReadOnlyList<GoldShopItem> Items => items ??= Create();

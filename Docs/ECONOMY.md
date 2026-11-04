@@ -5,7 +5,7 @@ The numbers live in `Data/Balance/GameBalance.asset` and `Data/SkillTree/SkillTr
 ## Income sources
 | Source | Formula | Typical share |
 |---|---|---|
-| Globe turn | €1.6 × income scale per full revolution | early game |
+| Globe turn | €2.4 × income scale per revolution, paid in 12 small ticks (every 30°) | early game, lots of small payouts |
 | Pin pass | €3 × location × pin payout × income scale | **~65%** |
 | Case approved | max(€40 × case# × all income, **12 s of recent income**) × case reward | ~30% |
 | Lootbox money | 30–80% refund, or a 2–4× jackpot (25%) | random |
@@ -27,8 +27,8 @@ final = (base + Σ add) × max(0.05, 1 + Σ percent) × Π (multiply^rank) × te
 Costs are written as *base × growth per rank*. ★ nodes cost gold.
 
 **Globe**
-- Clockwork Motor (first node after the root): +2 RPM auto-rotate, never above max speed. 20 ranks, €8 ×1.6.
-- Greased Bearings (after Clockwork Motor): +2 RPM max speed. 20 ranks, €10 ×1.42.
+- Clockwork Motor (first node after the root): auto-rotate at +20% of max speed per rank (100% at rank 5). 5 ranks, €8 ×2.2.
+- Greased Bearings (after Clockwork Motor): ×1.2 max speed per rank, compounding: 15 RPM base → ~575 RPM at rank 20 (about 10× the old 50 RPM top). 20 ranks, €10 ×2.3. Drag and click impulses scale with max speed (÷ 90°/s), so hand spinning stays useful.
 - Firm Grip: +30% drag. 5 ranks, €20 ×1.8.
 - Flick of the Wrist: +20% click. 5 ranks, €20 ×1.8.
 - **Rule:** dragging always beats clicking. At the same upgrade level drag power ≥ click power, and every drag gives at least 1.5 clicks' worth of speed (checked by a unit test).
@@ -38,7 +38,7 @@ Costs are written as *base × growth per rank*. ★ nodes cost gold.
 - Globe Mastery: ×1.05 globe earnings per rank, endless. €2M ×1.25.
 
 **Pins**
-- Pin n: €20 × 3.1^(n−1), except Pin 1 at €10 (fast first shot). Pin 1 €10, Pin 3 €192, Pin 6 €5.7K, Pin 9 €171K, Pin 12 €5.1M.
+- Pin n: €20 × 3.6^(n−1), except Pin 1 at €10 (fast first shot). Pin 3 €259, Pin 6 €12K, Pin 9 €560K, Pin 12 €26M.
 - Pin n · Durability: +1 pass. 5 ranks, 1.5 × the pin's price, ×1.6 per rank.
 - Pin n · Payout: +50% for that pin. 10 ranks, 1.25 × the pin's price, ×1.45 per rank.
 - Oiled Spring: −6% reload. 15 ranks (up to −90%), €25 ×1.45.
@@ -80,7 +80,7 @@ Costs are written as *base × growth per rank*. ★ nodes cost gold.
 ★ nodes add up to about 920 gold. Gold sinks give the loop *money → lootbox → statue pieces → smash → gold → golden nodes* its purpose.
 
 ## Prestige and Gold shop
-- **Retire the agency** (Gold shop, top card): possible once €1M is earned in the current run. Gold = floor(25 × √(run earnings ÷ €1M)): €1M → 25, €4M → 50, €10M → 79, €100M → 250. Simulated first retirement: ~40 min (25 gold), ~54 min for 50.
+- **Retire the agency** (Gold shop, top card): possible once €10M is earned in the current run. Gold = floor(25 × √(run earnings ÷ €10M)): €10M → 25, €40M → 50, €100M → 79. Simulated first retirement: ~1 h.
 - Resets money, the skill tree, pins, cases, whiskey, lootbox count and items. Keeps gold, the Gold shop, statues, settings and the lamp.
 - **Skill tree is money only (65 nodes).** Statue nodes stay hidden until First Pedestal is bought; Front Page News until Press Coverage is bought.
 - **Gold shop** (G, or the GOLD SHOP button):

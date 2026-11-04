@@ -43,12 +43,12 @@ def run(shop, prestiges, cap_h=3, dt=2.0):
             if v>bv: bv=v; best_c=(n,c)
         if best_c: money-=best_c[1]; R[best_c[0]['id']]+=1
         t+=dt
-        g=math.floor(25*math.sqrt(earned/1e6)) if earned>=1e6 else 0
+        g=math.floor(25*math.sqrt(earned/1e7)) if earned>=1e7 else 0
         if g>0 and int(t)%60==0:
             rate=(g+sgold)/t
             if rate>best: best=rate; bestT=t
             elif rate<0.97*best and t>bestT+300: break
-    g=math.floor(25*math.sqrt(earned/1e6)) if earned>=1e6 else 0
+    g=math.floor(25*math.sqrt(earned/1e7)) if earned>=1e7 else 0
     return t, g+sgold
 
 ITEMS=[('ledger',10),('st0',25),('wound',20),('spare',30),('press',40),('st1',75),('steel',60),('double',100),('twin',120),

@@ -20,8 +20,8 @@ namespace DetectiveDesk.Progression
         public static string PinId(int pin) => $"pin_{pin:00}";               // 1-based for readability
         public static string PinDurabilityId(int pin) => $"pin_{pin:00}_durability";
         public static string PinPayoutId(int pin) => $"pin_{pin:00}_payout";
-        // Pin 1 is cheap so the first shot comes early; from pin 2 on: €20 × 3.1^(n-1).
-        public static double PinPrice(int pin) => pin <= 1 ? 10 : 20 * System.Math.Pow(3.1, pin - 1);
+        // Pin 1 is cheap so the first shot comes early; from pin 2 on: €20 × 3.6^(n-1).
+        public static double PinPrice(int pin) => pin <= 1 ? 10 : 20 * System.Math.Pow(3.6, pin - 1);
 
         public static List<SkillNodeData> Create()
         {
@@ -97,12 +97,13 @@ namespace DetectiveDesk.Progression
         {
             Vector2 side = Perpendicular(dir);
             // Clockwork Motor comes first: it is meant to be the player's first purchase, so the globe keeps
-            // turning (and earning) without constant clicking. It is capped by the maximum spin speed.
-            var auto = Add(n, "globe_auto", "Clockwork Motor", "+2 RPM auto-rotate: the globe keeps turning by itself. Never faster than the maximum spin speed.",
-                SkillBranch.Globe, 20, Money(8, 1.6), dir * Step, new[] { RootId }, StatModifier.Add(StatId.GlobeAutoSpeed, 12));
-            Add(n, "globe_max_speed", "Greased Bearings", "+2 RPM maximum spin speed. Caps dragging and auto-rotate.",
-                SkillBranch.Globe, 20, Money(10, 1.42), dir * Step * 2, new[] { "globe_auto" }, StatModifier.Add(StatId.GlobeMaxSpeed, 12));
-            auto.capStat = StatId.GlobeAutoSpeed; auto.capByStat = StatId.GlobeMaxSpeed;
+            // turning (and earning) without constant clicking. Auto-rotate is a share of the max speed, so it
+            // keeps up as Greased Bearings make the globe faster.
+            Add(n, "globe_auto", "Clockwork Motor", "The globe keeps turning by itself at +20% of its maximum spin speed per rank (100% at rank 5).",
+                SkillBranch.Globe, 5, Money(8, 2.2), dir * Step, new[] { RootId }, StatModifier.Add(StatId.GlobeAutoShare, 0.2));
+            // Exponential: ×1.2 per rank, about ×38 at rank 20 (15 → ~575 RPM). The price grows faster still.
+            Add(n, "globe_max_speed", "Greased Bearings", "+20% maximum spin speed per rank (compounding). Drag, click and auto-rotate all scale with it.",
+                SkillBranch.Globe, 20, Money(10, 2.3), dir * Step * 2, new[] { "globe_auto" }, StatModifier.Multiply(StatId.GlobeMaxSpeed, 1.2));
             Add(n, "globe_drag", "Firm Grip", "+30% speed gained from dragging. (Dragging always beats clicking at the same upgrade level.)",
                 SkillBranch.Globe, 5, Money(20, 1.8), dir * Step * 1.5f + side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeDragPower, 0.3));
             Add(n, "globe_click", "Flick of the Wrist", "+20% speed gained from clicking.",

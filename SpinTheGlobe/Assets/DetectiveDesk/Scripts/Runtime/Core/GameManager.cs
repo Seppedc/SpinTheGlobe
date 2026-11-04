@@ -155,8 +155,15 @@ namespace DetectiveDesk.Gameplay
             return list.ToArray();
         }
 
-        void OnEnable() { if (globe) globe.RevolutionsCompleted += Revolution; }
-        void OnDisable() { if (globe) globe.RevolutionsCompleted -= Revolution; }
+        void OnEnable() { if (globe) { globe.RevolutionsCompleted += Revolution; globe.TicksCompleted += Tick; } }
+        void OnDisable() { if (globe) { globe.RevolutionsCompleted -= Revolution; globe.TicksCompleted -= Tick; } }
+
+        /// <summary>The globe pays in small steps during each turn (lots of small payouts instead of one per turn).</summary>
+        void Tick(long count)
+        {
+            int ticks = Mathf.Max(1, Balance.globeTicksPerRevolution);
+            for (long i = 0; i < count && i < 8; i++) CreditIncome(Balance.revolutionReward / ticks * IncomeScale * (count > 8 && i == 7 ? count - 7 : 1));
+        }
 
         void Start()
         {
@@ -226,7 +233,6 @@ namespace DetectiveDesk.Gameplay
         // ------------------------------------------------------------------ economy
         void Revolution(long count)
         {
-            CreditIncome(count * Balance.revolutionReward * IncomeScale);
             float fill = (float)(count * Balance.statueGoldFillPerRevolution * Stats.Get(StatId.StatueGoldFillRate));
             if (figurines != null) foreach (var f in figurines) if (f) f.AddGold(fill);
             EventBus.Publish(new GlobeRevolutions(count));

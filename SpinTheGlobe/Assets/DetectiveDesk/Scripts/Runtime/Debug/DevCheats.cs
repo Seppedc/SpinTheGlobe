@@ -6,7 +6,7 @@ namespace DetectiveDesk.Gameplay
     /// Testing shortcuts, only in the Editor and development builds:
     /// F1 +€1,000 (Shift: +€100,000) · F2 +1 ice, paper ball and statue piece · F3 complete and gild all unlocked statues
     /// · F4 +10 gold (Shift: +100) · F5 fill the case file · F6 show the whole skill tree · F7 whiskey glass almost full (no cooldown)
-    /// · F8 slow motion on/off (×0.15) · F9 +€1M run earnings to test retiring (Shift: +€10M).
+    /// · F8 slow motion on/off (×0.15) · F9 +€10M run earnings to test retiring (Shift: +€100M).
     /// </summary>
     public sealed class DevCheats : MonoBehaviour
     {
@@ -32,7 +32,7 @@ namespace DetectiveDesk.Gameplay
                 game.ShowHint("[dev] statues completed and gilded");
             }
             if (Input.GetKeyDown(KeyCode.F4)) { game.CreditGold(shift ? 100 : 10); game.ShowHint("[dev] gold added"); }
-            if (Input.GetKeyDown(KeyCode.F9)) { game.Credit(shift ? 1e7 : 1e6); game.ShowHint("[dev] run earnings +" + (shift ? "€10M" : "€1M") + " (retire test)"); }
+            if (Input.GetKeyDown(KeyCode.F9)) { game.Credit(shift ? 1e8 : 1e7); game.ShowHint("[dev] run earnings +" + (shift ? "€100M" : "€10M") + " (retire test)"); }
             if (Input.GetKeyDown(KeyCode.F5) && game.Cases) game.Cases.DevFill();
             if (Input.GetKeyDown(KeyCode.F7) && game.Whiskey) game.Whiskey.DevAlmostFull();
             if (Input.GetKeyDown(KeyCode.F8)) { Time.timeScale = Time.timeScale < 0.99f ? 1f : 0.15f; game.ShowHint("[dev] time ×" + Time.timeScale.ToString("0.##")); }

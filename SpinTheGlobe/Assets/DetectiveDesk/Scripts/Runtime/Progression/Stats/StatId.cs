@@ -16,6 +16,7 @@ namespace DetectiveDesk.Progression
         GlobeClickPower = 103,      // multiplier on click impulse
         GlobeMultiplier = 104,      // base multiplier on all globe earnings
         IncomeMultiplier = 105,     // multiplier on every income source (golden nodes)
+        GlobeAutoShare = 106,       // auto-rotate floor as a share of the max speed (0..1), Clockwork Motor
 
         // Pins & shooter
         PinSlots = 200,             // number of pins unlocked (0..12)

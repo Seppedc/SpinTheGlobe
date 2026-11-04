@@ -49,7 +49,7 @@ namespace DetectiveDesk.Progression
 
         [Header("Prestige (Retire the agency)")]
         [Tooltip("Money that must be earned in a run before retiring is possible.")]
-        [Min(1)] public double prestigeThreshold = 1_000_000;
+        [Min(1)] public double prestigeThreshold = 10_000_000;
         [Tooltip("Gold for retiring = floor(scale × (earned this run ÷ threshold)^exponent).")]
         [Min(0)] public double prestigeGoldScale = 25;
         [Range(0.1f, 1f)] public double prestigeExponent = 0.5;
@@ -73,12 +73,16 @@ namespace DetectiveDesk.Progression
         [Range(0.5f, 1)] public float frictionAt60Hz = 0.985f;
         [Tooltip("°/s gained per pixel dragged (× Drag Power).")]
         [Min(0)] public float dragAcceleration = 0.35f;
+        [Tooltip("Drag and click impulses scale with max speed ÷ this, so spinning by hand stays useful as the globe gets faster.")]
+        [Min(1)] public float impulseReferenceSpeed = 90f;
+        [Tooltip("The globe pays out this many times per revolution (each a small payout), instead of once per turn.")]
+        [Min(1)] public int globeTicksPerRevolution = 12;
         [Tooltip("°/s gained per click on the globe (× Click Power). Smaller than a good drag.")]
         [Min(0)] public float clickImpulse = 10f;
         [Tooltip("A drag always gives at least this many clicks' worth of speed (with drag power), so dragging beats clicking.")]
         [Min(1)] public float dragOverClick = 1.5f;
         [Tooltip("Money for each full revolution past the start line (× Globe Multiplier).")]
-        [Min(0)] public double revolutionReward = 1.6;
+        [Min(0)] public double revolutionReward = 2.4;
 
         [Header("Pins")]
         [Tooltip("Money each time a pin passes the payout line, before landing bonuses and upgrades.")]
@@ -150,8 +154,9 @@ namespace DetectiveDesk.Progression
         /// <summary>Provisional starting values; tune in the asset.</summary>
         public static StatBase[] Defaults() => new[]
         {
-            new StatBase(StatId.GlobeMaxSpeed, 60),        // °/s (10 RPM)
+            new StatBase(StatId.GlobeMaxSpeed, 90),        // °/s (10 RPM)
             new StatBase(StatId.GlobeAutoSpeed, 0),
+            new StatBase(StatId.GlobeAutoShare, 0),
             new StatBase(StatId.GlobeDragPower, 1),
             new StatBase(StatId.GlobeClickPower, 1),
             new StatBase(StatId.GlobeMultiplier, 1),

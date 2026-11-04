@@ -11,6 +11,7 @@ namespace DetectiveDesk.Gameplay
             {
                 case StatId.GlobeMaxSpeed: return "Max spin speed";
                 case StatId.GlobeAutoSpeed: return "Auto-rotate";
+                case StatId.GlobeAutoShare: return "Auto-rotate (share of max speed)";
                 case StatId.GlobeDragPower: return "Drag power";
                 case StatId.GlobeClickPower: return "Click power";
                 case StatId.GlobeMultiplier: return "Globe earnings";
@@ -50,6 +51,8 @@ namespace DetectiveDesk.Gameplay
                 case StatId.GlobeMaxSpeed:
                 case StatId.GlobeAutoSpeed:
                     return (v / 6.0).ToString("0.#") + " RPM";
+                case StatId.GlobeAutoShare:
+                    return System.Math.Round(System.Math.Min(1, v) * 100) + "%";
                 case StatId.PinSlots:
                 case StatId.PinDurability:
                 case StatId.CaseEvidenceReduction:
