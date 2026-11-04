@@ -100,16 +100,16 @@ namespace DetectiveDesk.Progression
             // turning (and earning) without constant clicking. Auto-rotate is a share of the max speed, so it
             // keeps up as Greased Bearings make the globe faster.
             Add(n, "globe_auto", "Clockwork Motor", "The globe keeps turning by itself at +20% of its maximum spin speed per rank (100% at rank 5).",
-                SkillBranch.Globe, 5, Money(8, 2.2), dir * Step, new[] { RootId }, StatModifier.Add(StatId.GlobeAutoShare, 0.2));
+                SkillBranch.Globe, 5, Money(6, 2.0), dir * Step, new[] { RootId }, StatModifier.Add(StatId.GlobeAutoShare, 0.2));
             // Exponential: ×1.2 per rank, about ×38 at rank 20 (15 → ~575 RPM). The price grows faster still.
             Add(n, "globe_max_speed", "Greased Bearings", "+20% maximum spin speed per rank (compounding). Drag, click and auto-rotate all scale with it.",
-                SkillBranch.Globe, 20, Money(10, 2.3), dir * Step * 2, new[] { "globe_auto" }, StatModifier.Multiply(StatId.GlobeMaxSpeed, 1.2));
+                SkillBranch.Globe, 20, Money(7, 2.3), dir * Step * 2, new[] { "globe_auto" }, StatModifier.Multiply(StatId.GlobeMaxSpeed, 1.2));
             Add(n, "globe_drag", "Firm Grip", "+30% speed gained from dragging. (Dragging always beats clicking at the same upgrade level.)",
-                SkillBranch.Globe, 5, Money(20, 1.8), dir * Step * 1.5f + side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeDragPower, 0.3));
+                SkillBranch.Globe, 5, Money(12, 1.8), dir * Step * 1.5f + side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeDragPower, 0.3));
             Add(n, "globe_click", "Flick of the Wrist", "+20% speed gained from clicking.",
-                SkillBranch.Globe, 5, Money(20, 1.8), dir * Step * 1.5f - side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeClickPower, 0.2));
+                SkillBranch.Globe, 5, Money(12, 1.8), dir * Step * 1.5f - side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeClickPower, 0.2));
             Add(n, "globe_multiplier", "Cartographer's Cut", "+25% globe earnings (turns and pins).",
-                SkillBranch.Globe, 25, Money(150, 1.42), dir * Step * 3, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeMultiplier, 0.25));
+                SkillBranch.Globe, 25, Money(110, 1.42), dir * Step * 3, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeMultiplier, 0.25));
             Add(n, "globe_gilded_axis", "Gilded Axis", "Doubles all globe earnings.",
                 SkillBranch.Globe, 1, Money(5e6, 1), dir * Step * 4, new[] { "globe_multiplier" }, StatModifier.Multiply(StatId.GlobeMultiplier, 2));
             Add(n, "globe_mastery", "Globe Mastery", "+5% globe earnings per rank, compounding. Never maxes out.",
@@ -137,9 +137,9 @@ namespace DetectiveDesk.Progression
             Vector2 track = side * Step * 1.45f;
             // 15 ranks × -6% = -90% at most (above -95% the stat floor would make the last ranks useless).
             Add(n, "shooter_cooldown", "Oiled Spring", "-6% pin shooter reload time.",
-                SkillBranch.Pins, 15, Money(25, 1.45), dir * Step * 1.5f + track, new[] { PinId(1) }, StatModifier.Percent(StatId.ShooterCooldown, -0.06));
+                SkillBranch.Pins, 15, Money(15, 1.45), dir * Step * 1.5f + track, new[] { PinId(1) }, StatModifier.Percent(StatId.ShooterCooldown, -0.06));
             Add(n, "pin_land_chance", "Steady Aim", "+8% chance a pin lands on land (land pays ×2).",
-                SkillBranch.Pins, 5, Money(80, 1.9), dir * Step * 2.5f + track, new[] { PinId(2) }, StatModifier.Add(StatId.PinLandChance, 0.08));
+                SkillBranch.Pins, 5, Money(50, 1.9), dir * Step * 2.5f + track, new[] { PinId(2) }, StatModifier.Add(StatId.PinLandChance, 0.08));
             Add(n, "pin_city_chance", "Big City Lights", "+5% chance a pin lands near a big city (up to ×6).",
                 SkillBranch.Pins, 5, Money(200, 2.0), dir * Step * 3.5f + track, new[] { "pin_land_chance" }, StatModifier.Add(StatId.PinCityChance, 0.05));
             Add(n, "pin_autoloader", "Auto-loader", "The shooter fires a pin by itself whenever one is ready.",
@@ -152,9 +152,9 @@ namespace DetectiveDesk.Progression
         {
             Vector2 side = Perpendicular(dir);
             Add(n, "case_payout", "Bigger Retainers", "+25% money from approved cases.",
-                SkillBranch.CaseFile, 10, Money(80, 1.7), dir * Step, new[] { RootId }, StatModifier.Percent(StatId.CasePayout, 0.25));
+                SkillBranch.CaseFile, 10, Money(60, 1.7), dir * Step, new[] { RootId }, StatModifier.Percent(StatId.CasePayout, 0.25));
             Add(n, "case_cooldown", "Efficient Paperwork", "-7% wait before the next case opens.",
-                SkillBranch.CaseFile, 10, Money(100, 1.7), dir * Step * 2 + side * Step * 0.6f, new[] { "case_payout" }, StatModifier.Percent(StatId.CaseCooldown, -0.07));
+                SkillBranch.CaseFile, 10, Money(75, 1.7), dir * Step * 2 + side * Step * 0.6f, new[] { "case_payout" }, StatModifier.Percent(StatId.CaseCooldown, -0.07));
             Add(n, "case_autostamp", "Rubber-Stamp Clerk", "+5% chance a full case stamps itself.",
                 SkillBranch.CaseFile, 10, Money(250, 1.7), dir * Step * 2 - side * Step * 0.6f, new[] { "case_payout" }, StatModifier.Add(StatId.CaseAutoStampChance, 0.05));
             Add(n, "case_cold_cases", "Cold Cases", "Every case needs one less piece of evidence.",
@@ -191,9 +191,9 @@ namespace DetectiveDesk.Progression
         {
             Vector2 side = Perpendicular(dir);
             Add(n, "whiskey_duration", "Slow Sipper", "+2 s boost duration.",
-                SkillBranch.Whiskey, 10, Money(100, 1.55), dir * Step, new[] { RootId }, StatModifier.Add(StatId.WhiskeyBoostDuration, 2));
+                SkillBranch.Whiskey, 10, Money(70, 1.55), dir * Step, new[] { RootId }, StatModifier.Add(StatId.WhiskeyBoostDuration, 2));
             Add(n, "whiskey_cooldown", "Quick Refill", "-6% whiskey cooldown.",
-                SkillBranch.Whiskey, 10, Money(120, 1.55), dir * Step * 2 + side * Step * 0.6f, new[] { "whiskey_duration" }, StatModifier.Percent(StatId.WhiskeyCooldown, -0.06));
+                SkillBranch.Whiskey, 10, Money(85, 1.55), dir * Step * 2 + side * Step * 0.6f, new[] { "whiskey_duration" }, StatModifier.Percent(StatId.WhiskeyCooldown, -0.06));
             Add(n, "whiskey_strength", "Top Shelf", "+0.25× boost strength.",
                 SkillBranch.Whiskey, 5, Money(400, 2.2), dir * Step * 2 - side * Step * 0.6f, new[] { "whiskey_duration" }, StatModifier.Add(StatId.WhiskeyBoostStrength, 0.25));
             Add(n, "whiskey_mastery", "Whiskey Mastery", "+1 s boost duration per rank. Never maxes out.",

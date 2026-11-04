@@ -27,12 +27,12 @@ final = (base + Σ add) × max(0.05, 1 + Σ percent) × Π (multiply^rank) × te
 Costs are written as *base × growth per rank*. ★ nodes cost gold.
 
 **Globe**
-- Clockwork Motor (first node after the root): auto-rotate at +20% of max speed per rank (100% at rank 5). 5 ranks, €8 ×2.2.
-- Greased Bearings (after Clockwork Motor): ×1.2 max speed per rank, compounding: 15 RPM base → ~575 RPM at rank 20 (about 10× the old 50 RPM top). 20 ranks, €10 ×2.3. Drag and click impulses scale with max speed (÷ 90°/s), so hand spinning stays useful.
-- Firm Grip: +30% drag. 5 ranks, €20 ×1.8.
-- Flick of the Wrist: +20% click. 5 ranks, €20 ×1.8.
+- Clockwork Motor (first node after the root): auto-rotate at +20% of max speed per rank (100% at rank 5). 5 ranks, €6 ×2.0.
+- Greased Bearings (after Clockwork Motor): ×1.2 max speed per rank, compounding: 15 RPM base → ~575 RPM at rank 20 (about 10× the old 50 RPM top). 20 ranks, €7 ×2.3. Drag and click impulses scale with max speed (÷ 90°/s), so hand spinning stays useful.
+- Firm Grip: +30% drag. 5 ranks, €12 ×1.8.
+- Flick of the Wrist: +20% click. 5 ranks, €12 ×1.8.
 - **Rule:** dragging always beats clicking. At the same upgrade level drag power ≥ click power, and every drag gives at least 1.5 clicks' worth of speed (checked by a unit test).
-- Cartographer's Cut: +25% globe earnings. 25 ranks, €150 ×1.42.
+- Cartographer's Cut: +25% globe earnings. 25 ranks, €110 ×1.42.
 - Gilded Axis: ×2 globe earnings. 1 rank, €5M.
 - ★ Golden Meridian: ×1.5 all income. 150 gold.
 - Globe Mastery: ×1.05 globe earnings per rank, endless. €2M ×1.25.
@@ -41,8 +41,8 @@ Costs are written as *base × growth per rank*. ★ nodes cost gold.
 - Pin n: €20 × 3.6^(n−1), except Pin 1 at €10 (fast first shot). Pin 3 €259, Pin 6 €12K, Pin 9 €560K, Pin 12 €26M.
 - Pin n · Durability: +1 pass. 5 ranks, 1.5 × the pin's price, ×1.6 per rank.
 - Pin n · Payout: +50% for that pin. 10 ranks, 1.25 × the pin's price, ×1.45 per rank.
-- Oiled Spring: −6% reload. 15 ranks (up to −90%), €25 ×1.45.
-- Steady Aim: +8% land chance. 5 ranks, €80 ×1.9.
+- Oiled Spring: −6% reload. 15 ranks (up to −90%), €15 ×1.45.
+- Steady Aim: +8% land chance. 5 ranks, €50 ×1.9.
 - Big City Lights: +5% city chance. 5 ranks, €200 ×2.
 - Auto-loader: fires pins automatically. €50K.
 - ★ Steel Tips: +1 durability for all pins. 60 gold.
@@ -50,8 +50,8 @@ Costs are written as *base × growth per rank*. ★ nodes cost gold.
 - Pin Mastery: ×1.05 all pin payouts per rank, endless. €5M ×1.25.
 
 **Case file**
-- Bigger Retainers: +25% reward. 10 ranks, €80 ×1.7.
-- Efficient Paperwork: −7% cooldown. 10 ranks, €100 ×1.7.
+- Bigger Retainers: +25% reward. 10 ranks, €60 ×1.7.
+- Efficient Paperwork: −7% cooldown. 10 ranks, €75 ×1.7.
 - Rubber-Stamp Clerk: +5% auto-stamp. 10 ranks, €250 ×1.7.
 - Cold Cases: −1 evidence needed. 3 ranks, €1K ×3.
 - ★ Press Coverage: 2% chance an approved case drops gold. 40 gold.
@@ -71,8 +71,8 @@ Costs are written as *base × growth per rank*. ★ nodes cost gold.
 - Lootbox Mastery: +5% luck per rank, endless. €1M ×1.25.
 
 **Whiskey**
-- Slow Sipper: +2 s boost. 10 ranks, €100 ×1.55.
-- Quick Refill: −6% cooldown. 10 ranks, €120 ×1.55.
+- Slow Sipper: +2 s boost. 10 ranks, €70 ×1.55.
+- Quick Refill: −6% cooldown. 10 ranks, €85 ×1.55.
 - Top Shelf: +0.25× strength. 5 ranks, €400 ×2.2.
 - ★ Bottomless Glass: refills itself. 200 gold.
 - Whiskey Mastery: +1 s boost per rank, endless. €1M ×1.25.

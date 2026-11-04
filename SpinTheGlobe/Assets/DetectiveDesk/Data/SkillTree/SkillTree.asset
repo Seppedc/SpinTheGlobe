@@ -37,8 +37,8 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 8
-      growth: 2.2
+      baseCost: 6
+      growth: 2
       explicitCosts: []
     prerequisites:
     - root
@@ -59,7 +59,7 @@ MonoBehaviour:
     maxRank: 20
     currency: 0
     cost:
-      baseCost: 10
+      baseCost: 7
       growth: 2.3
       explicitCosts: []
     prerequisites:
@@ -81,7 +81,7 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 20
+      baseCost: 12
       growth: 1.8
       explicitCosts: []
     prerequisites:
@@ -102,7 +102,7 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 20
+      baseCost: 12
       growth: 1.8
       explicitCosts: []
     prerequisites:
@@ -123,7 +123,7 @@ MonoBehaviour:
     maxRank: 25
     currency: 0
     cost:
-      baseCost: 150
+      baseCost: 110
       growth: 1.42
       explicitCosts: []
     prerequisites:
@@ -942,7 +942,7 @@ MonoBehaviour:
     maxRank: 15
     currency: 0
     cost:
-      baseCost: 25
+      baseCost: 15
       growth: 1.45
       explicitCosts: []
     prerequisites:
@@ -963,7 +963,7 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 80
+      baseCost: 50
       growth: 1.9
       explicitCosts: []
     prerequisites:
@@ -1047,7 +1047,7 @@ MonoBehaviour:
     maxRank: 10
     currency: 0
     cost:
-      baseCost: 80
+      baseCost: 60
       growth: 1.7
       explicitCosts: []
     prerequisites:
@@ -1068,7 +1068,7 @@ MonoBehaviour:
     maxRank: 10
     currency: 0
     cost:
-      baseCost: 100
+      baseCost: 75
       growth: 1.7
       explicitCosts: []
     prerequisites:
@@ -1300,7 +1300,7 @@ MonoBehaviour:
     maxRank: 10
     currency: 0
     cost:
-      baseCost: 100
+      baseCost: 70
       growth: 1.55
       explicitCosts: []
     prerequisites:
@@ -1321,7 +1321,7 @@ MonoBehaviour:
     maxRank: 10
     currency: 0
     cost:
-      baseCost: 120
+      baseCost: 85
       growth: 1.55
       explicitCosts: []
     prerequisites:
