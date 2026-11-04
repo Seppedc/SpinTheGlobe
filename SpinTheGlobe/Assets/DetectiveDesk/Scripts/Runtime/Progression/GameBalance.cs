@@ -47,7 +47,7 @@ namespace DetectiveDesk.Progression
         [Tooltip("A drag always gives at least this many clicks' worth of speed (with drag power), so dragging beats clicking.")]
         [Min(1)] public float dragOverClick = 1.5f;
         [Tooltip("Money for each full revolution past the start line (× Globe Multiplier).")]
-        [Min(0)] public double revolutionReward = 1.5;
+        [Min(0)] public double revolutionReward = 1.6;
 
         [Header("Pins")]
         [Tooltip("Money each time a pin passes the payout line, before landing bonuses and upgrades.")]

@@ -45,7 +45,7 @@ ids={n['id']:n for n in N}
 def cost(n,r): return math.ceil(n['c']*n['g']**r)
 
 # ---------------- economy model ----------------
-B=dict(maxspd=60, rev=1.5, pin=3, landM=2, cityM=3, reload=4, land=0.3, city=0.05, wh_dur=10, wh_cd=60, wh_str=1.5,
+B=dict(maxspd=60, rev=1.6, pin=3, landM=2, cityM=3, reload=4, land=0.3, city=0.05, wh_dur=10, wh_cd=60, wh_str=1.5,
        case_base=40, case_growth=1.32, loot_base=150, loot_g=1.12)
 def stats(R):
     s=dict(B); s['maxspd']+=12*R['max_speed']; s['auto']=min(s['maxspd'],6*R['auto'])
