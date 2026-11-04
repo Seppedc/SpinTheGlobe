@@ -9,7 +9,7 @@ namespace DetectiveDesk.Gameplay
     /// <summary>
     /// Screen HUD in the noir-ledger style (<see cref="UITheme"/>):
     /// top-left bar (settings | money | income per minute | gold) with the desk items under it
-    /// (lootbox, paper balls, ice), the UPGRADES button top-right, a toast line and a "+€x" payout pop.
+    /// (lootbox, paper balls, ice), the UPGRADES button top-right, a toast line and a toast line (payout numbers: PayoutPopups).
     /// Everything about the desk objects themselves lives on the desk (<see cref="DeskInfoSystem"/>).
     /// Replaces the authored top-left HUD and buttons of the legacy canvas (hidden at start).
     /// </summary>
@@ -18,13 +18,13 @@ namespace DetectiveDesk.Gameplay
     {
         GameManager game;
         Canvas canvas;
-        TextMeshProUGUI moneyText, incomeText, goldText, upgradesHint, popText, toastText;
+        TextMeshProUGUI moneyText, incomeText, goldText, upgradesHint, toastText;
         TextMeshProUGUI lootLabel, paperLabel, iceLabel;
         Button lootButton, paperButton;
         GameObject iceChip;
         CanvasGroup toastGroup;
-        float toastTimer, popTimer, incomeRefresh;
-        double popAmount, shownIncome = -1;
+        float toastTimer, incomeRefresh;
+        double shownIncome = -1;
 
         public Canvas Canvas => canvas;
 
@@ -32,12 +32,9 @@ namespace DetectiveDesk.Gameplay
         {
             game = owner;
             Build();
-            game.CashAwarded += OnCash;
         }
 
-        void OnDestroy() { if (game) game.CashAwarded -= OnCash; if (canvas) Destroy(canvas.gameObject); }
-
-        void OnCash(double amount) { popAmount = popTimer > 0 ? popAmount + amount : amount; popTimer = 1.2f; }
+        void OnDestroy() { if (canvas) Destroy(canvas.gameObject); }
 
         // ------------------------------------------------------------------ build
         void Build()
@@ -47,8 +44,6 @@ namespace DetectiveDesk.Gameplay
             BuildItems();
             BuildUpgradesButton();
 
-            popText = UIFactory.NewTitle("Payout pop", canvas.transform, "", 34, TextAnchor.MiddleCenter, UITheme.GoldBright);
-            popText.rectTransform.Place(new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0, 90), new Vector2(500, 50));
 
             var toast = UIFactory.NewPanel("Message", canvas.transform);
             toast.raycastTarget = false;
@@ -224,14 +219,6 @@ namespace DetectiveDesk.Gameplay
                 if (toastTimer <= 0) toastGroup.gameObject.SetActive(false);
             }
 
-            if (popTimer > 0)
-            {
-                popTimer -= Time.deltaTime;
-                popText.text = "+" + UIFactory.Money(popAmount);
-                var c = popText.color; c.a = Mathf.Clamp01(popTimer / 0.4f); popText.color = c;
-                popText.rectTransform.anchoredPosition = new Vector2(0, 90 + (1.2f - popTimer) * 25);
-            }
-            else if (popText.text.Length > 0) popText.text = "";
         }
     }
 }

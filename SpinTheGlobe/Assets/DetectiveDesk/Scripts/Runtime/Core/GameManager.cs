@@ -82,6 +82,9 @@ namespace DetectiveDesk.Gameplay
 
         public event Action Changed;
         public event Action<double> CashAwarded;
+        /// <summary>Every gold payout (statues, lootboxes, Press Coverage).</summary>
+        public event Action<double> GoldAwarded;
+        public PayoutPopups Popups { get; private set; }
 
         SaveStore store;
         float autosaveTimer;
@@ -127,6 +130,7 @@ namespace DetectiveDesk.Gameplay
             Settings = Ensure<SettingsMenu>();
             Music = Ensure<MusicPlayer>();
             ShopView = Ensure<GoldShopView>();
+            Popups = Ensure<PayoutPopups>();
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             Ensure<DevCheats>();
 #endif
@@ -175,6 +179,7 @@ namespace DetectiveDesk.Gameplay
             Settings.Initialize(this);
             Music.Initialize(this);
             ShopView.Initialize(this);
+            Popups.Initialize(this);
 
             loaded = true;
             EventBus.Publish(new GameLoaded());
@@ -245,6 +250,7 @@ namespace DetectiveDesk.Gameplay
         {
             if (double.IsNaN(amount) || double.IsInfinity(amount) || amount <= 0) return;
             Wallet.Add(Currency.Gold, amount);
+            GoldAwarded?.Invoke(amount);
             if (audioManager) audioManager.Payout();
         }
 
