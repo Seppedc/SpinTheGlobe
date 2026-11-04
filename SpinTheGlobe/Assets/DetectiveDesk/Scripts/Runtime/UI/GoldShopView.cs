@@ -28,7 +28,7 @@ namespace DetectiveDesk.Gameplay
         Canvas canvas;
         RectTransform dialog;
         Button hudButton, retireButton;
-        TextMeshProUGUI goldText, retireInfo, retireLabel, prestigeText, dialogText;
+        TextMeshProUGUI goldText, retireInfo, retireLabel, prestigeText, dialogText, hudRank;
         readonly List<Row> rows = new List<Row>();
         float refreshTimer;
         int closedFrame = -1;
@@ -97,7 +97,7 @@ namespace DetectiveDesk.Gameplay
             var title = UIFactory.NewTitle("Title", header, "GOLD SHOP", 30, TextAnchor.MiddleLeft, UITheme.Gold);
             title.gameObject.AddComponent<LayoutElement>().flexibleWidth = 1;
             prestigeText = UIFactory.NewText("Prestiges", header, "", 18, TextAnchor.MiddleRight, UITheme.CreamDim);
-            Fixed(prestigeText.gameObject, 200, 48);
+            Fixed(prestigeText.gameObject, 340, 48);
             Fixed(UIFactory.NewIcon("coin", header, 30).gameObject, 30, 30);
             goldText = UIFactory.NewTitle("Gold", header, "", 28, TextAnchor.MiddleLeft, UITheme.GoldBright);
             Fixed(goldText.gameObject, 110, 48);
@@ -242,6 +242,19 @@ namespace DetectiveDesk.Gameplay
             hudButton = UIFactory.NewButton("Gold shop", parent, "GOLD SHOP", 24, "coin", Toggle, out _);
             hudButton.GetComponent<RectTransform>().Place(new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(-284, -20), new Vector2(240, 66));
             hudButton.gameObject.SetActive(false);
+
+            // Detective rank under the button, like the unlock hint under UPGRADES.
+            hudRank = UIFactory.NewText("Rank", parent, "", 17, TextAnchor.UpperCenter, UITheme.CreamDim);
+            hudRank.rectTransform.Place(new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1), new Vector2(-284, -92), new Vector2(240, 24));
+            hudRank.raycastTarget = false;
+            hudRank.gameObject.SetActive(false);
+        }
+
+        /// <summary>"Inspector · +50% income" (the rank bonus is left out while it is zero).</summary>
+        string RankLine()
+        {
+            var r = game.Rank;
+            return r.title + (r.incomeBonus > 0 ? "  ·  +" + Mathf.RoundToInt(r.incomeBonus * 100) + "% income" : "");
         }
 
         /// <summary>The button appears once the shop matters: the skill tree is open, or there is gold or a retirement.</summary>
@@ -250,6 +263,11 @@ namespace DetectiveDesk.Gameplay
             if (!hudButton) return;
             bool show = game.Skills.Owns(DefaultSkillTreeFactory.RootId) || game.Wallet.Gold > 0 || game.Prestiges > 0 || game.CanRetire;
             if (hudButton.gameObject.activeSelf != show) hudButton.gameObject.SetActive(show);
+            if (hudRank)
+            {
+                if (hudRank.gameObject.activeSelf != show) hudRank.gameObject.SetActive(show);
+                if (show) { string line = RankLine(); if (hudRank.text != line) hudRank.text = line; }
+            }
         }
 
         // ------------------------------------------------------------------ refresh
@@ -258,7 +276,9 @@ namespace DetectiveDesk.Gameplay
             refreshTimer = 0.25f;
             if (!game) return;
             goldText.text = NumberFormatter.Format(game.Wallet.Gold);
-            prestigeText.text = game.Prestiges == 0 ? "" : "Retired " + game.Prestiges + (game.Prestiges == 1 ? " time" : " times");
+            string next = game.TryNextRank(out var nextRank)
+                ? "  <color=#a89a80>next: " + nextRank.title + " (" + (nextRank.retirements - game.Prestiges) + " more)</color>" : "";
+            prestigeText.text = "<color=#e8d5a8>" + RankLine() + "</color>" + next;
 
             double gain = game.PrestigeGold;
             if (game.CanRetire)

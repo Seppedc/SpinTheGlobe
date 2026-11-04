@@ -87,6 +87,8 @@ Costs are written as *base × growth per rank*. ★ nodes cost gold.
   - Unlocks: First Pedestal 25 · Second Pedestal 75 · Third Pedestal 150 · Press Coverage 40.
   - Permanent: Agency Reputation +10% all income, 50 ranks, 20 ×1.35 · Golden Meridian ×1.5, 150 · Steel Tips 60 · Twin Barrel 120 · Double Box 100 · Bottomless Glass 200 · Fast Casting 250.
   - Fresh start (applied after retiring): Kept Ledger 10 (root unlocked) · Wound Clockwork 20 (Clockwork Motor rank 3) · Spare Pin 30 (Pin 1) · Seed Money 15 ×2.6, 5 ranks (€100 → €1M start).
+- **Statue tiers** (Gold shop, per statue, after its pedestal): bronze → silver → gold. Each tier: +1 piece needed, gold ×2.5 (silver) / ×6 (gold). Costs: statue 1 60 → 198, statue 2 150 → 495, statue 3 300 → 990. Names, multipliers and extra pieces live in GameBalance.
+- **Detective ranks** (GameBalance.ranks, add more in the inspector): Rookie 0 retirements · Detective 1 (+10% all income) · Senior Detective 3 (+25%) · Inspector 5 (+50%) · Chief Inspector 8 (+100%) · Commissioner 12 (+200%) · Legend of the Bureau 20 (+400%). The bonus is the rank's own value, not cumulative. Shown under the GOLD SHOP button and in the shop header.
 - Lootboxes drop no statue pieces until a statue is unlocked (they pay money instead).
 - Old saves: owned ★ nodes become their Gold shop items; statues that already had pieces get their pedestal unlock.
 

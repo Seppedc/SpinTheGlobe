@@ -90,11 +90,14 @@ namespace DetectiveDesk.Gameplay
                     var fig = f;
                     Add("Statue", InFront(fig.transform), () =>
                         !fig.Unlocked ? "LOCKED"
-                        : fig.Pieces == 0 ? "0 / " + fig.PiecesRequired
-                        : !fig.IsComplete ? fig.Pieces + " / " + fig.PiecesRequired
+                        : fig.Pieces == 0 ? Tiered(fig, "0 / " + fig.PiecesRequired)
+                        : !fig.IsComplete ? Tiered(fig, fig.Pieces + " / " + fig.PiecesRequired)
                         : fig.IsReadyToSmash ? "SMASH" : Mathf.FloorToInt(fig.GoldFill * 100) + " % GOLD");
                 }
         }
+
+        /// <summary>Silver and gold statues show their tier on the plate.</summary>
+        static string Tiered(FigurinePedestal fig, string text) => fig.Tier > 0 ? fig.TierName.ToUpperInvariant() + "  ·  " + text : text;
 
         Vector3 InFront(Transform t)
         {

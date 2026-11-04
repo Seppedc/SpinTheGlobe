@@ -262,5 +262,37 @@ namespace DetectiveDesk.Tests
             Assert.Less(g4, g1 * 4, "4× the earnings gives less than 4× the gold");
             Assert.Greater(g100, g4);
         }
+        [Test]
+        public void DetectiveRanks_FollowRetirements_AndCanBeExtended()
+        {
+            Assert.AreEqual("Rookie", DetectiveRanks.For(balance, 0).title);
+            Assert.AreEqual("Detective", DetectiveRanks.For(balance, 1).title);
+            Assert.AreEqual("Detective", DetectiveRanks.For(balance, 2).title);
+            Assert.IsTrue(DetectiveRanks.TryNext(balance, 1, out var next));
+            Assert.Greater(next.retirements, 1);
+            // A rank added at the end of the list (any order) is picked up without code changes.
+            balance.ranks.Add(new GameBalance.DetectiveRank("Test Rank", 1000, 9f));
+            Assert.AreEqual("Test Rank", DetectiveRanks.For(balance, 1000).title);
+            Assert.IsFalse(DetectiveRanks.TryNext(balance, 1000, out _));
+            // Bonuses never go down as the rank rises.
+            float last = -1;
+            foreach (var r in DetectiveRanks.Sorted(balance)) { Assert.GreaterOrEqual(r.incomeBonus, last, r.title); last = r.incomeBonus; }
+        }
+
+        [Test]
+        public void StatueTiers_NeedThePedestal_AndHaveTwoRanks()
+        {
+            var shop = new GoldShopState();
+            wallet.Add(Currency.Gold, 1e6);
+            string tier = GoldShopCatalog.StatueTierId(0);
+            Assert.IsFalse(shop.TryBuy(tier, wallet, out _), "needs the first pedestal");
+            Assert.IsTrue(shop.TryBuy(GoldShopCatalog.Statue1, wallet, out _));
+            Assert.IsTrue(shop.TryBuy(tier, wallet, out _));
+            Assert.IsTrue(shop.TryBuy(tier, wallet, out _));
+            Assert.IsFalse(shop.TryBuy(tier, wallet, out _), "bronze → silver → gold, then maxed");
+            Assert.AreEqual(GoldShopCatalog.StatueTierCount, shop.Rank(tier));
+            Assert.AreEqual(GoldShopCatalog.StatueTierCount + 1, balance.statueTierNames.Length);
+            Assert.AreEqual(GoldShopCatalog.StatueTierCount + 1, balance.statueTierGoldMultipliers.Length);
+        }
     }
 }

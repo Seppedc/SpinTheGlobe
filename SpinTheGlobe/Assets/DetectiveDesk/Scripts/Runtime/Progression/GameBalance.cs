@@ -29,6 +29,18 @@ namespace DetectiveDesk.Progression
             public LootEntry(LootKind kind, float weight) { this.kind = kind; this.weight = weight; }
         }
 
+        /// <summary>A detective rank, earned by retiring the agency. Add more in the inspector; they are sorted by retirements.</summary>
+        [Serializable]
+        public struct DetectiveRank
+        {
+            public string title;
+            [Tooltip("Retirements needed to reach this rank.")]
+            [Min(0)] public int retirements;
+            [Tooltip("Permanent bonus on every source of income while at this rank (0.25 = +25%). Not cumulative: the rank's own value.")]
+            [Min(0)] public float incomeBonus;
+            public DetectiveRank(string title, int retirements, float incomeBonus) { this.title = title; this.retirements = retirements; this.incomeBonus = incomeBonus; }
+        }
+
         [Header("Start")]
         [Min(0)] public double startingMoney = 0;
         [Min(0)] public double startingGold = 0;
@@ -41,6 +53,18 @@ namespace DetectiveDesk.Progression
         [Tooltip("Gold for retiring = floor(scale × (earned this run ÷ threshold)^exponent).")]
         [Min(0)] public double prestigeGoldScale = 25;
         [Range(0.1f, 1f)] public double prestigeExponent = 0.5;
+
+        [Header("Detective ranks (earned by retiring; add more any time)")]
+        public List<DetectiveRank> ranks = new List<DetectiveRank>
+        {
+            new DetectiveRank("Rookie", 0, 0f),
+            new DetectiveRank("Detective", 1, 0.10f),
+            new DetectiveRank("Senior Detective", 3, 0.25f),
+            new DetectiveRank("Inspector", 5, 0.50f),
+            new DetectiveRank("Chief Inspector", 8, 1.00f),
+            new DetectiveRank("Commissioner", 12, 2.00f),
+            new DetectiveRank("Legend of the Bureau", 20, 4.00f),
+        };
 
         [Header("Base stats (before upgrades)")]
         public List<StatBase> baseStats = new List<StatBase>(Defaults());
@@ -93,6 +117,10 @@ namespace DetectiveDesk.Progression
         [Tooltip("Gold fill (0..1) added per globe revolution (× Gold Fill Rate).")]
         [Range(0.001f, 1)] public float statueGoldFillPerRevolution = 0.04f;
         [Min(0)] public double statueBaseGold = 10;
+        [Tooltip("Statue tiers, bought per statue in the Gold shop: names, gold multipliers and extra pieces per tier.")]
+        public string[] statueTierNames = { "Bronze", "Silver", "Gold" };
+        public float[] statueTierGoldMultipliers = { 1f, 2.5f, 6f };
+        [Min(0)] public int statueTierExtraPieces = 1;
 
         [Header("Lootbox")]
         public CostCurve lootboxCost = new CostCurve(150, 1.12);

@@ -4,7 +4,7 @@ namespace DetectiveDesk.Gameplay
 {
     /// <summary>
     /// Testing shortcuts, only in the Editor and development builds:
-    /// F1 +€1,000 (Shift: +€100,000) · F2 +1 ice, paper ball and statue piece · F3 complete and gild all statues
+    /// F1 +€1,000 (Shift: +€100,000) · F2 +1 ice, paper ball and statue piece · F3 complete and gild all unlocked statues
     /// · F4 +10 gold (Shift: +100) · F5 fill the case file · F6 show the whole skill tree · F7 whiskey glass almost full (no cooldown)
     /// · F8 slow motion on/off (×0.15) · F9 +€1M run earnings to test retiring (Shift: +€10M).
     /// </summary>
@@ -28,7 +28,7 @@ namespace DetectiveDesk.Gameplay
             }
             if (Input.GetKeyDown(KeyCode.F3) && game.figurines != null)
             {
-                foreach (var f in game.figurines) if (f) { while (!f.IsComplete) f.AddPiece(); f.AddGold(1); }
+                foreach (var f in game.figurines) if (f && f.Unlocked) { while (!f.IsComplete) f.AddPiece(); f.AddGold(1); }
                 game.ShowHint("[dev] statues completed and gilded");
             }
             if (Input.GetKeyDown(KeyCode.F4)) { game.CreditGold(shift ? 100 : 10); game.ShowHint("[dev] gold added"); }

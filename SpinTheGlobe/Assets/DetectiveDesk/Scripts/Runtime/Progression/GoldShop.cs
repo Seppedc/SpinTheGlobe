@@ -37,6 +37,11 @@ namespace DetectiveDesk.Progression
         public const string KeptLedger = "start_ledger", SparePin = "start_pin", WoundClockwork = "start_motor", SeedMoney = "start_money";
         public const string Reputation = "agency_reputation";
 
+        /// <summary>Tier upgrade (bronze → silver → gold) for statue n (0-based); pedestals beyond the third share the third.</summary>
+        public static string StatueTierId(int index) => "statue_tier_" + (System.Math.Min(System.Math.Max(index, 0), 2) + 1);
+        public const int StatueTierCount = 2;   // ranks: 1 = silver, 2 = gold
+        static readonly double[] StatueTierBaseCost = { 60, 150, 300 };
+
         /// <summary>Statue n (0-based) needs this item. Extra pedestals beyond the third share the third unlock.</summary>
         public static string StatueUnlockId(int index) => index <= 0 ? Statue1 : index == 1 ? Statue2 : Statue3;
 
@@ -72,6 +77,10 @@ namespace DetectiveDesk.Progression
                 GoldShopCategory.Unlock, 1, 75, 1, Statue1);
             Add(Statue3, "Third Pedestal", "Statue 3 can be built. It needs the most pieces and pays three times the gold.",
                 GoldShopCategory.Unlock, 1, 150, 1, Statue2);
+            for (int i = 0; i < 3; i++)
+                Add(StatueTierId(i), "Statue " + (i + 1) + ": Silver & Gold",
+                    "Upgrade statue " + (i + 1) + " from bronze to silver, then gold. Each tier needs one more piece but pays far more gold (×2.5, then ×6).",
+                    GoldShopCategory.Unlock, StatueTierCount, StatueTierBaseCost[i], 3.3, StatueUnlockId(i));
             Add(PressCoverage, "Press Coverage", "Approved cases get a 2% chance to also drop gold. Opens Front Page News in the skill tree (up to 10%).",
                 GoldShopCategory.Unlock, 1, 40, 1, null, StatModifier.Add(StatId.CaseGoldChance, 0.02), StatModifier.Add(StatId.CaseGold, 5));
 

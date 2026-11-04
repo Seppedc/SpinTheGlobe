@@ -28,8 +28,14 @@ namespace DetectiveDesk.Gameplay
         public int Pieces { get; private set; }
         public float GoldFill { get; private set; }
         public int PiecesRequired => game
-            ? Mathf.Max(2, game.Balance.statueBasePieces + game.Balance.statuePiecesPerIndex * Index - Mathf.RoundToInt((float)game.Stats.Get(StatId.StatuePieceReduction)))
+            ? Mathf.Max(2, game.Balance.statueBasePieces + game.Balance.statuePiecesPerIndex * Index + Tier * game.Balance.statueTierExtraPieces
+                           - Mathf.RoundToInt((float)game.Stats.Get(StatId.StatuePieceReduction)))
             : 5;
+        /// <summary>0 = bronze, 1 = silver, 2 = gold (Gold shop upgrade per statue).</summary>
+        public int Tier => game ? Mathf.Clamp(game.Shop.Rank(GoldShopCatalog.StatueTierId(Index)), 0, GoldShopCatalog.StatueTierCount) : 0;
+        public string TierName => game && game.Balance.statueTierNames != null && Tier < game.Balance.statueTierNames.Length ? game.Balance.statueTierNames[Tier] : "Bronze";
+        float TierGoldMultiplier => game && game.Balance.statueTierGoldMultipliers != null && Tier < game.Balance.statueTierGoldMultipliers.Length
+            ? Mathf.Max(0, game.Balance.statueTierGoldMultipliers[Tier]) : 1f;
         public bool IsComplete => Pieces >= PiecesRequired;
         /// <summary>Statues are bought in the Gold shop before lootboxes drop pieces for them.</summary>
         public bool Unlocked => !game || game.Shop.Owns(DetectiveDesk.Progression.GoldShopCatalog.StatueUnlockId(Index));
@@ -39,15 +45,19 @@ namespace DetectiveDesk.Gameplay
         public Bounds VisualBounds => ClickRouter.RendererBounds(bust ? bust : transform, transform.position);
         public string StatusText =>
             !Unlocked ? "Locked. Buy " + UnlockTitle + " in the Gold shop to build this statue."
-            : Pieces == 0 ? "Empty pedestal — statue pieces come from lootboxes."
-            : !IsComplete ? "Statue " + Pieces + " / " + PiecesRequired + " pieces."
+            : Pieces == 0 ? "Empty " + TierName.ToLowerInvariant() + " pedestal — statue pieces come from lootboxes."
+            : !IsComplete ? TierName + " statue " + Pieces + " / " + PiecesRequired + " pieces."
             : !IsReadyToSmash ? "Filling with gold: " + Mathf.FloorToInt(GoldFill * 100) + "% (spin the globe)."
             : "Solid gold! Click to smash it with the hammer.";
 
         readonly List<Renderer> parts = new List<Renderer>();
         MaterialPropertyBlock properties;
-        static readonly Color Stone = new Color(0.62f, 0.60f, 0.55f);
         static readonly Color Gold = new Color(0.86f, 0.62f, 0.18f);
+        // Material of the unfilled statue per tier: bronze, silver, gold-leaf.
+        static readonly Color[] TierColors = { new Color(0.55f, 0.36f, 0.20f), new Color(0.78f, 0.79f, 0.82f), new Color(0.80f, 0.64f, 0.34f) };
+        static readonly float[] TierMetal = { 0.55f, 0.75f, 0.8f };
+        Color TierColor => TierColors[Mathf.Clamp(Tier, 0, TierColors.Length - 1)];
+        float TierMetallic => TierMetal[Mathf.Clamp(Tier, 0, TierMetal.Length - 1)];
 
         public void Bind(GameManager owner, int index)
         {
@@ -103,7 +113,10 @@ namespace DetectiveDesk.Gameplay
             if (!wasReady && IsReadyToSmash && game) game.ShowHint("Statue " + (Index + 1) + " is solid gold. Smash it with the hammer!");
         }
 
-        public double GoldReward => game ? game.Balance.statueBaseGold * (Index + 1) * game.Stats.Get(StatId.StatuePayout) : 0;
+        public double GoldReward => game ? game.Balance.statueBaseGold * (Index + 1) * TierGoldMultiplier * game.Stats.Get(StatId.StatuePayout) : 0;
+
+        /// <summary>Redraws the statue (after a tier upgrade changes its material or piece count).</summary>
+        public void RefreshVisual() => Apply();
 
         /// <summary>Resets the pedestal after smashing and returns the gold earned.</summary>
         public double Shatter()
@@ -132,13 +145,13 @@ namespace DetectiveDesk.Gameplay
             if (!Application.isPlaying) return; // the authored desk stays untouched in Edit Mode
             int visible = parts.Count == 0 ? 0 : Mathf.CeilToInt(parts.Count * Mathf.Clamp01(Pieces / (float)Mathf.Max(1, PiecesRequired)));
             for (int i = 0; i < parts.Count; i++) if (parts[i]) parts[i].enabled = i < visible;
-            Tint(Color.Lerp(Stone, Gold, IsComplete ? GoldFill : 0), IsComplete ? GoldFill * 0.15f : 0);
+            Tint(Color.Lerp(TierColor, Gold, IsComplete ? GoldFill : 0), IsComplete ? GoldFill * 0.15f : 0);
         }
 
         void Tint(Color color, float glow)
         {
             if (properties == null) return;
-            float metal = IsComplete ? Mathf.Lerp(0.05f, 0.95f, GoldFill) : 0.05f;
+            float metal = Mathf.Lerp(TierMetallic, 0.95f, IsComplete ? GoldFill : 0);
             foreach (var r in parts)
             {
                 if (!r) continue;

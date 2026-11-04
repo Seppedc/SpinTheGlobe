@@ -65,6 +65,12 @@ namespace DetectiveDesk.Gameplay
         public double PrestigeGold => Prestige.GoldFor(RunEarnings, Balance);
         public bool CanRetire => PrestigeGold >= 1;
         bool retiring;
+        /// <summary>Message shown once the new run has loaded after retiring (survives the scene reload).</summary>
+        static string pendingHint;
+
+        /// <summary>The detective rank earned by retiring (title + permanent income bonus, see GameBalance.ranks).</summary>
+        public GameBalance.DetectiveRank Rank => DetectiveRanks.For(Balance, Prestiges);
+        public bool TryNextRank(out GameBalance.DetectiveRank next) => DetectiveRanks.TryNext(Balance, Prestiges, out next);
 
         public double Money => Wallet.Money;
         public double PlayTime { get; private set; }
@@ -101,7 +107,7 @@ namespace DetectiveDesk.Gameplay
             }
             Balance.ApplyTo(Stats);
             // Gold shop bonuses count like skills; statue and Press Coverage nodes stay hidden until their unlock is bought.
-            Stats.ExtraSource = Shop.Modifiers;
+            Stats.ExtraSource = ExtraModifiers;
             Skills.UnlockCheck = Shop.Owns;
 
             if (legacy) { legacy.Gameplay = this; legacy.globeSpeed = 0; }
@@ -173,8 +179,9 @@ namespace DetectiveDesk.Gameplay
             loaded = true;
             EventBus.Publish(new GameLoaded());
             Notify();
-            ShowHint(Skills.Owns(DefaultSkillTreeFactory.RootId)
-                ? "Welcome back, detective."
+            if (!string.IsNullOrEmpty(pendingHint)) { ShowHint(pendingHint); pendingHint = null; }
+            else ShowHint(Skills.Owns(DefaultSkillTreeFactory.RootId)
+                ? "Welcome back, " + Rank.title.ToLowerInvariant() + "."
                 : "Drag or click the globe to spin it. Earn " + NumberFormatter.Money(Tree.Find(DefaultSkillTreeFactory.RootId).cost.Cost(0)) + " to open the skill tree (T).");
         }
 
@@ -430,6 +437,10 @@ namespace DetectiveDesk.Gameplay
             try { Store.Save(data); }
             catch (Exception e) { Debug.LogWarning("Retiring failed: " + e.Message); ShowHint("Retiring failed: the game could not be saved."); return; }
             retiring = true;
+            var before = Rank;
+            var after = DetectiveRanks.For(Balance, Prestiges + 1);
+            pendingHint = "Agency retired: +" + NumberFormatter.Format(gain) + " gold." +
+                (after.title != before.title ? " Promoted to " + after.title + (after.incomeBonus > 0 ? " (+" + Mathf.RoundToInt(after.incomeBonus * 100) + "% all income)." : ".") : "");
             Time.timeScale = 1;
             UnityEngine.SceneManagement.SceneManager.LoadScene(gameObject.scene.buildIndex >= 0 ? gameObject.scene.buildIndex : 0);
         }
@@ -445,6 +456,13 @@ namespace DetectiveDesk.Gameplay
             return list;
         }
 
+        /// <summary>Permanent modifiers outside the skill tree: Gold shop items and the detective rank bonus.</summary>
+        IEnumerable<(StatModifier modifier, int rank)> ExtraModifiers()
+        {
+            foreach (var m in Shop.Modifiers()) yield return m;
+            foreach (var m in DetectiveRanks.Modifiers(Balance, Prestiges)) yield return m;
+        }
+
         // ------------------------------------------------------------------ gold shop
         public bool PurchaseShopItem(string id)
         {
@@ -452,6 +470,7 @@ namespace DetectiveDesk.Gameplay
             Stats.Rebuild(Tree, Skills);
             if (globe) globe.EnforceLimits();
             if (PinBox) PinBox.Refresh();
+            if (figurines != null) foreach (var f in figurines) if (f) f.RefreshVisual();
             if (audioManager) audioManager.Click();
             var item = GoldShopCatalog.Find(id);
             ShowHint(item.title + (item.maxRank > 1 ? " rank " + Shop.Rank(id) : "") + " bought.");
