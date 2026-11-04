@@ -5,7 +5,7 @@ The numbers live in `Data/Balance/GameBalance.asset` and `Data/SkillTree/SkillTr
 ## Income sources
 | Source | Formula | Typical share |
 |---|---|---|
-| Globe turn | €2.4 × income scale per revolution, paid in 12 small ticks (every 30°) | early game, lots of small payouts |
+| Globe turn | €2.4 × income scale each time the globe crosses the red payout line | early game |
 | Pin pass | €3 × location × pin payout × income scale | **~65%** |
 | Case approved | max(€40 × case# × all income, **12 s of recent income**) × case reward | ~30% |
 | Lootbox money | 30–80% refund, or a 2–4× jackpot (25%) | random |

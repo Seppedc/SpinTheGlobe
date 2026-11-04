@@ -75,8 +75,8 @@ namespace DetectiveDesk.Progression
         [Min(0)] public float dragAcceleration = 0.35f;
         [Tooltip("Drag and click impulses scale with max speed ÷ this, so spinning by hand stays useful as the globe gets faster.")]
         [Min(1)] public float impulseReferenceSpeed = 90f;
-        [Tooltip("The globe pays out this many times per revolution (each a small payout), instead of once per turn.")]
-        [Min(1)] public int globeTicksPerRevolution = 12;
+        [Tooltip("Payouts per revolution. 1 = only when the globe crosses the red payout line (the rule). Higher values pay in steps between crossings.")]
+        [Min(1)] public int globeTicksPerRevolution = 1;
         [Tooltip("°/s gained per click on the globe (× Click Power). Smaller than a good drag.")]
         [Min(0)] public float clickImpulse = 10f;
         [Tooltip("A drag always gives at least this many clicks' worth of speed (with drag power), so dragging beats clicking.")]
