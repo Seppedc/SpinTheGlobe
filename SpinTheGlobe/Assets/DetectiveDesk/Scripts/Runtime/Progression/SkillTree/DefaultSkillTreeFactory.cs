@@ -101,9 +101,9 @@ namespace DetectiveDesk.Progression
             // keeps up as Greased Bearings make the globe faster.
             Add(n, "globe_auto", "Clockwork Motor", "The globe keeps turning by itself at +20% of its maximum spin speed per rank (100% at rank 5).",
                 SkillBranch.Globe, 5, Money(6, 2.0), dir * Step, new[] { RootId }, StatModifier.Add(StatId.GlobeAutoShare, 0.2));
-            // Exponential: ×1.2 per rank, about ×38 at rank 20 (15 → ~575 RPM). The price grows faster still.
-            Add(n, "globe_max_speed", "Greased Bearings", "+20% maximum spin speed per rank (compounding). Drag, click and auto-rotate all scale with it.",
-                SkillBranch.Globe, 20, Money(7, 2.3), dir * Step * 2, new[] { "globe_auto" }, StatModifier.Multiply(StatId.GlobeMaxSpeed, 1.2));
+            // 20 steady levels of +25 RPM each: 15 → 515 RPM at level 20 (about 10× the old top speed).
+            Add(n, "globe_max_speed", "Greased Bearings", "+25 RPM maximum spin speed. Drag, click and auto-rotate all scale with it.",
+                SkillBranch.Globe, 20, Money(15, 1.6), dir * Step * 2, new[] { "globe_auto" }, StatModifier.Add(StatId.GlobeMaxSpeed, 150));
             Add(n, "globe_drag", "Firm Grip", "+30% speed gained from dragging. (Dragging always beats clicking at the same upgrade level.)",
                 SkillBranch.Globe, 5, Money(12, 1.8), dir * Step * 1.5f + side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeDragPower, 0.3));
             Add(n, "globe_click", "Flick of the Wrist", "+20% speed gained from clicking.",

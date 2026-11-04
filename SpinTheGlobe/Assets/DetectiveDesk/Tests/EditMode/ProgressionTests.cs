@@ -104,13 +104,14 @@ namespace DetectiveDesk.Tests
         }
 
         [Test]
-        public void GreasedBearings_GrowMaxSpeedExponentially_AboutTenTimesTheOldTop()
+        public void GreasedBearings_TwentySteadyLevels_ReachAboutTenTimesTheOldTop()
         {
             var bearings = tree.Find("globe_max_speed");
+            Assert.AreEqual(20, bearings.maxRank);
             double start = stats.Get(StatId.GlobeMaxSpeed);
+            double one = stats.Preview(StatId.GlobeMaxSpeed, bearings.modifiers, 1);
             double full = stats.Preview(StatId.GlobeMaxSpeed, bearings.modifiers, bearings.maxRank);
-            double half = stats.Preview(StatId.GlobeMaxSpeed, bearings.modifiers, bearings.maxRank / 2);
-            Assert.Greater(full / half, half / start * 0.99, "compounding: the second half adds at least as much as the first");
+            Assert.AreEqual((full - start) / bearings.maxRank, one - start, 1e-9, "every level adds the same amount (no percentage)");
             Assert.GreaterOrEqual(full / 6.0, 400, "top speed is roughly 10× the old 50 RPM");
             Assert.LessOrEqual(full / 6.0, 800, "but not overboard");
         }

@@ -28,7 +28,7 @@ Costs are written as *base × growth per rank*. ★ nodes cost gold.
 
 **Globe**
 - Clockwork Motor (first node after the root): auto-rotate at +20% of max speed per rank (100% at rank 5). 5 ranks, €6 ×2.0.
-- Greased Bearings (after Clockwork Motor): ×1.2 max speed per rank, compounding: 15 RPM base → ~575 RPM at rank 20 (about 10× the old 50 RPM top). 20 ranks, €7 ×2.3. Drag and click impulses scale with max speed (÷ 90°/s), so hand spinning stays useful.
+- Greased Bearings (after Clockwork Motor): +25 RPM max speed per level, 20 levels: 15 RPM → 515 RPM (about 10× the old 50 RPM top). €15 ×1.6. Drag and click impulses scale with max speed (÷ 90°/s), so hand spinning stays useful.
 - Firm Grip: +30% drag. 5 ranks, €12 ×1.8.
 - Flick of the Wrist: +20% click. 5 ranks, €12 ×1.8.
 - **Rule:** dragging always beats clicking. At the same upgrade level drag power ≥ click power, and every drag gives at least 1.5 clicks' worth of speed (checked by a unit test).
@@ -80,7 +80,7 @@ Costs are written as *base × growth per rank*. ★ nodes cost gold.
 ★ nodes add up to about 920 gold. Gold sinks give the loop *money → lootbox → statue pieces → smash → gold → golden nodes* its purpose.
 
 ## Prestige and Gold shop
-- **Retire the agency** (Gold shop, top card): possible once €10M is earned in the current run. Gold = floor(25 × √(run earnings ÷ €10M)): €10M → 25, €40M → 50, €100M → 79. Simulated first retirement: ~1 h.
+- **Retire the agency** (Gold shop, top card): possible once €25M is earned in the current run. Gold = floor(25 × √(run earnings ÷ €25M)): €25M → 25, €100M → 50, €250M → 79. Simulated first retirement: ~40 min; everything in the Gold shop after ~10 h (ideal play).
 - Resets money, the skill tree, pins, cases, whiskey, lootbox count and items. Keeps gold, the Gold shop, statues, settings and the lamp.
 - **Skill tree is money only (65 nodes).** Statue nodes stay hidden until First Pedestal is bought; Front Page News until Press Coverage is bought.
 - **Gold shop** (G, or the GOLD SHOP button):

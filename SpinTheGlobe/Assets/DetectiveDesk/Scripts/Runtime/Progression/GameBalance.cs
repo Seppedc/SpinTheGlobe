@@ -49,7 +49,7 @@ namespace DetectiveDesk.Progression
 
         [Header("Prestige (Retire the agency)")]
         [Tooltip("Money that must be earned in a run before retiring is possible.")]
-        [Min(1)] public double prestigeThreshold = 10_000_000;
+        [Min(1)] public double prestigeThreshold = 25_000_000;
         [Tooltip("Gold for retiring = floor(scale × (earned this run ÷ threshold)^exponent).")]
         [Min(0)] public double prestigeGoldScale = 25;
         [Range(0.1f, 1f)] public double prestigeExponent = 0.5;
