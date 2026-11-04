@@ -97,10 +97,11 @@ namespace DetectiveDesk.Progression
         {
             Vector2 side = Perpendicular(dir);
             // Clockwork Motor comes first: it is meant to be the player's first purchase, so the globe keeps
-            // turning (and earning) without constant clicking. Auto-rotate is a share of the max speed, so it
-            // keeps up as Greased Bearings make the globe faster.
-            Add(n, "globe_auto", "Clockwork Motor", "The globe keeps turning by itself at +20% of its maximum spin speed per rank (100% at rank 5).",
-                SkillBranch.Globe, 5, Money(6, 2.0), dir * Step, new[] { RootId }, StatModifier.Add(StatId.GlobeAutoShare, 0.2));
+            // turning (and earning) without constant clicking. 50 cheap levels of +10 RPM, bought one after another;
+            // capped by the max speed, so Greased Bearings opens room for more motor levels.
+            var auto = Add(n, "globe_auto", "Clockwork Motor", "+10 RPM auto-rotate: the globe keeps turning by itself. Never faster than the maximum spin speed (Greased Bearings).",
+                SkillBranch.Globe, 50, Money(6, 1.22), dir * Step, new[] { RootId }, StatModifier.Add(StatId.GlobeAutoSpeed, 60));
+            auto.capStat = StatId.GlobeAutoSpeed; auto.capByStat = StatId.GlobeMaxSpeed;
             // 20 steady levels of +25 RPM each: 15 → 515 RPM at level 20 (about 10× the old top speed).
             Add(n, "globe_max_speed", "Greased Bearings", "+25 RPM maximum spin speed. Drag, click and auto-rotate all scale with it.",
                 SkillBranch.Globe, 20, Money(15, 1.6), dir * Step * 2, new[] { "globe_auto" }, StatModifier.Add(StatId.GlobeMaxSpeed, 150));

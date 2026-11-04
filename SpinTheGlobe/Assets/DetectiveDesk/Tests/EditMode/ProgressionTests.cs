@@ -89,18 +89,22 @@ namespace DetectiveDesk.Tests
         }
 
         [Test]
-        public void AutoRotate_IsAShareOfMaxSpeed_AndReachesItAtFullRank()
+        public void AutoRotate_ManyCheapLevels_NeverAboveMaxSpeed()
         {
             wallet.Add(Currency.Money, 1e15);
             Buy(DefaultSkillTreeFactory.RootId);
             var auto = tree.Find("globe_auto");
             CollectionAssert.Contains(auto.prerequisites, DefaultSkillTreeFactory.RootId, "Clockwork Motor is the first upgrade after the root");
-            Assert.IsTrue(Buy("globe_auto"));
-            double share = stats.Get(StatId.GlobeAutoShare);
-            Assert.Greater(share, 0);
-            for (int i = 1; i < auto.maxRank; i++) Assert.IsTrue(Buy("globe_auto"));
-            Assert.AreEqual(1.0, stats.Get(StatId.GlobeAutoShare), 1e-9, "full Clockwork Motor = auto-rotate at max speed, never above");
-            Assert.IsFalse(Buy("globe_auto"));
+            Assert.GreaterOrEqual(auto.maxRank, 30, "lots of levels");
+            Assert.Less(auto.cost.Cost(1) / auto.cost.Cost(0), 1.3, "cheap steps, bought one after another");
+            double step = auto.modifiers[0].valuePerRank;
+            int bought = 0;
+            while (stats.Get(StatId.GlobeAutoSpeed) + step <= stats.Get(StatId.GlobeMaxSpeed) && bought < auto.maxRank) { Assert.IsTrue(Buy("globe_auto")); bought++; }
+            Assert.Greater(bought, 0);
+            Assert.AreEqual(NodeStatus.Capped, state.Status(auto, wallet, stats, out _));
+            Assert.IsTrue(Buy("globe_max_speed"));
+            Assert.AreEqual(NodeStatus.Available, state.Status(auto, wallet, stats, out _), "Greased Bearings opens room for more motor levels");
+            Assert.LessOrEqual(stats.Get(StatId.GlobeAutoSpeed), stats.Get(StatId.GlobeMaxSpeed));
         }
 
         [Test]

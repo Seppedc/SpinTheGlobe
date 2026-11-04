@@ -53,21 +53,21 @@ MonoBehaviour:
     position: {x: 0, y: 160}
   - id: globe_max_speed
     title: Greased Bearings
-    description: +20% maximum spin speed per rank (compounding). Drag, click and
-      auto-rotate all scale with it.
+    description: +25 RPM maximum spin speed. Drag, click and auto-rotate all scale
+      with it.
     branch: 1
     maxRank: 20
     currency: 0
     cost:
-      baseCost: 7
-      growth: 2.3
+      baseCost: 15
+      growth: 1.6
       explicitCosts: []
     prerequisites:
     - globe_auto
     modifiers:
     - stat: 100
-      kind: 2
-      valuePerRank: 1.2
+      kind: 0
+      valuePerRank: 150
       pinIndex: -1
     requiresUnlock: 
     capStat: 0
