@@ -20,14 +20,15 @@ namespace DetectiveDesk.Progression
         public static string PinId(int pin) => $"pin_{pin:00}";               // 1-based for readability
         public static string PinDurabilityId(int pin) => $"pin_{pin:00}_durability";
         public static string PinPayoutId(int pin) => $"pin_{pin:00}_payout";
-        public static double PinPrice(int pin) => 20 * System.Math.Pow(3.1, pin - 1);
+        // Pin 1 is cheap so the first shot comes early; from pin 2 on: €20 × 3.1^(n-1).
+        public static double PinPrice(int pin) => pin <= 1 ? 10 : 20 * System.Math.Pow(3.1, pin - 1);
 
         public static List<SkillNodeData> Create()
         {
             var nodes = new List<SkillNodeData>
             {
                 Node(RootId, "Skill Tree Unlock", "Open the detective's ledger of upgrades.", SkillBranch.Root,
-                    1, Money(25, 1), Vector2.zero, null),
+                    1, Money(10, 1), Vector2.zero, null),
             };
             BuildGlobe(nodes, Direction(90));
             BuildPins(nodes, Direction(30));
@@ -97,14 +98,14 @@ namespace DetectiveDesk.Progression
         {
             Vector2 side = Perpendicular(dir);
             Add(n, "globe_max_speed", "Greased Bearings", "+2 RPM maximum spin speed. Caps dragging and auto-rotate.",
-                SkillBranch.Globe, 20, Money(20, 1.42), dir * Step, new[] { RootId }, StatModifier.Add(StatId.GlobeMaxSpeed, 12));
+                SkillBranch.Globe, 20, Money(10, 1.42), dir * Step, new[] { RootId }, StatModifier.Add(StatId.GlobeMaxSpeed, 12));
             var auto = Add(n, "globe_auto", "Clockwork Motor", "+1 RPM auto-rotate. Never faster than the maximum spin speed.",
-                SkillBranch.Globe, 20, Money(60, 1.45), dir * Step * 2, new[] { "globe_max_speed" }, StatModifier.Add(StatId.GlobeAutoSpeed, 6));
+                SkillBranch.Globe, 20, Money(40, 1.45), dir * Step * 2, new[] { "globe_max_speed" }, StatModifier.Add(StatId.GlobeAutoSpeed, 6));
             auto.capStat = StatId.GlobeAutoSpeed; auto.capByStat = StatId.GlobeMaxSpeed;
             Add(n, "globe_drag", "Firm Grip", "+30% speed gained from dragging. (Dragging always beats clicking at the same upgrade level.)",
-                SkillBranch.Globe, 5, Money(40, 1.8), dir * Step * 1.5f + side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeDragPower, 0.3));
+                SkillBranch.Globe, 5, Money(20, 1.8), dir * Step * 1.5f + side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeDragPower, 0.3));
             Add(n, "globe_click", "Flick of the Wrist", "+20% speed gained from clicking.",
-                SkillBranch.Globe, 5, Money(40, 1.8), dir * Step * 1.5f - side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeClickPower, 0.2));
+                SkillBranch.Globe, 5, Money(20, 1.8), dir * Step * 1.5f - side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeClickPower, 0.2));
             Add(n, "globe_multiplier", "Cartographer's Cut", "+25% globe earnings (turns and pins).",
                 SkillBranch.Globe, 25, Money(150, 1.42), dir * Step * 3, new[] { "globe_auto" }, StatModifier.Percent(StatId.GlobeMultiplier, 0.25));
             Add(n, "globe_gilded_axis", "Gilded Axis", "Doubles all globe earnings.",
@@ -135,7 +136,7 @@ namespace DetectiveDesk.Progression
             // Shooter and landing upgrades run on a parallel track beside the pin chain.
             Vector2 track = side * Step * 1.45f;
             Add(n, "shooter_cooldown", "Oiled Spring", "-8% pin shooter reload time.",
-                SkillBranch.Pins, 10, Money(35, 1.6), dir * Step * 1.5f + track, new[] { PinId(1) }, StatModifier.Percent(StatId.ShooterCooldown, -0.08));
+                SkillBranch.Pins, 10, Money(25, 1.6), dir * Step * 1.5f + track, new[] { PinId(1) }, StatModifier.Percent(StatId.ShooterCooldown, -0.08));
             Add(n, "pin_land_chance", "Steady Aim", "+8% chance a pin lands on land (land pays ×2).",
                 SkillBranch.Pins, 5, Money(80, 1.9), dir * Step * 2.5f + track, new[] { PinId(2) }, StatModifier.Add(StatId.PinLandChance, 0.08));
             Add(n, "pin_city_chance", "Big City Lights", "+5% chance a pin lands near a big city (up to ×6).",

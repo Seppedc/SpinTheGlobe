@@ -5,21 +5,21 @@ import math
 # (id, branch, maxRank, baseCost, growth, effect)
 N=[]
 def node(i,b,r,c,g,eff,cur='€',req=None): N.append(dict(id=i,b=b,max=r,c=c,g=g,eff=eff,cur=cur,req=req))
-node('root','root',1,25,1,None)
+node('root','root',1,10,1,None)
 # Globe
-node('max_speed','globe',20,20,1.42,('maxspd',12),req='root')
-node('auto','globe',20,60,1.45,('auto',6),req='max_speed')
+node('max_speed','globe',20,10,1.42,('maxspd',12),req='root')
+node('auto','globe',20,40,1.45,('auto',6),req='max_speed')
 node('globe_mult','globe',25,150,1.42,('gmult_add',0.25),req='auto')
-node('drag','globe',5,40,1.8,None,req='max_speed')
-node('click','globe',5,40,1.8,None,req='max_speed')
+node('drag','globe',5,20,1.8,None,req='max_speed')
+node('click','globe',5,20,1.8,None,req='max_speed')
 node('gilded_axis','globe',1,5e6,1,('gmult_x',2),req='globe_mult')
 node('golden_meridian','globe',1,150,1,('all_x',1.5),cur='g',req='gilded_axis')
 # Pins
 for i in range(12):
-    node(f'pin{i+1}','pins',1,20*3.1**i,1,('pin',i),req=('root' if i==0 else f'pin{i}'))
+    node(f'pin{i+1}','pins',1,(20*3.1**i if i else 10),1,('pin',i),req=('root' if i==0 else f'pin{i}'))
     node(f'dur{i+1}','pins',5,30*3.1**i,1.6,('dur',i),req=f'pin{i+1}')
     node(f'pay{i+1}','pins',10,25*3.1**i,1.45,('pay',i),req=f'pin{i+1}')
-node('reload','pins',10,35,1.6,('reload',0.08),req='pin1')
+node('reload','pins',10,25,1.6,('reload',0.08),req='pin1')
 node('autoloader','pins',1,50000,1,('autofire',1),req='reload')
 node('land','pins',5,80,1.9,('land',0.08),req='pin2')
 node('city','pins',5,200,2.0,('city',0.05),req='land')
@@ -126,7 +126,7 @@ def sim(hours=8,dt=1.0):
             if n['cur']=='g': gold-=c
             else: money-=c
             R[n['id']]+=1
-            for key in ('root','pin1','pin3','pin6','pin9','pin12','autoloader','gilded_axis'):
+            for key in ('root','max_speed','pin1','pin2','pin3','pin4','pin6','pin9','pin12','autoloader','gilded_axis'):
                 if n['id']==key and key not in milestones: milestones[key]=t
         if int(t)%1800==0: log.append((t/60,money,inc*60,cinc*60,case_level,stats(R)['pins'],sum(R.values())))
         t+=dt

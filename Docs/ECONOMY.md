@@ -27,10 +27,10 @@ final = (base + Σ add) × max(0.05, 1 + Σ percent) × Π (multiply^rank) × te
 Costs are written as *base × growth per rank*. ★ nodes cost gold.
 
 **Globe**
-- Greased Bearings: +2 RPM max speed. 20 ranks, €20 ×1.42.
-- Clockwork Motor: +1 RPM auto-rotate, never above max speed. 20 ranks, €60 ×1.45.
-- Firm Grip: +30% drag. 5 ranks, €40 ×1.8.
-- Flick of the Wrist: +20% click. 5 ranks, €40 ×1.8.
+- Greased Bearings: +2 RPM max speed. 20 ranks, €10 ×1.42.
+- Clockwork Motor: +1 RPM auto-rotate, never above max speed. 20 ranks, €40 ×1.45.
+- Firm Grip: +30% drag. 5 ranks, €20 ×1.8.
+- Flick of the Wrist: +20% click. 5 ranks, €20 ×1.8.
 - **Rule:** dragging always beats clicking. At the same upgrade level drag power ≥ click power, and every drag gives at least 1.5 clicks' worth of speed (checked by a unit test).
 - Cartographer's Cut: +25% globe earnings. 25 ranks, €150 ×1.42.
 - Gilded Axis: ×2 globe earnings. 1 rank, €5M.
@@ -38,10 +38,10 @@ Costs are written as *base × growth per rank*. ★ nodes cost gold.
 - Globe Mastery: ×1.05 globe earnings per rank, endless. €2M ×1.25.
 
 **Pins**
-- Pin n: €20 × 3.1^(n−1). Pin 1 €20, Pin 3 €192, Pin 6 €5.7K, Pin 9 €171K, Pin 12 €5.1M.
+- Pin n: €20 × 3.1^(n−1), except Pin 1 at €10 (fast first shot). Pin 1 €10, Pin 3 €192, Pin 6 €5.7K, Pin 9 €171K, Pin 12 €5.1M.
 - Pin n · Durability: +1 pass. 5 ranks, 1.5 × the pin's price, ×1.6 per rank.
 - Pin n · Payout: +50% for that pin. 10 ranks, 1.25 × the pin's price, ×1.45 per rank.
-- Oiled Spring: −8% reload. 10 ranks, €35 ×1.6.
+- Oiled Spring: −8% reload. 10 ranks, €25 ×1.6.
 - Steady Aim: +8% land chance. 5 ranks, €80 ×1.9.
 - Big City Lights: +5% city chance. 5 ranks, €200 ×2.
 - Auto-loader: fires pins automatically. €50K.
@@ -82,14 +82,14 @@ Costs are written as *base × growth per rank*. ★ nodes cost gold.
 ## Simulated pacing (active player, best-value purchases)
 | Time | Milestone | Income |
 |---|---|---|
-| 2.5 min | skill tree unlocked | €10/min |
-| 5 min | Pin 1 | |
-| 16 min | Pin 3 | |
-| 30 min | 4 pins | ~€11K/min |
-| 33 min | Pin 6 | |
-| 52 min | Auto-loader | |
-| 1 h | Pin 9 | ~€100K/min |
-| ~5.5 h | Gilded Axis, Pin 12 | ~€500K/min |
+| 1 min | skill tree unlocked (root €10) | €10/min |
+| 2 min | Pin 1 | |
+| 13 min | Pin 3 | |
+| 28 min | Pin 6 | |
+| 30 min | 6 pins | ~€27K/min |
+| 45 min | Auto-loader | |
+| 55 min | Pin 9 | ~€100K/min |
+| ~5.4 h | Gilded Axis, Pin 12 | ~€500K/min |
 | 7.5 h+ | about 95% of the finite tree done; Mastery nodes keep going | |
 
 **Next step for long-term play:** prestige, "Retire the agency". You reset money and the tree in exchange for permanent *Reputation* bonuses.
