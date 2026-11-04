@@ -22,6 +22,12 @@ MonoBehaviour:
   - kind: 2
     weight: 100
   autosaveInterval: 30
+  revolutionReward: 2.4
+  globeTicksPerRevolution: 1
+  impulseReferenceSpeed: 90
+  prestigeThreshold: 10000000
+  prestigeGoldScale: 25
+  prestigeExponent: 0.5
   baseStats:
   - stat: 100
     value: 90

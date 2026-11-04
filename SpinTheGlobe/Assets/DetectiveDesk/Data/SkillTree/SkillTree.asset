@@ -31,42 +31,43 @@ MonoBehaviour:
     position: {x: 0, y: 0}
   - id: globe_auto
     title: Clockwork Motor
-    description: '+2 RPM auto-rotate: the globe keeps turning by itself. Never faster
-      than the maximum spin speed.'
+    description: The globe keeps turning by itself at +20% of its maximum spin speed
+      per rank (100% at rank 5).
     branch: 1
-    maxRank: 20
+    maxRank: 5
     currency: 0
     cost:
       baseCost: 8
-      growth: 1.6
+      growth: 2.2
       explicitCosts: []
     prerequisites:
     - root
     modifiers:
-    - stat: 101
+    - stat: 106
       kind: 0
-      valuePerRank: 12
+      valuePerRank: 0.2
       pinIndex: -1
     requiresUnlock: 
-    capStat: 101
-    capByStat: 100
+    capStat: 0
+    capByStat: 0
     position: {x: 0, y: 160}
   - id: globe_max_speed
     title: Greased Bearings
-    description: +2 RPM maximum spin speed. Caps dragging and auto-rotate.
+    description: +20% maximum spin speed per rank (compounding). Drag, click and
+      auto-rotate all scale with it.
     branch: 1
     maxRank: 20
     currency: 0
     cost:
       baseCost: 10
-      growth: 1.42
+      growth: 2.3
       explicitCosts: []
     prerequisites:
     - globe_auto
     modifiers:
     - stat: 100
-      kind: 0
-      valuePerRank: 12
+      kind: 2
+      valuePerRank: 1.2
       pinIndex: -1
     requiresUnlock: 
     capStat: 0
@@ -248,7 +249,7 @@ MonoBehaviour:
     maxRank: 1
     currency: 0
     cost:
-      baseCost: 62
+      baseCost: 72
       growth: 1
       explicitCosts: []
     prerequisites:
@@ -269,7 +270,7 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 93
+      baseCost: 108
       growth: 1.6
       explicitCosts: []
     prerequisites:
@@ -290,7 +291,7 @@ MonoBehaviour:
     maxRank: 10
     currency: 0
     cost:
-      baseCost: 77.5
+      baseCost: 90
       growth: 1.45
       explicitCosts: []
     prerequisites:
@@ -311,7 +312,7 @@ MonoBehaviour:
     maxRank: 1
     currency: 0
     cost:
-      baseCost: 192.20000000000002
+      baseCost: 259.20000000000005
       growth: 1
       explicitCosts: []
     prerequisites:
@@ -332,7 +333,7 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 288.3
+      baseCost: 388.80000000000007
       growth: 1.6
       explicitCosts: []
     prerequisites:
@@ -353,7 +354,7 @@ MonoBehaviour:
     maxRank: 10
     currency: 0
     cost:
-      baseCost: 240.25000000000003
+      baseCost: 324.00000000000006
       growth: 1.45
       explicitCosts: []
     prerequisites:
@@ -374,7 +375,7 @@ MonoBehaviour:
     maxRank: 1
     currency: 0
     cost:
-      baseCost: 595.82
+      baseCost: 933.1200000000001
       growth: 1
       explicitCosts: []
     prerequisites:
@@ -395,7 +396,7 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 893.73
+      baseCost: 1399.6800000000003
       growth: 1.6
       explicitCosts: []
     prerequisites:
@@ -416,7 +417,7 @@ MonoBehaviour:
     maxRank: 10
     currency: 0
     cost:
-      baseCost: 744.7750000000001
+      baseCost: 1166.4
       growth: 1.45
       explicitCosts: []
     prerequisites:
@@ -437,7 +438,7 @@ MonoBehaviour:
     maxRank: 1
     currency: 0
     cost:
-      baseCost: 1847.0420000000001
+      baseCost: 3359.232
       growth: 1
       explicitCosts: []
     prerequisites:
@@ -458,7 +459,7 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 2770.563
+      baseCost: 5038.848
       growth: 1.6
       explicitCosts: []
     prerequisites:
@@ -479,7 +480,7 @@ MonoBehaviour:
     maxRank: 10
     currency: 0
     cost:
-      baseCost: 2308.8025000000002
+      baseCost: 4199.04
       growth: 1.45
       explicitCosts: []
     prerequisites:
@@ -500,7 +501,7 @@ MonoBehaviour:
     maxRank: 1
     currency: 0
     cost:
-      baseCost: 5725.8302
+      baseCost: 12093.235200000001
       growth: 1
       explicitCosts: []
     prerequisites:
@@ -521,7 +522,7 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 8588.7453
+      baseCost: 18139.8528
       growth: 1.6
       explicitCosts: []
     prerequisites:
@@ -542,7 +543,7 @@ MonoBehaviour:
     maxRank: 10
     currency: 0
     cost:
-      baseCost: 7157.28775
+      baseCost: 15116.544000000002
       growth: 1.45
       explicitCosts: []
     prerequisites:
@@ -563,7 +564,7 @@ MonoBehaviour:
     maxRank: 1
     currency: 0
     cost:
-      baseCost: 17750.073620000003
+      baseCost: 43535.646720000004
       growth: 1
       explicitCosts: []
     prerequisites:
@@ -584,7 +585,7 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 26625.110430000004
+      baseCost: 65303.47008000001
       growth: 1.6
       explicitCosts: []
     prerequisites:
@@ -605,7 +606,7 @@ MonoBehaviour:
     maxRank: 10
     currency: 0
     cost:
-      baseCost: 22187.592025000005
+      baseCost: 54419.55840000001
       growth: 1.45
       explicitCosts: []
     prerequisites:
@@ -626,7 +627,7 @@ MonoBehaviour:
     maxRank: 1
     currency: 0
     cost:
-      baseCost: 55025.22822200001
+      baseCost: 156728.32819200002
       growth: 1
       explicitCosts: []
     prerequisites:
@@ -647,7 +648,7 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 82537.84233300002
+      baseCost: 235092.492288
       growth: 1.6
       explicitCosts: []
     prerequisites:
@@ -668,7 +669,7 @@ MonoBehaviour:
     maxRank: 10
     currency: 0
     cost:
-      baseCost: 68781.53527750002
+      baseCost: 195910.41024000003
       growth: 1.45
       explicitCosts: []
     prerequisites:
@@ -689,7 +690,7 @@ MonoBehaviour:
     maxRank: 1
     currency: 0
     cost:
-      baseCost: 170578.20748820002
+      baseCost: 564221.9814912002
       growth: 1
       explicitCosts: []
     prerequisites:
@@ -710,7 +711,7 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 255867.3112323
+      baseCost: 846332.9722368002
       growth: 1.6
       explicitCosts: []
     prerequisites:
@@ -731,7 +732,7 @@ MonoBehaviour:
     maxRank: 10
     currency: 0
     cost:
-      baseCost: 213222.75936025003
+      baseCost: 705277.4768640002
       growth: 1.45
       explicitCosts: []
     prerequisites:
@@ -752,7 +753,7 @@ MonoBehaviour:
     maxRank: 1
     currency: 0
     cost:
-      baseCost: 528792.4432134201
+      baseCost: 2031199.1333683205
       growth: 1
       explicitCosts: []
     prerequisites:
@@ -773,7 +774,7 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 793188.6648201302
+      baseCost: 3046798.7000524807
       growth: 1.6
       explicitCosts: []
     prerequisites:
@@ -794,7 +795,7 @@ MonoBehaviour:
     maxRank: 10
     currency: 0
     cost:
-      baseCost: 660990.5540167751
+      baseCost: 2538998.9167104005
       growth: 1.45
       explicitCosts: []
     prerequisites:
@@ -815,7 +816,7 @@ MonoBehaviour:
     maxRank: 1
     currency: 0
     cost:
-      baseCost: 1639256.5739616025
+      baseCost: 7312316.880125954
       growth: 1
       explicitCosts: []
     prerequisites:
@@ -836,7 +837,7 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 2458884.860942404
+      baseCost: 10968475.32018893
       growth: 1.6
       explicitCosts: []
     prerequisites:
@@ -857,7 +858,7 @@ MonoBehaviour:
     maxRank: 10
     currency: 0
     cost:
-      baseCost: 2049070.7174520032
+      baseCost: 9140396.100157442
       growth: 1.45
       explicitCosts: []
     prerequisites:
@@ -878,7 +879,7 @@ MonoBehaviour:
     maxRank: 1
     currency: 0
     cost:
-      baseCost: 5081695.379280968
+      baseCost: 26324340.768453434
       growth: 1
       explicitCosts: []
     prerequisites:
@@ -899,7 +900,7 @@ MonoBehaviour:
     maxRank: 5
     currency: 0
     cost:
-      baseCost: 7622543.068921451
+      baseCost: 39486511.15268015
       growth: 1.6
       explicitCosts: []
     prerequisites:
@@ -920,7 +921,7 @@ MonoBehaviour:
     maxRank: 10
     currency: 0
     cost:
-      baseCost: 6352119.22410121
+      baseCost: 32905425.960566793
       growth: 1.45
       explicitCosts: []
     prerequisites:
