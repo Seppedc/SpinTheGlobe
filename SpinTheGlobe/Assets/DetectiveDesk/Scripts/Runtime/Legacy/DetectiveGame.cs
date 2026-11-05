@@ -91,8 +91,7 @@ namespace DetectiveDesk
 
         public void OpenFiles()
         {
-            // Clicking the case folder only reports the case status; the old evidence archive pop-up is not used.
-            if (HasGameplay && Gameplay.Cases) Gameplay.Cases.ShowStatus();
+            // Retain the authored click binding; progress is displayed on the case's brass plate.
         }
 
         public void SelectPin(PinCofferSlot slot) { if (HasGameplay) Gameplay.SelectPin(slot); }

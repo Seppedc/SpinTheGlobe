@@ -1,5 +1,7 @@
 # Overnight build log — 2026-11-02
 
+Historical build notes. Current controls: [Developer controls](DEVELOPER_TOOLS.md).
+
 Queue: steps 2–9 from `Docs/GAME_DESIGN.md`. Each finished step is committed separately in git.
 
 | Step | Status | Notes |

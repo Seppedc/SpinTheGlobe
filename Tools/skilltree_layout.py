@@ -12,7 +12,6 @@ for k in range(1,13):
     a(f'pin_{k:02}',x,0,[prev],'P'); a(f'pin_{k:02}_durability',x,1,[f'pin_{k:02}'],'P'); a(f'pin_{k:02}_payout',x,-1,[f'pin_{k:02}'],'P'); prev=f'pin_{k:02}'
 a('pin_mastery',14,0,['pin_12'],'P')
 a('shooter_cooldown',3,-2,['pin_01'],'P'); a('pin_autoloader',3,-3,['shooter_cooldown'],'P')
-a('pin_land_chance',4,-2,['pin_02'],'P'); a('pin_city_chance',5,-2,['pin_land_chance'],'P');
 # Case (left)
 a('case_payout',-1,0,['root'],'C'); a('case_cooldown',-2,0.5,['case_payout'],'C'); a('case_autostamp',-2,-0.5,['case_payout'],'C')
 a('case_cold_cases',-3,0.5,['case_cooldown'],'C'); a('case_mastery',-4,0.5,['case_cold_cases'],'C'); a('case_headlines',-3,-0.5,['case_autostamp'],'C')

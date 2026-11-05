@@ -32,8 +32,6 @@ namespace DetectiveDesk.Gameplay
             ? Math.Max(0, Math.Min(MaximumVelocity, Math.Max(game.Stats.Get(StatId.GlobeAutoSpeed),
                                                              MaximumVelocity * Math.Min(1, game.Stats.Get(StatId.GlobeAutoShare)))))
             : 0;
-        /// <summary>Hand spinning scales with the max speed, so dragging stays worthwhile on a fast globe.</summary>
-        double ImpulseScale => game ? Math.Max(1, MaximumVelocity / Math.Max(1, game.Balance.impulseReferenceSpeed)) : 1;
         public bool IsRedline => CurrentVelocity >= MaximumVelocity * .95;
         public Vector3 Axis => rotor && rotor.parent ? rotor.parent.up : Vector3.up;
         public Vector3 Center => rotor ? rotor.TransformPoint(markerLocalCenter) : transform.position;
@@ -74,7 +72,7 @@ namespace DetectiveDesk.Gameplay
                     Vector2 next = Input.mousePosition;
                     float dx = next.x - pointer.x;
                     travelled += (next - pointer).magnitude;
-                    AddSwipe(dx);
+                    AddSwipe(dx, Time.unscaledDeltaTime);
                     pointer = next;
                 }
                 if (Input.GetMouseButtonUp(0))
@@ -100,13 +98,16 @@ namespace DetectiveDesk.Gameplay
             return discriminant >= 0 && -along + Mathf.Sqrt(discriminant) > 0;
         }
 
-        /// <summary>Drag input: positive (west → east) pixels only.</summary>
-        public void AddSwipe(float horizontalPixels)
+        public void AddSwipe(float horizontalPixels) => AddSwipe(horizontalPixels, Time.unscaledDeltaTime);
+
+        /// <summary>Positive west-to-east movement, weighted by pointer speed.</summary>
+        public void AddSwipe(float horizontalPixels, float seconds)
         {
-            if (float.IsNaN(horizontalPixels) || float.IsInfinity(horizontalPixels) || horizontalPixels <= 0) return;
-            double gain = game ? game.Balance.dragAcceleration * game.Stats.Get(StatId.GlobeDragPower) * ImpulseScale : .35;
-            dragAdded += horizontalPixels * gain;
-            AddVelocity(horizontalPixels * gain);
+            if (!game) return;
+            double impulse = GameplayMath.DragImpulse(horizontalPixels, seconds, game.Balance,
+                game.Stats.Get(StatId.GlobeDragPower), MaximumVelocity);
+            dragAdded += impulse;
+            AddVelocity(impulse);
         }
 
         /// <summary>
@@ -116,14 +117,14 @@ namespace DetectiveDesk.Gameplay
         void FinishDrag()
         {
             if (dragAdded <= 0 || !game) return;
-            double minimum = game.Balance.clickImpulse * game.Balance.dragOverClick * game.Stats.Get(StatId.GlobeDragPower) * ImpulseScale;
+            double minimum = GameplayMath.SpinImpulse(game.Balance.clickImpulse * game.Balance.dragOverClick, game.Stats.Get(StatId.GlobeDragPower), MaximumVelocity, game.Balance.impulseReferenceSpeed);
             if (dragAdded < minimum) AddVelocity(minimum - dragAdded);
         }
 
         /// <summary>Click input: a fixed impulse, deliberately weaker than a good drag.</summary>
         public void AddClick()
         {
-            double impulse = game ? game.Balance.clickImpulse * game.Stats.Get(StatId.GlobeClickPower) * ImpulseScale : 10;
+            double impulse = game ? GameplayMath.SpinImpulse(game.Balance.clickImpulse, game.Stats.Get(StatId.GlobeClickPower), MaximumVelocity, game.Balance.impulseReferenceSpeed) : 3;
             AddVelocity(impulse);
         }
 

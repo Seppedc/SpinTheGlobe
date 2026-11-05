@@ -31,15 +31,16 @@ namespace DetectiveDesk.Gameplay
         readonly System.Random rng = new System.Random();
 
         GameBalance B => game.Balance;
-        public int Required => game ? Mathf.Max(1, Mathf.Min(B.caseMaxEvidence, B.caseBaseEvidence + B.caseEvidencePerLevel * Level)
-                                                   - Mathf.RoundToInt((float)game.Stats.Get(StatId.CaseEvidenceReduction))) : 3;
-        public int RequiredDurability => game ? Mathf.Min(B.caseMaxDurabilityRequirement, Level / Mathf.Max(1, B.caseLevelsPerDurabilityStep)) : 0;
+        public int Required => game ? CaseProgression.RequiredEvidence(B, Level,
+            Mathf.RoundToInt((float)game.Stats.Get(StatId.CaseEvidenceReduction))) : 3;
+        public int RequiredDurability => game ? CaseProgression.RequiredStrength(B, Level) : 0;
+        public string EvidenceLabel => CaseProgression.EvidenceLabel(Evidence, Required, OnCooldown);
         public bool IsFull => Evidence >= Required;
         public bool OnCooldown => Cooldown > 0;
-        /// <summary>max(base × case number, N seconds of recent income) × case reward × golden income multiplier.</summary>
+        /// <summary>Small base-reward increases, with an income-scaled minimum; upgrades apply on top.</summary>
         public double Reward => game
-            ? System.Math.Max(B.caseBaseReward * (Level + 1) * game.Stats.Get(StatId.IncomeMultiplier), B.caseIncomeSeconds * game.IncomeRate)
-              * game.Stats.Get(StatId.CasePayout)
+            ? CaseProgression.Reward(B, Level, game.IncomeRate,
+                game.Stats.Get(StatId.IncomeMultiplier), game.Stats.Get(StatId.CasePayout))
             : 0;
         /// <summary>Chance an approved case also drops gold (Press Coverage), never above the balance cap (10%).</summary>
         public double GoldChance => game ? System.Math.Min(B.caseGoldChanceCap, game.Stats.Get(StatId.CaseGoldChance)) : 0;
@@ -49,6 +50,7 @@ namespace DetectiveDesk.Gameplay
         public void Initialize(GameManager owner)
         {
             game = owner;
+            Evidence = Mathf.Min(Evidence, Required);
             stamp = ClickRouter.FindByName("SOLVED Stamp", "Stamp body");
             folder = ClickRouter.FindByName("CaseFiles", "Case file");
             visual = gameObject.AddComponent<CaseFolderVisual>();
@@ -69,47 +71,29 @@ namespace DetectiveDesk.Gameplay
             if (Cooldown <= 0)
             {
                 if (game.legacy) game.legacy.ResetCaseVisual();
-                game.ShowHint("A new case file landed on the desk: case #" + (Level + 1) + ". Needs " + Required + " evidence" + DurabilityNote() + ".");
                 game.Notify();
             }
         }
 
-        string DurabilityNote() => RequiredDurability > 0 ? " from pins with durability ≥ " + RequiredDurability : "";
-
         void OnPinFell(PinFellOff e)
         {
             if (!game) return;
-            if (OnCooldown) { game.ShowHint("Pin " + (e.PinIndex + 1) + " fell, but no case is open (next in " + UIFactory.Seconds(Cooldown) + ")."); return; }
-            if (IsFull) { game.ShowHint("The case file is full. Press the stamp!"); return; }
+            if (OnCooldown || IsFull) return;
             if (e.DurabilityLevel < RequiredDurability)
             {
-                game.ShowHint("Pin " + (e.PinIndex + 1) + " is too weak for this case (needs durability ≥ " + RequiredDurability + ").");
+                game.ShowHint("Pin " + (e.PinIndex + 1) + " needs Strength " + RequiredDurability + "+ for this case.");
                 return;
             }
             Evidence++;
             if (visual) visual.SetCount(Evidence, Level, true);
-            if (IsFull)
-            {
-                if (rng.NextDouble() < game.Stats.Get(StatId.CaseAutoStampChance)) Stamp(true);
-                else game.ShowHint("Case #" + (Level + 1) + " is complete! Press the stamp to approve it.");
-            }
-            else game.ShowHint("Evidence added: " + Evidence + " / " + Required + ".");
+            if (IsFull && rng.NextDouble() < game.Stats.Get(StatId.CaseAutoStampChance)) Stamp(true);
             game.Notify();
-        }
-
-        public void ShowStatus()
-        {
-            if (!game) return;
-            if (OnCooldown) game.ShowHint("Case #" + Level + " is approved. The next case arrives in " + UIFactory.Seconds(Cooldown) + ".");
-            else game.ShowHint("Case #" + (Level + 1) + ": " + Evidence + " / " + Required + " evidence" + DurabilityNote() + (IsFull ? ". Press the stamp!" : ". Pins that fall off the map become evidence."));
         }
 
         /// <summary>Stamp button / clicking the stamp on the desk.</summary>
         public void TryStamp()
         {
-            if (!game || stamping) return;
-            if (OnCooldown) { game.ShowHint("Next case arrives in " + UIFactory.Seconds(Cooldown) + "."); return; }
-            if (!IsFull) { ShowStatus(); return; }
+            if (!game || stamping || OnCooldown || !IsFull) return;
             Stamp(false);
         }
 
@@ -184,8 +168,6 @@ namespace DetectiveDesk.Gameplay
             if (gold > 0) game.CreditGold(gold, at);
             if (visual) visual.ShowSolvedMark(level);
             if (game.audioManager) game.audioManager.Click();
-            game.ShowHint((automatic ? "Auto-stamped! " : "") + "Case #" + (level + 1) + " solved: +" + UIFactory.Money(reward) +
-                          (gold > 0 ? " and " + UIFactory.Num(gold) + " gold" : ""));
             Level++;
             Evidence = 0;
             Cooldown = (float)game.Stats.Get(StatId.CaseCooldown);
@@ -201,7 +183,6 @@ namespace DetectiveDesk.Gameplay
             if (!game || OnCooldown) return;
             Evidence = Required;
             if (visual) visual.SetCount(Evidence, Level, true);
-            game.ShowHint("[dev] case file filled");
             game.Notify();
         }
 

@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: DetectiveDesk.Runtime::DetectiveDesk.Progression.SkillTreeAsset
   nodes:
   - id: root
-    title: Skill Tree Unlock
-    description: Open the detective's ledger of upgrades.
+    title: Unlock Upgrades
+    description: Open the skill tree.
     branch: 0
     maxRank: 1
     currency: 0
     cost:
-      baseCost: 10
+      baseCost: 20
       growth: 1
       explicitCosts: []
     prerequisites: []
@@ -30,53 +30,50 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 0, y: 0}
   - id: globe_auto
-    title: Clockwork Motor
-    description: '+10 RPM auto-rotate: the globe keeps turning by itself. Never faster
-      than the maximum spin speed (Greased Bearings).'
+    title: Auto Spin
+    description: Keeps the globe spinning. Limited by Spin Limit.
     branch: 1
-    maxRank: 50
+    maxRank: 100
     currency: 0
     cost:
-      baseCost: 6
-      growth: 1.22
+      baseCost: 15
+      growth: 1.16
       explicitCosts: []
     prerequisites:
     - root
     modifiers:
     - stat: 101
       kind: 0
-      valuePerRank: 60
+      valuePerRank: 30
       pinIndex: -1
     requiresUnlock: 
     capStat: 101
     capByStat: 100
     position: {x: 0, y: 160}
   - id: globe_max_speed
-    title: Greased Bearings
-    description: +25 RPM maximum spin speed. Drag, click and auto-rotate all scale
-      with it.
+    title: Spin Limit
+    description: Raise the top spin speed.
     branch: 1
-    maxRank: 20
+    maxRank: 101
     currency: 0
     cost:
-      baseCost: 15
-      growth: 1.6
+      baseCost: 20
+      growth: 1.16
       explicitCosts: []
     prerequisites:
     - globe_auto
     modifiers:
     - stat: 100
       kind: 0
-      valuePerRank: 150
+      valuePerRank: 45
       pinIndex: -1
     requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 0, y: 320}
   - id: globe_drag
-    title: Firm Grip
-    description: +30% speed gained from dragging. (Dragging always beats clicking
-      at the same upgrade level.)
+    title: Stronger Drag
+    description: Gain more speed from dragging.
     branch: 1
     maxRank: 5
     currency: 0
@@ -96,8 +93,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: -160, y: 320}
   - id: globe_click
-    title: Flick of the Wrist
-    description: +20% speed gained from clicking.
+    title: Stronger Click
+    description: Gain more speed from clicking.
     branch: 1
     maxRank: 5
     currency: 0
@@ -117,8 +114,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 160, y: 320}
   - id: globe_multiplier
-    title: Cartographer's Cut
-    description: +25% globe earnings (turns and pins).
+    title: Spin Pay
+    description: Earn more from spins.
     branch: 1
     maxRank: 25
     currency: 0
@@ -138,8 +135,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 0, y: 480}
   - id: globe_gilded_axis
-    title: Gilded Axis
-    description: Doubles all globe earnings.
+    title: Double Spin Pay
+    description: Double spin earnings.
     branch: 1
     maxRank: 1
     currency: 0
@@ -159,8 +156,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 0, y: 640}
   - id: globe_mastery
-    title: Globe Mastery
-    description: +5% globe earnings per rank, compounding. Never maxes out.
+    title: Spin Bonus
+    description: Earn 5% more from spins.
     branch: 1
     maxRank: 999
     currency: 0
@@ -181,7 +178,7 @@ MonoBehaviour:
     position: {x: 0, y: 800}
   - id: pin_01
     title: Pin 1
-    description: Adds pin #1 to the pin box.
+    description: Unlock pin 1 for the shooter.
     branch: 2
     maxRank: 1
     currency: 0
@@ -201,8 +198,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 320, y: 0}
   - id: pin_01_durability
-    title: "Pin 1 \xB7 Durability"
-    description: Pin #1 survives one more pass under the payout line.
+    title: "Pin 1 \xB7 Strength"
+    description: Survive one more payout.
     branch: 2
     maxRank: 5
     currency: 0
@@ -222,8 +219,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 320, y: 160}
   - id: pin_01_payout
-    title: "Pin 1 \xB7 Payout"
-    description: +50% payout from pin #1.
+    title: "Pin 1 \xB7 Pay"
+    description: Earn more from this pin.
     branch: 2
     maxRank: 10
     currency: 0
@@ -244,7 +241,7 @@ MonoBehaviour:
     position: {x: 320, y: -160}
   - id: pin_02
     title: Pin 2
-    description: Adds pin #2 to the pin box.
+    description: Unlock pin 2 for the shooter.
     branch: 2
     maxRank: 1
     currency: 0
@@ -264,8 +261,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 480, y: 0}
   - id: pin_02_durability
-    title: "Pin 2 \xB7 Durability"
-    description: Pin #2 survives one more pass under the payout line.
+    title: "Pin 2 \xB7 Strength"
+    description: Survive one more payout.
     branch: 2
     maxRank: 5
     currency: 0
@@ -285,8 +282,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 480, y: 160}
   - id: pin_02_payout
-    title: "Pin 2 \xB7 Payout"
-    description: +50% payout from pin #2.
+    title: "Pin 2 \xB7 Pay"
+    description: Earn more from this pin.
     branch: 2
     maxRank: 10
     currency: 0
@@ -307,7 +304,7 @@ MonoBehaviour:
     position: {x: 480, y: -160}
   - id: pin_03
     title: Pin 3
-    description: Adds pin #3 to the pin box.
+    description: Unlock pin 3 for the shooter.
     branch: 2
     maxRank: 1
     currency: 0
@@ -327,8 +324,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 640, y: 0}
   - id: pin_03_durability
-    title: "Pin 3 \xB7 Durability"
-    description: Pin #3 survives one more pass under the payout line.
+    title: "Pin 3 \xB7 Strength"
+    description: Survive one more payout.
     branch: 2
     maxRank: 5
     currency: 0
@@ -348,8 +345,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 640, y: 160}
   - id: pin_03_payout
-    title: "Pin 3 \xB7 Payout"
-    description: +50% payout from pin #3.
+    title: "Pin 3 \xB7 Pay"
+    description: Earn more from this pin.
     branch: 2
     maxRank: 10
     currency: 0
@@ -370,7 +367,7 @@ MonoBehaviour:
     position: {x: 640, y: -160}
   - id: pin_04
     title: Pin 4
-    description: Adds pin #4 to the pin box.
+    description: Unlock pin 4 for the shooter.
     branch: 2
     maxRank: 1
     currency: 0
@@ -390,8 +387,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 800, y: 0}
   - id: pin_04_durability
-    title: "Pin 4 \xB7 Durability"
-    description: Pin #4 survives one more pass under the payout line.
+    title: "Pin 4 \xB7 Strength"
+    description: Survive one more payout.
     branch: 2
     maxRank: 5
     currency: 0
@@ -411,8 +408,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 800, y: 160}
   - id: pin_04_payout
-    title: "Pin 4 \xB7 Payout"
-    description: +50% payout from pin #4.
+    title: "Pin 4 \xB7 Pay"
+    description: Earn more from this pin.
     branch: 2
     maxRank: 10
     currency: 0
@@ -433,7 +430,7 @@ MonoBehaviour:
     position: {x: 800, y: -160}
   - id: pin_05
     title: Pin 5
-    description: Adds pin #5 to the pin box.
+    description: Unlock pin 5 for the shooter.
     branch: 2
     maxRank: 1
     currency: 0
@@ -453,8 +450,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 960, y: 0}
   - id: pin_05_durability
-    title: "Pin 5 \xB7 Durability"
-    description: Pin #5 survives one more pass under the payout line.
+    title: "Pin 5 \xB7 Strength"
+    description: Survive one more payout.
     branch: 2
     maxRank: 5
     currency: 0
@@ -474,8 +471,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 960, y: 160}
   - id: pin_05_payout
-    title: "Pin 5 \xB7 Payout"
-    description: +50% payout from pin #5.
+    title: "Pin 5 \xB7 Pay"
+    description: Earn more from this pin.
     branch: 2
     maxRank: 10
     currency: 0
@@ -496,7 +493,7 @@ MonoBehaviour:
     position: {x: 960, y: -160}
   - id: pin_06
     title: Pin 6
-    description: Adds pin #6 to the pin box.
+    description: Unlock pin 6 for the shooter.
     branch: 2
     maxRank: 1
     currency: 0
@@ -516,8 +513,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 1120, y: 0}
   - id: pin_06_durability
-    title: "Pin 6 \xB7 Durability"
-    description: Pin #6 survives one more pass under the payout line.
+    title: "Pin 6 \xB7 Strength"
+    description: Survive one more payout.
     branch: 2
     maxRank: 5
     currency: 0
@@ -537,8 +534,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 1120, y: 160}
   - id: pin_06_payout
-    title: "Pin 6 \xB7 Payout"
-    description: +50% payout from pin #6.
+    title: "Pin 6 \xB7 Pay"
+    description: Earn more from this pin.
     branch: 2
     maxRank: 10
     currency: 0
@@ -559,7 +556,7 @@ MonoBehaviour:
     position: {x: 1120, y: -160}
   - id: pin_07
     title: Pin 7
-    description: Adds pin #7 to the pin box.
+    description: Unlock pin 7 for the shooter.
     branch: 2
     maxRank: 1
     currency: 0
@@ -579,8 +576,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 1280, y: 0}
   - id: pin_07_durability
-    title: "Pin 7 \xB7 Durability"
-    description: Pin #7 survives one more pass under the payout line.
+    title: "Pin 7 \xB7 Strength"
+    description: Survive one more payout.
     branch: 2
     maxRank: 5
     currency: 0
@@ -600,8 +597,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 1280, y: 160}
   - id: pin_07_payout
-    title: "Pin 7 \xB7 Payout"
-    description: +50% payout from pin #7.
+    title: "Pin 7 \xB7 Pay"
+    description: Earn more from this pin.
     branch: 2
     maxRank: 10
     currency: 0
@@ -622,7 +619,7 @@ MonoBehaviour:
     position: {x: 1280, y: -160}
   - id: pin_08
     title: Pin 8
-    description: Adds pin #8 to the pin box.
+    description: Unlock pin 8 for the shooter.
     branch: 2
     maxRank: 1
     currency: 0
@@ -642,8 +639,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 1440, y: 0}
   - id: pin_08_durability
-    title: "Pin 8 \xB7 Durability"
-    description: Pin #8 survives one more pass under the payout line.
+    title: "Pin 8 \xB7 Strength"
+    description: Survive one more payout.
     branch: 2
     maxRank: 5
     currency: 0
@@ -663,8 +660,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 1440, y: 160}
   - id: pin_08_payout
-    title: "Pin 8 \xB7 Payout"
-    description: +50% payout from pin #8.
+    title: "Pin 8 \xB7 Pay"
+    description: Earn more from this pin.
     branch: 2
     maxRank: 10
     currency: 0
@@ -685,7 +682,7 @@ MonoBehaviour:
     position: {x: 1440, y: -160}
   - id: pin_09
     title: Pin 9
-    description: Adds pin #9 to the pin box.
+    description: Unlock pin 9 for the shooter.
     branch: 2
     maxRank: 1
     currency: 0
@@ -705,8 +702,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 1600, y: 0}
   - id: pin_09_durability
-    title: "Pin 9 \xB7 Durability"
-    description: Pin #9 survives one more pass under the payout line.
+    title: "Pin 9 \xB7 Strength"
+    description: Survive one more payout.
     branch: 2
     maxRank: 5
     currency: 0
@@ -726,8 +723,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 1600, y: 160}
   - id: pin_09_payout
-    title: "Pin 9 \xB7 Payout"
-    description: +50% payout from pin #9.
+    title: "Pin 9 \xB7 Pay"
+    description: Earn more from this pin.
     branch: 2
     maxRank: 10
     currency: 0
@@ -748,7 +745,7 @@ MonoBehaviour:
     position: {x: 1600, y: -160}
   - id: pin_10
     title: Pin 10
-    description: Adds pin #10 to the pin box.
+    description: Unlock pin 10 for the shooter.
     branch: 2
     maxRank: 1
     currency: 0
@@ -768,8 +765,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 1760, y: 0}
   - id: pin_10_durability
-    title: "Pin 10 \xB7 Durability"
-    description: Pin #10 survives one more pass under the payout line.
+    title: "Pin 10 \xB7 Strength"
+    description: Survive one more payout.
     branch: 2
     maxRank: 5
     currency: 0
@@ -789,8 +786,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 1760, y: 160}
   - id: pin_10_payout
-    title: "Pin 10 \xB7 Payout"
-    description: +50% payout from pin #10.
+    title: "Pin 10 \xB7 Pay"
+    description: Earn more from this pin.
     branch: 2
     maxRank: 10
     currency: 0
@@ -811,7 +808,7 @@ MonoBehaviour:
     position: {x: 1760, y: -160}
   - id: pin_11
     title: Pin 11
-    description: Adds pin #11 to the pin box.
+    description: Unlock pin 11 for the shooter.
     branch: 2
     maxRank: 1
     currency: 0
@@ -831,8 +828,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 1920, y: 0}
   - id: pin_11_durability
-    title: "Pin 11 \xB7 Durability"
-    description: Pin #11 survives one more pass under the payout line.
+    title: "Pin 11 \xB7 Strength"
+    description: Survive one more payout.
     branch: 2
     maxRank: 5
     currency: 0
@@ -852,8 +849,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 1920, y: 160}
   - id: pin_11_payout
-    title: "Pin 11 \xB7 Payout"
-    description: +50% payout from pin #11.
+    title: "Pin 11 \xB7 Pay"
+    description: Earn more from this pin.
     branch: 2
     maxRank: 10
     currency: 0
@@ -874,7 +871,7 @@ MonoBehaviour:
     position: {x: 1920, y: -160}
   - id: pin_12
     title: Pin 12
-    description: Adds pin #12 to the pin box.
+    description: Unlock pin 12 for the shooter.
     branch: 2
     maxRank: 1
     currency: 0
@@ -894,8 +891,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 2080, y: 0}
   - id: pin_12_durability
-    title: "Pin 12 \xB7 Durability"
-    description: Pin #12 survives one more pass under the payout line.
+    title: "Pin 12 \xB7 Strength"
+    description: Survive one more payout.
     branch: 2
     maxRank: 5
     currency: 0
@@ -915,8 +912,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 2080, y: 160}
   - id: pin_12_payout
-    title: "Pin 12 \xB7 Payout"
-    description: +50% payout from pin #12.
+    title: "Pin 12 \xB7 Pay"
+    description: Earn more from this pin.
     branch: 2
     maxRank: 10
     currency: 0
@@ -936,71 +933,29 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 2080, y: -160}
   - id: shooter_cooldown
-    title: Oiled Spring
-    description: -6% pin shooter reload time.
+    title: Faster Reload
+    description: Reload 10% faster each level.
     branch: 2
-    maxRank: 15
+    maxRank: 40
     currency: 0
     cost:
-      baseCost: 15
-      growth: 1.45
+      baseCost: 5
+      growth: 1.14
       explicitCosts: []
     prerequisites:
     - pin_01
     modifiers:
     - stat: 201
-      kind: 1
-      valuePerRank: -0.06
+      kind: 2
+      valuePerRank: 0.9
       pinIndex: -1
     requiresUnlock: 
     capStat: 0
     capByStat: 0
     position: {x: 480, y: -320}
-  - id: pin_land_chance
-    title: Steady Aim
-    description: "+8% chance a pin lands on land (land pays \xD72)."
-    branch: 2
-    maxRank: 5
-    currency: 0
-    cost:
-      baseCost: 50
-      growth: 1.9
-      explicitCosts: []
-    prerequisites:
-    - pin_02
-    modifiers:
-    - stat: 202
-      kind: 0
-      valuePerRank: 0.08
-      pinIndex: -1
-    requiresUnlock: 
-    capStat: 0
-    capByStat: 0
-    position: {x: 640, y: -320}
-  - id: pin_city_chance
-    title: Big City Lights
-    description: "+5% chance a pin lands near a big city (up to \xD76)."
-    branch: 2
-    maxRank: 5
-    currency: 0
-    cost:
-      baseCost: 200
-      growth: 2
-      explicitCosts: []
-    prerequisites:
-    - pin_land_chance
-    modifiers:
-    - stat: 203
-      kind: 0
-      valuePerRank: 0.05
-      pinIndex: -1
-    requiresUnlock: 
-    capStat: 0
-    capByStat: 0
-    position: {x: 800, y: -320}
   - id: pin_autoloader
-    title: Auto-loader
-    description: The shooter fires a pin by itself whenever one is ready.
+    title: Auto Fire
+    description: Shoot ready pins automatically.
     branch: 2
     maxRank: 1
     currency: 0
@@ -1020,8 +975,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 480, y: -480}
   - id: pin_mastery
-    title: Pin Mastery
-    description: +5% payout for every pin per rank, compounding. Never maxes out.
+    title: All Pin Pay
+    description: Multiply every pin payout by 1.05.
     branch: 2
     maxRank: 999
     currency: 0
@@ -1041,8 +996,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 2240, y: 0}
   - id: case_payout
-    title: Bigger Retainers
-    description: +25% money from approved cases.
+    title: Case Pay
+    description: Earn more from solved cases.
     branch: 3
     maxRank: 10
     currency: 0
@@ -1062,8 +1017,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: -160, y: 0}
   - id: case_cooldown
-    title: Efficient Paperwork
-    description: -7% wait before the next case opens.
+    title: Case Wait
+    description: Open the next case sooner.
     branch: 3
     maxRank: 10
     currency: 0
@@ -1083,8 +1038,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: -320, y: 80}
   - id: case_autostamp
-    title: Rubber-Stamp Clerk
-    description: +5% chance a full case stamps itself.
+    title: Auto Stamp
+    description: Chance to stamp a full case automatically.
     branch: 3
     maxRank: 10
     currency: 0
@@ -1104,8 +1059,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: -320, y: -80}
   - id: case_cold_cases
-    title: Cold Cases
-    description: Every case needs one less piece of evidence.
+    title: Less Evidence
+    description: Solve each case with fewer clues.
     branch: 3
     maxRank: 3
     currency: 0
@@ -1125,9 +1080,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: -480, y: 80}
   - id: case_headlines
-    title: Front Page News
-    description: +1% chance an approved case drops gold (needs Press Coverage from
-      the Gold shop). Never above 10%.
+    title: Case Gold
+    description: More chance of gold from solved cases. Max 10%.
     branch: 3
     maxRank: 8
     currency: 0
@@ -1147,8 +1101,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: -480, y: -80}
   - id: case_mastery
-    title: Case Mastery
-    description: +5% case rewards per rank, compounding. Never maxes out.
+    title: Case Pay Bonus
+    description: Multiply case rewards by 1.05.
     branch: 3
     maxRank: 999
     currency: 0
@@ -1168,8 +1122,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: -640, y: 80}
   - id: statue_gold_fill
-    title: Molten Pour
-    description: +20% gold fill speed from globe spins.
+    title: Faster Gold Fill
+    description: Statues fill with gold faster.
     branch: 5
     maxRank: 10
     currency: 0
@@ -1189,8 +1143,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 0, y: -160}
   - id: statue_payout
-    title: Heavier Gold
-    description: +25% gold from smashed statues.
+    title: Statue Gold
+    description: Earn more gold when smashing statues.
     branch: 5
     maxRank: 10
     currency: 0
@@ -1210,8 +1164,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 0, y: -320}
   - id: statue_mastery
-    title: Statue Mastery
-    description: +5% statue gold per rank, compounding. Never maxes out.
+    title: Statue Gold Bonus
+    description: Multiply statue gold rewards by 1.05.
     branch: 5
     maxRank: 999
     currency: 0
@@ -1231,8 +1185,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: 0, y: -480}
   - id: loot_bulk
-    title: Bulk Order
-    description: -6% lootbox price.
+    title: Cheaper Boxes
+    description: Pay less for each lootbox.
     branch: 6
     maxRank: 5
     currency: 0
@@ -1252,8 +1206,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: -320, y: -320}
   - id: loot_luck
-    title: Lucky Charm
-    description: +20% odds for statue pieces and gold.
+    title: Better Loot
+    description: Better odds of gold and statue pieces.
     branch: 6
     maxRank: 5
     currency: 0
@@ -1273,8 +1227,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: -480, y: -320}
   - id: loot_mastery
-    title: Lootbox Mastery
-    description: +5% lootbox luck per rank. Never maxes out.
+    title: More Loot Luck
+    description: Further improve gold and statue piece odds.
     branch: 6
     maxRank: 999
     currency: 0
@@ -1294,8 +1248,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: -640, y: -320}
   - id: whiskey_duration
-    title: Slow Sipper
-    description: +2 s boost duration.
+    title: Longer Boost
+    description: Keep the drink boost active longer.
     branch: 4
     maxRank: 10
     currency: 0
@@ -1315,8 +1269,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: -320, y: 320}
   - id: whiskey_cooldown
-    title: Quick Refill
-    description: -6% whiskey cooldown.
+    title: Drink Wait
+    description: Use the glass again sooner.
     branch: 4
     maxRank: 10
     currency: 0
@@ -1336,8 +1290,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: -480, y: 400}
   - id: whiskey_strength
-    title: Top Shelf
-    description: "+0.25\xD7 boost strength."
+    title: Stronger Boost
+    description: Boost spin speed and earnings further.
     branch: 4
     maxRank: 5
     currency: 0
@@ -1357,8 +1311,8 @@ MonoBehaviour:
     capByStat: 0
     position: {x: -480, y: 240}
   - id: whiskey_mastery
-    title: Whiskey Mastery
-    description: +1 s boost duration per rank. Never maxes out.
+    title: Extra Boost Time
+    description: Add more time to the drink boost.
     branch: 4
     maxRank: 999
     currency: 0

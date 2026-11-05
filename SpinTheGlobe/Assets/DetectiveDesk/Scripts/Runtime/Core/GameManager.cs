@@ -96,8 +96,10 @@ namespace DetectiveDesk.Gameplay
         /// <summary>Recent earnings per second from the globe and pins (≈30 s moving average). Drives case rewards.</summary>
         public double IncomeRate { get; private set; }
 
-        /// <summary>Multiplier on all globe-related earnings: Globe earnings × the golden income multiplier.</summary>
+        /// <summary>Multiplier on spin earnings, including global income bonuses.</summary>
         public double IncomeScale => Stats.Get(StatId.GlobeMultiplier) * Stats.Get(StatId.IncomeMultiplier);
+        /// <summary>Global income bonuses for pins; their own Pay stat supplies pin-specific bonuses.</summary>
+        public double PinIncomeScale => Stats.Get(StatId.IncomeMultiplier);
         bool loaded;
 
         // ------------------------------------------------------------------ lifecycle
@@ -280,11 +282,9 @@ namespace DetectiveDesk.Gameplay
         public bool PurchaseSkill(string id)
         {
             if (!Skills.TryPurchase(Tree, id, Wallet, Stats, out string reason)) { ShowHint(reason); return false; }
-            var node = Tree.Find(id);
             if (globe) globe.EnforceLimits();
             if (PinBox) PinBox.Refresh();
             if (audioManager) audioManager.Click();
-            ShowHint(node.title + (node.maxRank > 1 ? " rank " + Skills.Rank(id) : "") + " unlocked.");
             Notify();
             return true;
         }
@@ -298,6 +298,7 @@ namespace DetectiveDesk.Gameplay
         public void FirePin()
         {
             if (!map) return;
+            if (map.CooldownRemaining > 0 || (UnlockedPins > 0 && map.ReadyCount == 0)) return;
             string problem = map.FireNext();
             if (problem != null) ShowHint(problem);
         }
@@ -491,8 +492,6 @@ namespace DetectiveDesk.Gameplay
             if (PinBox) PinBox.Refresh();
             if (figurines != null) foreach (var f in figurines) if (f) f.RefreshVisual();
             if (audioManager) audioManager.Click();
-            var item = GoldShopCatalog.Find(id);
-            ShowHint(item.title + (item.maxRank > 1 ? " rank " + Shop.Rank(id) : "") + " bought.");
             Notify();
             return true;
         }

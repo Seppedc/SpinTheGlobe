@@ -14,7 +14,7 @@ namespace DetectiveDesk.Progression
         GlobeAutoSpeed = 101,       // degrees / second auto-rotate floor (never above GlobeMaxSpeed)
         GlobeDragPower = 102,       // multiplier on drag acceleration
         GlobeClickPower = 103,      // multiplier on click impulse
-        GlobeMultiplier = 104,      // base multiplier on all globe earnings
+        GlobeMultiplier = 104,      // multiplier on spin earnings only
         IncomeMultiplier = 105,     // multiplier on every income source (golden nodes)
         GlobeAutoShare = 106,       // auto-rotate floor as a share of the max speed (0..1), Clockwork Motor
 

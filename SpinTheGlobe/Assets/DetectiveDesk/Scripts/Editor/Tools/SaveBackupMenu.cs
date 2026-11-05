@@ -15,7 +15,6 @@ namespace DetectiveDesk.Editor
         static string BackupDir => Path.GetFullPath(Path.Combine(Application.dataPath, "..", "Builds", "SaveBackups"));
         static string SavePath => SaveStore.Default.FilePath;
 
-        [MenuItem("Tools/Spin The Globe/Save Backup/Back Up Save File", priority = 300)]
         public static void Backup()
         {
             if (!File.Exists(SavePath)) { Debug.LogWarning("No save file to back up at " + SavePath); return; }
@@ -26,7 +25,6 @@ namespace DetectiveDesk.Editor
             Debug.Log("Save backed up to " + target);
         }
 
-        [MenuItem("Tools/Spin The Globe/Save Backup/Restore Latest Backup", priority = 301)]
         public static void Restore()
         {
             string latest = Path.Combine(BackupDir, "latest.json");
@@ -39,7 +37,5 @@ namespace DetectiveDesk.Editor
             Debug.Log("Save restored from " + latest);
         }
 
-        [MenuItem("Tools/Spin The Globe/Save Backup/Restore Latest Backup", true)]
-        static bool CanRestore() => !EditorApplication.isPlaying;
     }
 }

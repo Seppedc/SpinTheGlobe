@@ -12,22 +12,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16514d9470b54159abee5736b84e692a, type: 3}
   m_Name: GameBalance
   m_EditorClassIdentifier: DetectiveDesk.Runtime::DetectiveDesk.Progression.GameBalance
-  startingMoney: 1000
+  startingMoney: 0
   startingGold: 0
   lootboxCost:
-    baseCost: 1
-    growth: 1
+    baseCost: 150
+    growth: 1.12
     explicitCosts: []
   lootTable:
   - kind: 2
-    weight: 100
+    weight: 30
+  - kind: 4
+    weight: 25
+  - kind: 0
+    weight: 20
+  - kind: 1
+    weight: 15
+  - kind: 3
+    weight: 10
   autosaveInterval: 30
-  revolutionReward: 2.4
+  revolutionReward: 1
+  pinBasePayout: 0.5
   globeTicksPerRevolution: 1
-  impulseReferenceSpeed: 90
-  prestigeThreshold: 25000000
+  impulseReferenceSpeed: 135
+  frictionAt60Hz: 0.9875
+  dragAcceleration: 0.25
+  dragReferencePixelsPerSecond: 900
+  dragMaxSpeedFactor: 1.5
+  clickImpulse: 3
+  dragOverClick: 2.25
+  prestigeThreshold: 57500000
   prestigeGoldScale: 25
   prestigeExponent: 0.5
+  caseBaseEvidence: 3
+  caseRepeatCount: 5
+  caseEvidencePerGroup: 1
+  caseBaseTierLength: 15
+  caseMaxDurabilityRequirement: 5
+  caseBaseReward: 5
+  caseRewardGrowthPerLevel: 0.02
+  caseIncomeSeconds: 1.5
   baseStats:
   - stat: 100
     value: 90
@@ -42,7 +65,7 @@ MonoBehaviour:
   - stat: 200
     value: 0
   - stat: 201
-    value: 4
+    value: 1.8
   - stat: 202
     value: 0.3
   - stat: 203

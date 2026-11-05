@@ -20,11 +20,10 @@ namespace DetectiveDesk.Gameplay
         public void Use()
         {
             if (!game) return;
-            if (!game.Inventory.TryUsePaperBall()) { game.ShowHint("No paper balls. They come from lootboxes."); return; }
+            if (!game.Inventory.TryUsePaperBall()) return;
             double reward = game.Balance.paperBallReward * game.IncomeScale;
             game.CreditIncome(reward);
             if (game.audioManager) game.audioManager.Click();
-            game.ShowHint("Paper ball cashed in: +" + UIFactory.Money(reward));
         }
     }
 }

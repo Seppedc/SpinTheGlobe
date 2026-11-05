@@ -49,7 +49,7 @@ namespace DetectiveDesk.Progression
 
         [Header("Prestige (Retire the agency)")]
         [Tooltip("Money that must be earned in a run before retiring is possible.")]
-        [Min(1)] public double prestigeThreshold = 25_000_000;
+        [Min(1)] public double prestigeThreshold = 57_500_000;
         [Tooltip("Gold for retiring = floor(scale × (earned this run ÷ threshold)^exponent).")]
         [Min(0)] public double prestigeGoldScale = 25;
         [Range(0.1f, 1f)] public double prestigeExponent = 0.5;
@@ -70,40 +70,45 @@ namespace DetectiveDesk.Progression
         public List<StatBase> baseStats = new List<StatBase>(Defaults());
 
         [Header("Globe")]
-        [Range(0.5f, 1)] public float frictionAt60Hz = 0.985f;
+        [Range(0.5f, 1)] public float frictionAt60Hz = 0.9875f;
         [Tooltip("°/s gained per pixel dragged (× Drag Power).")]
-        [Min(0)] public float dragAcceleration = 0.35f;
+        [Min(0)] public float dragAcceleration = 0.25f;
+        [Tooltip("Pointer speed in pixels/second for a full-strength drag. Slower drags give a smaller push.")]
+        [Min(1)] public float dragReferencePixelsPerSecond = 900f;
+        [Tooltip("Maximum multiplier from a very fast flick.")]
+        [Min(1)] public float dragMaxSpeedFactor = 1.5f;
         [Tooltip("Drag and click impulses scale with max speed ÷ this, so spinning by hand stays useful as the globe gets faster.")]
-        [Min(1)] public float impulseReferenceSpeed = 90f;
+        [Min(1)] public float impulseReferenceSpeed = 135f;
         [Tooltip("Payouts per revolution. 1 = only when the globe crosses the red payout line (the rule). Higher values pay in steps between crossings.")]
         [Min(1)] public int globeTicksPerRevolution = 1;
         [Tooltip("°/s gained per click on the globe (× Click Power). Smaller than a good drag.")]
-        [Min(0)] public float clickImpulse = 10f;
+        [Min(0)] public float clickImpulse = 3f;
         [Tooltip("A drag always gives at least this many clicks' worth of speed (with drag power), so dragging beats clicking.")]
-        [Min(1)] public float dragOverClick = 1.5f;
+        [Min(1)] public float dragOverClick = 2.25f;
         [Tooltip("Money for each full revolution past the start line (× Globe Multiplier).")]
-        [Min(0)] public double revolutionReward = 2.4;
+        [Min(0)] public double revolutionReward = 1;
 
         [Header("Pins")]
         [Tooltip("Money each time a pin passes the payout line, before landing bonuses and upgrades.")]
-        [Min(0)] public double pinBasePayout = 3;
-        [Min(1)] public double landMultiplier = 2;
-        [Tooltip("Multiplier at the exact city centre; fades to ×1 at the city radius.")]
-        [Min(1)] public double cityMultiplier = 3;
+        [Min(0)] public double pinBasePayout = 0.5;
         [Min(0.5f)] public float cityRadiusDegrees = 4f;
         [Min(0.05f)] public float pinFlightSeconds = 0.32f;
 
         [Header("Case file")]
         [Min(1)] public int caseBaseEvidence = 3;
-        [Min(0)] public int caseEvidencePerLevel = 2;
-        [Min(1)] public int caseMaxEvidence = 40;
-        [Tooltip("Every N cases the required pin durability level rises by one.")]
-        [Min(1)] public int caseLevelsPerDurabilityStep = 4;
+        [Tooltip("Consecutive cases sharing the same evidence count.")]
+        [Min(1)] public int caseRepeatCount = 5;
+        [Tooltip("Extra evidence after each repeated group. There is no evidence-count cap.")]
+        [Min(0)] public int caseEvidencePerGroup = 1;
+        [Tooltip("Cases in the first Strength tier. Later tiers last 2x, 3x, 4x... this many cases.")]
+        [Min(1)] public int caseBaseTierLength = 15;
         [Min(0)] public int caseMaxDurabilityRequirement = 5;
-        [Tooltip("Minimum case reward: this × case number.")]
-        [Min(0)] public double caseBaseReward = 40;
+        [Tooltip("First case's minimum reward, before income and reward upgrades.")]
+        [Min(0)] public double caseBaseReward = 5;
+        [Tooltip("Small linear increase per solved case, as a fraction of the first case's base reward.")]
+        [Min(0)] public double caseRewardGrowthPerLevel = 0.02;
         [Tooltip("A case pays at least this many seconds of your recent income (globe + pins). Keeps cases relevant all game without exploding.")]
-        [Min(0)] public float caseIncomeSeconds = 12;
+        [Min(0)] public float caseIncomeSeconds = 1.5f;
         [Tooltip("Gold per approved case is CaseGold × (1 + case number / this).")]
         [Min(1)] public float caseGoldLevelDivisor = 10;
         [Tooltip("Highest chance an approved case drops gold (Press Coverage and its upgrades never go above this).")]
@@ -154,7 +159,7 @@ namespace DetectiveDesk.Progression
         /// <summary>Provisional starting values; tune in the asset.</summary>
         public static StatBase[] Defaults() => new[]
         {
-            new StatBase(StatId.GlobeMaxSpeed, 90),        // °/s (10 RPM)
+            new StatBase(StatId.GlobeMaxSpeed, 90),        // °/s (15 RPM); 101 × +7.5 RPM reaches 772.5 RPM
             new StatBase(StatId.GlobeAutoSpeed, 0),
             new StatBase(StatId.GlobeAutoShare, 0),
             new StatBase(StatId.GlobeDragPower, 1),
@@ -163,7 +168,7 @@ namespace DetectiveDesk.Progression
             new StatBase(StatId.IncomeMultiplier, 1),
 
             new StatBase(StatId.PinSlots, 0),              // start with no pins
-            new StatBase(StatId.ShooterCooldown, 4),       // seconds
+            new StatBase(StatId.ShooterCooldown, 1.8),     // seconds; 40 reload ranks reach ~0.027 s
             new StatBase(StatId.PinLandChance, 0.3),       // ≈ Earth's land fraction
             new StatBase(StatId.PinCityChance, 0.05),
             new StatBase(StatId.PinDurability, 1),         // passes before falling off

@@ -11,7 +11,6 @@ namespace DetectiveDesk.Editor
         public const string BalancePath = "Assets/DetectiveDesk/Data/Balance/GameBalance.asset";
         public const string SkillTreePath = "Assets/DetectiveDesk/Data/SkillTree/SkillTree.asset";
 
-        [MenuItem("Tools/Spin The Globe/Create Default Data")]
         public static void CreateDefaults()
         {
             var balance = LoadOrCreate<GameBalance>(BalancePath, out bool balanceIsNew);

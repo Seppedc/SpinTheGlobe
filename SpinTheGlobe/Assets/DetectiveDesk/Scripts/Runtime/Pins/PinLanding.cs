@@ -3,18 +3,17 @@ using UnityEngine;
 
 namespace DetectiveDesk.Gameplay
 {
-    /// <summary>Where a pin landed and how much that spot is worth.</summary>
+    /// <summary>Geographic information only; landing location does not affect payout.</summary>
     public readonly struct PinLanding
     {
         public readonly float Latitude, Longitude;
         public readonly bool OnLand;
         public readonly string NearCity;      // null when not near a city
         public readonly float CityCloseness;  // 1 at the centre, 0 at the radius
-        public readonly double Multiplier;
 
-        public PinLanding(float lat, float lon, bool onLand, string city, float closeness, double multiplier)
+        public PinLanding(float lat, float lon, bool onLand, string city, float closeness)
         {
-            Latitude = lat; Longitude = lon; OnLand = onLand; NearCity = city; CityCloseness = closeness; Multiplier = multiplier;
+            Latitude = lat; Longitude = lon; OnLand = onLand; NearCity = city; CityCloseness = closeness;
         }
 
         public string Describe() =>
@@ -22,11 +21,10 @@ namespace DetectiveDesk.Gameplay
 
         /// <summary>
         /// Random landing spot. With <paramref name="cityChance"/> it aims at a big city; otherwise it
-        /// lands on land with <paramref name="landChance"/>, else at sea. Any spot that happens to be
-        /// close to a city still earns the city bonus.
+        /// lands on land with <paramref name="landChance"/>, else at sea. These affect placement only.
         /// </summary>
         public static PinLanding Sample(System.Random rng, double landChance, double cityChance, float cityRadius,
-            double landMultiplier, double cityMultiplier, float minLatitude, float maxLatitude)
+            float minLatitude, float maxLatitude)
         {
             float lat = 0, lon = 0;
             bool placed = false;
@@ -53,10 +51,10 @@ namespace DetectiveDesk.Gameplay
                     if (LandMask.IsLand(lat, lon) == wantLand) break;
                 }
             }
-            return Evaluate(lat, lon, cityRadius, landMultiplier, cityMultiplier);
+            return Evaluate(lat, lon, cityRadius);
         }
 
-        public static PinLanding Evaluate(float lat, float lon, float cityRadius, double landMultiplier, double cityMultiplier)
+        public static PinLanding Evaluate(float lat, float lon, float cityRadius)
         {
             bool land = LandMask.IsLand(lat, lon);
             string best = null; float bestDistance = float.MaxValue;
@@ -67,8 +65,7 @@ namespace DetectiveDesk.Gameplay
             }
             float closeness = bestDistance < cityRadius ? 1f - bestDistance / cityRadius : 0f;
             if (closeness <= 0) best = null;
-            double m = (land || best != null ? landMultiplier : 1) * (1 + (cityMultiplier - 1) * closeness);
-            return new PinLanding(lat, lon, land || best != null, best, closeness, m);
+            return new PinLanding(lat, lon, land, best, closeness);
         }
 
         /// <summary>Great-circle distance in degrees.</summary>

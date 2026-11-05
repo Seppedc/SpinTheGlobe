@@ -33,7 +33,7 @@ namespace DetectiveDesk.Gameplay
         GameManager game;
         Canvas canvas;
         RectTransform canvasRect, content, tooltip;
-        TextMeshProUGUI moneyText, tipTitle, tipBody, tipStats, tipCost;
+        TextMeshProUGUI moneyText, tipTitle, tipBody, tipStats, tipCost, tipRank;
         readonly Dictionary<string, NodeView> views = new Dictionary<string, NodeView>();
         NodeView hovered;
         float tooltipAge;
@@ -124,7 +124,7 @@ namespace DetectiveDesk.Gameplay
             moneyText.rectTransform.Place(new Vector2(0.5f, 0), new Vector2(1, 1), new Vector2(1, 0.5f), new Vector2(-170, 0), new Vector2(-190, 0));
             UIFactory.NewButton("Close", header, "CLOSE", 18, "close", Close, out _).GetComponent<RectTransform>()
                 .Place(new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(-14, 0), new Vector2(140, 44));
-            UIFactory.NewText("Help", back, "Hover a node to inspect · click to buy · drag to move · scroll to zoom", 16, TextAnchor.LowerLeft, UIFactory.InkDim).rectTransform
+            UIFactory.NewText("Help", back, "Hover: details  ·  Click: buy  ·  Drag: move  ·  Scroll: zoom", 16, TextAnchor.LowerLeft, UIFactory.InkDim).rectTransform
                 .Place(new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(20, 14), new Vector2(900, 24));
 
             BuildTooltip();
@@ -145,8 +145,8 @@ namespace DetectiveDesk.Gameplay
             v.rank.rectTransform.Place(new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0), new Vector2(0, 6), new Vector2(0, 16));
 
             float below = node.IsRoot ? size * 0.71f : size * 0.5f;
-            v.label = UIFactory.NewText("Label " + node.id, labels, "", 13, TextAnchor.UpperCenter, UIFactory.Ink);
-            v.label.rectTransform.Place(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 1), node.position - new Vector2(0, below + 5), new Vector2(150, 40));
+            v.label = UIFactory.NewText("Label " + node.id, labels, "", 16, TextAnchor.UpperCenter, UIFactory.Ink);
+            v.label.rectTransform.Place(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 1), node.position - new Vector2(0, below + 5), new Vector2(150, 48));
             v.label.text = "<mark=#0b0a09E6 padding=\"6,6,2,2\">" + ShortLabel(node) + "</mark>";
 
             if (node.IsRoot)
@@ -182,9 +182,7 @@ namespace DetectiveDesk.Gameplay
 
         static string ShortLabel(SkillNodeData node)
         {
-            string t = node.title ?? node.id;
-            int dot = t.IndexOf(" · ", System.StringComparison.Ordinal);
-            return dot >= 0 ? t.Substring(dot + 3) : t;
+            return (node.title ?? node.id).Replace(" · ", "\n");
         }
 
         static Image Link(RectTransform parent, Vector2 a, Vector2 b)
@@ -218,14 +216,15 @@ namespace DetectiveDesk.Gameplay
             var fitter = card.gameObject.AddComponent<ContentSizeFitter>();
             fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            tipTitle = UIFactory.NewTitle("Title", tooltip, "", 24, TextAnchor.MiddleCenter, UITheme.Gold);
-            tipTitle.gameObject.AddComponent<LayoutElement>().minHeight = 44;
+            tipTitle = UIFactory.NewTitle("Title", tooltip, "", 24, TextAnchor.MiddleLeft, UITheme.Gold);
+            tipTitle.gameObject.AddComponent<LayoutElement>().minHeight = 32;
             var rule = UIFactory.NewImage("Rule", tooltip, UITheme.GoldDim);
             rule.raycastTarget = false;
             rule.gameObject.AddComponent<LayoutElement>().preferredHeight = 1;
 
-            tipBody = Line("Description", 18, UIFactory.Ink, FontStyles.Bold);
-            tipStats = Line("Stats", 16, UIFactory.InkDim, FontStyles.Normal);
+            tipBody = Line("Description", 17, UITheme.CreamDim, FontStyles.Normal);
+            tipStats = Line("Stats", 20, UIFactory.Ink, FontStyles.Bold);
+            tipRank = Line("Level", 15, UITheme.CreamDim, FontStyles.Normal);
             tipCost = Line("Cost", 26, UIFactory.Brass, FontStyles.Normal);
             tipCost.font = UITheme.TmpDisplay;
             tooltip.gameObject.SetActive(false);
@@ -233,7 +232,7 @@ namespace DetectiveDesk.Gameplay
 
         TextMeshProUGUI Line(string name, int size, Color color, FontStyles style)
         {
-            var t = UIFactory.NewText(name, tooltip, "", size, TextAnchor.MiddleCenter, color);
+            var t = UIFactory.NewText(name, tooltip, "", size, TextAnchor.MiddleLeft, color);
             t.fontStyle = style;
             var pad = t.gameObject.AddComponent<LayoutElement>();
             pad.minHeight = size + 6;
@@ -277,9 +276,12 @@ namespace DetectiveDesk.Gameplay
                     if (!maxed) sb.Append("  →  ").Append(StatInfo.Format(m.stat, game.Stats.Preview(m.stat, node.modifiers, 1, m.pinIndex)));
                     sb.Append('\n');
                 }
-            if (node.maxRank >= DefaultSkillTreeFactory.MasteryRanks) sb.Append("Rank ").Append(rank).Append(" · endless");
-            else if (node.maxRank > 1) sb.Append("Rank ").Append(rank).Append(" / ").Append(node.maxRank);
             tipStats.text = sb.ToString().TrimEnd('\n');
+            tipStats.gameObject.SetActive(sb.Length > 0);
+            tipRank.gameObject.SetActive(node.maxRank > 1);
+            tipRank.text = node.maxRank >= DefaultSkillTreeFactory.MasteryRanks
+                ? "Level " + rank
+                : "Level " + rank + " / " + node.maxRank;
 
             string price = node.currency == Currency.Gold
                 ? NumberFormatter.Format(game.Skills.NextCost(node)) + " gold"
@@ -289,7 +291,17 @@ namespace DetectiveDesk.Gameplay
                 case NodeStatus.Maxed: tipCost.text = rank > 0 && node.maxRank == 1 ? "OWNED" : "MAXED"; tipCost.color = new Color(0.55f, 0.8f, 0.45f); tipCost.fontSize = 22; break;
                 case NodeStatus.Available: tipCost.text = price; tipCost.color = new Color(0.55f, 0.85f, 0.45f); tipCost.fontSize = 26; break;
                 case NodeStatus.Unaffordable: tipCost.text = price; tipCost.color = new Color(0.92f, 0.28f, 0.3f); tipCost.fontSize = 26; break;
-                default: tipCost.text = price + "\n<size=15>" + reason + "</size>"; tipCost.color = new Color(0.75f, 0.55f, 0.35f); tipCost.fontSize = 22; break;
+                default:
+                    if (status == NodeStatus.Capped) reason = "Raise " + StatInfo.Name(node.capByStat) + " first.";
+                    else if (status == NodeStatus.Locked && node.prerequisites != null)
+                    {
+                        var missing = new List<string>();
+                        foreach (var id in node.prerequisites)
+                            if (!game.Skills.Owns(id)) missing.Add(game.Tree.Find(id)?.title ?? "an earlier upgrade");
+                        reason = "Needs " + string.Join(", ", missing) + ".";
+                    }
+                    tipCost.text = price + "\n<size=15>" + reason + "</size>";
+                    tipCost.color = new Color(0.75f, 0.55f, 0.35f); tipCost.fontSize = 22; break;
             }
         }
 

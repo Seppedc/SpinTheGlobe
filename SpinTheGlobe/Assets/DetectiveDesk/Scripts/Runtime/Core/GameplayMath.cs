@@ -1,4 +1,5 @@
 using System;
+using DetectiveDesk.Progression;
 using UnityEngine;
 
 namespace DetectiveDesk.Gameplay
@@ -8,6 +9,17 @@ namespace DetectiveDesk.Gameplay
     {
         public static bool Finite(double value) => !double.IsNaN(value) && !double.IsInfinity(value);
         public static double Repeat(double value, double length) => value - Math.Floor(value / length) * length;
+        /// <summary>Scale manual impulses with the globe while retaining the drag/click strength difference.</summary>
+        public static double SpinImpulse(double amount, double power, double maxSpeed, double referenceSpeed) =>
+            amount * power * Math.Max(1, maxSpeed / Math.Max(1, referenceSpeed));
+        /// <summary>Equal distances moved slowly and quickly give different impulses.</summary>
+        public static double DragImpulse(double pixels, double seconds, GameBalance balance, double power, double maxSpeed)
+        {
+            if (!Finite(pixels) || !Finite(seconds) || pixels <= 0 || seconds <= 0) return 0;
+            double speedFactor = Math.Min(balance.dragMaxSpeedFactor,
+                pixels / seconds / Math.Max(1, balance.dragReferencePixelsPerSecond));
+            return SpinImpulse(pixels * balance.dragAcceleration * speedFactor, power, maxSpeed, balance.impulseReferenceSpeed);
+        }
         public static Vector3 Spherical(float latitude, float longitude, float radius)
         {
             double lat = latitude * Math.PI / 180, lon = longitude * Math.PI / 180;
@@ -15,7 +27,8 @@ namespace DetectiveDesk.Gameplay
                 (float)(radius * Math.Sin(lat)), (float)(-radius * Math.Cos(lat) * Math.Cos(lon)));
         }
 
-        // Exact integration of the 60 Hz reference decay, including the auto-floor crossing.
+        // The motor maintains its baseline; friction decays only the manual speed above it.
+        // Integrate the baseline and exponential excess exactly, independent of frame rate.
         public static double Integrate(ref double velocity, double seconds, double friction,
             double floor, double ceiling)
         {
@@ -25,10 +38,10 @@ namespace DetectiveDesk.Gameplay
             friction = Math.Max(.000001, Math.Min(1, friction));
             if (friction >= .999999999) return velocity * seconds;
             double drag = -60 * Math.Log(friction);
-            double movingTime = floor > 0 && velocity > floor ? Math.Min(seconds, Math.Log(velocity / floor) / drag) : seconds;
-            if (velocity <= floor) return floor * seconds;
-            double angle = velocity * (1 - Math.Exp(-drag * movingTime)) / drag + floor * (seconds - movingTime);
-            velocity = Math.Max(floor, velocity * Math.Exp(-drag * seconds));
+            double excess = velocity - floor;
+            double decay = Math.Exp(-drag * seconds);
+            double angle = floor * seconds + excess * (1 - decay) / drag;
+            velocity = floor + excess * decay;
             // No hidden auto-spin: exponentially small unpowered speeds settle completely.
             if (floor == 0 && velocity < .005) velocity = 0;
             return angle;

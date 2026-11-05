@@ -9,23 +9,23 @@ namespace DetectiveDesk.Gameplay
         {
             switch (stat)
             {
-                case StatId.GlobeMaxSpeed: return "Max spin speed";
-                case StatId.GlobeAutoSpeed: return "Auto-rotate";
+                case StatId.GlobeMaxSpeed: return "Spin Limit";
+                case StatId.GlobeAutoSpeed: return "Auto Spin";
                 case StatId.GlobeAutoShare: return "Auto-rotate (share of max speed)";
                 case StatId.GlobeDragPower: return "Drag power";
                 case StatId.GlobeClickPower: return "Click power";
-                case StatId.GlobeMultiplier: return "Globe earnings";
+                case StatId.GlobeMultiplier: return "Spin pay";
                 case StatId.PinSlots: return "Pins";
-                case StatId.ShooterCooldown: return "Shooter reload";
+                case StatId.ShooterCooldown: return "Reload";
                 case StatId.PinLandChance: return "Land chance";
                 case StatId.PinCityChance: return "City chance";
-                case StatId.PinDurability: return "Passes before falling";
+                case StatId.PinDurability: return "Payouts per pin";
                 case StatId.PinPayout: return "Pin payout";
                 case StatId.CasePayout: return "Case reward";
-                case StatId.CaseCooldown: return "Next case after";
+                case StatId.CaseCooldown: return "Case wait";
                 case StatId.CaseAutoStampChance: return "Auto-stamp chance";
                 case StatId.WhiskeyBoostDuration: return "Boost duration";
-                case StatId.WhiskeyCooldown: return "Whiskey cooldown";
+                case StatId.WhiskeyCooldown: return "Drink wait";
                 case StatId.WhiskeyBoostStrength: return "Boost strength";
                 case StatId.StatueGoldFillRate: return "Gold fill speed";
                 case StatId.StatuePayout: return "Statue gold";
@@ -67,6 +67,7 @@ namespace DetectiveDesk.Gameplay
                 case StatId.LootLuck:
                     return "+" + (v * 100).ToString("0.#") + "%";
                 case StatId.ShooterCooldown:
+                    return v.ToString("0.###") + "s";
                 case StatId.CaseCooldown:
                 case StatId.WhiskeyCooldown:
                 case StatId.WhiskeyBoostDuration:

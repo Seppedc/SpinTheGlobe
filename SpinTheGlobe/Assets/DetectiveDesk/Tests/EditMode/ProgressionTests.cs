@@ -38,6 +38,38 @@ namespace DetectiveDesk.Tests
         bool Buy(string id) => state.TryPurchase(tree, id, wallet, stats, out _);
 
         [Test]
+        public void SpinPayUpgrades_DoNotIncreasePinIncome()
+        {
+            var root = new GameObject("Inactive payout test");
+            root.SetActive(false);
+            try
+            {
+                var game = root.AddComponent<Gameplay.GameManager>();
+                balance.ApplyTo(game.Stats);
+                // Global income bonuses must continue to apply to both sources.
+                game.Stats.SetBase(StatId.IncomeMultiplier, 2);
+                double pinBefore = game.PinPayoutMultiplier(0) * game.PinIncomeScale;
+                double spinBefore = game.IncomeScale;
+                var ranks = new System.Collections.Generic.List<Save.SkillRank>();
+                foreach (var id in new[] { "globe_multiplier", "globe_gilded_axis", "globe_mastery" })
+                    ranks.Add(new Save.SkillRank { id = id, rank = 1 });
+                state.Load(tree, ranks);
+                game.Stats.Rebuild(tree, state);
+                Assert.Greater(game.IncomeScale, spinBefore);
+                Assert.AreEqual(pinBefore, game.PinPayoutMultiplier(0) * game.PinIncomeScale, 1e-9);
+                ranks.Add(new Save.SkillRank { id = DefaultSkillTreeFactory.PinPayoutId(1), rank = 1 });
+                state.Load(tree, ranks);
+                game.Stats.Rebuild(tree, state);
+                Assert.Greater(game.PinPayoutMultiplier(0) * game.PinIncomeScale, pinBefore);
+                Assert.AreEqual(pinBefore, game.PinPayoutMultiplier(1) * game.PinIncomeScale, 1e-9);
+                double upgraded = game.PinPayoutMultiplier(0) * game.PinIncomeScale;
+                game.Stats.SetTemporaryMultiplier(StatId.PinPayout, 2);
+                Assert.AreEqual(upgraded * 2, game.PinPayoutMultiplier(0) * game.PinIncomeScale, 1e-9);
+            }
+            finally { Object.DestroyImmediate(root); }
+        }
+
+        [Test]
         public void DefaultTree_IsValid_WithTwelvePinsEachHavingDurabilityAndPayout()
         {
             CollectionAssert.IsEmpty(tree.Validate());
@@ -48,6 +80,24 @@ namespace DetectiveDesk.Tests
                 Assert.IsNotNull(tree.Find(DefaultSkillTreeFactory.PinPayoutId(pin)));
             }
             Assert.AreEqual(1, tree.Nodes.Count(n => n.IsRoot));
+        }
+
+        [Test]
+        public void LocationSkills_AreRemoved_AndOldSavedRanksAreIgnored()
+        {
+            Assert.IsNull(tree.Find("pin_land_chance"));
+            Assert.IsNull(tree.Find("pin_city_chance"));
+            state.Load(tree, new[]
+            {
+                new Save.SkillRank { id = "root", rank = 1 },
+                new Save.SkillRank { id = "pin_land_chance", rank = 5 },
+                new Save.SkillRank { id = "pin_city_chance", rank = 5 },
+            });
+            Assert.IsTrue(state.Owns("root"));
+            Assert.AreEqual(0, state.Rank("pin_land_chance"));
+            Assert.AreEqual(0, state.Rank("pin_city_chance"));
+            Assert.AreEqual(1, state.ToSave().Count);
+            Assert.AreEqual(0, wallet.Money, "removed test upgrades do not grant a refund");
         }
 
         [Test]
@@ -96,7 +146,7 @@ namespace DetectiveDesk.Tests
             var auto = tree.Find("globe_auto");
             CollectionAssert.Contains(auto.prerequisites, DefaultSkillTreeFactory.RootId, "Clockwork Motor is the first upgrade after the root");
             Assert.GreaterOrEqual(auto.maxRank, 30, "lots of levels");
-            Assert.Less(auto.cost.Cost(1) / auto.cost.Cost(0), 1.3, "cheap steps, bought one after another");
+            Assert.LessOrEqual(auto.cost.Cost(1) / auto.cost.Cost(0), 1.3, "cheap steps, bought one after another");
             double step = auto.modifiers[0].valuePerRank;
             int bought = 0;
             while (stats.Get(StatId.GlobeAutoSpeed) + step <= stats.Get(StatId.GlobeMaxSpeed) && bought < auto.maxRank) { Assert.IsTrue(Buy("globe_auto")); bought++; }
@@ -108,16 +158,17 @@ namespace DetectiveDesk.Tests
         }
 
         [Test]
-        public void GreasedBearings_SteadyLevels_ReachAboutTenTimesTheOldTop()
+        public void SpinLimit_SmallSteps_LeaveHeadroomAboveAutoSpin()
         {
             var bearings = tree.Find("globe_max_speed");
-            Assert.GreaterOrEqual(bearings.maxRank, 20, "lots of levels");
+            Assert.GreaterOrEqual(bearings.maxRank, 100, "small steps spread speed gains across the run");
             double start = stats.Get(StatId.GlobeMaxSpeed);
             double one = stats.Preview(StatId.GlobeMaxSpeed, bearings.modifiers, 1);
             double full = stats.Preview(StatId.GlobeMaxSpeed, bearings.modifiers, bearings.maxRank);
             Assert.AreEqual((full - start) / bearings.maxRank, one - start, 1e-9, "every level adds the same amount (no percentage)");
-            Assert.GreaterOrEqual(full / 6.0, 400, "top speed is roughly 10× the old 50 RPM");
-            Assert.LessOrEqual(full / 6.0, 800, "but not overboard");
+            Assert.AreEqual(15, start / 6.0, 1e-9, "half the 30 RPM opening cap");
+            Assert.AreEqual(7.5, (one - start) / 6.0, 1e-9, "gradual speed steps");
+            Assert.AreEqual(772.5, full / 6.0, 1e-9, "manual headroom above the motor's 500 RPM");
         }
 
         [Test]

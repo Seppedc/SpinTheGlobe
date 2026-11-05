@@ -27,8 +27,8 @@ namespace DetectiveDesk.Progression
         {
             var nodes = new List<SkillNodeData>
             {
-                Node(RootId, "Skill Tree Unlock", "Open the detective's ledger of upgrades.", SkillBranch.Root,
-                    1, Money(10, 1), Vector2.zero, null),
+                Node(RootId, "Unlock Upgrades", "Open the skill tree.", SkillBranch.Root,
+                    1, Money(20, 1), Vector2.zero, null),
             };
             BuildGlobe(nodes, Direction(90));
             BuildPins(nodes, Direction(30));
@@ -61,7 +61,6 @@ namespace DetectiveDesk.Progression
                 ["globe_mastery"] = new Vector2(0, 5),
                 // Pins: shooter track
                 ["shooter_cooldown"] = new Vector2(3, -2), ["pin_autoloader"] = new Vector2(3, -3),
-                ["pin_land_chance"] = new Vector2(4, -2), ["pin_city_chance"] = new Vector2(5, -2),
                 ["pin_mastery"] = new Vector2(MaxPins + 2, 0),
                 // Case file
                 ["case_payout"] = new Vector2(-1, 0),
@@ -96,24 +95,22 @@ namespace DetectiveDesk.Progression
         static void BuildGlobe(List<SkillNodeData> n, Vector2 dir)
         {
             Vector2 side = Perpendicular(dir);
-            // Clockwork Motor comes first: it is meant to be the player's first purchase, so the globe keeps
-            // turning (and earning) without constant clicking. 50 cheap levels of +10 RPM, bought one after another;
-            // capped by the max speed, so Greased Bearings opens room for more motor levels.
-            var auto = Add(n, "globe_auto", "Clockwork Motor", "+10 RPM auto-rotate: the globe keeps turning by itself. Never faster than the maximum spin speed (Greased Bearings).",
-                SkillBranch.Globe, 50, Money(10, 1.3), dir * Step, new[] { RootId }, StatModifier.Add(StatId.GlobeAutoSpeed, 60));
+            // Small motor steps ease the opening: 100 levels of +5 RPM, capped by Spin Limit.
+            var auto = Add(n, "globe_auto", "Auto Spin", "Keeps the globe spinning. Limited by Spin Limit.",
+                SkillBranch.Globe, 100, Money(15, 1.16), dir * Step, new[] { RootId }, StatModifier.Add(StatId.GlobeAutoSpeed, 30));
             auto.capStat = StatId.GlobeAutoSpeed; auto.capByStat = StatId.GlobeMaxSpeed;
-            // 25 steady levels of +20 RPM each: 15 → 515 RPM at level 25 (about 10× the old top speed), spread over the run.
-            Add(n, "globe_max_speed", "Greased Bearings", "+20 RPM maximum spin speed. Drag, click and auto-rotate all scale with it.",
-                SkillBranch.Globe, 25, Money(40, 1.75), dir * Step * 2, new[] { "globe_auto" }, StatModifier.Add(StatId.GlobeMaxSpeed, 120));
-            Add(n, "globe_drag", "Firm Grip", "+30% speed gained from dragging. (Dragging always beats clicking at the same upgrade level.)",
+            // Extra headroom keeps hand dragging useful above the motor's 500 RPM ceiling.
+            Add(n, "globe_max_speed", "Spin Limit", "Raise the top spin speed.",
+                SkillBranch.Globe, 101, Money(20, 1.16), dir * Step * 2, new[] { "globe_auto" }, StatModifier.Add(StatId.GlobeMaxSpeed, 45));
+            Add(n, "globe_drag", "Stronger Drag", "Gain more speed from dragging.",
                 SkillBranch.Globe, 5, Money(12, 1.8), dir * Step * 1.5f + side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeDragPower, 0.3));
-            Add(n, "globe_click", "Flick of the Wrist", "+20% speed gained from clicking.",
+            Add(n, "globe_click", "Stronger Click", "Gain more speed from clicking.",
                 SkillBranch.Globe, 5, Money(12, 1.8), dir * Step * 1.5f - side * Step, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeClickPower, 0.2));
-            Add(n, "globe_multiplier", "Cartographer's Cut", "+25% globe earnings (turns and pins).",
+            Add(n, "globe_multiplier", "Spin Pay", "Earn more from spins.",
                 SkillBranch.Globe, 25, Money(110, 1.42), dir * Step * 3, new[] { "globe_max_speed" }, StatModifier.Percent(StatId.GlobeMultiplier, 0.25));
-            Add(n, "globe_gilded_axis", "Gilded Axis", "Doubles all globe earnings.",
+            Add(n, "globe_gilded_axis", "Double Spin Pay", "Double spin earnings.",
                 SkillBranch.Globe, 1, Money(5e6, 1), dir * Step * 4, new[] { "globe_multiplier" }, StatModifier.Multiply(StatId.GlobeMultiplier, 2));
-            Add(n, "globe_mastery", "Globe Mastery", "+5% globe earnings per rank, compounding. Never maxes out.",
+            Add(n, "globe_mastery", "Spin Bonus", "Earn 5% more from spins.",
                 SkillBranch.Globe, MasteryRanks, Money(2e6, 1.25), dir * Step * 5, new[] { "globe_gilded_axis" }, StatModifier.Multiply(StatId.GlobeMultiplier, 1.05));
         }
 
@@ -126,78 +123,74 @@ namespace DetectiveDesk.Progression
                 int index = pin - 1;
                 double price = PinPrice(pin);
                 Vector2 at = dir * Step * pin;
-                Add(n, PinId(pin), $"Pin {pin}", $"Adds pin #{pin} to the pin box.",
+                Add(n, PinId(pin), $"Pin {pin}", $"Unlock pin {pin} for the shooter.",
                     SkillBranch.Pins, 1, Money(price, 1), at, new[] { previous }, StatModifier.Add(StatId.PinSlots, 1));
-                Add(n, PinDurabilityId(pin), $"Pin {pin} · Durability", $"Pin #{pin} survives one more pass under the payout line.",
+                Add(n, PinDurabilityId(pin), $"Pin {pin} · Strength", "Survive one more payout.",
                     SkillBranch.Pins, 5, Money(price * 1.5, 1.6), at + side * Step * 0.55f, new[] { PinId(pin) }, StatModifier.Add(StatId.PinDurability, 1, index));
-                Add(n, PinPayoutId(pin), $"Pin {pin} · Payout", $"+50% payout from pin #{pin}.",
+                Add(n, PinPayoutId(pin), $"Pin {pin} · Pay", "Earn more from this pin.",
                     SkillBranch.Pins, 10, Money(price * 1.25, 1.45), at - side * Step * 0.55f, new[] { PinId(pin) }, StatModifier.Percent(StatId.PinPayout, 0.5, index));
                 previous = PinId(pin);
             }
-            // Shooter and landing upgrades run on a parallel track beside the pin chain.
+            // Shooter upgrades run on a parallel track beside the pin chain.
             Vector2 track = side * Step * 1.45f;
-            // 15 ranks × -6% = -90% at most (above -95% the stat floor would make the last ranks useless).
-            Add(n, "shooter_cooldown", "Oiled Spring", "-6% pin shooter reload time.",
-                SkillBranch.Pins, 15, Money(15, 1.45), dir * Step * 1.5f + track, new[] { PinId(1) }, StatModifier.Percent(StatId.ShooterCooldown, -0.06));
-            Add(n, "pin_land_chance", "Steady Aim", "+8% chance a pin lands on land (land pays ×2).",
-                SkillBranch.Pins, 5, Money(50, 1.9), dir * Step * 2.5f + track, new[] { PinId(2) }, StatModifier.Add(StatId.PinLandChance, 0.08));
-            Add(n, "pin_city_chance", "Big City Lights", "+5% chance a pin lands near a big city (up to ×6).",
-                SkillBranch.Pins, 5, Money(200, 2.0), dir * Step * 3.5f + track, new[] { "pin_land_chance" }, StatModifier.Add(StatId.PinCityChance, 0.05));
-            Add(n, "pin_autoloader", "Auto-loader", "The shooter fires a pin by itself whenever one is ready.",
+            // Multiplicative reductions keep every rank useful beyond the percentage-stat floor.
+            Add(n, "shooter_cooldown", "Faster Reload", "Reload 10% faster each level.",
+                SkillBranch.Pins, 40, Money(5, 1.14), dir * Step * 1.5f + track, new[] { PinId(1) }, StatModifier.Multiply(StatId.ShooterCooldown, 0.9));
+            Add(n, "pin_autoloader", "Auto Fire", "Shoot ready pins automatically.",
                 SkillBranch.Pins, 1, Money(50000, 1), dir * Step * 4.5f + track, new[] { "shooter_cooldown" }, StatModifier.Add(StatId.PinAutoFire, 1));
-            Add(n, "pin_mastery", "Pin Mastery", "+5% payout for every pin per rank, compounding. Never maxes out.",
+            Add(n, "pin_mastery", "All Pin Pay", "Multiply every pin payout by 1.05.",
                 SkillBranch.Pins, MasteryRanks, Money(5e6, 1.25), dir * Step * (MaxPins + 1), new[] { PinId(MaxPins) }, StatModifier.Multiply(StatId.PinPayout, 1.05));
         }
 
         static void BuildCaseFile(List<SkillNodeData> n, Vector2 dir)
         {
             Vector2 side = Perpendicular(dir);
-            Add(n, "case_payout", "Bigger Retainers", "+25% money from approved cases.",
+            Add(n, "case_payout", "Case Pay", "Earn more from solved cases.",
                 SkillBranch.CaseFile, 10, Money(60, 1.7), dir * Step, new[] { RootId }, StatModifier.Percent(StatId.CasePayout, 0.25));
-            Add(n, "case_cooldown", "Efficient Paperwork", "-7% wait before the next case opens.",
+            Add(n, "case_cooldown", "Case Wait", "Open the next case sooner.",
                 SkillBranch.CaseFile, 10, Money(75, 1.7), dir * Step * 2 + side * Step * 0.6f, new[] { "case_payout" }, StatModifier.Percent(StatId.CaseCooldown, -0.07));
-            Add(n, "case_autostamp", "Rubber-Stamp Clerk", "+5% chance a full case stamps itself.",
+            Add(n, "case_autostamp", "Auto Stamp", "Chance to stamp a full case automatically.",
                 SkillBranch.CaseFile, 10, Money(250, 1.7), dir * Step * 2 - side * Step * 0.6f, new[] { "case_payout" }, StatModifier.Add(StatId.CaseAutoStampChance, 0.05));
-            Add(n, "case_cold_cases", "Cold Cases", "Every case needs one less piece of evidence.",
+            Add(n, "case_cold_cases", "Less Evidence", "Solve each case with fewer clues.",
                 SkillBranch.CaseFile, 3, Money(1000, 3), dir * Step * 3 + side * Step * 0.6f, new[] { "case_cooldown" }, StatModifier.Add(StatId.CaseEvidenceReduction, 1));
-            Add(n, "case_headlines", "Front Page News", "+1% chance an approved case drops gold (needs Press Coverage from the Gold shop). Never above 10%.",
+            Add(n, "case_headlines", "Case Gold", "More chance of gold from solved cases. Max 10%.",
                 SkillBranch.CaseFile, 8, Money(5000, 1.9), dir * Step * 3 - side * Step * 0.6f, new[] { "case_autostamp" }, StatModifier.Add(StatId.CaseGoldChance, 0.01)).requiresUnlock = GoldShopCatalog.PressCoverage;
-            Add(n, "case_mastery", "Case Mastery", "+5% case rewards per rank, compounding. Never maxes out.",
+            Add(n, "case_mastery", "Case Pay Bonus", "Multiply case rewards by 1.05.",
                 SkillBranch.CaseFile, MasteryRanks, Money(1e6, 1.25), dir * Step * 4, new[] { "case_cold_cases" }, StatModifier.Multiply(StatId.CasePayout, 1.05));
         }
 
         static void BuildStatues(List<SkillNodeData> n, Vector2 dir)
         {
             Vector2 side = Perpendicular(dir);
-            Add(n, "statue_gold_fill", "Molten Pour", "+20% gold fill speed from globe spins.",
+            Add(n, "statue_gold_fill", "Faster Gold Fill", "Statues fill with gold faster.",
                 SkillBranch.Statues, 10, Money(150, 1.6), dir * Step, new[] { RootId }, StatModifier.Percent(StatId.StatueGoldFillRate, 0.2)).requiresUnlock = GoldShopCatalog.Statue1;
-            Add(n, "statue_payout", "Heavier Gold", "+25% gold from smashed statues.",
+            Add(n, "statue_payout", "Statue Gold", "Earn more gold when smashing statues.",
                 SkillBranch.Statues, 10, Money(250, 1.6), dir * Step * 2, new[] { "statue_gold_fill" }, StatModifier.Percent(StatId.StatuePayout, 0.25)).requiresUnlock = GoldShopCatalog.Statue1;
-            Add(n, "statue_mastery", "Statue Mastery", "+5% statue gold per rank, compounding. Never maxes out.",
+            Add(n, "statue_mastery", "Statue Gold Bonus", "Multiply statue gold rewards by 1.05.",
                 SkillBranch.Statues, MasteryRanks, Money(1e6, 1.25), dir * Step * 3, new[] { "statue_payout" }, StatModifier.Multiply(StatId.StatuePayout, 1.05)).requiresUnlock = GoldShopCatalog.Statue1;
         }
 
         static void BuildLootbox(List<SkillNodeData> n, Vector2 dir)
         {
             Vector2 side = Perpendicular(dir);
-            Add(n, "loot_bulk", "Bulk Order", "-6% lootbox price.",
+            Add(n, "loot_bulk", "Cheaper Boxes", "Pay less for each lootbox.",
                 SkillBranch.Lootbox, 5, Money(300, 2), dir * Step, new[] { RootId }, StatModifier.Percent(StatId.LootboxPrice, -0.06));
-            Add(n, "loot_luck", "Lucky Charm", "+20% odds for statue pieces and gold.",
+            Add(n, "loot_luck", "Better Loot", "Better odds of gold and statue pieces.",
                 SkillBranch.Lootbox, 5, Money(500, 2), dir * Step * 2, new[] { "loot_bulk" }, StatModifier.Add(StatId.LootLuck, 0.2));
-            Add(n, "loot_mastery", "Lootbox Mastery", "+5% lootbox luck per rank. Never maxes out.",
+            Add(n, "loot_mastery", "More Loot Luck", "Further improve gold and statue piece odds.",
                 SkillBranch.Lootbox, MasteryRanks, Money(1e6, 1.25), dir * Step * 3, new[] { "loot_luck" }, StatModifier.Add(StatId.LootLuck, 0.05));
         }
 
         static void BuildWhiskey(List<SkillNodeData> n, Vector2 dir)
         {
             Vector2 side = Perpendicular(dir);
-            Add(n, "whiskey_duration", "Slow Sipper", "+2 s boost duration.",
+            Add(n, "whiskey_duration", "Longer Boost", "Keep the drink boost active longer.",
                 SkillBranch.Whiskey, 10, Money(70, 1.55), dir * Step, new[] { RootId }, StatModifier.Add(StatId.WhiskeyBoostDuration, 2));
-            Add(n, "whiskey_cooldown", "Quick Refill", "-6% whiskey cooldown.",
+            Add(n, "whiskey_cooldown", "Drink Wait", "Use the glass again sooner.",
                 SkillBranch.Whiskey, 10, Money(85, 1.55), dir * Step * 2 + side * Step * 0.6f, new[] { "whiskey_duration" }, StatModifier.Percent(StatId.WhiskeyCooldown, -0.06));
-            Add(n, "whiskey_strength", "Top Shelf", "+0.25× boost strength.",
+            Add(n, "whiskey_strength", "Stronger Boost", "Boost spin speed and earnings further.",
                 SkillBranch.Whiskey, 5, Money(400, 2.2), dir * Step * 2 - side * Step * 0.6f, new[] { "whiskey_duration" }, StatModifier.Add(StatId.WhiskeyBoostStrength, 0.25));
-            Add(n, "whiskey_mastery", "Whiskey Mastery", "+1 s boost duration per rank. Never maxes out.",
+            Add(n, "whiskey_mastery", "Extra Boost Time", "Add more time to the drink boost.",
                 SkillBranch.Whiskey, MasteryRanks, Money(1e6, 1.25), dir * Step * 3 - side * Step * 0.6f, new[] { "whiskey_strength" }, StatModifier.Add(StatId.WhiskeyBoostDuration, 1));
         }
 

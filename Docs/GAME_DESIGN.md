@@ -38,13 +38,15 @@ Globe revolutions ─► gold fill in completed statues ─► smash with hammer
 - The shooter fires pins from the pin box to **random** spots on the wall map. There is no aiming.
 - Each map pin is mirrored at the same latitude/longitude on the globe.
 - Each time a pin passes the payout line, the player is paid and the pin loses 1 strength. At 0 strength the pin falls off the map, and that fallen pin becomes evidence for the case file.
-- **Landing bonuses:** land pays more than sea; landing near a big city pays more; the *chance* of each can be upgraded.
-- **Upgrades:** shooter cooldown, land chance and city chance.
+- **Location-neutral payout:** sea, land and city locations pay the same. Pin Pay and global income bonuses apply. Spin Pay upgrades affect spins only.
+- **Upgrades:** shooter cooldown, auto-fire, per-pin Strength and Pay. Location-chance skills are removed.
 - **Pins:** the player starts with 0. They are unlocked one at a time up to 12. Each pin has its own **durability** and **payout** ranks.
 
 ### 3.3 Case file (second income)
 - One folder on the desk, empty at the start. Each pin that falls off adds a clue (sheet, photo, memo) and the folder thickens.
-- A case is done when it reaches its threshold. Later cases only accept pins of a minimum durability level.
+- A case is done when it reaches its evidence threshold. Five consecutive cases share each threshold: 3 clues for cases 1-5, then 4 for 6-10, then 5 for 11-15, continuing without an evidence cap.
+- Cases 1-15 accept any pin. Cases 16-45 require Strength 1+, 46-90 require Strength 2+, then tiers last 60 and 75 cases. Strength 5+ is the final requirement; cases continue indefinitely.
+- Base money starts at EUR 5 and grows by EUR 0.10 per case before upgrades. The income-linked minimum is 1.5 seconds of recent income. Both are half the preceding settings. The brass case plate displays `Evidence: collected/required` while a case is open, and a `NEXT CASE` countdown during cooldown.
 - When a case is full, the player presses the stamp: it stamps the folder physically, SOLVED appears in red, the folder slides away and a new empty one drops in.
 - After that there is a cooldown before the next case opens.
 - **Upgrades:** payout, cooldown, auto-stamp chance, and ★ Press Coverage (gold-drop chance, hard cap 10%).
@@ -63,7 +65,7 @@ Globe revolutions ─► gold fill in completed statues ─► smash with hammer
 - Bought with money. Loot: ice cube, gold, statue piece, paper ball (pays out instantly for now), money (a fraction of the price or a jackpot).
 
 ### 3.7 Skill tree
-- One root node, **Skill Tree Unlock**, with branches Globe, Pins, Case File, Whiskey, Statues and Lootbox on a clean grid (72 nodes).
+- One root node, **Skill Tree Unlock**, with branches Globe, Pins, Case File, Whiskey, Statues and Lootbox on a clean grid (63 nodes).
 - Nodes appear as soon as one of their prerequisites is owned. Pins branch: Pin 1 → Pin 12 chain, each pin with Durability and Payout side nodes.
 - The data is in `Data/SkillTree/SkillTree.asset`. To generate it, use **Tools ▸ Spin The Globe ▸ Create Default Data**.
 

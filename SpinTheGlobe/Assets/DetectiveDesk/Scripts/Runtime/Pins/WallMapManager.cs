@@ -38,11 +38,12 @@ namespace DetectiveDesk.Gameplay
         readonly List<GameObject> flightObjects = new List<GameObject>();
         readonly Queue<GameObject> dropped = new Queue<GameObject>();
         readonly System.Random rng = new System.Random();
+        readonly PinShooterCycle cycle = new PinShooterCycle();
         Quaternion launcherRest;
         Vector3 launcherPosition;
         float recoil;
 
-        public float CooldownRemaining { get; private set; }
+        public float CooldownRemaining => (float)cycle.CooldownRemaining;
         public int ActiveCount => active.Count;
         public int DroppedCount { get; private set; }
         public int LaunchedCount { get; private set; }
@@ -75,22 +76,26 @@ namespace DetectiveDesk.Gameplay
 
         void Update()
         {
-            if (CooldownRemaining > 0) CooldownRemaining = Mathf.Max(0, CooldownRemaining - Time.deltaTime);
+            cycle.Advance(Time.deltaTime);
             if (launcherVisual && recoil > 0)
             {
                 recoil = Mathf.MoveTowards(recoil, 0, Time.deltaTime * 5);
                 launcherVisual.localRotation = launcherRest * Quaternion.Euler(-3 * recoil, 0, 0);
                 launcherVisual.localPosition = launcherPosition + Vector3.back * .025f * recoil;
             }
-            if (game && !game.WorldInputBlocked && Input.GetKeyDown(KeyCode.Space)) game.FirePin();
             // Auto-loader upgrade: fire by itself whenever a pin is ready.
-            if (game && CooldownRemaining <= 0 && game.Stats.Get(StatId.PinAutoFire) >= 1 && ReadyCount > 0) FireNext();
+            // Carry the fractional reload time across shots so fast reloads also work at 30 FPS.
+            if (game && game.Stats.Get(StatId.PinAutoFire) >= 1)
+                for (int shot = 0; shot < DefaultSkillTreeFactory.MaxPins && cycle.Ready && ReadyCount > 0; shot++)
+                    if (FireNext() != null) break;
+            cycle.DiscardOverdueTime();
+            if (game && !game.WorldInputBlocked && Input.GetKeyDown(KeyCode.Space)) game.FirePin();
         }
 
         public double PayoutFor(PinInstance pin)
         {
             if (!game || !pin) return 0;
-            return game.Balance.pinBasePayout * pin.Landing.Multiplier * game.PinPayoutMultiplier(pin.Index) * game.IncomeScale;
+            return game.Balance.pinBasePayout * game.PinPayoutMultiplier(pin.Index) * game.PinIncomeScale;
         }
 
         /// <summary>Fire the next ready pin. Returns null on success or a message explaining why not.</summary>
@@ -102,26 +107,22 @@ namespace DetectiveDesk.Gameplay
                 ? "Buy Pin 1 in the skill tree (T) to load the shooter."
                 : "Unlock the skill tree (T), then buy your first pin.";
             if (CooldownRemaining > 0) return "Shooter reloading… " + CooldownRemaining.ToString("0.0") + "s";
-            int index = -1;
-            for (int i = 0; i < unlocked; i++) if (!busy.Contains(i)) { index = i; break; }
+            int index = cycle.TakeNextReady(unlocked, busy);
             if (index < 0) return "All your pins are on the map. They come back when they fall off.";
 
             var b = game.Balance;
             var landing = PinLanding.Sample(rng, game.Stats.Get(StatId.PinLandChance), game.Stats.Get(StatId.PinCityChance),
-                b.cityRadiusDegrees, b.landMultiplier, b.cityMultiplier, minimumLatitude, maximumLatitude);
-            CooldownRemaining = (float)game.Stats.Get(StatId.ShooterCooldown);
+                b.cityRadiusDegrees, minimumLatitude, maximumLatitude);
+            cycle.Reload(game.Stats.Get(StatId.ShooterCooldown));
             Launch(index, landing);
 
             // Twin Barrel: chance to fire a second ready pin in the same shot.
             if (rng.NextDouble() < game.Stats.Get(StatId.PinDoubleShotChance))
             {
-                for (int i = 0; i < unlocked; i++)
-                    if (!busy.Contains(i))
-                    {
-                        Launch(i, PinLanding.Sample(rng, game.Stats.Get(StatId.PinLandChance), game.Stats.Get(StatId.PinCityChance),
-                            b.cityRadiusDegrees, b.landMultiplier, b.cityMultiplier, minimumLatitude, maximumLatitude));
-                        break;
-                    }
+                int second = cycle.TakeNextReady(unlocked, busy);
+                if (second >= 0)
+                    Launch(second, PinLanding.Sample(rng, game.Stats.Get(StatId.PinLandChance), game.Stats.Get(StatId.PinCityChance),
+                        b.cityRadiusDegrees, minimumLatitude, maximumLatitude));
             }
             return null;
         }
@@ -167,8 +168,6 @@ namespace DetectiveDesk.Gameplay
             instance.Initialize(this, index, landing, marker, passes, meridian.NextPass(marker.transform.position));
             active.Add(instance);
             if (yarn) yarn.Rebuild(active, mapNormal);
-            game.ShowHint("Pin " + (index + 1) + " landed " + landing.Describe() + ": " + UIFactory.Money(PayoutFor(instance)) +
-                          " per pass, " + passes + " pass" + (passes == 1 ? "" : "es") + ".");
             game.Notify();
         }
 

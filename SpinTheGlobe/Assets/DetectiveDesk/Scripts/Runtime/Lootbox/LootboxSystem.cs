@@ -27,7 +27,7 @@ namespace DetectiveDesk.Gameplay
         {
             if (!game) return false;
             double price = Price;
-            if (!game.TrySpend(price)) { game.ShowHint("A lootbox costs " + UIFactory.Money(price) + "."); return false; }
+            if (!game.TrySpend(price)) return false;
             Opened++;
             var result = Apply(Roll(), price);
             // Double Box: chance of a second reward from the same box.
@@ -37,7 +37,6 @@ namespace DetectiveDesk.Gameplay
                 result = new LootOpened(result.Kind, result.Amount, result.Description + " DOUBLE BOX! Also " + second.Description);
             }
             if (game.audioManager) game.audioManager.Click();
-            game.ShowHint("Lootbox: " + result.Description);
             Rolled?.Invoke(result);
             EventBus.Publish(result);
             game.Notify();

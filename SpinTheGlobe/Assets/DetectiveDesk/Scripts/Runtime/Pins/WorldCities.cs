@@ -1,6 +1,6 @@
 namespace DetectiveDesk.Gameplay
 {
-    /// <summary>Major world cities used for the "near a big city" pin bonus.</summary>
+    /// <summary>Major world cities used for geographic pin placement and labels.</summary>
     public static class WorldCities
     {
         public readonly struct City

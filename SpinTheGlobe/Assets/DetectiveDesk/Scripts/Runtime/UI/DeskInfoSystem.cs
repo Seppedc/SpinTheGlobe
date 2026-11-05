@@ -76,7 +76,7 @@ namespace DetectiveDesk.Gameplay
                 Vector3 p = new Vector3(b.min.x - plateSize.x * 0.6f, b.min.y, b.min.z + plateSize.y * 2f);
                 Add("Case file", p, () => cases.OnCooldown
                     ? "NEXT CASE " + UIFactory.Seconds(cases.Cooldown)
-                    : "CASE " + (cases.Level + 1) + "  ·  " + cases.Evidence + " / " + cases.Required + "  ·  " + UIFactory.Money(cases.Reward));
+                    : cases.EvidenceLabel);
             }
             if (cases && cases.StampTransform)
                 Add("Stamp", InFront(cases.StampTransform), () => cases.IsFull && !cases.OnCooldown ? "STAMP!" : null);
@@ -194,7 +194,7 @@ namespace DetectiveDesk.Gameplay
             var cam = game.GameCamera;
             bool hidden = !cam || !map || game.UnlockedPins == 0 || (game.TreeView && game.TreeView.IsOpen);
             float cd = map ? map.CooldownRemaining : 0;
-            float total = Mathf.Max(0.05f, (float)game.Stats.Get(DetectiveDesk.Progression.StatId.ShooterCooldown));
+            float total = Mathf.Max(0.001f, (float)game.Stats.Get(DetectiveDesk.Progression.StatId.ShooterCooldown));
             if (cd > 0)
             {
                 ringFill.fillAmount = 1 - Mathf.Clamp01(cd / total);

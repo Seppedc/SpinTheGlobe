@@ -45,7 +45,7 @@ namespace DetectiveDesk.Gameplay
         float shownLevel;              // 0..1 as drawn
         readonly List<GameObject> ice = new List<GameObject>();
 
-        static readonly StatId[] Boosted = { StatId.GlobeMultiplier, StatId.GlobeMaxSpeed };   // auto-rotate follows the max speed
+        static readonly StatId[] Boosted = { StatId.GlobeMultiplier, StatId.PinPayout, StatId.GlobeMaxSpeed };   // auto-rotate follows the max speed
 
         public void Initialize(GameManager owner)
         {

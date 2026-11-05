@@ -9,7 +9,7 @@ namespace DetectiveDesk.Editor
     /// editor can't show, such as window mode and resolution.</summary>
     public static class BuildMenu
     {
-        [MenuItem("Tools/Spin The Globe/Build Windows (test)", priority = 200)]
+        [MenuItem("File/Build Spin The Globe Windows (test)", priority = 200)]
         public static void BuildWindows()
         {
             string dir = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "Builds", "Windows"));
