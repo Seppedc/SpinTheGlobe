@@ -1,9 +1,15 @@
 # Spin The Globe - Economy and pacing
 
-Updated 2026-11-04. The player assets are the source of truth:
+Less Friction replaces Stronger Drag: ten levels reduce the speed-loss rate
+by 15% each. Existing owned levels carry over. See [LESS_FRICTION_UPGRADE.md](LESS_FRICTION_UPGRADE.md).
+
+Money upgrade prices round to the nearest EUR 5 after evaluating their curves.
+See [ROUNDED_UPGRADE_PRICES.md](ROUNDED_UPGRADE_PRICES.md) for current examples.
+
+Updated 2026-11-06. Current price curves and bulk-buy behavior are documented in [ECONOMY_REBALANCE.md](ECONOMY_REBALANCE.md). The player assets are the source of truth:
 `SpinTheGlobe/Assets/DetectiveDesk/Data/Balance/GameBalance.asset` and
 `SpinTheGlobe/Assets/DetectiveDesk/Data/SkillTree/SkillTree.asset`.
-The tree currently has 63 nodes; more ranks do not add more nodes.
+The tree currently has 64 nodes; more ranks do not add more nodes.
 
 ## Current targets
 
@@ -22,11 +28,11 @@ The tree currently has 63 nodes; more ranks do not add more nodes.
 | Base globe payout | EUR 1 per payout-line crossing |
 | Payout ticks per revolution | 1 |
 | Starting spin limit | 15 RPM (90 degrees/s) |
-| Auto Spin | 100 ranks, +5 RPM each, EUR 15 x 1.16^rank |
-| Spin Limit | 101 ranks, +7.5 RPM each, EUR 20 x 1.16^rank |
+| Auto Spin | 100 ranks, +5 RPM each, explicit prices from EUR 22 to EUR 86,750 (opening rises by EUR 10, then accelerates) |
+| Spin Limit | 101 ranks, +7.5 RPM each, explicit prices from EUR 24 to EUR 107,385 (opening rises by EUR 10, then accelerates) |
 | Fully upgraded spin limit | 772.5 RPM |
 | Fully upgraded Auto Spin | 500 RPM, capped by Spin Limit |
-| Unlock Upgrades | EUR 20 |
+| Unlock Upgrades | EUR 10 |
 | First pin | EUR 10 |
 
 The speed limit leaves headroom for dragging instead of being a speed that clicks
@@ -37,16 +43,24 @@ are retained. Whiskey can temporarily raise the unboosted limit further.
 ## Manual input feel
 
 The corrected opening cap is 15 RPM: half of the earlier 30 RPM value.
-Dragging now uses pointer speed as well as distance, replacing the distance-only
-push that could wind the globe to max even during a slow drag.
+Dragging is one press-to-release gesture. Only release adds a boost; movement
+while held never accumulates impulses. Net forward displacement determines the
+distance contribution, weighted by average pointer speed.
 
 - Click impulse remains 3 degrees/s (0.5 RPM initially).
-- Drag acceleration is 0.25 degrees/s per pixel, weighted by pointer speed /
-  900 pixels/s. The speed multiplier is capped at 1.5 for very fast flicks.
-- A 200px movement over 0.2 seconds requests about 9.3 RPM before friction;
-  the same distance over 2 seconds requests about 0.9 RPM before friction.
-  The release minimum can gently top up a very small drag; it does not set speed
-  to the cap. Long slow drags also remain gentle while held.
+- Drag acceleration remains 0.25 degrees/s per reference pixel, weighted by
+  net pointer speed / 900 reference pixels/s, capped at a 1.5 speed multiplier.
+- Net forward displacement must reach 32 reference pixels. Its distance
+  contribution caps at 200. Reference pixels are normalized to a 1920-wide
+  viewport, so smaller/larger game windows have equivalent relative gestures.
+- A single release adds at most half the current speed limit, including Drag
+  Power. A 200-reference-pixel swipe over 0.2 seconds adds up to 7.5 RPM at the
+  opening cap; the same distance over two seconds adds about 0.9 RPM.
+- Backtracking does not charge power. Returning to the starting position after
+  a large movement gives neither a drag boost nor a click. The unconditional
+  minimum drag top-up is removed. Small clicks retain their normal impulse.
+- See [GLOBE_SWIPE_INPUT.md](GLOBE_SWIPE_INPUT.md) for cancellation behavior and
+  the changed-file list.
 - Stronger Drag and manual scaling (max speed / 135 degrees/s, minimum x1)
   still apply, so upgraded quick flicks can become stronger later in a run.
 - Friction stays at 0.9875 per 60 Hz step. It now decays only the extra speed
@@ -66,6 +80,7 @@ push that could wind the globe to max even during a slow drag.
 - Globe payout: EUR 1 x spin earnings x all income.
 - Pin payout: EUR 0.50 x that pin's payout x all income.
 - Landing location does not affect payout: sea, land and cities pay the same.
+- Case Files costs EUR 30 once per run and requires Pin 1 and the root. Before purchase, cases do not collect evidence or pay money/gold. The existing case upgrade chain now starts behind this unlock; all prior upgrade prices are retained.
 - Case money: max(EUR 5 x (1 + completed cases x 0.02) x all income,
   1.5 seconds of recent globe/pin income) x case reward multiplier. The base and
   income-linked payouts are half the preceding setup (one eighth of the original
@@ -98,23 +113,35 @@ bonuses add together before multiplicative bonuses and temporary whiskey buffs.
 
 ## Shooter
 
-Faster Reload has 40 ranks, each multiplying reload by 0.9.
-Price: EUR 5 x 1.14^rank; all 40 ranks total EUR 6,731.
-Reload: 1.8 s initially, 0.371 s at rank 15, 0.076 s at rank 30, 0.027 s at rank 40.
+Faster Reload has 40 ranks, each multiplying reload by 0.88 (12% less reload time).
+Price: first six ranks EUR 10, 15, 23, 34, 51, 76; later prices ceil(76 x 1.15^(ownedRank - 5)). All 40 ranks total EUR 67,117; final rank EUR 8,802. Auto Fire costs EUR 350.
+Reload: 4.5 s initially, 3.960 s at rank 1, 2.375 s at rank 5,
+1.253 s at rank 10, 0.661 s at rank 15, 0.097 s at rank 30 and 0.027 s at rank 40.
+At the starting 15 RPM limit, a one-pass pin returns within about 4.32 seconds,
+so base reload now limits early firing and the first purchases have a clearer
+benefit. See [RELOAD_OPENING.md](RELOAD_OPENING.md) for the firing comparison.
 Pins fire in rotation, including Twin Barrel's second pin. Fractional reload time
 carries across frames; waiting for pins cannot store a burst of overdue shots.
 
 `python Tools/shooter_sim.py` models flight, first crossings and frame timing.
 At 772.5 RPM, maximum reload, any landing location and one-pass pins, three pins sustain
-about 8.18 shots/s and twelve sustain 31.81 shots/s. Corresponding pin income is
-EUR 4.08/s and EUR 15.86/s, before upgrades. Globe-only income is EUR 12.88/s.
+about 8.18 shots/s and twelve sustain 31.77 shots/s. Corresponding pin income is
+EUR 4.08/s and EUR 15.84/s, before upgrades. Globe-only income is EUR 12.88/s.
 These are numerical estimates, not measured rendering/physics performance.
+
+Current price pass: late globe speed upgrades use the accelerating curves; pin unlock prices grow
+by 1.7 per pin, with independent Strength and Pay curves. See
+[ECONOMY_REBALANCE.md](ECONOMY_REBALANCE.md) for exact curves and measurements.
+The older [UPGRADE_PRICE_REVIEW.md](UPGRADE_PRICE_REVIEW.md) is historical.
+Bulk Buy 1 / 5 / 10 controls buy up to the selected amount, respecting funds,
+maximum ranks, prerequisites and permanent speed caps. The tooltip shows the
+actual quantity, total price and resulting stat.
 
 ## Retirement and permanent progression
 
-Retirement unlocks at EUR 57.5M earned this run. Reward:
-`floor(25 x sqrt(run earnings / 57.5M))`.
-EUR 57.5M earns 25 retirement gold; EUR 230M earns 50. Lootbox rewards and other
+Retirement unlocks at EUR 15,000 earned this run; this is not a wallet fee. Reward:
+`floor(25 x sqrt(run earnings / 15,000))`.
+EUR 15,000 earns 25 retirement gold; EUR 60,000 earns 50. Lootbox rewards and other
 money credits count toward run earnings. Starting cash does not.
 
 Retirement resets money, normal skills, pins, cases, whiskey, lootbox prices and
@@ -284,3 +311,5 @@ Validation: 80/80 EditMode tests passed (Logs/spin-only-pay-editmode.xml),
 tree validation found no errors, Python model compiled and git diff --check
 passed. The gameplay scene was not saved or modified. Pacing projections have
 not been recalibrated after this income reduction.
+
+Current pin progression: each of the 12 pins has 20 Strength and 20 Pay levels. Existing early prices are retained; levels 11-20 use 15% price growth. Case Wait now starts at EUR 60 (20% lower base). See ECONOMY_REBALANCE.md for the new limits and validation; earlier run timings predate these changes.

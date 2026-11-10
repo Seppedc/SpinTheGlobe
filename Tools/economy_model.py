@@ -14,8 +14,12 @@ SNAPSHOT = Path(__file__).with_name('economy_snapshot.json')
 
 def cost(curve, rank):
     explicit = curve.get('explicitCosts') or []
-    return math.ceil(explicit[rank] if rank < len(explicit)
-                     else curve['baseCost'] * curve['growth'] ** rank)
+    price = math.ceil(explicit[rank] if rank < len(explicit)
+                      else curve['baseCost'] * curve['growth'] ** rank)
+    step = curve.get('roundingStep', 1)
+    if price <= 0 or step <= 1:
+        return price
+    return max(step, math.floor(price / step + .5) * step)
 
 
 class Economy:
@@ -60,7 +64,7 @@ class Economy:
         s, durability, payout = self.sheet(ranks, shop_ranks, prestiges)
         b = self.b
         speed = max(min(s[100], s[101]), min(1, self.activity * s[102] ** .4) * s[100])
-        uptime = s[400] / (s[400] + s[401] + 10)
+        uptime = s[400] / (s[400] + s[401] + 10) if dict(shop_ranks).get('unlock_whiskey') else 0
         boost = 1 + (s[402] - 1) * uptime
         turns = speed / 360
         scale = s[104] * s[105] * boost
@@ -81,8 +85,10 @@ class Economy:
             remaining -= length
             requirement += 1
         eligible = sum(ranks[self.index[f'pin_{p+1:02}_durability']] >= requirement for p in range(pins)) / max(1, pins)
-        evidence = launches * eligible
+        evidence = launches * eligible if s.get(306, 0) >= 1 else 0
         reward = max(b['caseBaseReward'] * (1 + level * b['caseRewardGrowthPerLevel']) * s[105], b['caseIncomeSeconds'] * (globe + pin_income)) * s[300]
+        if s.get(306, 0) < 1:
+            return globe + pin_income, 0, 0, need, 0, turns, s
         wait = max(s[301], 2.8) + 1.5 * (1 - min(1, s[302]))
         return globe + pin_income, reward / (need / max(evidence, 1e-9) + wait), evidence, need, reward, turns, s
 

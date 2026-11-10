@@ -23,6 +23,40 @@ namespace DetectiveDesk
         public int SkinIndex => skinIndex;
         public Renderer EnamelHeadRenderer => ResolveEnamelHead();
         public IReadOnlyList<Material> SkinMaterials => skinMaterials;
+        public int StrengthRank { get; private set; } = -1;
+        public Color DisplayColor => StrengthRank >= 0 ? strengthColor :
+            skinMaterials[skinIndex] ? skinMaterials[skinIndex].GetColor("_BaseColor") : Color.white;
+        Color strengthColor;
+        float strengthMetallic;
+        bool illuminated;
+        MaterialPropertyBlock strengthProperties;
+
+        /// <summary>Override only this pin's enamel; the needle and shared materials stay intact.</summary>
+        public void SetStrengthAppearance(int rank, Color color, float metallic)
+        {
+            StrengthRank = rank;
+            strengthColor = color;
+            strengthMetallic = metallic;
+            ApplyStrengthAppearance();
+        }
+
+        public void SetIlluminated(bool value)
+        {
+            illuminated = value;
+            if (StrengthRank >= 0) ApplyStrengthAppearance();
+        }
+
+        void ApplyStrengthAppearance()
+        {
+            var head = ResolveEnamelHead();
+            if (!head) return;
+            if (strengthProperties == null) strengthProperties = new MaterialPropertyBlock();
+            head.GetPropertyBlock(strengthProperties, enamelMaterialSlot);
+            strengthProperties.SetColor("_BaseColor", strengthColor);
+            strengthProperties.SetFloat("_Metallic", strengthMetallic);
+            strengthProperties.SetColor("_EmissionColor", illuminated ? strengthColor * .65f : Color.black);
+            head.SetPropertyBlock(strengthProperties, enamelMaterialSlot);
+        }
 
         void Awake() { ApplySkin(skinIndex, true); }
 
@@ -69,6 +103,8 @@ namespace DetectiveDesk
                 head.sharedMaterials = slots;
             }
             skinIndex = index;
+            StrengthRank = -1;
+            head.SetPropertyBlock(null, enamelMaterialSlot);
             return true;
         }
 

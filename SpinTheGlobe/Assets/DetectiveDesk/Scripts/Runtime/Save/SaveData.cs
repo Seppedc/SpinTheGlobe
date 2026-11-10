@@ -17,6 +17,7 @@ namespace DetectiveDesk.Save
         public int version = CurrentVersion;
         public long savedAtUnixSeconds;
         public double playTimeSeconds;
+        public List<string> completedGuidance = new List<string>();
 
         // Economy
         public double money;

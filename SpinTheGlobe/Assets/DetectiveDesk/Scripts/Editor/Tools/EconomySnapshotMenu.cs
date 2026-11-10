@@ -24,7 +24,9 @@ namespace DetectiveDesk.Editor
         sealed class Snapshot
         {
             public int version = 1;
+            public int layoutRevision;
             public SkillNodeData[] skills;
+            public SkillSectionData[] sections;
             public ShopEntry[] shop;
             public double[] seedMoney;
             public int startingMotorRanks;
@@ -40,10 +42,14 @@ namespace DetectiveDesk.Editor
             balance.ApplyTo(stats);
             var snapshot = new Snapshot
             {
+                layoutRevision = tree.layoutRevision,
                 skills = tree.Nodes.ToArray(),
+                sections = tree.Sections.ToArray(),
                 shop = GoldShopCatalog.Items.Select(i => new ShopEntry
                 {
-                    id = i.id, requires = i.requires, maxRank = i.maxRank, cost = i.cost, modifiers = i.modifiers,
+                    id = i.id, requires = i.requires, maxRank = i.maxRank,
+                    cost = i.id == GoldShopCatalog.Whiskey ? new CostCurve(balance.whiskeyUnlockGoldCost, 1) : i.cost,
+                    modifiers = i.modifiers,
                 }).ToArray(),
                 seedMoney = GoldShopCatalog.SeedMoneyAmounts, startingMotorRanks = GoldShopCatalog.WoundClockworkRanks,
                 bases = Enum.GetValues(typeof(StatId)).Cast<StatId>().Where(s => s != StatId.None)

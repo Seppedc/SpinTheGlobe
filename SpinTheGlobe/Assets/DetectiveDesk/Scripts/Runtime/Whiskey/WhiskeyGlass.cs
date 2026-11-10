@@ -23,6 +23,11 @@ namespace DetectiveDesk.Gameplay
         public bool IceInGlass { get; private set; }
         /// <summary>The drinking animation is playing (clicks are ignored).</summary>
         public bool Drinking { get; private set; }
+        public bool Unlocked => game && game.Shop.Owns(GoldShopCatalog.Whiskey);
+
+        [Header("Drink objects (resolved by name when unassigned)")]
+        public Transform glassModel, glassInteraction, glassRim;
+        public Transform bottleModel, bottleInteraction, bottleCap;
 
         [Tooltip("Seconds the whiskey takes to rise to the next step after a click.")]
         public float pourSeconds = 0.25f;
@@ -52,15 +57,21 @@ namespace DetectiveDesk.Gameplay
             game = owner;
             // The authored model (Generated_WhiskeyGlass) is what the player sees; the older "Whiskey glass"
             // placeholder and its rim still carry the click collider, so all of them are clickable and move together.
-            var model = ClickRouter.FindByName("Generated_WhiskeyGlass");
-            var placeholder = ClickRouter.FindByName("Whiskey glass", "WhiskeyGlass");
-            var rim = ClickRouter.FindByName("Glass rim");
+            if (!glassModel) glassModel = FindDrinkObject("Generated_WhiskeyGlass");
+            if (!glassInteraction) glassInteraction = FindDrinkObject("Whiskey glass") ?? FindDrinkObject("WhiskeyGlass");
+            if (!glassRim) glassRim = FindDrinkObject("Glass rim");
+            if (!bottleModel) bottleModel = FindDrinkObject("Generated_WhiskeyBottle");
+            if (!bottleInteraction) bottleInteraction = FindDrinkObject("Whiskey bottle");
+            if (!bottleCap) bottleCap = FindDrinkObject("Bottle cap");
+            var model = glassModel;
+            var placeholder = glassInteraction;
+            var rim = glassRim;
             glass = model ? model : placeholder;
             block = new MaterialPropertyBlock();
-            if (!glass) return;
+            if (!glass) { RefreshUnlock(); return; }
 
             foreach (var t in new[] { glass, placeholder, rim })
-                if (t && !carried.Contains(t)) { carried.Add(t); game.Clicks.Register(t, Sip); }
+                if (t && !carried.Contains(t)) { carried.Add(t); if (game.Clicks) game.Clicks.Register(t, Sip); }
             var glow = new List<Renderer>();
             foreach (var t in glass.GetComponentsInChildren<Transform>(true))
             {
@@ -85,12 +96,39 @@ namespace DetectiveDesk.Gameplay
             }
             shownLevel = Boosting ? 0 : Fill;
             ApplyLiquid(shownLevel);
+            RefreshUnlock();
+        }
+
+        Transform FindDrinkObject(string objectName)
+        {
+            foreach (var t in FindObjectsByType<Transform>(FindObjectsInactive.Include))
+                if (t.gameObject.scene == game.gameObject.scene && t.name == objectName) return t;
+            return null;
+        }
+
+        public void RefreshUnlock()
+        {
+            bool visible = Unlocked;
+            foreach (var t in new[] { glassModel, glassInteraction, glassRim, bottleModel, bottleInteraction, bottleCap })
+                if (t && t.gameObject.activeSelf != visible) t.gameObject.SetActive(visible);
+            if (!visible)
+            {
+                if (Drinking) StopAllCoroutines();
+                if (Boosting) foreach (var stat in Boosted) game.Stats.SetTemporaryMultiplier(stat, 1);
+                Fill = BoostRemaining = Cooldown = 0;
+                Drinking = false;
+                IceInGlass = false;
+                shownLevel = 0;
+                ApplyLiquid(0);
+                foreach (var cube in ice) if (cube) cube.SetActive(false);
+                if (game && game.globe) game.globe.EnforceLimits();
+            }
         }
 
         /// <summary>Click on the glass: pour one step.</summary>
         public void Sip()
         {
-            if (!game || Drinking) return;
+            if (!Unlocked || Drinking) return;
             if (Boosting) { game.ShowHint("Boost active: " + UIFactory.Seconds(BoostRemaining) + " left."); return; }
             if (Cooldown > 0) { game.ShowHint("The glass is empty. Refill in " + UIFactory.Seconds(Cooldown) + "."); return; }
             if (Fill <= 0 && !IceInGlass && game.Inventory.TryUseIce()) { IceInGlass = true; game.ShowHint("Ice cube added: the glass fills faster."); }
@@ -170,6 +208,7 @@ namespace DetectiveDesk.Gameplay
 
         void StartBoost()
         {
+            if (!Unlocked) return;
             Fill = 0;
             BoostRemaining = (float)game.Stats.Get(StatId.WhiskeyBoostDuration);
             double strength = game.Stats.Permanent(StatId.WhiskeyBoostStrength);
@@ -192,7 +231,7 @@ namespace DetectiveDesk.Gameplay
 
         void Update()
         {
-            if (!game) return;
+            if (!Unlocked) return;
             if (BoostRemaining > 0) { BoostRemaining -= Time.deltaTime; if (BoostRemaining <= 0) { BoostRemaining = 0; EndBoost(); } }
             else if (Cooldown > 0 && !Drinking)
             {
@@ -249,7 +288,7 @@ namespace DetectiveDesk.Gameplay
         /// <summary>Testing only: ends any boost/cooldown and fills the glass to one pour from full.</summary>
         public void DevAlmostFull()
         {
-            if (!game || Drinking) return;
+            if (!Unlocked || Drinking) return;
             if (Boosting) { BoostRemaining = 0; foreach (var s in Boosted) game.Stats.SetTemporaryMultiplier(s, 1); }
             Cooldown = 0;
             Fill = Mathf.Max(0, 1 - game.Balance.whiskeyFillPerClick);

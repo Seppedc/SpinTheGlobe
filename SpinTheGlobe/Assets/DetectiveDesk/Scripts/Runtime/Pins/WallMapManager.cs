@@ -36,6 +36,7 @@ namespace DetectiveDesk.Gameplay
         readonly List<PinInstance> active = new List<PinInstance>();
         readonly HashSet<int> busy = new HashSet<int>();          // pins in flight or on the board
         readonly List<GameObject> flightObjects = new List<GameObject>();
+        readonly Dictionary<PinSkin, int> flightPins = new Dictionary<PinSkin, int>();
         readonly Queue<GameObject> dropped = new Queue<GameObject>();
         readonly System.Random rng = new System.Random();
         readonly PinShooterCycle cycle = new PinShooterCycle();
@@ -130,6 +131,7 @@ namespace DetectiveDesk.Gameplay
         void Launch(int index, PinLanding landing)
         {
             busy.Add(index);
+            game.Guidance.Complete(PlayerGuidanceState.PinFire);
             if (game.PinBox) game.PinBox.Refresh();
             StartCoroutine(Flight(index, landing));
         }
@@ -143,10 +145,12 @@ namespace DetectiveDesk.Gameplay
 
         IEnumerator Flight(int index, PinLanding landing)
         {
-            int skin = index % PinSkin.SkinCount;
+            const int skin = 0;
             Vector3 destination = GeographicPoint(landing.Latitude, landing.Longitude);
             Vector3 start = muzzle ? muzzle.position : destination + mapNormal;
             var visual = PinVisual.Create(pinPrefab, runtimeRoot, start, mapNormal, boardPinLength, skin);
+            game.ApplyPinAppearance(visual, index);
+            flightPins.Add(visual, index);
             flightObjects.Add(visual.gameObject); LaunchedCount++; recoil = 1;
             if (game.audioManager) game.audioManager.Launch();
             float seconds = game ? game.Balance.pinFlightSeconds : flightSeconds, elapsed = 0;
@@ -157,11 +161,14 @@ namespace DetectiveDesk.Gameplay
                 yield return null;
             }
             flightObjects.Remove(visual.gameObject); visual.transform.position = destination;
+            flightPins.Remove(visual);
 
             var markerGO = new GameObject("Globe marker / pin " + (index + 1));
             var marker = markerGO.AddComponent<GlobePinMarker>(); marker.Initialize(globe, landing.Latitude, landing.Longitude);
             Vector3 outward = (marker.transform.position - globe.Center).normalized;
-            marker.Illuminate(PinVisual.Create(pinPrefab, marker.transform, marker.transform.position, outward, markerLength, skin));
+            var markerVisual = PinVisual.Create(pinPrefab, marker.transform, marker.transform.position, outward, markerLength, skin);
+            game.ApplyPinAppearance(markerVisual, index);
+            marker.Illuminate(markerVisual);
 
             var instance = visual.gameObject.AddComponent<PinInstance>();
             int passes = game.PinPasses(index);
@@ -187,6 +194,18 @@ namespace DetectiveDesk.Gameplay
 
         public PinInstance[] ActivePinsSnapshot() => active.ToArray();
 
+        public void RefreshPinAppearance()
+        {
+            if (!game) return;
+            foreach (var flight in flightPins) game.ApplyPinAppearance(flight.Key, flight.Value);
+            foreach (var pin in active)
+            {
+                if (!pin) continue;
+                game.ApplyPinAppearance(pin.GetComponent<PinSkin>(), pin.Index);
+                if (pin.Marker) game.ApplyPinAppearance(pin.Marker.GetComponentInChildren<PinSkin>(), pin.Index);
+            }
+        }
+
         public void Unregister(PinInstance pin)
         {
             active.Remove(pin);
@@ -208,6 +227,7 @@ namespace DetectiveDesk.Gameplay
             StopAllCoroutines();
             foreach (var pin in flightObjects) if (pin) Destroy(pin);
             flightObjects.Clear();
+            flightPins.Clear();
             busy.Clear();
             foreach (var p in active) if (p) busy.Add(p.Index);
             if (launcherVisual) { launcherVisual.localRotation = launcherRest; launcherVisual.localPosition = launcherPosition; }

@@ -1,5 +1,6 @@
 {
     "version": 1,
+    "layoutRevision": 2,
     "skills": [
         {
             "id": "root",
@@ -9,9 +10,10 @@
             "maxRank": 1,
             "currency": 0,
             "cost": {
-                "baseCost": 20.0,
+                "baseCost": 9.5,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [],
             "modifiers": [],
@@ -31,9 +33,111 @@
             "maxRank": 100,
             "currency": 0,
             "cost": {
-                "baseCost": 15.0,
-                "growth": 1.16,
-                "explicitCosts": []
+                "baseCost": 20.9,
+                "growth": 1.0,
+                "explicitCosts": [
+                    21.0,
+                    31.0,
+                    40.0,
+                    50.0,
+                    59.0,
+                    70.0,
+                    79.0,
+                    91.0,
+                    104.0,
+                    119.0,
+                    137.0,
+                    159.0,
+                    185.0,
+                    214.0,
+                    249.0,
+                    291.0,
+                    338.0,
+                    392.0,
+                    454.0,
+                    523.0,
+                    601.0,
+                    688.0,
+                    785.0,
+                    892.0,
+                    1009.0,
+                    1140.0,
+                    1280.0,
+                    1434.0,
+                    1601.0,
+                    1782.0,
+                    1976.0,
+                    2186.0,
+                    2412.0,
+                    2652.0,
+                    2909.0,
+                    3185.0,
+                    3477.0,
+                    3787.0,
+                    4117.0,
+                    4465.0,
+                    4834.0,
+                    5224.0,
+                    5634.0,
+                    6065.0,
+                    6519.0,
+                    6997.0,
+                    7497.0,
+                    8021.0,
+                    8570.0,
+                    9144.0,
+                    9744.0,
+                    10370.0,
+                    11022.0,
+                    11702.0,
+                    12409.0,
+                    13147.0,
+                    13911.0,
+                    14706.0,
+                    15532.0,
+                    16388.0,
+                    17275.0,
+                    18195.0,
+                    19147.0,
+                    20131.0,
+                    21149.0,
+                    22203.0,
+                    23290.0,
+                    24413.0,
+                    25572.0,
+                    26767.0,
+                    27999.0,
+                    29269.0,
+                    30577.0,
+                    31923.0,
+                    33309.0,
+                    34736.0,
+                    36202.0,
+                    37710.0,
+                    39259.0,
+                    40850.0,
+                    42484.0,
+                    44162.0,
+                    45884.0,
+                    47649.0,
+                    49459.0,
+                    51317.0,
+                    53219.0,
+                    55168.0,
+                    57165.0,
+                    59209.0,
+                    61302.0,
+                    63444.0,
+                    65636.0,
+                    67877.0,
+                    70169.0,
+                    72514.0,
+                    74909.0,
+                    77357.0,
+                    79858.0,
+                    82413.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "root"
@@ -50,8 +154,8 @@
             "capStat": 101,
             "capByStat": 100,
             "position": {
-                "x": 0.0,
-                "y": 160.0
+                "x": -240.0,
+                "y": 480.0
             }
         },
         {
@@ -62,12 +166,115 @@
             "maxRank": 101,
             "currency": 0,
             "cost": {
-                "baseCost": 20.0,
-                "growth": 1.16,
-                "explicitCosts": []
+                "baseCost": 22.799999999999998,
+                "growth": 1.0,
+                "explicitCosts": [
+                    23.0,
+                    33.0,
+                    42.0,
+                    52.0,
+                    61.0,
+                    74.0,
+                    85.0,
+                    99.0,
+                    114.0,
+                    133.0,
+                    154.0,
+                    181.0,
+                    211.0,
+                    247.0,
+                    289.0,
+                    339.0,
+                    396.0,
+                    460.0,
+                    534.0,
+                    617.0,
+                    711.0,
+                    816.0,
+                    931.0,
+                    1061.0,
+                    1201.0,
+                    1357.0,
+                    1526.0,
+                    1711.0,
+                    1911.0,
+                    2128.0,
+                    2362.0,
+                    2613.0,
+                    2884.0,
+                    3173.0,
+                    3481.0,
+                    3811.0,
+                    4162.0,
+                    4535.0,
+                    4930.0,
+                    5348.0,
+                    5791.0,
+                    6258.0,
+                    6750.0,
+                    7269.0,
+                    7813.0,
+                    8386.0,
+                    8987.0,
+                    9615.0,
+                    10275.0,
+                    10963.0,
+                    11683.0,
+                    12433.0,
+                    13217.0,
+                    14032.0,
+                    14881.0,
+                    15766.0,
+                    16683.0,
+                    17638.0,
+                    18628.0,
+                    19655.0,
+                    20720.0,
+                    21824.0,
+                    22966.0,
+                    24148.0,
+                    25369.0,
+                    26633.0,
+                    27938.0,
+                    29285.0,
+                    30676.0,
+                    32110.0,
+                    33589.0,
+                    35112.0,
+                    36682.0,
+                    38299.0,
+                    39961.0,
+                    41673.0,
+                    43433.0,
+                    45242.0,
+                    47101.0,
+                    49010.0,
+                    50972.0,
+                    52984.0,
+                    55050.0,
+                    57169.0,
+                    59341.0,
+                    61569.0,
+                    63853.0,
+                    66192.0,
+                    68588.0,
+                    71041.0,
+                    73552.0,
+                    76123.0,
+                    78753.0,
+                    81443.0,
+                    84193.0,
+                    87006.0,
+                    89881.0,
+                    92818.0,
+                    95820.0,
+                    98885.0,
+                    102016.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
-                "globe_auto"
+                "root"
             ],
             "modifiers": [
                 {
@@ -81,30 +288,31 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 0.0,
-                "y": 320.0
+                "x": -80.0,
+                "y": 480.0
             }
         },
         {
             "id": "globe_drag",
-            "title": "Stronger Drag",
-            "description": "Gain more speed from dragging.",
+            "title": "Less Friction",
+            "description": "Lose spin speed 15% slower per level.",
             "branch": 1,
-            "maxRank": 5,
+            "maxRank": 10,
             "currency": 0,
             "cost": {
-                "baseCost": 12.0,
+                "baseCost": 11.399999999999999,
                 "growth": 1.8,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
-                "globe_max_speed"
+                "root"
             ],
             "modifiers": [
                 {
-                    "stat": 102,
-                    "kind": 1,
-                    "valuePerRank": 0.3,
+                    "stat": 107,
+                    "kind": 2,
+                    "valuePerRank": 0.85,
                     "pinIndex": -1
                 }
             ],
@@ -112,8 +320,8 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": -160.0,
-                "y": 320.0
+                "x": 80.0,
+                "y": 480.0
             }
         },
         {
@@ -124,12 +332,13 @@
             "maxRank": 5,
             "currency": 0,
             "cost": {
-                "baseCost": 12.0,
+                "baseCost": 11.399999999999999,
                 "growth": 1.8,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
-                "globe_max_speed"
+                "root"
             ],
             "modifiers": [
                 {
@@ -143,8 +352,8 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 160.0,
-                "y": 320.0
+                "x": 240.0,
+                "y": 480.0
             }
         },
         {
@@ -155,9 +364,36 @@
             "maxRank": 25,
             "currency": 0,
             "cost": {
-                "baseCost": 110.0,
-                "growth": 1.42,
-                "explicitCosts": []
+                "baseCost": 47.5,
+                "growth": 1.4,
+                "explicitCosts": [
+                    48.0,
+                    95.0,
+                    190.0,
+                    266.0,
+                    373.0,
+                    522.0,
+                    731.0,
+                    1023.0,
+                    1431.0,
+                    2004.0,
+                    2805.0,
+                    3927.0,
+                    5497.0,
+                    7695.0,
+                    10773.0,
+                    15082.0,
+                    21114.0,
+                    29559.0,
+                    41382.0,
+                    57934.0,
+                    81108.0,
+                    113551.0,
+                    158971.0,
+                    222559.0,
+                    311581.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "globe_max_speed"
@@ -174,8 +410,8 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 0.0,
-                "y": 480.0
+                "x": -80.0,
+                "y": 640.0
             }
         },
         {
@@ -186,9 +422,10 @@
             "maxRank": 1,
             "currency": 0,
             "cost": {
-                "baseCost": 5000000.0,
+                "baseCost": 4750.0,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "globe_multiplier"
@@ -205,8 +442,8 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 0.0,
-                "y": 640.0
+                "x": -80.0,
+                "y": 800.0
             }
         },
         {
@@ -217,9 +454,10 @@
             "maxRank": 999,
             "currency": 0,
             "cost": {
-                "baseCost": 2000000.0,
+                "baseCost": 1900000.0,
                 "growth": 1.25,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "globe_gilded_axis"
@@ -236,8 +474,8 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 0.0,
-                "y": 800.0
+                "x": -80.0,
+                "y": 960.0
             }
         },
         {
@@ -248,9 +486,10 @@
             "maxRank": 1,
             "currency": 0,
             "cost": {
-                "baseCost": 10.0,
+                "baseCost": 9.5,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "root"
@@ -267,21 +506,43 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 320.0,
+                "x": 480.0,
                 "y": 0.0
             }
         },
         {
             "id": "pin_01_durability",
             "title": "Pin 1 · Strength",
-            "description": "Survive one more payout.",
+            "description": "Lasts one extra turn.",
             "branch": 2,
-            "maxRank": 5,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 15.0,
-                "growth": 1.6,
-                "explicitCosts": []
+                "baseCost": 14.25,
+                "growth": 1.8,
+                "explicitCosts": [
+                    15.0,
+                    26.0,
+                    47.0,
+                    84.0,
+                    151.0,
+                    270.0,
+                    486.0,
+                    874.0,
+                    1571.0,
+                    2828.0,
+                    3534.0,
+                    4418.0,
+                    5522.0,
+                    6902.0,
+                    8627.0,
+                    10784.0,
+                    13479.0,
+                    16849.0,
+                    21061.0,
+                    26326.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_01"
@@ -298,7 +559,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 320.0,
+                "x": 480.0,
                 "y": 160.0
             }
         },
@@ -307,12 +568,34 @@
             "title": "Pin 1 · Pay",
             "description": "Earn more from this pin.",
             "branch": 2,
-            "maxRank": 10,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 12.5,
-                "growth": 1.45,
-                "explicitCosts": []
+                "baseCost": 14.25,
+                "growth": 1.6,
+                "explicitCosts": [
+                    15.0,
+                    23.0,
+                    38.0,
+                    59.0,
+                    95.0,
+                    151.0,
+                    240.0,
+                    383.0,
+                    613.0,
+                    980.0,
+                    1127.0,
+                    1296.0,
+                    1490.0,
+                    1713.0,
+                    1971.0,
+                    2266.0,
+                    2605.0,
+                    2997.0,
+                    3446.0,
+                    3963.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_01"
@@ -329,7 +612,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 320.0,
+                "x": 480.0,
                 "y": -160.0
             }
         },
@@ -341,9 +624,10 @@
             "maxRank": 1,
             "currency": 0,
             "cost": {
-                "baseCost": 72.0,
+                "baseCost": 37.05,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_01"
@@ -360,21 +644,43 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 480.0,
+                "x": 640.0,
                 "y": 0.0
             }
         },
         {
             "id": "pin_02_durability",
             "title": "Pin 2 · Strength",
-            "description": "Survive one more payout.",
+            "description": "Lasts one extra turn.",
             "branch": 2,
-            "maxRank": 5,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 108.0,
-                "growth": 1.6,
-                "explicitCosts": []
+                "baseCost": 21.375,
+                "growth": 1.8,
+                "explicitCosts": [
+                    22.0,
+                    39.0,
+                    70.0,
+                    126.0,
+                    226.0,
+                    405.0,
+                    728.0,
+                    1310.0,
+                    2356.0,
+                    4241.0,
+                    5301.0,
+                    6626.0,
+                    8282.0,
+                    10353.0,
+                    12940.0,
+                    16175.0,
+                    20218.0,
+                    25273.0,
+                    31591.0,
+                    39488.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_02"
@@ -391,7 +697,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 480.0,
+                "x": 640.0,
                 "y": 160.0
             }
         },
@@ -400,12 +706,34 @@
             "title": "Pin 2 · Pay",
             "description": "Earn more from this pin.",
             "branch": 2,
-            "maxRank": 10,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 90.0,
-                "growth": 1.45,
-                "explicitCosts": []
+                "baseCost": 21.375,
+                "growth": 1.6,
+                "explicitCosts": [
+                    22.0,
+                    35.0,
+                    56.0,
+                    89.0,
+                    141.0,
+                    225.0,
+                    360.0,
+                    574.0,
+                    919.0,
+                    1470.0,
+                    1691.0,
+                    1943.0,
+                    2235.0,
+                    2570.0,
+                    2955.0,
+                    3399.0,
+                    3908.0,
+                    4494.0,
+                    5168.0,
+                    5944.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_02"
@@ -422,7 +750,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 480.0,
+                "x": 640.0,
                 "y": -160.0
             }
         },
@@ -434,9 +762,10 @@
             "maxRank": 1,
             "currency": 0,
             "cost": {
-                "baseCost": 259.20000000000007,
+                "baseCost": 62.699999999999999,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_02"
@@ -453,21 +782,43 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 640.0,
+                "x": 800.0,
                 "y": 0.0
             }
         },
         {
             "id": "pin_03_durability",
             "title": "Pin 3 · Strength",
-            "description": "Survive one more payout.",
+            "description": "Lasts one extra turn.",
             "branch": 2,
-            "maxRank": 5,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 388.80000000000009,
-                "growth": 1.6,
-                "explicitCosts": []
+                "baseCost": 32.0625,
+                "growth": 1.8,
+                "explicitCosts": [
+                    33.0,
+                    58.0,
+                    105.0,
+                    188.0,
+                    338.0,
+                    607.0,
+                    1091.0,
+                    1964.0,
+                    3534.0,
+                    6361.0,
+                    7951.0,
+                    9938.0,
+                    12423.0,
+                    15528.0,
+                    19410.0,
+                    24262.0,
+                    30327.0,
+                    37909.0,
+                    47386.0,
+                    59232.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_03"
@@ -484,7 +835,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 640.0,
+                "x": 800.0,
                 "y": 160.0
             }
         },
@@ -493,12 +844,34 @@
             "title": "Pin 3 · Pay",
             "description": "Earn more from this pin.",
             "branch": 2,
-            "maxRank": 10,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 324.00000000000008,
-                "growth": 1.45,
-                "explicitCosts": []
+                "baseCost": 32.0625,
+                "growth": 1.6,
+                "explicitCosts": [
+                    33.0,
+                    52.0,
+                    83.0,
+                    133.0,
+                    211.0,
+                    337.0,
+                    539.0,
+                    861.0,
+                    1378.0,
+                    2204.0,
+                    2535.0,
+                    2915.0,
+                    3352.0,
+                    3855.0,
+                    4432.0,
+                    5097.0,
+                    5862.0,
+                    6741.0,
+                    7752.0,
+                    8914.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_03"
@@ -515,7 +888,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 640.0,
+                "x": 800.0,
                 "y": -160.0
             }
         },
@@ -527,9 +900,10 @@
             "maxRank": 1,
             "currency": 0,
             "cost": {
-                "baseCost": 933.1200000000001,
+                "baseCost": 105.44999999999999,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_03"
@@ -546,21 +920,43 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 800.0,
+                "x": 960.0,
                 "y": 0.0
             }
         },
         {
             "id": "pin_04_durability",
             "title": "Pin 4 · Strength",
-            "description": "Survive one more payout.",
+            "description": "Lasts one extra turn.",
             "branch": 2,
-            "maxRank": 5,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 1399.6800000000003,
-                "growth": 1.6,
-                "explicitCosts": []
+                "baseCost": 48.09375,
+                "growth": 1.8,
+                "explicitCosts": [
+                    49.0,
+                    88.0,
+                    157.0,
+                    282.0,
+                    506.0,
+                    910.0,
+                    1636.0,
+                    2945.0,
+                    5301.0,
+                    9540.0,
+                    11926.0,
+                    14907.0,
+                    18634.0,
+                    23292.0,
+                    29114.0,
+                    36392.0,
+                    45490.0,
+                    56863.0,
+                    71079.0,
+                    88847.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_04"
@@ -577,7 +973,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 800.0,
+                "x": 960.0,
                 "y": 160.0
             }
         },
@@ -586,12 +982,34 @@
             "title": "Pin 4 · Pay",
             "description": "Earn more from this pin.",
             "branch": 2,
-            "maxRank": 10,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 1166.4,
-                "growth": 1.45,
-                "explicitCosts": []
+                "baseCost": 48.09375,
+                "growth": 1.6,
+                "explicitCosts": [
+                    49.0,
+                    77.0,
+                    124.0,
+                    198.0,
+                    316.0,
+                    505.0,
+                    808.0,
+                    1292.0,
+                    2067.0,
+                    3306.0,
+                    3801.0,
+                    4371.0,
+                    5028.0,
+                    5781.0,
+                    6649.0,
+                    7645.0,
+                    8793.0,
+                    10111.0,
+                    11628.0,
+                    13372.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_04"
@@ -608,7 +1026,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 800.0,
+                "x": 960.0,
                 "y": -160.0
             }
         },
@@ -620,9 +1038,10 @@
             "maxRank": 1,
             "currency": 0,
             "cost": {
-                "baseCost": 3359.232,
+                "baseCost": 179.54999999999999,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_04"
@@ -639,21 +1058,43 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 960.0,
+                "x": 1120.0,
                 "y": 0.0
             }
         },
         {
             "id": "pin_05_durability",
             "title": "Pin 5 · Strength",
-            "description": "Survive one more payout.",
+            "description": "Lasts one extra turn.",
             "branch": 2,
-            "maxRank": 5,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 5038.848,
-                "growth": 1.6,
-                "explicitCosts": []
+                "baseCost": 72.140625,
+                "growth": 1.8,
+                "explicitCosts": [
+                    73.0,
+                    131.0,
+                    235.0,
+                    421.0,
+                    759.0,
+                    1364.0,
+                    2454.0,
+                    4418.0,
+                    7951.0,
+                    14310.0,
+                    17888.0,
+                    22360.0,
+                    27949.0,
+                    34937.0,
+                    43671.0,
+                    54588.0,
+                    68235.0,
+                    85293.0,
+                    106617.0,
+                    133271.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_05"
@@ -670,7 +1111,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 960.0,
+                "x": 1120.0,
                 "y": 160.0
             }
         },
@@ -679,12 +1120,34 @@
             "title": "Pin 5 · Pay",
             "description": "Earn more from this pin.",
             "branch": 2,
-            "maxRank": 10,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 4199.04,
-                "growth": 1.45,
-                "explicitCosts": []
+                "baseCost": 72.140625,
+                "growth": 1.6,
+                "explicitCosts": [
+                    73.0,
+                    116.0,
+                    186.0,
+                    297.0,
+                    474.0,
+                    758.0,
+                    1212.0,
+                    1938.0,
+                    3099.0,
+                    4959.0,
+                    5702.0,
+                    6557.0,
+                    7541.0,
+                    8671.0,
+                    9973.0,
+                    11468.0,
+                    13188.0,
+                    15166.0,
+                    17441.0,
+                    20057.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_05"
@@ -701,7 +1164,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 960.0,
+                "x": 1120.0,
                 "y": -160.0
             }
         },
@@ -713,9 +1176,10 @@
             "maxRank": 1,
             "currency": 0,
             "cost": {
-                "baseCost": 12093.235200000001,
+                "baseCost": 303.525,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_05"
@@ -732,21 +1196,43 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1120.0,
+                "x": 1280.0,
                 "y": 0.0
             }
         },
         {
             "id": "pin_06_durability",
             "title": "Pin 6 · Strength",
-            "description": "Survive one more payout.",
+            "description": "Lasts one extra turn.",
             "branch": 2,
-            "maxRank": 5,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 18139.8528,
-                "growth": 1.6,
-                "explicitCosts": []
+                "baseCost": 108.2109375,
+                "growth": 1.8,
+                "explicitCosts": [
+                    109.0,
+                    196.0,
+                    352.0,
+                    632.0,
+                    1137.0,
+                    2046.0,
+                    3682.0,
+                    6626.0,
+                    11926.0,
+                    21466.0,
+                    26831.0,
+                    33539.0,
+                    41924.0,
+                    52405.0,
+                    65506.0,
+                    81882.0,
+                    102353.0,
+                    127940.0,
+                    159925.0,
+                    199906.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_06"
@@ -763,7 +1249,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1120.0,
+                "x": 1280.0,
                 "y": 160.0
             }
         },
@@ -772,12 +1258,34 @@
             "title": "Pin 6 · Pay",
             "description": "Earn more from this pin.",
             "branch": 2,
-            "maxRank": 10,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 15116.544000000002,
-                "growth": 1.45,
-                "explicitCosts": []
+                "baseCost": 108.2109375,
+                "growth": 1.6,
+                "explicitCosts": [
+                    109.0,
+                    174.0,
+                    278.0,
+                    444.0,
+                    710.0,
+                    1136.0,
+                    1817.0,
+                    2906.0,
+                    4649.0,
+                    7437.0,
+                    8552.0,
+                    9835.0,
+                    11310.0,
+                    13007.0,
+                    14958.0,
+                    17201.0,
+                    19781.0,
+                    22748.0,
+                    26161.0,
+                    30084.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_06"
@@ -794,7 +1302,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1120.0,
+                "x": 1280.0,
                 "y": -160.0
             }
         },
@@ -806,9 +1314,10 @@
             "maxRank": 1,
             "currency": 0,
             "cost": {
-                "baseCost": 43535.646720000004,
+                "baseCost": 517.275,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_06"
@@ -825,21 +1334,43 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1280.0,
+                "x": 1440.0,
                 "y": 0.0
             }
         },
         {
             "id": "pin_07_durability",
             "title": "Pin 7 · Strength",
-            "description": "Survive one more payout.",
+            "description": "Lasts one extra turn.",
             "branch": 2,
-            "maxRank": 5,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 65303.47008000001,
-                "growth": 1.6,
-                "explicitCosts": []
+                "baseCost": 162.31640625,
+                "growth": 1.8,
+                "explicitCosts": [
+                    163.0,
+                    293.0,
+                    527.0,
+                    948.0,
+                    1705.0,
+                    3068.0,
+                    5522.0,
+                    9938.0,
+                    17888.0,
+                    32198.0,
+                    40247.0,
+                    50309.0,
+                    62886.0,
+                    78607.0,
+                    98258.0,
+                    122822.0,
+                    153528.0,
+                    191910.0,
+                    239887.0,
+                    299858.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_07"
@@ -856,7 +1387,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1280.0,
+                "x": 1440.0,
                 "y": 160.0
             }
         },
@@ -865,12 +1396,34 @@
             "title": "Pin 7 · Pay",
             "description": "Earn more from this pin.",
             "branch": 2,
-            "maxRank": 10,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 54419.55840000001,
-                "growth": 1.45,
-                "explicitCosts": []
+                "baseCost": 162.31640625,
+                "growth": 1.6,
+                "explicitCosts": [
+                    163.0,
+                    261.0,
+                    417.0,
+                    665.0,
+                    1064.0,
+                    1703.0,
+                    2724.0,
+                    4358.0,
+                    6973.0,
+                    11155.0,
+                    12828.0,
+                    14752.0,
+                    16966.0,
+                    19510.0,
+                    22437.0,
+                    25802.0,
+                    29672.0,
+                    34123.0,
+                    39240.0,
+                    45126.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_07"
@@ -887,7 +1440,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1280.0,
+                "x": 1440.0,
                 "y": -160.0
             }
         },
@@ -899,9 +1452,10 @@
             "maxRank": 1,
             "currency": 0,
             "cost": {
-                "baseCost": 156728.32819200002,
+                "baseCost": 877.8,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_07"
@@ -918,21 +1472,43 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1440.0,
+                "x": 1600.0,
                 "y": 0.0
             }
         },
         {
             "id": "pin_08_durability",
             "title": "Pin 8 · Strength",
-            "description": "Survive one more payout.",
+            "description": "Lasts one extra turn.",
             "branch": 2,
-            "maxRank": 5,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 235092.492288,
-                "growth": 1.6,
-                "explicitCosts": []
+                "baseCost": 243.474609375,
+                "growth": 1.8,
+                "explicitCosts": [
+                    245.0,
+                    439.0,
+                    790.0,
+                    1421.0,
+                    2557.0,
+                    4601.0,
+                    8282.0,
+                    14907.0,
+                    26831.0,
+                    48297.0,
+                    60370.0,
+                    75463.0,
+                    94328.0,
+                    117910.0,
+                    147387.0,
+                    184233.0,
+                    230292.0,
+                    287865.0,
+                    359830.0,
+                    449787.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_08"
@@ -949,7 +1525,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1440.0,
+                "x": 1600.0,
                 "y": 160.0
             }
         },
@@ -958,12 +1534,34 @@
             "title": "Pin 8 · Pay",
             "description": "Earn more from this pin.",
             "branch": 2,
-            "maxRank": 10,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 195910.41024000004,
-                "growth": 1.45,
-                "explicitCosts": []
+                "baseCost": 243.474609375,
+                "growth": 1.6,
+                "explicitCosts": [
+                    245.0,
+                    391.0,
+                    625.0,
+                    998.0,
+                    1596.0,
+                    2554.0,
+                    4085.0,
+                    6536.0,
+                    10458.0,
+                    16733.0,
+                    19242.0,
+                    22128.0,
+                    25447.0,
+                    29264.0,
+                    33654.0,
+                    38702.0,
+                    44507.0,
+                    51183.0,
+                    58861.0,
+                    67689.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_08"
@@ -980,7 +1578,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1440.0,
+                "x": 1600.0,
                 "y": -160.0
             }
         },
@@ -992,9 +1590,10 @@
             "maxRank": 1,
             "currency": 0,
             "cost": {
-                "baseCost": 564221.9814912002,
+                "baseCost": 1491.975,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_08"
@@ -1011,21 +1610,43 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1600.0,
+                "x": 1760.0,
                 "y": 0.0
             }
         },
         {
             "id": "pin_09_durability",
             "title": "Pin 9 · Strength",
-            "description": "Survive one more payout.",
+            "description": "Lasts one extra turn.",
             "branch": 2,
-            "maxRank": 5,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 846332.9722368002,
-                "growth": 1.6,
-                "explicitCosts": []
+                "baseCost": 365.2119140625,
+                "growth": 1.8,
+                "explicitCosts": [
+                    366.0,
+                    658.0,
+                    1184.0,
+                    2131.0,
+                    3835.0,
+                    6902.0,
+                    12423.0,
+                    22360.0,
+                    40247.0,
+                    72444.0,
+                    90554.0,
+                    113193.0,
+                    141492.0,
+                    176864.0,
+                    221080.0,
+                    276350.0,
+                    345437.0,
+                    431796.0,
+                    539745.0,
+                    674681.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_09"
@@ -1042,7 +1663,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1600.0,
+                "x": 1760.0,
                 "y": 160.0
             }
         },
@@ -1051,12 +1672,34 @@
             "title": "Pin 9 · Pay",
             "description": "Earn more from this pin.",
             "branch": 2,
-            "maxRank": 10,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 705277.4768640002,
-                "growth": 1.45,
-                "explicitCosts": []
+                "baseCost": 365.2119140625,
+                "growth": 1.6,
+                "explicitCosts": [
+                    366.0,
+                    586.0,
+                    936.0,
+                    1497.0,
+                    2394.0,
+                    3831.0,
+                    6128.0,
+                    9804.0,
+                    15687.0,
+                    25099.0,
+                    28862.0,
+                    33192.0,
+                    38171.0,
+                    43896.0,
+                    50481.0,
+                    58052.0,
+                    66760.0,
+                    76774.0,
+                    88290.0,
+                    101533.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_09"
@@ -1073,7 +1716,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1600.0,
+                "x": 1760.0,
                 "y": -160.0
             }
         },
@@ -1085,9 +1728,10 @@
             "maxRank": 1,
             "currency": 0,
             "cost": {
-                "baseCost": 2031199.1333683206,
+                "baseCost": 2535.075,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_09"
@@ -1104,21 +1748,43 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1760.0,
+                "x": 1920.0,
                 "y": 0.0
             }
         },
         {
             "id": "pin_10_durability",
             "title": "Pin 10 · Strength",
-            "description": "Survive one more payout.",
+            "description": "Lasts one extra turn.",
             "branch": 2,
-            "maxRank": 5,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 3046798.7000524809,
-                "growth": 1.6,
-                "explicitCosts": []
+                "baseCost": 547.81787109375,
+                "growth": 1.8,
+                "explicitCosts": [
+                    549.0,
+                    987.0,
+                    1776.0,
+                    3196.0,
+                    5752.0,
+                    10353.0,
+                    18634.0,
+                    33539.0,
+                    60370.0,
+                    108665.0,
+                    135831.0,
+                    169789.0,
+                    212237.0,
+                    265296.0,
+                    331620.0,
+                    414524.0,
+                    518155.0,
+                    647693.0,
+                    809616.0,
+                    1012020.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_10"
@@ -1135,7 +1801,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1760.0,
+                "x": 1920.0,
                 "y": 160.0
             }
         },
@@ -1144,12 +1810,34 @@
             "title": "Pin 10 · Pay",
             "description": "Earn more from this pin.",
             "branch": 2,
-            "maxRank": 10,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 2538998.9167104007,
-                "growth": 1.45,
-                "explicitCosts": []
+                "baseCost": 547.81787109375,
+                "growth": 1.6,
+                "explicitCosts": [
+                    549.0,
+                    877.0,
+                    1404.0,
+                    2244.0,
+                    3591.0,
+                    5745.0,
+                    9192.0,
+                    14706.0,
+                    23529.0,
+                    37647.0,
+                    43294.0,
+                    49787.0,
+                    57255.0,
+                    65844.0,
+                    75720.0,
+                    87077.0,
+                    100139.0,
+                    115160.0,
+                    132434.0,
+                    152299.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_10"
@@ -1166,7 +1854,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1760.0,
+                "x": 1920.0,
                 "y": -160.0
             }
         },
@@ -1178,9 +1866,10 @@
             "maxRank": 1,
             "currency": 0,
             "cost": {
-                "baseCost": 7312316.880125954,
+                "baseCost": 4309.2,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_10"
@@ -1197,21 +1886,43 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1920.0,
+                "x": 2080.0,
                 "y": 0.0
             }
         },
         {
             "id": "pin_11_durability",
             "title": "Pin 11 · Strength",
-            "description": "Survive one more payout.",
+            "description": "Lasts one extra turn.",
             "branch": 2,
-            "maxRank": 5,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 10968475.32018893,
-                "growth": 1.6,
-                "explicitCosts": []
+                "baseCost": 821.726806640625,
+                "growth": 1.8,
+                "explicitCosts": [
+                    822.0,
+                    1480.0,
+                    2663.0,
+                    4793.0,
+                    8627.0,
+                    15528.0,
+                    27949.0,
+                    50309.0,
+                    90554.0,
+                    162998.0,
+                    203747.0,
+                    254684.0,
+                    318355.0,
+                    397943.0,
+                    497429.0,
+                    621786.0,
+                    777232.0,
+                    971540.0,
+                    1214424.0,
+                    1518030.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_11"
@@ -1228,7 +1939,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1920.0,
+                "x": 2080.0,
                 "y": 160.0
             }
         },
@@ -1237,12 +1948,34 @@
             "title": "Pin 11 · Pay",
             "description": "Earn more from this pin.",
             "branch": 2,
-            "maxRank": 10,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 9140396.100157442,
-                "growth": 1.45,
-                "explicitCosts": []
+                "baseCost": 821.726806640625,
+                "growth": 1.6,
+                "explicitCosts": [
+                    822.0,
+                    1315.0,
+                    2105.0,
+                    3366.0,
+                    5386.0,
+                    8617.0,
+                    13787.0,
+                    22059.0,
+                    35294.0,
+                    56469.0,
+                    64940.0,
+                    74681.0,
+                    85882.0,
+                    98765.0,
+                    113580.0,
+                    130616.0,
+                    150209.0,
+                    172740.0,
+                    198650.0,
+                    228448.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_11"
@@ -1259,7 +1992,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 1920.0,
+                "x": 2080.0,
                 "y": -160.0
             }
         },
@@ -1271,9 +2004,10 @@
             "maxRank": 1,
             "currency": 0,
             "cost": {
-                "baseCost": 26324340.768453435,
+                "baseCost": 7325.924999999999,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_11"
@@ -1290,21 +2024,43 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 2080.0,
+                "x": 2240.0,
                 "y": 0.0
             }
         },
         {
             "id": "pin_12_durability",
             "title": "Pin 12 · Strength",
-            "description": "Survive one more payout.",
+            "description": "Lasts one extra turn.",
             "branch": 2,
-            "maxRank": 5,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 39486511.15268015,
-                "growth": 1.6,
-                "explicitCosts": []
+                "baseCost": 1232.5902099609375,
+                "growth": 1.8,
+                "explicitCosts": [
+                    1234.0,
+                    2220.0,
+                    3994.0,
+                    7189.0,
+                    12940.0,
+                    23292.0,
+                    41924.0,
+                    75463.0,
+                    135831.0,
+                    244496.0,
+                    305620.0,
+                    382026.0,
+                    477531.0,
+                    596914.0,
+                    746143.0,
+                    932678.0,
+                    1165847.0,
+                    1457309.0,
+                    1821636.0,
+                    2277045.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_12"
@@ -1321,7 +2077,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 2080.0,
+                "x": 2240.0,
                 "y": 160.0
             }
         },
@@ -1330,12 +2086,34 @@
             "title": "Pin 12 · Pay",
             "description": "Earn more from this pin.",
             "branch": 2,
-            "maxRank": 10,
+            "maxRank": 20,
             "currency": 0,
             "cost": {
-                "baseCost": 32905425.960566794,
-                "growth": 1.45,
-                "explicitCosts": []
+                "baseCost": 1232.5902099609375,
+                "growth": 1.6,
+                "explicitCosts": [
+                    1234.0,
+                    1973.0,
+                    3156.0,
+                    5050.0,
+                    8079.0,
+                    12925.0,
+                    20680.0,
+                    33088.0,
+                    52940.0,
+                    84704.0,
+                    97410.0,
+                    112021.0,
+                    128823.0,
+                    148147.0,
+                    170369.0,
+                    195924.0,
+                    225313.0,
+                    259109.0,
+                    297976.0,
+                    342671.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_12"
@@ -1352,30 +2130,73 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 2080.0,
+                "x": 2240.0,
                 "y": -160.0
             }
         },
         {
             "id": "shooter_cooldown",
             "title": "Faster Reload",
-            "description": "Reload 10% faster each level.",
+            "description": "Reload 12% faster each level.",
             "branch": 2,
             "maxRank": 40,
             "currency": 0,
             "cost": {
-                "baseCost": 5.0,
-                "growth": 1.14,
-                "explicitCosts": []
+                "baseCost": 8.55,
+                "growth": 1.15,
+                "explicitCosts": [
+                    9.0,
+                    14.0,
+                    20.0,
+                    30.0,
+                    45.0,
+                    66.0,
+                    76.0,
+                    87.0,
+                    100.0,
+                    115.0,
+                    132.0,
+                    152.0,
+                    174.0,
+                    200.0,
+                    230.0,
+                    264.0,
+                    304.0,
+                    349.0,
+                    401.0,
+                    461.0,
+                    531.0,
+                    610.0,
+                    701.0,
+                    805.0,
+                    926.0,
+                    1064.0,
+                    1224.0,
+                    1408.0,
+                    1619.0,
+                    1862.0,
+                    2140.0,
+                    2462.0,
+                    2830.0,
+                    3254.0,
+                    3743.0,
+                    4304.0,
+                    4949.0,
+                    5691.0,
+                    6545.0,
+                    7526.0
+                ],
+                "roundingStep": 5.0
             },
             "prerequisites": [
+                "root",
                 "pin_01"
             ],
             "modifiers": [
                 {
                     "stat": 201,
                     "kind": 2,
-                    "valuePerRank": 0.9,
+                    "valuePerRank": 0.88,
                     "pinIndex": -1
                 }
             ],
@@ -1383,8 +2204,8 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 480.0,
-                "y": -320.0
+                "x": 240.0,
+                "y": -240.0
             }
         },
         {
@@ -1395,9 +2216,10 @@
             "maxRank": 1,
             "currency": 0,
             "cost": {
-                "baseCost": 50000.0,
+                "baseCost": 299.25,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "shooter_cooldown"
@@ -1414,7 +2236,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 480.0,
+                "x": 240.0,
                 "y": -480.0
             }
         },
@@ -1426,9 +2248,10 @@
             "maxRank": 999,
             "currency": 0,
             "cost": {
-                "baseCost": 5000000.0,
+                "baseCost": 4750000.0,
                 "growth": 1.25,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "pin_12"
@@ -1445,7 +2268,40 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 2240.0,
+                "x": 2400.0,
+                "y": 0.0
+            }
+        },
+        {
+            "id": "case_unlock",
+            "title": "Case Files",
+            "description": "Turn fallen pins into evidence. Solve cases for money.",
+            "branch": 3,
+            "maxRank": 1,
+            "currency": 0,
+            "cost": {
+                "baseCost": 28.5,
+                "growth": 1.0,
+                "explicitCosts": [],
+                "roundingStep": 5.0
+            },
+            "prerequisites": [
+                "root",
+                "pin_01"
+            ],
+            "modifiers": [
+                {
+                    "stat": 306,
+                    "kind": 0,
+                    "valuePerRank": 1.0,
+                    "pinIndex": -1
+                }
+            ],
+            "requiresUnlock": "",
+            "capStat": 0,
+            "capByStat": 0,
+            "position": {
+                "x": -480.0,
                 "y": 0.0
             }
         },
@@ -1457,12 +2313,13 @@
             "maxRank": 10,
             "currency": 0,
             "cost": {
-                "baseCost": 60.0,
-                "growth": 1.7,
-                "explicitCosts": []
+                "baseCost": 57.0,
+                "growth": 1.5,
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
-                "root"
+                "case_unlock"
             ],
             "modifiers": [
                 {
@@ -1476,7 +2333,7 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": -160.0,
+                "x": -640.0,
                 "y": 0.0
             }
         },
@@ -1488,12 +2345,13 @@
             "maxRank": 10,
             "currency": 0,
             "cost": {
-                "baseCost": 75.0,
-                "growth": 1.7,
-                "explicitCosts": []
+                "baseCost": 57.0,
+                "growth": 1.5,
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
-                "case_payout"
+                "case_unlock"
             ],
             "modifiers": [
                 {
@@ -1507,8 +2365,8 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": -320.0,
-                "y": 80.0
+                "x": -640.0,
+                "y": 160.0
             }
         },
         {
@@ -1519,12 +2377,13 @@
             "maxRank": 10,
             "currency": 0,
             "cost": {
-                "baseCost": 250.0,
-                "growth": 1.7,
-                "explicitCosts": []
+                "baseCost": 142.5,
+                "growth": 1.5,
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
-                "case_payout"
+                "case_unlock"
             ],
             "modifiers": [
                 {
@@ -1538,8 +2397,8 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": -320.0,
-                "y": -80.0
+                "x": -480.0,
+                "y": 160.0
             }
         },
         {
@@ -1550,9 +2409,10 @@
             "maxRank": 3,
             "currency": 0,
             "cost": {
-                "baseCost": 1000.0,
-                "growth": 3.0,
-                "explicitCosts": []
+                "baseCost": 475.0,
+                "growth": 2.0,
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "case_cooldown"
@@ -1569,8 +2429,8 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": -480.0,
-                "y": 80.0
+                "x": -800.0,
+                "y": 160.0
             }
         },
         {
@@ -1581,9 +2441,10 @@
             "maxRank": 8,
             "currency": 0,
             "cost": {
-                "baseCost": 5000.0,
-                "growth": 1.9,
-                "explicitCosts": []
+                "baseCost": 475.0,
+                "growth": 1.6,
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "case_autostamp"
@@ -1600,8 +2461,8 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": -480.0,
-                "y": -80.0
+                "x": -800.0,
+                "y": 320.0
             }
         },
         {
@@ -1612,9 +2473,10 @@
             "maxRank": 999,
             "currency": 0,
             "cost": {
-                "baseCost": 1000000.0,
+                "baseCost": 950000.0,
                 "growth": 1.25,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "case_cold_cases"
@@ -1631,8 +2493,8 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": -640.0,
-                "y": 80.0
+                "x": -960.0,
+                "y": 160.0
             }
         },
         {
@@ -1643,9 +2505,10 @@
             "maxRank": 10,
             "currency": 0,
             "cost": {
-                "baseCost": 150.0,
+                "baseCost": 142.5,
                 "growth": 1.6,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "root"
@@ -1662,8 +2525,8 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 0.0,
-                "y": -160.0
+                "x": -480.0,
+                "y": -480.0
             }
         },
         {
@@ -1674,9 +2537,10 @@
             "maxRank": 10,
             "currency": 0,
             "cost": {
-                "baseCost": 250.0,
+                "baseCost": 237.5,
                 "growth": 1.6,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "statue_gold_fill"
@@ -1693,8 +2557,8 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 0.0,
-                "y": -320.0
+                "x": -480.0,
+                "y": -720.0
             }
         },
         {
@@ -1705,9 +2569,10 @@
             "maxRank": 999,
             "currency": 0,
             "cost": {
-                "baseCost": 1000000.0,
+                "baseCost": 950000.0,
                 "growth": 1.25,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "statue_payout"
@@ -1724,8 +2589,8 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": 0.0,
-                "y": -480.0
+                "x": -480.0,
+                "y": -960.0
             }
         },
         {
@@ -1736,9 +2601,10 @@
             "maxRank": 5,
             "currency": 0,
             "cost": {
-                "baseCost": 300.0,
-                "growth": 2.0,
-                "explicitCosts": []
+                "baseCost": 190.0,
+                "growth": 1.7,
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "root"
@@ -1755,8 +2621,8 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": -320.0,
-                "y": -320.0
+                "x": 0.0,
+                "y": -480.0
             }
         },
         {
@@ -1767,9 +2633,10 @@
             "maxRank": 5,
             "currency": 0,
             "cost": {
-                "baseCost": 500.0,
-                "growth": 2.0,
-                "explicitCosts": []
+                "baseCost": 332.5,
+                "growth": 1.7,
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "loot_bulk"
@@ -1786,8 +2653,8 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": -480.0,
-                "y": -320.0
+                "x": 0.0,
+                "y": -720.0
             }
         },
         {
@@ -1798,9 +2665,10 @@
             "maxRank": 999,
             "currency": 0,
             "cost": {
-                "baseCost": 1000000.0,
+                "baseCost": 950000.0,
                 "growth": 1.25,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "loot_luck"
@@ -1817,8 +2685,8 @@
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": -640.0,
-                "y": -320.0
+                "x": 0.0,
+                "y": -960.0
             }
         },
         {
@@ -1829,9 +2697,10 @@
             "maxRank": 10,
             "currency": 0,
             "cost": {
-                "baseCost": 70.0,
-                "growth": 1.55,
-                "explicitCosts": []
+                "baseCost": 66.5,
+                "growth": 1.45,
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "root"
@@ -1844,12 +2713,12 @@
                     "pinIndex": -1
                 }
             ],
-            "requiresUnlock": "",
+            "requiresUnlock": "unlock_whiskey",
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": -320.0,
-                "y": 320.0
+                "x": -240.0,
+                "y": -480.0
             }
         },
         {
@@ -1860,9 +2729,10 @@
             "maxRank": 10,
             "currency": 0,
             "cost": {
-                "baseCost": 85.0,
-                "growth": 1.55,
-                "explicitCosts": []
+                "baseCost": 80.75,
+                "growth": 1.45,
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "whiskey_duration"
@@ -1875,12 +2745,12 @@
                     "pinIndex": -1
                 }
             ],
-            "requiresUnlock": "",
+            "requiresUnlock": "unlock_whiskey",
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": -480.0,
-                "y": 400.0
+                "x": -320.0,
+                "y": -720.0
             }
         },
         {
@@ -1891,9 +2761,10 @@
             "maxRank": 5,
             "currency": 0,
             "cost": {
-                "baseCost": 400.0,
-                "growth": 2.2,
-                "explicitCosts": []
+                "baseCost": 285.0,
+                "growth": 1.8,
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "whiskey_duration"
@@ -1906,12 +2777,12 @@
                     "pinIndex": -1
                 }
             ],
-            "requiresUnlock": "",
+            "requiresUnlock": "unlock_whiskey",
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": -480.0,
-                "y": 240.0
+                "x": -160.0,
+                "y": -720.0
             }
         },
         {
@@ -1922,9 +2793,10 @@
             "maxRank": 999,
             "currency": 0,
             "cost": {
-                "baseCost": 1000000.0,
+                "baseCost": 950000.0,
                 "growth": 1.25,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 5.0
             },
             "prerequisites": [
                 "whiskey_strength"
@@ -1937,16 +2809,96 @@
                     "pinIndex": -1
                 }
             ],
-            "requiresUnlock": "",
+            "requiresUnlock": "unlock_whiskey",
             "capStat": 0,
             "capByStat": 0,
             "position": {
-                "x": -640.0,
-                "y": 240.0
+                "x": -160.0,
+                "y": -960.0
             }
         }
     ],
+    "sections": [
+        {
+            "id": "globe_section",
+            "title": "Globe",
+            "icon": "globe",
+            "description": "Spin to earn. Improve speed and keep your momentum.",
+            "position": {
+                "x": 0.0,
+                "y": 240.0
+            },
+            "upward": true,
+            "sharedConnector": true,
+            "connectorOffset": 120.0,
+            "branches": [
+                1
+            ]
+        },
+        {
+            "id": "pins_section",
+            "title": "Pins",
+            "icon": "pin",
+            "description": "Fire pins at the map. Each turn pays money and uses Strength.",
+            "position": {
+                "x": 240.0,
+                "y": 0.0
+            },
+            "upward": false,
+            "sharedConnector": false,
+            "connectorOffset": 80.0,
+            "branches": [
+                2
+            ]
+        },
+        {
+            "id": "cases_section",
+            "title": "Case Files",
+            "icon": "folder",
+            "description": "Fallen pins add evidence. Stamp a full case to claim money.",
+            "position": {
+                "x": -240.0,
+                "y": 0.0
+            },
+            "upward": false,
+            "sharedConnector": false,
+            "connectorOffset": 80.0,
+            "branches": [
+                3
+            ]
+        },
+        {
+            "id": "desk_section",
+            "title": "Desk Items",
+            "icon": "gift",
+            "description": "Open boxes. Unlock drinks and statues with Gold.",
+            "position": {
+                "x": 0.0,
+                "y": -240.0
+            },
+            "upward": false,
+            "sharedConnector": true,
+            "connectorOffset": 120.0,
+            "branches": [
+                6,
+                4,
+                5
+            ]
+        }
+    ],
     "shop": [
+        {
+            "id": "unlock_whiskey",
+            "requires": "",
+            "maxRank": 1,
+            "cost": {
+                "baseCost": 10.0,
+                "growth": 1.0,
+                "explicitCosts": [],
+                "roundingStep": 1.0
+            },
+            "modifiers": []
+        },
         {
             "id": "unlock_statue_1",
             "requires": "",
@@ -1954,7 +2906,8 @@
             "cost": {
                 "baseCost": 25.0,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": []
         },
@@ -1965,7 +2918,8 @@
             "cost": {
                 "baseCost": 75.0,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": []
         },
@@ -1976,7 +2930,8 @@
             "cost": {
                 "baseCost": 150.0,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": []
         },
@@ -1987,7 +2942,8 @@
             "cost": {
                 "baseCost": 60.0,
                 "growth": 3.3,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": []
         },
@@ -1998,7 +2954,8 @@
             "cost": {
                 "baseCost": 150.0,
                 "growth": 3.3,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": []
         },
@@ -2009,7 +2966,8 @@
             "cost": {
                 "baseCost": 300.0,
                 "growth": 3.3,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": []
         },
@@ -2020,7 +2978,8 @@
             "cost": {
                 "baseCost": 40.0,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": [
                 {
@@ -2044,7 +3003,8 @@
             "cost": {
                 "baseCost": 20.0,
                 "growth": 1.35,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": [
                 {
@@ -2062,7 +3022,8 @@
             "cost": {
                 "baseCost": 150.0,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": [
                 {
@@ -2080,7 +3041,8 @@
             "cost": {
                 "baseCost": 60.0,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": [
                 {
@@ -2098,7 +3060,8 @@
             "cost": {
                 "baseCost": 120.0,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": [
                 {
@@ -2116,7 +3079,8 @@
             "cost": {
                 "baseCost": 100.0,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": [
                 {
@@ -2129,12 +3093,13 @@
         },
         {
             "id": "bottomless_glass",
-            "requires": "",
+            "requires": "unlock_whiskey",
             "maxRank": 1,
             "cost": {
                 "baseCost": 200.0,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": [
                 {
@@ -2152,7 +3117,8 @@
             "cost": {
                 "baseCost": 250.0,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": [
                 {
@@ -2170,7 +3136,8 @@
             "cost": {
                 "baseCost": 10.0,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": []
         },
@@ -2181,7 +3148,8 @@
             "cost": {
                 "baseCost": 20.0,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": []
         },
@@ -2192,7 +3160,8 @@
             "cost": {
                 "baseCost": 30.0,
                 "growth": 1.0,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": []
         },
@@ -2203,7 +3172,8 @@
             "cost": {
                 "baseCost": 15.0,
                 "growth": 2.6,
-                "explicitCosts": []
+                "explicitCosts": [],
+                "roundingStep": 1.0
             },
             "modifiers": []
         }
@@ -2247,12 +3217,16 @@
             "value": 0.0
         },
         {
+            "stat": 107,
+            "value": 1.0
+        },
+        {
             "stat": 200,
             "value": 0.0
         },
         {
             "stat": 201,
-            "value": 1.8
+            "value": 4.5
         },
         {
             "stat": 202,
@@ -2303,6 +3277,10 @@
             "value": 0.0
         },
         {
+            "stat": 306,
+            "value": 0.0
+        },
+        {
             "stat": 400,
             "value": 10.0
         },
@@ -2347,8 +3325,9 @@
 "balance":{
     "startingMoney": 0.0,
     "startingGold": 0.0,
+    "whiskeyUnlockGoldCost": 10.0,
     "autosaveInterval": 30.0,
-    "prestigeThreshold": 57500000.0,
+    "prestigeThreshold": 15000.0,
     "prestigeGoldScale": 25.0,
     "prestigeExponent": 0.5,
     "ranks": [
@@ -2402,6 +3381,10 @@
             "value": 1.0
         },
         {
+            "stat": 107,
+            "value": 1.0
+        },
+        {
             "stat": 103,
             "value": 1.0
         },
@@ -2415,7 +3398,7 @@
         },
         {
             "stat": 201,
-            "value": 1.8
+            "value": 4.5
         },
         {
             "stat": 202,
@@ -2464,16 +3447,158 @@
         {
             "stat": 501,
             "value": 1.0
+        },
+        {
+            "stat": 306,
+            "value": 0.0
         }
     ],
+    "pinStrengthColors": [
+        {
+            "r": 0.47999998927116396,
+            "g": 0.5299999713897705,
+            "b": 0.5799999833106995,
+            "a": 1.0
+        },
+        {
+            "r": 0.3499999940395355,
+            "g": 0.49000000953674319,
+            "b": 0.6899999976158142,
+            "a": 1.0
+        },
+        {
+            "r": 0.23999999463558198,
+            "g": 0.4300000071525574,
+            "b": 0.8199999928474426,
+            "a": 1.0
+        },
+        {
+            "r": 0.1599999964237213,
+            "g": 0.3400000035762787,
+            "b": 0.9200000166893005,
+            "a": 1.0
+        },
+        {
+            "r": 0.10000000149011612,
+            "g": 0.5099999904632568,
+            "b": 0.8700000047683716,
+            "a": 1.0
+        },
+        {
+            "r": 0.07999999821186066,
+            "g": 0.6600000262260437,
+            "b": 0.7799999713897705,
+            "a": 1.0
+        },
+        {
+            "r": 0.07999999821186066,
+            "g": 0.7599999904632568,
+            "b": 0.6499999761581421,
+            "a": 1.0
+        },
+        {
+            "r": 0.10000000149011612,
+            "g": 0.6800000071525574,
+            "b": 0.46000000834465029,
+            "a": 1.0
+        },
+        {
+            "r": 0.18000000715255738,
+            "g": 0.5899999737739563,
+            "b": 0.28999999165534975,
+            "a": 1.0
+        },
+        {
+            "r": 0.4000000059604645,
+            "g": 0.6899999976158142,
+            "b": 0.23000000417232514,
+            "a": 1.0
+        },
+        {
+            "r": 0.6200000047683716,
+            "g": 0.7599999904632568,
+            "b": 0.23999999463558198,
+            "a": 1.0
+        },
+        {
+            "r": 0.699999988079071,
+            "g": 0.49000000953674319,
+            "b": 0.8199999928474426,
+            "a": 1.0
+        },
+        {
+            "r": 0.5799999833106995,
+            "g": 0.3100000023841858,
+            "b": 0.8299999833106995,
+            "a": 1.0
+        },
+        {
+            "r": 0.7599999904632568,
+            "g": 0.23999999463558198,
+            "b": 0.6800000071525574,
+            "a": 1.0
+        },
+        {
+            "r": 0.8700000047683716,
+            "g": 0.23000000417232514,
+            "b": 0.46000000834465029,
+            "a": 1.0
+        },
+        {
+            "r": 0.8500000238418579,
+            "g": 0.1599999964237213,
+            "b": 0.2199999988079071,
+            "a": 1.0
+        },
+        {
+            "r": 0.9200000166893005,
+            "g": 0.30000001192092898,
+            "b": 0.1599999964237213,
+            "a": 1.0
+        },
+        {
+            "r": 0.9100000262260437,
+            "g": 0.4300000071525574,
+            "b": 0.20000000298023225,
+            "a": 1.0
+        },
+        {
+            "r": 0.7599999904632568,
+            "g": 0.3799999952316284,
+            "b": 0.23000000417232514,
+            "a": 1.0
+        },
+        {
+            "r": 0.8700000047683716,
+            "g": 0.5799999833106995,
+            "b": 0.3799999952316284,
+            "a": 1.0
+        },
+        {
+            "r": 1.0,
+            "g": 0.7599999904632568,
+            "b": 0.23999999463558198,
+            "a": 1.0
+        }
+    ],
+    "pinEnamelMetallic": 0.15000000596046449,
+    "pinMaxStrengthMetallic": 0.8500000238418579,
+    "guidanceOverlayMaterial": {
+        "instanceID": -1582148
+    },
+    "guidancePulseSeconds": 2.799999952316284,
+    "guidanceOverlayOpacity": 0.75,
     "frictionAt60Hz": 0.987500011920929,
     "dragAcceleration": 0.25,
     "dragReferencePixelsPerSecond": 900.0,
     "dragMaxSpeedFactor": 1.5,
+    "dragReferenceScreenWidth": 1920.0,
+    "dragMinPixels": 32.0,
+    "dragFullPixels": 200.0,
+    "dragMaxBoostFraction": 0.5,
     "impulseReferenceSpeed": 135.0,
     "globeTicksPerRevolution": 1,
     "clickImpulse": 3.0,
-    "dragOverClick": 2.25,
     "revolutionReward": 1.0,
     "pinBasePayout": 0.5,
     "cityRadiusDegrees": 4.0,
@@ -2508,7 +3633,8 @@
     "lootboxCost": {
         "baseCost": 150.0,
         "growth": 1.12,
-        "explicitCosts": []
+        "explicitCosts": [],
+        "roundingStep": 1.0
     },
     "lootTable": [
         {

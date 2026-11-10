@@ -17,6 +17,22 @@ namespace DetectiveDesk.Progression
         Lootbox = 6,
     }
 
+    /// <summary>A free visual heading and connector bus. It is not a skill and is never saved as an owned rank.</summary>
+    [Serializable]
+    public sealed class SkillSectionData
+    {
+        public string id, title, icon;
+        [TextArea(2, 4)] public string description;
+        public Vector2 position;
+        public bool upward;
+        public bool sharedConnector = true;
+        [Min(1)] public float connectorOffset = 80;
+        public SkillBranch[] branches = Array.Empty<SkillBranch>();
+
+        public bool Contains(SkillNodeData node) => node != null && branches != null
+            && Array.IndexOf(branches, node.branch) >= 0;
+    }
+
     [Serializable]
     public sealed class SkillNodeData
     {
@@ -27,7 +43,7 @@ namespace DetectiveDesk.Progression
         public SkillBranch branch;
         [Min(1)] public int maxRank = 1;
         public Currency currency = Currency.Money;
-        public CostCurve cost = new CostCurve(10, 1.5);
+        public CostCurve cost = new CostCurve(10, 1.5) { roundingStep = 5 };
 
         [Tooltip("Every listed node must be owned (rank ≥ 1) before this one can be bought. " +
                  "The node becomes visible as soon as ANY of them is owned (Spellbound-style reveal).")]
@@ -56,11 +72,25 @@ namespace DetectiveDesk.Progression
     [CreateAssetMenu(menuName = "Spin The Globe/Skill Tree", fileName = "SkillTree")]
     public sealed class SkillTreeAsset : ScriptableObject
     {
+        [Tooltip("Increase when a new authored layout should replace older saved canvas positions.")]
+        [Min(1)] public int layoutRevision = 2;
         [SerializeField] List<SkillNodeData> nodes = new List<SkillNodeData>();
+        [SerializeField] List<SkillSectionData> sections = new List<SkillSectionData>();
 
         Dictionary<string, SkillNodeData> lookup;
 
         public IReadOnlyList<SkillNodeData> Nodes => nodes;
+        public IReadOnlyList<SkillSectionData> Sections => sections;
+
+        public void SetSections(IEnumerable<SkillSectionData> newSections) => sections = new List<SkillSectionData>(newSections);
+
+        public SkillSectionData SectionFor(SkillNodeData node)
+        {
+            if (node == null || node.prerequisites == null
+                || Array.IndexOf(node.prerequisites, DefaultSkillTreeFactory.RootId) < 0) return null;
+            foreach (var section in sections) if (section != null && section.Contains(node)) return section;
+            return null;
+        }
 
         public SkillNodeData Find(string id)
         {
@@ -107,6 +137,16 @@ namespace DetectiveDesk.Progression
                     errors.Add($"'{n.id}' must set both capStat and capByStat, or neither.");
             }
             if (roots != 1) errors.Add($"Expected exactly one root node, found {roots}.");
+            var sectionIds = new HashSet<string>(StringComparer.Ordinal);
+            var sectionBranches = new HashSet<SkillBranch>();
+            foreach (var section in sections)
+            {
+                if (section == null || string.IsNullOrEmpty(section.id)) { errors.Add("A section has no id."); continue; }
+                if (!sectionIds.Add(section.id) || seen.Contains(section.id)) errors.Add($"Duplicate section id '{section.id}'.");
+                if (section.connectorOffset <= 0) errors.Add($"'{section.id}' connector offset must be positive.");
+                if (section.branches != null) foreach (var branch in section.branches)
+                    if (!sectionBranches.Add(branch)) errors.Add($"Branch '{branch}' is assigned to more than one section.");
+            }
 
             // Cycle detection (depth-first, three-colour).
             var state = new Dictionary<string, int>(StringComparer.Ordinal);

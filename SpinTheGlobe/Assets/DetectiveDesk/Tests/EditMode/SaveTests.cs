@@ -27,6 +27,7 @@ namespace DetectiveDesk.Tests
         {
             var data = new SaveData { money = 1234.5, gold = 7, lifetimeMoney = 5000, caseLevel = 10000, caseEvidence = 42 };
             data.skills.Add(new SkillRank { id = "root", rank = 1 });
+            data.completedGuidance.Add("globe_spin");
             store.Save(data);
 
             Assert.IsTrue(store.TryLoad(out var loaded));
@@ -36,6 +37,7 @@ namespace DetectiveDesk.Tests
             Assert.AreEqual(42, loaded.caseEvidence);
             Assert.AreEqual(1, loaded.skills.Count);
             Assert.AreEqual("root", loaded.skills[0].id);
+            CollectionAssert.Contains(loaded.completedGuidance, "globe_spin");
             Assert.Greater(loaded.savedAtUnixSeconds, 0);
         }
 

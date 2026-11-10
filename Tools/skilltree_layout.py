@@ -1,42 +1,83 @@
-import math, json
-N={}  # id: (x,y,parents,branch)
-def a(i,x,y,p,b): N[i]=(x,y,p,b)
-a('root',0,0,[],'R')
-# Globe (up)
-a('globe_auto',0,1,['root'],'G'); a('globe_drag',-1,2,['globe_max_speed'],'G'); a('globe_max_speed',0,2,['globe_auto'],'G'); a('globe_click',1,2,['globe_max_speed'],'G')
-a('globe_multiplier',0,3,['globe_max_speed'],'G'); a('globe_gilded_axis',0,4,['globe_multiplier'],'G'); a('globe_mastery',0,5,['globe_gilded_axis'],'G')
-# Pins (right)
-prev='root'
-for k in range(1,13):
-    x=k+1
-    a(f'pin_{k:02}',x,0,[prev],'P'); a(f'pin_{k:02}_durability',x,1,[f'pin_{k:02}'],'P'); a(f'pin_{k:02}_payout',x,-1,[f'pin_{k:02}'],'P'); prev=f'pin_{k:02}'
-a('pin_mastery',14,0,['pin_12'],'P')
-a('shooter_cooldown',3,-2,['pin_01'],'P'); a('pin_autoloader',3,-3,['shooter_cooldown'],'P')
-# Case (left)
-a('case_payout',-1,0,['root'],'C'); a('case_cooldown',-2,0.5,['case_payout'],'C'); a('case_autostamp',-2,-0.5,['case_payout'],'C')
-a('case_cold_cases',-3,0.5,['case_cooldown'],'C'); a('case_mastery',-4,0.5,['case_cold_cases'],'C'); a('case_headlines',-3,-0.5,['case_autostamp'],'C')
-# Whiskey (up-left)
-a('whiskey_duration',-2,2,['root'],'W'); a('whiskey_cooldown',-3,2.5,['whiskey_duration'],'W'); a('whiskey_strength',-3,1.5,['whiskey_duration'],'W')
-a('whiskey_mastery',-4,1.5,['whiskey_strength'],'W')
-# Statues (down)
-a('statue_gold_fill',0,-1,['root'],'S'); a('statue_payout',0,-2,['statue_gold_fill'],'S'); a('statue_mastery',0,-3,['statue_payout'],'S')
-# Lootbox (down-left)
-a('loot_bulk',-2,-2,['root'],'L'); a('loot_luck',-3,-2,['loot_bulk'],'L'); a('loot_mastery',-4,-2,['loot_luck'],'L')
-ids=list(N)
-bad=[]
-for i in range(len(ids)):
-    for j in range(i+1,len(ids)):
-        p,q=N[ids[i]],N[ids[j]]
-        d=math.hypot(p[0]-q[0],p[1]-q[1])
-        if d<0.99: bad.append(('close',ids[i],ids[j],round(d,2)))
-def segdist(px,py,ax,ay,bx,by):
-    dx,dy=bx-ax,by-ay; t=max(0,min(1,((px-ax)*dx+(py-ay)*dy)/(dx*dx+dy*dy))); return math.hypot(px-ax-t*dx,py-ay-t*dy)
-for c,(x,y,ps,b) in N.items():
-    for p in ps:
-        ax,ay=N[p][0],N[p][1]
-        for o,(ox,oy,_,_) in N.items():
-            if o in (c,p): continue
-            d=segdist(ox,oy,ax,ay,x,y)
-            if d<0.4: bad.append(('edge',p,c,'near',o,round(d,2)))
-print(len(N),'nodes'); print('\n'.join(map(str,bad)) or 'OK')
-json.dump({k:[v[0],v[1],v[2],v[3]] for k,v in N.items()},open('layout.json','w'))
+"""Check the exported skill layout, including free headings and shared connectors."""
+import json
+import math
+from pathlib import Path
+
+SNAPSHOT = Path(__file__).with_name('economy_snapshot.json')
+CELL = 160
+
+
+def segment_distance(point, a, b):
+    dx, dy = b[0] - a[0], b[1] - a[1]
+    length = dx * dx + dy * dy
+    if length == 0:
+        return math.dist(point, a)
+    t = max(0, min(1, ((point[0] - a[0]) * dx + (point[1] - a[1]) * dy) / length))
+    return math.dist(point, (a[0] + t * dx, a[1] + t * dy))
+
+
+def check(data):
+    skills = {n['id']: n for n in data['skills']}
+    sections = data.get('sections', [])
+    positions = {n['id']: (n['position']['x'] / CELL, n['position']['y'] / CELL)
+                 for n in [*skills.values(), *sections]}
+    section_for = {n['id']: s for n in skills.values() if 'root' in (n['prerequisites'] or [])
+                   for s in sections if n['branch'] in s['branches']}
+    segments = []
+
+    def edge(owner, a, b, *ignored):
+        if math.dist(a, b) > 1e-9:
+            segments.append((owner, a, b, set(ignored)))
+
+    for section in sections:
+        sid = section['id']
+        x, y = positions[sid]
+        bus_y = y + section['connectorOffset'] / CELL * (1 if section['upward'] else -1)
+        entries = [nid for nid, s in section_for.items() if s['id'] == sid]
+        edge(sid, positions['root'], (x, y), 'root', sid)
+        if not section.get("sharedConnector", True):
+            for nid in entries:
+                edge(sid, (x, y), positions[nid], sid, nid)
+        elif entries:
+            xs = [x] + [positions[nid][0] for nid in entries]
+            edge(sid, (x, y), (x, bus_y), sid)
+            edge(sid, (min(xs), bus_y), (max(xs), bus_y), sid)
+            for nid in entries:
+                edge(sid, (positions[nid][0], bus_y), positions[nid], sid, nid)
+
+    for nid, node in skills.items():
+        for parent in node['prerequisites'] or []:
+            if 'root' in node['prerequisites'] and parent != 'root':
+                continue
+            if parent == 'root' and nid in section_for:
+                continue
+            if parent != 'root' and skills[parent]['branch'] != node['branch']:
+                continue
+            edge(nid, positions[parent], positions[nid], parent, nid)
+
+    errors = []
+    ids = list(positions)
+    for i, nid in enumerate(ids):
+        for other in ids[i + 1:]:
+            distance = math.dist(positions[nid], positions[other])
+            if distance < .99:
+                errors.append(('close', nid, other, round(distance, 2)))
+    for owner, a, b, ignored in segments:
+        for nid, point in positions.items():
+            if nid in ignored:
+                continue
+            distance = segment_distance(point, a, b)
+            if distance < .4:
+                errors.append(('edge', owner, 'near', nid, round(distance, 2)))
+    return positions, errors
+
+
+if __name__ == '__main__':
+    data = json.loads(SNAPSHOT.read_text(encoding='utf-8-sig'))
+    positions, errors = check(data)
+    print(f"{len(data['skills'])} skills, {len(data.get('sections', []))} free section headings")
+    print(chr(10).join(map(str, errors)) if errors else 'OK')
+    branch_codes = {0: 'R', 1: 'G', 2: 'P', 3: 'C', 4: 'W', 5: 'S', 6: 'L'}
+    layout = {n['id']: [*positions[n['id']], n['prerequisites'] or [], branch_codes[n['branch']]] for n in data['skills']}
+    Path('layout.json').write_text(json.dumps(layout), encoding='utf-8')
+    raise SystemExit(1 if errors else 0)

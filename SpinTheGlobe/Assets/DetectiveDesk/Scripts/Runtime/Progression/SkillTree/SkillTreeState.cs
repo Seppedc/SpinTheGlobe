@@ -39,9 +39,9 @@ namespace DetectiveDesk.Progression
             reason = "";
             if (node == null) { reason = "Unknown skill."; return NodeStatus.Hidden; }
             int rank = Rank(node.id);
-            if (rank >= node.maxRank) { reason = "Maxed."; return NodeStatus.Maxed; }
             if (!string.IsNullOrEmpty(node.requiresUnlock) && !(UnlockCheck != null && UnlockCheck(node.requiresUnlock)))
             { reason = "Unlock it in the Gold shop first."; return NodeStatus.Hidden; }
+            if (rank >= node.maxRank) { reason = "Maxed."; return NodeStatus.Maxed; }
 
             if (!node.IsRoot)
             {
@@ -74,13 +74,41 @@ namespace DetectiveDesk.Progression
         }
 
         public bool TryPurchase(SkillTreeAsset tree, string id, Wallet wallet, StatSheet stats, out string reason)
+            => TryPurchase(tree, id, wallet, stats, 1, out _, out reason);
+
+        /// <summary>Ranks purchasable now, stopping at the wallet, rank limit or stat cap. Does not spend.</summary>
+        public int QuotePurchase(SkillNodeData node, Wallet wallet, StatSheet stats, int quantity, out double totalCost)
         {
+            totalCost = 0;
+            if (quantity <= 0 || Status(node, wallet, stats, out _) != NodeStatus.Available) return 0;
+            int owned = Rank(node.id), count = 0;
+            int limit = Math.Min(quantity, node.maxRank - owned);
+            while (count < limit)
+            {
+                if (node.capStat != StatId.None && node.capByStat != StatId.None && stats != null
+                    && stats.Preview(node.capStat, node.modifiers, count + 1) > stats.Permanent(node.capByStat) + 1e-9) break;
+                double next = totalCost + node.cost.Cost(owned + count);
+                if (!wallet.CanAfford(node.currency, next)) break;
+                totalCost = next;
+                count++;
+            }
+            return count;
+        }
+
+        /// <summary>Buy up to quantity ranks in one transaction and publish one final-rank notification.</summary>
+        public bool TryPurchase(SkillTreeAsset tree, string id, Wallet wallet, StatSheet stats,
+            int quantity, out int purchased, out string reason)
+        {
+            purchased = 0;
             var node = tree != null ? tree.Find(id) : null;
             if (Status(node, wallet, stats, out reason) != NodeStatus.Available) return false;
-            if (!wallet.TrySpend(node.currency, NextCost(node))) { reason = "Not enough funds."; return false; }
+            int count = QuotePurchase(node, wallet, stats, quantity, out double totalCost);
+            if (count == 0) { reason = "No levels available."; return false; }
+            if (!wallet.TrySpend(node.currency, totalCost)) { reason = "Not enough funds."; return false; }
 
-            int newRank = Rank(node.id) + 1;
+            int newRank = Rank(node.id) + count;
             ranks[node.id] = newRank;
+            purchased = count;
             stats?.Rebuild(tree, this);
             Purchased?.Invoke(node, newRank);
             EventBus.Publish(new SkillPurchased(node.id, newRank));

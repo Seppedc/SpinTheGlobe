@@ -40,10 +40,9 @@ namespace DetectiveDesk.Gameplay
         /// <summary>Payout ticks (several per revolution, see GameBalance.globeTicksPerRevolution).</summary>
         public event Action<long> TicksCompleted;
 
-        bool dragging;
-        Vector2 pointer;
-        float travelled;
-        double dragAdded;   // speed requested by the current drag
+        readonly GlobeDragGesture dragGesture = new GlobeDragGesture();
+        float dragPixelScale = 1;
+        int dragViewportWidth;
 
         void Start()
         {
@@ -57,31 +56,25 @@ namespace DetectiveDesk.Gameplay
 
         void Update()
         {
-            if (game && game.WorldInputBlocked) { dragging = false; }
+            if (game && game.WorldInputBlocked) { CancelDrag(); }
             else if (gameCamera && dragCollider)
             {
                 if (Input.GetMouseButtonDown(0) && !(EventSystem.current && EventSystem.current.IsPointerOverGameObject()))
                 {
-                    dragging = CanBeginDrag(gameCamera.ScreenPointToRay(Input.mousePosition));
-                    pointer = Input.mousePosition;
-                    travelled = 0;
-                    dragAdded = 0;
+                    CancelDrag();
+                    if (CanBeginDrag(gameCamera.ScreenPointToRay(Input.mousePosition)))
+                        BeginDrag(Input.mousePosition, Time.unscaledTimeAsDouble);
                 }
-                if (dragging && Input.GetMouseButton(0))
-                {
-                    Vector2 next = Input.mousePosition;
-                    float dx = next.x - pointer.x;
-                    travelled += (next - pointer).magnitude;
-                    AddSwipe(dx, Time.unscaledDeltaTime);
-                    pointer = next;
-                }
+                if (dragGesture.Active && gameCamera.pixelWidth != dragViewportWidth) CancelDrag();
+                if (dragGesture.Active && Input.GetMouseButton(0)) TrackDrag(Input.mousePosition);
                 if (Input.GetMouseButtonUp(0))
                 {
-                    if (dragging && travelled <= clickMaxPixels) AddClick();
-                    else if (dragging) FinishDrag();
-                    dragging = false;
+                    if (EventSystem.current && EventSystem.current.IsPointerOverGameObject()) CancelDrag();
+                    else ReleaseDrag(Input.mousePosition, Time.unscaledTimeAsDouble);
                 }
+                else if (dragGesture.Active && !Input.GetMouseButton(0)) CancelDrag();
             }
+            else CancelDrag();
             Advance(Time.deltaTime);
         }
 
@@ -98,28 +91,30 @@ namespace DetectiveDesk.Gameplay
             return discriminant >= 0 && -along + Mathf.Sqrt(discriminant) > 0;
         }
 
-        public void AddSwipe(float horizontalPixels) => AddSwipe(horizontalPixels, Time.unscaledDeltaTime);
-
-        /// <summary>Positive west-to-east movement, weighted by pointer speed.</summary>
-        public void AddSwipe(float horizontalPixels, float seconds)
+        /// <summary>Begin one gesture after globe hit-testing. No rotation is added until release.</summary>
+        public void BeginDrag(Vector2 screenPosition, double time)
         {
-            if (!game) return;
-            double impulse = GameplayMath.DragImpulse(horizontalPixels, seconds, game.Balance,
-                game.Stats.Get(StatId.GlobeDragPower), MaximumVelocity);
-            dragAdded += impulse;
-            AddVelocity(impulse);
+            CancelDrag();
+            if (!game || game.WorldInputBlocked) return;
+            dragViewportWidth = gameCamera ? Mathf.Max(1, gameCamera.pixelWidth) : 0;
+            dragPixelScale = dragViewportWidth > 0
+                ? Mathf.Max(1, game.Balance.dragReferenceScreenWidth) / dragViewportWidth : 1;
+            dragGesture.Begin(screenPosition, time);
         }
 
-        /// <summary>
-        /// Rule: dragging is always more rewarding than clicking. A drag in the spin direction gives at least
-        /// <see cref="GameBalance.dragOverClick"/> × a click's impulse, using the (always higher) drag power.
-        /// </summary>
-        void FinishDrag()
+        public void TrackDrag(Vector2 screenPosition) => dragGesture.Move(screenPosition);
+
+        /// <summary>Consume the gesture once. Backtracking reduces net forward distance instead of building power.</summary>
+        public void ReleaseDrag(Vector2 screenPosition, double time)
         {
-            if (dragAdded <= 0 || !game) return;
-            double minimum = GameplayMath.SpinImpulse(game.Balance.clickImpulse * game.Balance.dragOverClick, game.Stats.Get(StatId.GlobeDragPower), MaximumVelocity, game.Balance.impulseReferenceSpeed);
-            if (dragAdded < minimum) AddVelocity(minimum - dragAdded);
+            if (!game || game.WorldInputBlocked) { CancelDrag(); return; }
+            if (!dragGesture.TryRelease(screenPosition, time, clickMaxPixels, out var release)) return;
+            if (release.IsClick) AddClick();
+            else AddVelocity(GameplayMath.DragImpulse(release.HorizontalPixels * dragPixelScale, release.Seconds,
+                game.Balance, game.Stats.Get(StatId.GlobeDragPower), MaximumVelocity));
         }
+
+        public void CancelDrag() => dragGesture.Cancel();
 
         /// <summary>Click input: a fixed impulse, deliberately weaker than a good drag.</summary>
         public void AddClick()
@@ -132,6 +127,7 @@ namespace DetectiveDesk.Gameplay
         {
             if (amount <= 0 || IsRedline && CurrentVelocity >= MaximumVelocity) return;
             CurrentVelocity = Math.Min(MaximumVelocity, Math.Max(AutoFloor, CurrentVelocity) + amount);
+            if (game) game.Guidance.Complete(PlayerGuidanceState.GlobeSpin);
         }
 
         public void EnforceLimits() { CurrentVelocity = Math.Max(AutoFloor, Math.Min(MaximumVelocity, CurrentVelocity)); }
@@ -139,7 +135,8 @@ namespace DetectiveDesk.Gameplay
         public void Advance(double seconds)
         {
             double velocity = CurrentVelocity;
-            double friction = game ? game.Balance.frictionAt60Hz : .985;
+            double friction = game ? GameplayMath.SpinFriction(game.Balance.frictionAt60Hz,
+                game.Stats.Get(StatId.GlobeSpeedDecay)) : .985;
             double delta = GameplayMath.Integrate(ref velocity, seconds, friction, AutoFloor, MaximumVelocity);
             CurrentVelocity = velocity;
             if (game && game.legacy) game.legacy.globeSpeed = (float)CurrentVelocity;
@@ -157,6 +154,8 @@ namespace DetectiveDesk.Gameplay
         }
 
         public Vector3 MarkerPosition(float latitude, float longitude) => markerLocalCenter + GameplayMath.Spherical(latitude, longitude, markerLocalRadius);
-        void OnDisable() { dragging = false; }
+        void OnDisable() => CancelDrag();
+        void OnApplicationFocus(bool focused) { if (!focused) CancelDrag(); }
+        void OnApplicationPause(bool paused) { if (paused) CancelDrag(); }
     }
 }

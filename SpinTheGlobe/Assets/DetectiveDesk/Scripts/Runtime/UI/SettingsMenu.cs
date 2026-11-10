@@ -11,7 +11,7 @@ namespace DetectiveDesk.Gameplay
     /// <summary>
     /// Settings menu (gear button or Esc): language, master / effects / music volume, display options
     /// (window mode, resolution, frame-rate limit), Save &amp; Quit, and
-    /// Restart game behind two confirmations. Built at runtime in the noir-ledger style.
+    /// Restart game behind two confirmations. Uses the authored scene layout.
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class SettingsMenu : MonoBehaviour
@@ -19,10 +19,10 @@ namespace DetectiveDesk.Gameplay
         const float RowHeight = 42, LabelWidth = 250, PanelWidth = 760;
 
         GameManager game;
-        Canvas canvas;
-        RectTransform panel, dialog;
-        TextMeshProUGUI dialogTitle, dialogText, dialogConfirmLabel;
-        Button dialogConfirm;
+        [SerializeField] Canvas canvas;
+        [SerializeField] RectTransform panel, dialog;
+        [SerializeField] TextMeshProUGUI dialogTitle, dialogText, dialogConfirmLabel;
+        [SerializeField] Button dialogConfirm;
         int restartStep;
         Coroutine countdown;
         readonly List<Action> refreshers = new List<Action>();
@@ -33,11 +33,31 @@ namespace DetectiveDesk.Gameplay
         {
             game = owner;
             GameSettings.Apply();
-            Build();
+            CreateLayout(owner);
+            BindActions();
             canvas.gameObject.SetActive(false);
         }
 
-        void OnDestroy() { if (canvas) Destroy(canvas.gameObject); }
+        public Canvas CreateLayout(GameManager owner)
+        {
+            game = owner;
+            refreshers.Clear();
+            if (!canvas) Build();
+            else ConfigureControls();
+            return canvas;
+        }
+
+        void BindActions()
+        {
+            SceneViewBindings.Button(panel, "Title/Close", Close);
+            SceneViewBindings.Button(panel, "Buttons/Restart", AskRestart);
+            SceneViewBindings.Button(panel, "Buttons/Save and quit", SaveAndQuit);
+            SceneViewBindings.Button(panel, "Buttons/Back", Close);
+            SceneViewBindings.Button(dialog, "Box/Buttons/Cancel", HideDialog);
+            SceneViewBindings.Bind(dialogConfirm, ConfirmRestart);
+        }
+
+        void OnDestroy() { if (Application.isPlaying && canvas) Destroy(canvas.gameObject); }
 
         public void Toggle() { if (IsOpen) Close(); else Open(); }
 
@@ -132,6 +152,25 @@ namespace DetectiveDesk.Gameplay
             BuildDialog();
         }
 
+        void ConfigureControls()
+        {
+            Selector("Language", GameSettings.Languages, () => GameSettings.Language, i => { GameSettings.Language = i; GameSettings.Apply(); });
+
+            SliderRow("Master volume", () => GameSettings.Master, x => { GameSettings.Master = x; GameSettings.Apply(); });
+            SliderRow("Sound effects", () => GameSettings.Effects, x => { GameSettings.Effects = x; GameSettings.Apply(); });
+            SliderRow("Background music", () => GameSettings.Music, x => { GameSettings.Music = x; GameSettings.Apply(); });
+
+            Selector("Window mode", GameSettings.WindowModes, () => GameSettings.WindowMode, i => { GameSettings.WindowMode = i; GameSettings.Apply(); }, EditorNote);
+            var sizes = GameSettings.Resolutions();
+            var sizeNames = new string[sizes.Count];
+            for (int i = 0; i < sizes.Count; i++) sizeNames[i] = sizes[i].x + " × " + sizes[i].y;
+            Selector("Resolution", sizeNames, () => Mathf.Max(0, sizes.IndexOf(GameSettings.Resolution)) , i => { GameSettings.Resolution = sizes[i]; GameSettings.Apply(); }, EditorNote);
+            var fps = new string[GameSettings.FrameRates.Length];
+            for (int i = 0; i < fps.Length; i++) fps[i] = GameSettings.FrameRates[i] < 0 ? "Unlimited" : GameSettings.FrameRates[i] + " FPS";
+            Selector("Frame-rate limit", fps, () => GameSettings.FrameRateIndex, i => { GameSettings.FrameRateIndex = i; GameSettings.Apply(); });
+
+        }
+
         RectTransform Row(string name, float height = RowHeight)
         {
             var row = UIFactory.NewRect(name, panel);
@@ -165,8 +204,9 @@ namespace DetectiveDesk.Gameplay
         /// <summary>A "‹ value ›" picker that cycles through options.</summary>
         void Selector(string label, string[] options, Func<int> get, Action<int> set, Func<string> note = null)
         {
-            var row = Row(label);
-            Label(row, label);
+            var existing = panel.Find(label);
+            var row = existing ? (RectTransform)existing : Row(label);
+            if (!existing) Label(row, label);
             int count = Mathf.Max(1, options.Length);
             TextMeshProUGUI value = null;
             void Show()
@@ -175,18 +215,30 @@ namespace DetectiveDesk.Gameplay
                 string n = note != null ? note() : null;
                 value.text = (options.Length > 0 ? options[i] : "—") + (string.IsNullOrEmpty(n) ? "" : "  <size=70%><color=#a89a80>(" + n + ")</color></size>");
             }
-            var prev = UIFactory.NewButton("Previous", row, "‹", 24, () => { set(((get() - 1) % count + count) % count); RefreshAll(); }, out _);
-            Fixed(prev.gameObject, 44, 38);
-            value = UIFactory.NewTitle("Value", row, "", 20, TextAnchor.MiddleCenter, UITheme.Cream);
-            value.gameObject.AddComponent<LayoutElement>().flexibleWidth = 1;
-            var next = UIFactory.NewButton("Next", row, "›", 24, () => { set((get() + 1) % count); RefreshAll(); }, out _);
-            Fixed(next.gameObject, 44, 38);
+            if (!existing)
+            {
+                var prev = UIFactory.NewButton("Previous", row, "‹", 24, null, out _);
+                Fixed(prev.gameObject, 44, 38);
+                value = UIFactory.NewTitle("Value", row, "", 20, TextAnchor.MiddleCenter, UITheme.Cream);
+                value.gameObject.AddComponent<LayoutElement>().flexibleWidth = 1;
+                var next = UIFactory.NewButton("Next", row, "›", 24, null, out _);
+                Fixed(next.gameObject, 44, 38);
+            }
+            else value = row.Find("Value").GetComponent<TextMeshProUGUI>();
+            SceneViewBindings.Button(row, "Previous", () => { set(((get() - 1) % count + count) % count); RefreshAll(); });
+            SceneViewBindings.Button(row, "Next", () => { set((get() + 1) % count); RefreshAll(); });
             refreshers.Add(Show);
             Show();
         }
 
         void SliderRow(string label, Func<float> get, Action<float> set)
         {
+            var existing = panel.Find(label);
+            if (existing)
+            {
+                BindSlider(existing.Find("Slider").GetComponent<Slider>(), existing.Find("Value").GetComponent<TextMeshProUGUI>(), get, set);
+                return;
+            }
             var row = Row(label);
             Label(row, label);
 
@@ -212,8 +264,14 @@ namespace DetectiveDesk.Gameplay
 
             var value = UIFactory.NewTitle("Value", row, "", 20, TextAnchor.MiddleRight, UITheme.Cream);
             Fixed(value.gameObject, 70, RowHeight);
-            slider.value = get();
+            BindSlider(slider, value, get, set);
+        }
+
+        void BindSlider(Slider slider, TextMeshProUGUI value, Func<float> get, Action<float> set)
+        {
+            slider.SetValueWithoutNotify(get());
             value.text = Mathf.RoundToInt(get() * 100) + "%";
+            slider.onValueChanged.RemoveAllListeners();
             slider.onValueChanged.AddListener(x => { set(x); value.text = Mathf.RoundToInt(x * 100) + "%"; });
             refreshers.Add(() => { slider.SetValueWithoutNotify(get()); value.text = Mathf.RoundToInt(get() * 100) + "%"; });
         }

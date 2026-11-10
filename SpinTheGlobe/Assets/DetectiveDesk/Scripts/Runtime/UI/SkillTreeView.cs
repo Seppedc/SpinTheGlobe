@@ -12,29 +12,33 @@ namespace DetectiveDesk.Gameplay
     /// Full-screen radial skill tree in the style of Bills Must Be Paid: compact square nodes around
     /// one root, hover a node for a tooltip card (what it does, stat now ▸ after, price), click to buy.
     /// Nodes appear once one of their prerequisites is owned. Drag to pan, scroll to zoom.
-    /// Built at runtime from the SkillTreeAsset.
+    /// Uses the authored scene layout, with a builder fallback for scenes that have not been set up yet.
     /// </summary>
     [DisallowMultipleComponent]
-    public sealed class SkillTreeView : MonoBehaviour
+    public sealed partial class SkillTreeView : MonoBehaviour
     {
         const float NodeSize = 78, RootSize = 96, TooltipWidth = 360;
 
+        [System.Serializable]
         sealed class NodeView
         {
-            public SkillNodeData data;
+            public string id;
+            [System.NonSerialized] public SkillNodeData data;
             public RectTransform rect;
             public Image fill, border;
             public TextMeshProUGUI label, rank;
             public Image icon;
-            public readonly List<Image> links = new List<Image>();
+            public List<Image> links = new List<Image>();
             public float pulse;
         }
 
         GameManager game;
-        Canvas canvas;
-        RectTransform canvasRect, content, tooltip;
-        TextMeshProUGUI moneyText, tipTitle, tipBody, tipStats, tipCost, tipRank;
+        [SerializeField] Canvas canvas;
+        [SerializeField] RectTransform canvasRect, content, tooltip;
+        [SerializeField] TextMeshProUGUI moneyText, tipTitle, tipBody, tipStats, tipCost, tipRank;
         readonly Dictionary<string, NodeView> views = new Dictionary<string, NodeView>();
+        [SerializeField] List<NodeView> authoredNodes = new List<NodeView>();
+        [SerializeField] int authoredLayoutRevision;
         NodeView hovered;
         float tooltipAge;
         bool dirty = true;
@@ -42,18 +46,130 @@ namespace DetectiveDesk.Gameplay
 
         public bool IsOpen => canvas && canvas.gameObject.activeSelf;
 
-        /// <summary>Testing: show every node, including ones not discovered yet (F6 in the Editor).</summary>
+        /// <summary>Authoring preview: show every node, including ones not discovered yet.</summary>
         public bool RevealAll { get => revealAll; set { revealAll = value; dirty = true; } }
 
         public void Initialize(GameManager owner)
         {
             game = owner;
-            Build();
+            CreateLayout(owner);
+            BindActions();
             canvas.gameObject.SetActive(false);
             game.Changed += () => dirty = true;
         }
 
-        void OnDestroy() { if (canvas) Destroy(canvas.gameObject); }
+        public Canvas CreateLayout(GameManager owner)
+        {
+            game = owner;
+            if (!canvas)
+            {
+                Build();
+                authoredNodes = new List<NodeView>(views.Values);
+            }
+            else
+            {
+                views.Clear();
+                foreach (var node in authoredNodes)
+                {
+                    node.data = game.Tree.Find(node.id);
+                    if (node.data != null) views[node.id] = node;
+                }
+            }
+            RestoreSections();
+            if (authoredLayoutRevision != game.Tree.layoutRevision)
+            {
+                foreach (var node in views.Values)
+                {
+                    node.rect.anchoredPosition = node.data.position;
+                    float size = node.data.IsRoot ? RootSize : NodeSize;
+                    float below = node.data.IsRoot ? size * .71f : size * .5f;
+                    node.label.rectTransform.anchoredPosition = node.data.position - new Vector2(0, below + 5);
+                    node.label.text = "<mark=#0b0a09E6 padding=\"6,6,2,2\">" + ShortLabel(node.data) + "</mark>";
+                }
+                foreach (var section in sectionViews.Values)
+                {
+                    section.rect.anchoredPosition = section.data.position;
+                    PlaceSectionLabel(section);
+                }
+                foreach (var node in views.Values) RebuildNodeLinks(node);
+                authoredLayoutRevision = game.Tree.layoutRevision;
+            }
+            EnsurePurchaseControls();
+            return canvas;
+        }
+
+        void BindActions()
+        {
+            SceneViewBindings.Button(canvas.transform, "Backdrop/Header/Close", Close);
+            foreach (var node in views.Values) BindNode(node.rect.GetComponent<SkillNodeWidget>());
+        }
+
+        void BindNode(SkillNodeWidget widget)
+        {
+            widget.Entered = w => ShowTooltip(views[w.nodeId]);
+            widget.Exited = w => { if (hovered != null && hovered.data.id == w.nodeId) HideTooltip(); };
+            widget.Clicked = w => Buy(views[w.nodeId]);
+        }
+
+        public void PreviewLayout()
+        {
+            bool previous = revealAll;
+            revealAll = true;
+            Refresh();
+            revealAll = previous;
+        }
+
+        /// <summary>Update one authored branch after changing its data, leaving the other branches untouched.</summary>
+        public void SynchronizeBranchLayout(GameManager owner, SkillBranch branch)
+        {
+            var ids = new List<string>();
+            foreach (var node in owner.Tree.Nodes) if (node.branch == branch) ids.Add(node.id);
+            SynchronizeNodeLayout(owner, ids.ToArray());
+        }
+
+        /// <summary>Update only the specified nodes, retaining other authored positions and styling.</summary>
+        public void SynchronizeNodeLayout(GameManager owner, params string[] nodeIds)
+        {
+            if (Application.isPlaying) throw new System.InvalidOperationException("Update authored layouts outside Play mode.");
+            CreateLayout(owner);
+            var selected = new HashSet<string>(nodeIds);
+            foreach (var data in game.Tree.Nodes)
+            {
+                if (!selected.Contains(data.id)) continue;
+                if (!views.TryGetValue(data.id, out var node))
+                {
+                    NodeView style = null;
+                    foreach (var existing in views.Values)
+                        if (existing.data.branch == data.branch) { style = existing; break; }
+                    node = CreateNode(data, content.Find("Nodes") as RectTransform, content.Find("Labels") as RectTransform);
+                    if (style != null)
+                    {
+                        node.label.font = style.label.font;
+                        node.rank.font = style.rank.font;
+                        node.border.sprite = style.border.sprite;
+                        node.icon.sprite = style.icon.sprite;
+                    }
+                    views[data.id] = node;
+                }
+                node.rect.anchoredPosition = data.position;
+                float size = data.IsRoot ? RootSize : NodeSize;
+                float below = data.IsRoot ? size * 0.71f : size * 0.5f;
+                node.label.rectTransform.anchoredPosition = data.position - new Vector2(0, below + 5);
+                node.label.text = "<mark=#0b0a09E6 padding=\"6,6,2,2\">" + ShortLabel(data) + "</mark>";
+            }
+            foreach (var node in views.Values)
+                if (selected.Contains(node.id) || (node.data.prerequisites != null
+                    && System.Array.Exists(node.data.prerequisites, selected.Contains))) RebuildNodeLinks(node);
+            authoredNodes = new List<NodeView>(views.Values);
+            RefreshSections();
+        }
+
+        // Entry nodes connect to the root; additional requirements stay in the tooltip.
+        static bool DrawLink(SkillNodeData parent, SkillNodeData child) => parent != null
+            && (parent.IsRoot || (parent.branch == child.branch
+                && !System.Array.Exists(child.prerequisites, id => id == DefaultSkillTreeFactory.RootId)));
+
+        void OnDestroy() { if (Application.isPlaying && canvas) Destroy(canvas.gameObject); }
 
         public void Toggle() { if (IsOpen) Close(); else Open(); }
 
@@ -63,7 +179,8 @@ namespace DetectiveDesk.Gameplay
             if (game.legacy && game.legacy.upgradesPanel) game.legacy.upgradesPanel.SetActive(false);
             if (game.ShopView && game.ShopView.IsOpen) game.ShopView.Close();
             canvas.gameObject.SetActive(true);
-            dirty = true;
+            Refresh();
+            dirty = false;
         }
 
         /// <summary>True during the frame the tree was closed (so the same Esc press doesn't open the settings).</summary>
@@ -103,15 +220,8 @@ namespace DetectiveDesk.Gameplay
                 if (node == null || string.IsNullOrEmpty(node.id)) continue;
                 views[node.id] = CreateNode(node, nodeLayer, labelLayer);
             }
-            foreach (var v in views.Values)
-            {
-                if (v.data.prerequisites == null) continue;
-                foreach (var p in v.data.prerequisites)
-                {
-                    var parent = game.Tree.Find(p);
-                    if (parent != null) v.links.Add(Link(linkLayer, parent.position, v.data.position));
-                }
-            }
+            EnsureSections();
+            foreach (var v in views.Values) RebuildNodeLinks(v);
 
             // Header
             var header = UIFactory.NewPanel("Header", back, true, new Color(0.035f, 0.031f, 0.028f, 1)).rectTransform
@@ -133,7 +243,7 @@ namespace DetectiveDesk.Gameplay
         NodeView CreateNode(SkillNodeData node, RectTransform parent, RectTransform labels)
         {
             float size = node.IsRoot ? RootSize : NodeSize;
-            var v = new NodeView { data = node };
+            var v = new NodeView { id = node.id, data = node };
             v.fill = UIFactory.NewImage(node.id, parent, Color.black);
             v.rect = v.fill.rectTransform.Place(new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), node.position, new Vector2(size, size));
             v.border = UIFactory.AddFrame(v.rect, node.IsRoot || node.currency == Currency.Gold, 0.85f);
@@ -158,9 +268,7 @@ namespace DetectiveDesk.Gameplay
 
             var widget = v.rect.gameObject.AddComponent<SkillNodeWidget>();
             widget.nodeId = node.id;
-            widget.Entered = w => ShowTooltip(views[w.nodeId]);
-            widget.Exited = w => { if (hovered != null && hovered.data.id == w.nodeId) HideTooltip(); };
-            widget.Clicked = w => Buy(views[w.nodeId]);
+            BindNode(widget);
             return v;
         }
 
@@ -242,6 +350,7 @@ namespace DetectiveDesk.Gameplay
         // ------------------------------------------------------------------ tooltip
         void ShowTooltip(NodeView v)
         {
+            hoveredSection = null;
             hovered = v;
             tooltipAge = 0;
             tooltip.gameObject.SetActive(true);
@@ -252,18 +361,32 @@ namespace DetectiveDesk.Gameplay
         void HideTooltip()
         {
             hovered = null;
+            hoveredSection = null;
             if (tooltip) tooltip.gameObject.SetActive(false);
         }
 
         void FillTooltip()
         {
+            if (hoveredSection != null) { FillSectionTooltip(); return; }
             if (hovered == null) return;
+            tipCost.gameObject.SetActive(true);
             var node = hovered.data;
             var status = game.Skills.Status(node, game.Wallet, game.Stats, out string reason);
             int rank = game.Skills.Rank(node.id);
+            int quantity = PurchaseQuote(node, out double totalCost);
+            int previewRanks = quantity > 0 ? quantity : 1;
             bool maxed = status == NodeStatus.Maxed;
+            var colors = PurchasePalette.For(status);
 
             tipTitle.text = node.title;
+            tooltip.GetComponent<Image>().color = colors.fill;
+            tooltip.Find("Frame").GetComponent<Image>().color = colors.border;
+            tooltip.Find("Rule").GetComponent<Image>().color = colors.border;
+            tipTitle.color = colors.text;
+            tipBody.color = colors.text;
+            tipStats.color = colors.text;
+            tipRank.color = colors.text;
+            tipCost.color = colors.price;
             tipBody.text = node.description;
 
             var sb = new StringBuilder();
@@ -273,7 +396,7 @@ namespace DetectiveDesk.Gameplay
                     if (m.stat == StatId.None) continue;
                     double now = game.Stats.Permanent(m.stat, m.pinIndex);
                     sb.Append(StatInfo.Name(m.stat)).Append("     ").Append(StatInfo.Format(m.stat, now));
-                    if (!maxed) sb.Append("  →  ").Append(StatInfo.Format(m.stat, game.Stats.Preview(m.stat, node.modifiers, 1, m.pinIndex)));
+                    if (!maxed) sb.Append("  →  ").Append(StatInfo.Format(m.stat, game.Stats.Preview(m.stat, node.modifiers, previewRanks, m.pinIndex)));
                     sb.Append('\n');
                 }
             tipStats.text = sb.ToString().TrimEnd('\n');
@@ -284,13 +407,15 @@ namespace DetectiveDesk.Gameplay
                 : "Level " + rank + " / " + node.maxRank;
 
             string price = node.currency == Currency.Gold
-                ? NumberFormatter.Format(game.Skills.NextCost(node)) + " gold"
-                : NumberFormatter.Money(game.Skills.NextCost(node));
+                ? NumberFormatter.Format(quantity > 0 ? totalCost : game.Skills.NextCost(node)) + " gold"
+                : NumberFormatter.Money(quantity > 0 ? totalCost : game.Skills.NextCost(node));
+            if (quantity > 0 && node.maxRank > 1 && purchaseAmount > 1)
+                price = "Buy " + quantity + " level" + (quantity == 1 ? "" : "s") + " · " + price;
             switch (status)
             {
-                case NodeStatus.Maxed: tipCost.text = rank > 0 && node.maxRank == 1 ? "OWNED" : "MAXED"; tipCost.color = new Color(0.55f, 0.8f, 0.45f); tipCost.fontSize = 22; break;
-                case NodeStatus.Available: tipCost.text = price; tipCost.color = new Color(0.55f, 0.85f, 0.45f); tipCost.fontSize = 26; break;
-                case NodeStatus.Unaffordable: tipCost.text = price; tipCost.color = new Color(0.92f, 0.28f, 0.3f); tipCost.fontSize = 26; break;
+                case NodeStatus.Maxed: tipCost.text = rank > 0 && node.maxRank == 1 ? "OWNED" : "MAXED"; tipCost.fontSize = 22; break;
+                case NodeStatus.Available: tipCost.text = price; tipCost.fontSize = 26; break;
+                case NodeStatus.Unaffordable: tipCost.text = price; tipCost.fontSize = 26; break;
                 default:
                     if (status == NodeStatus.Capped) reason = "Raise " + StatInfo.Name(node.capByStat) + " first.";
                     else if (status == NodeStatus.Locked && node.prerequisites != null)
@@ -301,16 +426,17 @@ namespace DetectiveDesk.Gameplay
                         reason = "Needs " + string.Join(", ", missing) + ".";
                     }
                     tipCost.text = price + "\n<size=15>" + reason + "</size>";
-                    tipCost.color = new Color(0.75f, 0.55f, 0.35f); tipCost.fontSize = 22; break;
+                    tipCost.fontSize = 22; break;
             }
         }
 
         void PlaceTooltip()
         {
-            if (hovered == null) return;
-            Vector2 screen = RectTransformUtility.WorldToScreenPoint(null, hovered.rect.position);
+            var targetRect = hovered != null ? hovered.rect : hoveredSection?.rect;
+            if (!targetRect) return;
+            Vector2 screen = RectTransformUtility.WorldToScreenPoint(null, targetRect.position);
             RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screen, null, out Vector2 local);
-            float half = hovered.rect.rect.width * 0.5f * content.localScale.x + 18;
+            float half = targetRect.rect.width * 0.5f * content.localScale.x + 18;
             Vector2 size = canvasRect.rect.size;
             bool right = local.x + half + TooltipWidth < size.x * 0.5f - 10;
             tooltip.pivot = new Vector2(right ? 0 : 1, 0.5f);
@@ -325,10 +451,10 @@ namespace DetectiveDesk.Gameplay
             var status = game.Skills.Status(v.data, game.Wallet, game.Stats, out string reason);
             if (status != NodeStatus.Available)
             {
-                v.pulse = -1; // short red flash
+                v.pulse = -1; // short shake; retain the purchase-state colour
                 return;
             }
-            if (game.PurchaseSkill(v.data.id)) { v.pulse = 1; dirty = true; }
+            if (game.PurchaseSkill(v.data.id, purchaseAmount)) { v.pulse = 1; dirty = true; }
         }
 
         // ------------------------------------------------------------------ update
@@ -336,9 +462,9 @@ namespace DetectiveDesk.Gameplay
         {
             if (!IsOpen) return;
             if (Input.GetKeyDown(KeyCode.Escape)) { Close(); return; }
-            if (dirty) { dirty = false; Refresh(); if (hovered != null) FillTooltip(); }
+            if (dirty) { dirty = false; Refresh(); if (hovered != null || hoveredSection != null) FillTooltip(); }
 
-            if (hovered != null)
+            if (hovered != null || hoveredSection != null)
             {
                 // Pop-in: slight scale and tilt that settles, like a card being dealt.
                 tooltipAge += Time.unscaledDeltaTime;
@@ -356,8 +482,7 @@ namespace DetectiveDesk.Gameplay
                 v.rect.localScale = Vector3.one * s;
                 v.pulse = v.pulse > 0 ? Mathf.Max(0, v.pulse - Time.unscaledDeltaTime * 4) : Mathf.Min(0, v.pulse + Time.unscaledDeltaTime * 3);
                 if (v.pulse == 0) v.rect.localScale = Vector3.one;
-                if (v.pulse < 0) v.border.color = new Color(0.9f, 0.25f, 0.25f);
-                else if (v.pulse == 0) dirty = true;
+                if (v.pulse == 0) dirty = true;
             }
         }
 
@@ -371,48 +496,23 @@ namespace DetectiveDesk.Gameplay
                 v.rect.gameObject.SetActive(visible);
                 v.label.gameObject.SetActive(visible);
                 int rank = game.Skills.Rank(v.data.id);
-                Color branch = BranchColor(v.data.branch);
-                bool owned = rank > 0;
-
-                Color fill, border;
-                if (owned) { fill = Color.Lerp(branch, Color.black, 0.72f); border = Color.Lerp(branch, UITheme.Gold, 0.45f); }
-                else
-                    switch (status)
-                    {
-                        case NodeStatus.Available: fill = new Color(0.075f, 0.064f, 0.054f); border = UITheme.Gold; break;
-                        case NodeStatus.Capped: fill = new Color(0.07f, 0.055f, 0.045f); border = new Color(0.85f, 0.45f, 0.15f); break;
-                        case NodeStatus.Unaffordable: fill = new Color(0.05f, 0.046f, 0.042f); border = new Color(0.45f, 0.38f, 0.27f); break;
-                        default: fill = new Color(0.035f, 0.032f, 0.03f); border = new Color(0.22f, 0.2f, 0.17f); break;
-                    }
-                if (owned && status == NodeStatus.Available) border = UITheme.GoldBright; // more ranks affordable
-                v.fill.color = fill;
-                if (v.pulse >= 0) v.border.color = border;
-                v.label.color = owned || status == NodeStatus.Available ? UIFactory.Ink : status == NodeStatus.Unaffordable ? UIFactory.InkDim : new Color(0.45f, 0.42f, 0.38f);
-                v.icon.color = owned ? Color.Lerp(branch, UITheme.GoldBright, 0.5f) : status == NodeStatus.Available ? UITheme.Gold
-                             : status == NodeStatus.Unaffordable ? new Color(UITheme.Gold.r, UITheme.Gold.g, UITheme.Gold.b, 0.55f) : new Color(0.4f, 0.37f, 0.32f, 0.6f);
+                var colors = PurchasePalette.For(status);
+                v.fill.color = colors.fill;
+                v.border.color = colors.border;
+                v.label.color = colors.text;
+                v.rank.color = colors.text;
+                v.icon.color = colors.icon;
                 v.rank.text = v.data.maxRank >= DefaultSkillTreeFactory.MasteryRanks ? (rank > 0 ? "Lv " + rank : "∞")
                             : v.data.maxRank > 1 ? rank + "/" + v.data.maxRank : "";
 
                 foreach (var link in v.links)
                 {
                     link.gameObject.SetActive(visible);
-                    link.color = owned ? new Color(UITheme.Gold.r, UITheme.Gold.g, UITheme.Gold.b, 0.9f) : new Color(0.3f, 0.27f, 0.22f, 0.6f);
+                    link.color = new Color(colors.border.r, colors.border.g, colors.border.b, .65f);
                 }
             }
+            RefreshSections();
         }
 
-        static Color BranchColor(SkillBranch b)
-        {
-            switch (b)
-            {
-                case SkillBranch.Globe: return new Color(0.45f, 0.62f, 0.9f);
-                case SkillBranch.Pins: return new Color(0.85f, 0.32f, 0.32f);
-                case SkillBranch.CaseFile: return new Color(0.88f, 0.78f, 0.5f);
-                case SkillBranch.Whiskey: return new Color(0.95f, 0.6f, 0.2f);
-                case SkillBranch.Statues: return new Color(0.4f, 0.75f, 0.5f);
-                case SkillBranch.Lootbox: return new Color(0.7f, 0.5f, 0.85f);
-                default: return UIFactory.Brass;
-            }
-        }
     }
 }

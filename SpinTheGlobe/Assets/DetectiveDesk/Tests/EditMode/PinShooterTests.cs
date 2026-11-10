@@ -42,6 +42,25 @@ namespace DetectiveDesk.Tests
 
         static int ShotsInTenSeconds(int fps)
         {
+            var balance = ScriptableObject.CreateInstance<GameBalance>();
+            var tree = ScriptableObject.CreateInstance<SkillTreeAsset>();
+            try
+            {
+                tree.SetNodes(DefaultSkillTreeFactory.Create());
+                var stats = new StatSheet();
+                balance.ApplyTo(stats);
+                var reload = tree.Find("shooter_cooldown");
+                return ShotsInTenSeconds(fps, stats.Preview(StatId.ShooterCooldown, reload.modifiers, reload.maxRank));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(balance);
+                UnityEngine.Object.DestroyImmediate(tree);
+            }
+        }
+
+        static int ShotsInTenSeconds(int fps, double cooldown)
+        {
             var cycle = new PinShooterCycle();
             int shots = 0;
             for (int frame = 0; frame < fps * 10; frame++)
@@ -49,7 +68,7 @@ namespace DetectiveDesk.Tests
                 cycle.Advance(1.0 / fps);
                 for (int shot = 0; shot < 12 && cycle.Ready; shot++)
                 {
-                    cycle.Reload(1.8 * Math.Pow(0.9, 40));
+                    cycle.Reload(cooldown);
                     shots++;
                 }
                 cycle.DiscardOverdueTime();
@@ -58,7 +77,7 @@ namespace DetectiveDesk.Tests
         }
 
         [Test]
-        public void ReloadRanks_KeepImproving_AreCheaper_AndSupportTwelvePinsAtTopSpeed()
+        public void ReloadRanks_KeepImproving_WithIncreasingCosts_AndSupportTwelvePinsAtTopSpeed()
         {
             var tree = ScriptableObject.CreateInstance<SkillTreeAsset>();
             var balance = ScriptableObject.CreateInstance<GameBalance>();
@@ -69,17 +88,20 @@ namespace DetectiveDesk.Tests
                 var stats = new StatSheet();
                 balance.ApplyTo(stats);
                 double last = stats.Get(StatId.ShooterCooldown);
+                double firstPinLatestReturn = balance.pinFlightSeconds + 360 / stats.Get(StatId.GlobeMaxSpeed);
+                Assert.Greater(last, firstPinLatestReturn,
+                    "at the starting spin limit, even one pin returns before the base reload finishes");
                 Assert.Greater(reload.maxRank, 15);
                 for (int rank = 1; rank <= reload.maxRank; rank++)
                 {
                     double next = stats.Preview(StatId.ShooterCooldown, reload.modifiers, rank);
                     Assert.That(next, Is.GreaterThan(0).And.LessThan(last), "rank " + rank);
-                    if (rank <= 15)
-                        Assert.Less(reload.cost.Cost(rank - 1), Math.Ceiling(15 * Math.Pow(1.45, rank - 1)));
+                    if (rank > 1)
+                        Assert.Greater(reload.cost.Cost(rank - 1), reload.cost.Cost(rank - 2), "later reload ranks cost more");
                     last = next;
                 }
-                Assert.LessOrEqual(stats.Preview(StatId.ShooterCooldown, reload.modifiers, 15), 0.4,
-                    "existing players keep at least their old maximum fire rate");
+                Assert.That(last, Is.InRange(0.025, 0.030),
+                    "the slower opening retains approximately the same fully upgraded firing speed");
 
                 // At maximum speed, even a one-pass pin is busy during flight plus up to a turn.
                 var bearings = tree.Find("globe_max_speed");

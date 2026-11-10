@@ -8,6 +8,36 @@ namespace DetectiveDesk.Tests
 {
     public sealed class GlobeInputTests
     {
+        [TestCase(0)]
+        [TestCase(5)]
+        [TestCase(10)]
+        public void LessFriction_RetainsManualSpeed_AndStaysIndependentOfFrameRate(int level)
+        {
+            var balance = ScriptableObject.CreateInstance<GameBalance>();
+            try
+            {
+                double friction = GameplayMath.SpinFriction(balance.frictionAt60Hz, Math.Pow(.85, level));
+                double expected = 90;
+                double angle = GameplayMath.Integrate(ref expected, 2, friction, 30, 90);
+                double baseline = 90;
+                GameplayMath.Integrate(ref baseline, 2, balance.frictionAt60Hz, 30, 90);
+                if (level > 0) Assert.Greater(expected, baseline, "less speed is lost above the motor floor");
+                Assert.Greater(expected, 30);
+                Assert.Less(expected, 90, "friction still exists at maximum level");
+                foreach (int fps in new[] { 30, 60, 144 })
+                {
+                    double velocity = 90, travelled = 0;
+                    for (int frame = 0; frame < 2 * fps; frame++)
+                        travelled += GameplayMath.Integrate(ref velocity, 1.0 / fps, friction, 30, 90);
+                    Assert.AreEqual(expected, velocity, 1e-8);
+                    Assert.AreEqual(angle, travelled, 1e-8);
+                }
+                double stopped = 0;
+                Assert.AreEqual(0, GameplayMath.Integrate(ref stopped, 1, friction, 0, 90), "no hidden auto-rotation");
+            }
+            finally { UnityEngine.Object.DestroyImmediate(balance); }
+        }
+
         [TestCase(15, 0)]
         [TestCase(15, 5)]
         [TestCase(772.5, 0)]
@@ -144,16 +174,18 @@ namespace DetectiveDesk.Tests
 
         static double Gesture(GameBalance b, double pixels, double seconds, int fps, out double peak)
         {
-            double velocity = 0, elapsed = 0; peak = 0;
+            var gesture = new GlobeDragGesture();
+            gesture.Begin(Vector2.zero, 0);
+            double elapsed = 0;
             while (elapsed < seconds - 1e-9)
             {
                 double dt = Math.Min(1.0 / fps, seconds - elapsed);
-                velocity = Math.Min(90, velocity + GameplayMath.DragImpulse(pixels * dt / seconds, dt, b, 1, 90));
-                peak = Math.Max(peak, velocity);
-                GameplayMath.Integrate(ref velocity, dt, b.frictionAt60Hz, 0, 90);
                 elapsed += dt;
+                gesture.Move(new Vector2((float)(pixels * elapsed / seconds), 0));
             }
-            return velocity;
+            Assert.IsTrue(gesture.TryRelease(new Vector2((float)pixels, 0), seconds, 8, out var release));
+            peak = GameplayMath.DragImpulse(release.HorizontalPixels, release.Seconds, b, 1, 90);
+            return peak;
         }
 
         static double Travel(GameBalance b, double cap, double power, bool drag)
@@ -162,7 +194,7 @@ namespace DetectiveDesk.Tests
             for (int frame = 0; frame < 20 * 60; frame++)
             {
                 double impulse = drag
-                    ? (frame % 60 < 12 ? GameplayMath.DragImpulse(200.0 / 12, 1.0 / 60, b, power, cap) : 0)
+                    ? (frame % 60 == 12 ? GameplayMath.DragImpulse(200, .2, b, power, cap) : 0)
                     : (frame % 10 == 0 ? GameplayMath.SpinImpulse(b.clickImpulse, power, cap, b.impulseReferenceSpeed) : 0);
                 velocity = Math.Min(cap, velocity + impulse);
                 degrees += GameplayMath.Integrate(ref velocity, 1.0 / 60, b.frictionAt60Hz, 0, cap);

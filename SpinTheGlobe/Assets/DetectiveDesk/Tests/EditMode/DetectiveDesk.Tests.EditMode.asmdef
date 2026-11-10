@@ -3,6 +3,8 @@
     "rootNamespace": "DetectiveDesk.Tests",
     "references": [
         "DetectiveDesk.Runtime",
+        "UnityEngine.UI",
+        "Unity.TextMeshPro",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
     ],

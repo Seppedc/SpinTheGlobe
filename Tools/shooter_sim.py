@@ -72,6 +72,14 @@ def simulate(pins, passes, rpm, reload, per_pass, fair, fps=60, seconds=120):
 
 
 if __name__ == '__main__':
+    start_rpm = model.sheet(tuple(0 for _ in model.nodes), (), 0)[0][100] / 6
+    print('Early reload at %.0f RPM, one-pass pins, ready-pin firing:' % start_rpm)
+    print('pins rank reload  shots/min')
+    for pins in (1, 2, 3):
+        for rank in (0, 1, 5, 10):
+            reload = base_reload * factor ** rank
+            shots, _, _ = simulate(pins, 1, start_rpm, reload, payout, True, seconds=600)
+            print(f'{pins:4} {rank:4} {reload:6.3f}s {shots * 60:9.1f}')
     print('%.0f RPM, all locations, no payout upgrades; globe alone = EUR %.2f/s' % (max_rpm, max_rpm / 60 * reward))
     print('curve        pins passes reload    shots/s   pin EUR/s used')
     for label, reload, pay, fair in [('old reload', .4, 3, False)] + [

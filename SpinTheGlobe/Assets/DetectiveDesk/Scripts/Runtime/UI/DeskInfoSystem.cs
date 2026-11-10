@@ -22,42 +22,62 @@ namespace DetectiveDesk.Gameplay
         public Color brass = new Color(0.78f, 0.58f, 0.3f);
         public Color engraving = new Color(0.13f, 0.08f, 0.035f);
 
+        [Serializable]
         sealed class Tag
         {
             public string name;
-            public Func<string> text;
+            public string key;
+            [NonSerialized] public Func<string> text;
             public GameObject go;
             public TextMeshPro label;
         }
 
-        readonly List<Tag> tags = new List<Tag>();
+        [SerializeField] List<Tag> tags = new List<Tag>();
 
         // Reload ring by the pin shooter (screen-space, follows the barrel).
-        Canvas ringCanvas;
-        RectTransform ring;
-        Image ringFill, ringBack;
-        CanvasGroup ringGroup;
+        [SerializeField] Canvas ringCanvas;
+        [SerializeField] RectTransform ring;
+        [SerializeField] Image ringFill, ringBack;
+        [SerializeField] CanvasGroup ringGroup;
         Vector3 ringAnchor;
         float ringReadyFade, lastCooldown;
         GameManager game;
-        Transform root;
-        Material brassMaterial, rimMaterial;
+        [SerializeField] Transform root;
+        [SerializeField] Material brassMaterial, rimMaterial;
 
         public void Initialize(GameManager owner)
         {
             game = owner;
-            root = new GameObject("Desk brass tags").transform;
-            root.SetParent(transform, false);
-            brassMaterial = MakeMaterial("Runtime brass tag", brass, 0.85f, 0.55f);
-            rimMaterial = MakeMaterial("Runtime brass tag rim", brass * 0.45f, 0.8f, 0.4f);
-            RegisterTags();
+            CreateLayout(owner);
+            if (ringGroup) ringGroup.alpha = 0;
+            RefreshTags();
         }
 
-        void OnDestroy()
+        public Transform CreateLayout(GameManager owner)
         {
-            if (ringCanvas) Destroy(ringCanvas.gameObject);
-            if (brassMaterial) Destroy(brassMaterial);
-            if (rimMaterial) Destroy(rimMaterial);
+            game = owner;
+            if (!root)
+            {
+                root = new GameObject("Desk brass tags").transform;
+                root.SetParent(transform, false);
+            }
+            if (!brassMaterial) brassMaterial = MakeMaterial("Brass tag", brass, 0.85f, 0.55f);
+            if (!rimMaterial) rimMaterial = MakeMaterial("Brass tag rim", brass * 0.45f, 0.8f, 0.4f);
+            RegisterTags();
+            return root;
+        }
+
+        public Canvas ReloadCanvas => ringCanvas;
+
+        public void PreviewLayout()
+        {
+            foreach (var tag in tags)
+            {
+                tag.go.SetActive(true);
+                tag.label.text = tag.name == "Case file" ? "Unlock Case Files"
+                    : tag.name == "Stamp" ? "STAMP!" : "LOCKED";
+            }
+            if (ringGroup) { ringGroup.alpha = 0.85f; ringFill.fillAmount = 0.65f; PositionReloadRing(); }
         }
 
         // ------------------------------------------------------------------ tags
@@ -67,28 +87,26 @@ namespace DetectiveDesk.Gameplay
             BuildReloadRing();
 
             var cases = game.Cases;
-            if (cases && cases.FolderTransform)
+            var folder = cases && cases.FolderTransform ? cases.FolderTransform : ClickRouter.FindByName("Generated_CaseFiles", "CaseFiles_Review");
+            if (folder)
             {
-                // The folder reaches the front edge of the desk, so its plate stands beside it on the left.
-                var b = ClickRouter.RendererBounds(cases.FolderTransform, cases.FolderTransform.position);
-                var visual = cases.GetComponent<CaseFolderVisual>();
-                if (visual && visual.Folder) b = ClickRouter.RendererBounds(visual.Folder, visual.Folder.position);
+                // Position once when authored; gameplay never overwrites the plate's transform.
+                var b = ClickRouter.RendererBounds(folder, folder.position);
                 Vector3 p = new Vector3(b.min.x - plateSize.x * 0.6f, b.min.y, b.min.z + plateSize.y * 2f);
-                Add("Case file", p, () => cases.OnCooldown
-                    ? "NEXT CASE " + UIFactory.Seconds(cases.Cooldown)
-                    : cases.EvidenceLabel);
+                Add("case", "Case file", p, () => cases ? cases.StatusLabel : "Unlock Case Files");
             }
-            if (cases && cases.StampTransform)
-                Add("Stamp", InFront(cases.StampTransform), () => cases.IsFull && !cases.OnCooldown ? "STAMP!" : null);
+            var stamp = cases && cases.StampTransform ? cases.StampTransform : ClickRouter.FindByName("SOLVED Stamp", "Stamp body");
+            if (stamp) Add("stamp", "Stamp", InFront(stamp), () => cases && cases.IsFull && !cases.OnCooldown ? "STAMP!" : null);
 
             // The whiskey glass shows its state itself: the whiskey level inside the glass.
 
             if (game.figurines != null)
-                foreach (var f in game.figurines)
+                for (int i = 0; i < game.figurines.Length; i++)
                 {
+                    var f = game.figurines[i];
                     if (!f) continue;
                     var fig = f;
-                    Add("Statue", InFront(fig.transform), () =>
+                    Add("statue_" + i, "Statue", InFront(fig.transform), () =>
                         !fig.Unlocked ? "LOCKED"
                         : fig.Pieces == 0 ? Tiered(fig, "0 / " + fig.PiecesRequired)
                         : !fig.IsComplete ? Tiered(fig, fig.Pieces + " / " + fig.PiecesRequired)
@@ -108,9 +126,11 @@ namespace DetectiveDesk.Gameplay
             return new Vector3(b.center.x, b.min.y, b.center.z) + towardCamera * (reach + plateSize.y * 0.8f);
         }
 
-        void Add(string name, Vector3 deskPoint, Func<string> text)
+        void Add(string key, string name, Vector3 deskPoint, Func<string> text)
         {
-            var tag = new Tag { name = name, text = text };
+            var existing = tags.Find(t => t.key == key && t.go && t.label);
+            if (existing != null) { existing.text = text; return; }
+            var tag = new Tag { key = key, name = name, text = text };
             tag.go = new GameObject("Brass tag · " + name);
             var t = tag.go.transform;
             t.SetParent(root, false);
@@ -126,7 +146,7 @@ namespace DetectiveDesk.Gameplay
             // Dark rim behind a brass face.
             var rim = GameObject.CreatePrimitive(PrimitiveType.Cube);
             rim.name = "Rim";
-            Destroy(rim.GetComponent<Collider>());
+            RemoveCollider(rim);
             rim.transform.SetParent(t, false);
             rim.transform.localScale = new Vector3(plateSize.x + 0.016f, h + 0.016f, 0.012f);
             rim.transform.localPosition = new Vector3(0, 0, 0.004f);
@@ -134,7 +154,7 @@ namespace DetectiveDesk.Gameplay
 
             var face = GameObject.CreatePrimitive(PrimitiveType.Cube);
             face.name = "Face";
-            Destroy(face.GetComponent<Collider>());
+            RemoveCollider(face);
             face.transform.SetParent(t, false);
             face.transform.localScale = new Vector3(plateSize.x, h, 0.01f);
             face.GetComponent<Renderer>().sharedMaterial = brassMaterial;
@@ -165,6 +185,7 @@ namespace DetectiveDesk.Gameplay
             // Beside the cannon, level with the wheel, so it doesn't sit on the wall map.
             ringAnchor = new Vector3(b.max.x + b.size.x * 0.12f, b.min.y + b.size.y * 0.45f, b.center.z);
 
+            if (ringCanvas) return;
             ringCanvas = UIFactory.CreateCanvas("Shooter reload ring", 34);
             ringCanvas.GetComponent<GraphicRaycaster>().enabled = false;
             ring = UIFactory.NewRect("Ring", ringCanvas.transform);
@@ -213,10 +234,24 @@ namespace DetectiveDesk.Gameplay
             lastCooldown = cd;
 
             if (hidden) { ringGroup.alpha = 0; return; }
+            PositionReloadRing();
+        }
+
+        void PositionReloadRing()
+        {
+            var cam = game.GameCamera;
+            if (!cam || !ring || !ringCanvas) return;
             Vector3 screen = cam.WorldToScreenPoint(ringAnchor);
             if (screen.z <= 0) { ringGroup.alpha = 0; return; }
             RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)ringCanvas.transform, screen, null, out Vector2 local);
             ring.anchoredPosition = local;
+        }
+
+        static void RemoveCollider(GameObject go)
+        {
+            var collider = go.GetComponent<Collider>();
+            if (Application.isPlaying) Destroy(collider);
+            else DestroyImmediate(collider);
         }
 
         static Material MakeMaterial(string name, Color color, float metallic, float smoothness)
@@ -235,8 +270,14 @@ namespace DetectiveDesk.Gameplay
         {
             if (!game) return;
             UpdateReloadRing();
+            RefreshTags();
+        }
+
+        void RefreshTags()
+        {
             foreach (var tag in tags)
             {
+                if (tag.text == null || !tag.go || !tag.label) continue;
                 string s = tag.text();
                 bool show = !string.IsNullOrEmpty(s);
                 if (tag.go.activeSelf != show) tag.go.SetActive(show);

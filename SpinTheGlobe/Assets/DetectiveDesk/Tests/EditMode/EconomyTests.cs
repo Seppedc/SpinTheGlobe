@@ -74,5 +74,23 @@ namespace DetectiveDesk.Tests
             Assert.AreEqual(3, c.Cost(1));
             Assert.AreEqual(40, c.Cost(2));
         }
+
+        [TestCase(11, 10)]
+        [TestCase(12, 10)]
+        [TestCase(13, 15)]
+        [TestCase(14, 15)]
+        [TestCase(26, 25)]
+        [TestCase(27, 25)]
+        [TestCase(28, 30)]
+        [TestCase(89, 90)]
+        [TestCase(1, 5)]
+        [TestCase(0, 0)]
+        public void CostCurve_RoundsFinalPriceToNearestFive(double raw, double expected)
+        {
+            var curve = new CostCurve(raw, 1) { roundingStep = 5 };
+            Assert.AreEqual(expected, curve.Cost(0));
+            curve.explicitCosts = new[] { raw };
+            Assert.AreEqual(expected, curve.Cost(0), "hand-tuned prices follow the same rule");
+        }
     }
 }

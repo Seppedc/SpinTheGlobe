@@ -38,6 +38,7 @@ namespace DetectiveDesk.Gameplay
         public SkillTreeState Skills { get; } = new SkillTreeState();
         public GoldShopState Shop { get; } = new GoldShopState();
         public Inventory Inventory { get; } = new Inventory();
+        public PlayerGuidanceState Guidance { get; } = new PlayerGuidanceState();
         public GameBalance Balance { get; private set; }
         public SkillTreeAsset Tree { get; private set; }
 
@@ -55,6 +56,7 @@ namespace DetectiveDesk.Gameplay
         public SettingsMenu Settings { get; private set; }
         public MusicPlayer Music { get; private set; }
         public GoldShopView ShopView { get; private set; }
+        public FirstUseGuidance GuidanceView { get; private set; }
 
         // ------------------------------------------------------------------ prestige state
         /// <summary>Money earned since the last retirement (drives the prestige gold).</summary>
@@ -102,15 +104,33 @@ namespace DetectiveDesk.Gameplay
         public double PinIncomeScale => Stats.Get(StatId.IncomeMultiplier);
         bool loaded;
 
+        /// <summary>Prepare visual layouts for authoring without loading saves or starting gameplay.</summary>
+        public void PrepareScenePresentation()
+        {
+            if (Application.isPlaying) throw new InvalidOperationException("Scene layout authoring is only available outside Play mode.");
+            if (!balance || !skillTreeAsset) throw new InvalidOperationException("Assign the balance and skill tree assets before authoring layouts.");
+            Balance = balance;
+            Shop.Balance = Balance;
+            Tree = skillTreeAsset;
+            Balance.ApplyTo(Stats);
+            Hud = Ensure<GameHUD>();
+            TreeView = Ensure<SkillTreeView>();
+            DeskInfo = Ensure<DeskInfoSystem>();
+            Settings = Ensure<SettingsMenu>();
+            ShopView = Ensure<GoldShopView>();
+        }
+
         // ------------------------------------------------------------------ lifecycle
         void Awake()
         {
             Balance = balance ? balance : ScriptableObject.CreateInstance<GameBalance>();
+            Shop.Balance = Balance;
             if (skillTreeAsset) Tree = skillTreeAsset;
             else
             {
                 Tree = ScriptableObject.CreateInstance<SkillTreeAsset>();
                 Tree.SetNodes(DefaultSkillTreeFactory.Create());
+                Tree.SetSections(DefaultSkillTreeFactory.CreateSections());
             }
             Balance.ApplyTo(Stats);
             // Gold shop bonuses count like skills; statue and Press Coverage nodes stay hidden until their unlock is bought.
@@ -135,6 +155,7 @@ namespace DetectiveDesk.Gameplay
             Music = Ensure<MusicPlayer>();
             ShopView = Ensure<GoldShopView>();
             Popups = Ensure<PayoutPopups>();
+            GuidanceView = Ensure<FirstUseGuidance>();
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             Ensure<DevCheats>();
 #endif
@@ -191,6 +212,7 @@ namespace DetectiveDesk.Gameplay
             Music.Initialize(this);
             ShopView.Initialize(this);
             Popups.Initialize(this);
+            GuidanceView.Initialize(this);
 
             loaded = true;
             EventBus.Publish(new GameLoaded());
@@ -198,7 +220,7 @@ namespace DetectiveDesk.Gameplay
             if (!string.IsNullOrEmpty(pendingHint)) { ShowHint(pendingHint); pendingHint = null; }
             else ShowHint(Skills.Owns(DefaultSkillTreeFactory.RootId)
                 ? "Welcome back, " + Rank.title.ToLowerInvariant() + "."
-                : "Drag or click the globe to spin it. Earn " + NumberFormatter.Money(Tree.Find(DefaultSkillTreeFactory.RootId).cost.Cost(0)) + " to open the skill tree (T).");
+                : "Drag and release the globe to spin it. Earn " + NumberFormatter.Money(Tree.Find(DefaultSkillTreeFactory.RootId).cost.Cost(0)) + " to open the skill tree (T).");
         }
 
         void Update()
@@ -279,11 +301,14 @@ namespace DetectiveDesk.Gameplay
         }
 
         // ------------------------------------------------------------------ skill tree
-        public bool PurchaseSkill(string id)
+        public bool PurchaseSkill(string id, int quantity = 1)
         {
-            if (!Skills.TryPurchase(Tree, id, Wallet, Stats, out string reason)) { ShowHint(reason); return false; }
+            bool hadPins = UnlockedPins > 0;
+            if (!Skills.TryPurchase(Tree, id, Wallet, Stats, quantity, out _, out string reason)) { ShowHint(reason); return false; }
+            if (!hadPins && UnlockedPins > 0) Guidance.Complete(PlayerGuidanceState.PinIntroStarted);
             if (globe) globe.EnforceLimits();
             if (PinBox) PinBox.Refresh();
+            if (map) map.RefreshPinAppearance();
             if (audioManager) audioManager.Click();
             Notify();
             return true;
@@ -293,6 +318,17 @@ namespace DetectiveDesk.Gameplay
         public int UnlockedPins => Mathf.Clamp((int)Math.Round(Stats.Get(StatId.PinSlots)), 0, DefaultSkillTreeFactory.MaxPins);
         public int PinPasses(int index) => Math.Max(1, (int)Math.Round(Stats.Get(StatId.PinDurability, index)));
         public int PinDurabilityRank(int index) => Skills.Rank(DefaultSkillTreeFactory.PinDurabilityId(index + 1));
+        public void ApplyPinAppearance(PinSkin pin, int index)
+        {
+            if (!pin) return;
+            if (pin.SkinIndex != 0) pin.SetSkin(0);
+            int rank = PinDurabilityRank(index);
+            var colors = Balance.pinStrengthColors;
+            if (colors == null || colors.Length == 0) return;
+            int maximum = Tree.Find(DefaultSkillTreeFactory.PinDurabilityId(index + 1)).maxRank;
+            int colorIndex = Mathf.Clamp(Mathf.RoundToInt(rank * (colors.Length - 1f) / Mathf.Max(1, maximum)), 0, colors.Length - 1);
+            pin.SetStrengthAppearance(rank, colors[colorIndex], rank >= maximum ? Balance.pinMaxStrengthMetallic : Balance.pinEnamelMetallic);
+        }
         public double PinPayoutMultiplier(int index) => Stats.Get(StatId.PinPayout, index);
 
         public void FirePin()
@@ -358,6 +394,7 @@ namespace DetectiveDesk.Gameplay
             if (useSaveFile && Store.TryLoad(out var data))
             {
                 Wallet.Load(data.money, data.gold, data.lifetimeMoney, data.lifetimeGold);
+                Guidance.Load(data);
                 Shop.Load(data.goldShop);
                 Prestiges = Mathf.Max(0, data.prestiges);
                 // Saves from before prestige existed: the whole history counts as this run.
@@ -390,6 +427,7 @@ namespace DetectiveDesk.Gameplay
                     money = Wallet.Money, gold = Wallet.Gold, lifetimeMoney = Wallet.LifetimeMoney, lifetimeGold = Wallet.LifetimeGold,
                     runMoney = RunEarnings, prestiges = Prestiges, goldShop = Shop.ToSave(),
                     skills = Skills.ToSave(), playTimeSeconds = PlayTime,
+                    completedGuidance = Guidance.ToSave(),
                     iceCubes = Inventory.IceCubes, paperBalls = Inventory.PaperBalls, sparePieces = Inventory.SparePieces,
                     statues = new List<StatueState>(),
                 };
@@ -449,6 +487,7 @@ namespace DetectiveDesk.Gameplay
                 goldShop = Shop.ToSave(),
                 skills = FreshStartSkills(),
                 playTimeSeconds = PlayTime,
+                completedGuidance = Guidance.ToSave(),
                 sparePieces = Inventory.SparePieces,
                 statues = new List<StatueState>(),
             };
@@ -491,6 +530,7 @@ namespace DetectiveDesk.Gameplay
             if (globe) globe.EnforceLimits();
             if (PinBox) PinBox.Refresh();
             if (figurines != null) foreach (var f in figurines) if (f) f.RefreshVisual();
+            if (Whiskey) Whiskey.RefreshUnlock();
             if (audioManager) audioManager.Click();
             Notify();
             return true;

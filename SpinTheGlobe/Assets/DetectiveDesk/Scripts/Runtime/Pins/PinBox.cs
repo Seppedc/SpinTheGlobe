@@ -25,7 +25,7 @@ namespace DetectiveDesk.Gameplay
         {
             game = owner;
             FindLid();
-            lidOpen = IsOpen ? 1 : 0;
+            lidOpen = IsOpen && !game.Guidance.NeedsPinBox ? 1 : 0;
             ApplyLid();
             Refresh();
         }
@@ -41,11 +41,19 @@ namespace DetectiveDesk.Gameplay
 
         void Update()
         {
+            AdvanceLid(Time.deltaTime, game && !game.WorldInputBlocked && Application.isFocused);
+        }
+
+        /// <summary>The first opening waits until the desk is visible and pauses if it is hidden again.</summary>
+        public void AdvanceLid(float seconds, bool deskVisible)
+        {
             if (!game || !lid) return;
+            if (IsOpen && game.Guidance.NeedsPinBox && !deskVisible) return;
             float target = IsOpen ? 1 : 0;
             if (Mathf.Approximately(lidOpen, target)) return;
-            lidOpen = Mathf.MoveTowards(lidOpen, target, Time.deltaTime / lidSeconds);
+            lidOpen = Mathf.MoveTowards(lidOpen, target, Mathf.Max(0, seconds) / Mathf.Max(.05f, lidSeconds));
             ApplyLid();
+            if (IsOpen && lidOpen >= 1) game.Guidance.Complete(DetectiveDesk.Progression.PlayerGuidanceState.PinBoxOpened);
         }
 
         void ApplyLid()
@@ -64,12 +72,13 @@ namespace DetectiveDesk.Gameplay
                 if (!slot) continue;
                 int index = slot.SlotNumber - 1;
                 bool show = index < unlocked && !(game.map && game.map.IsBusy(index));
-                if (show && slot.IsEmpty && slot.PinPrefab) slot.PlacePin(index % PinSkin.SkinCount);
+                if (show && slot.IsEmpty && slot.PinPrefab) slot.PlacePin(0);
                 else if (!show && !slot.IsEmpty)
                 {
                     var pin = slot.ReleasePin();
                     if (pin) Destroy(pin.gameObject);
                 }
+                if (show && slot.Occupant) game.ApplyPinAppearance(slot.Occupant, index);
             }
         }
 

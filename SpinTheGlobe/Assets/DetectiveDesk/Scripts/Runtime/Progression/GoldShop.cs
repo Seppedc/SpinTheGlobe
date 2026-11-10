@@ -34,6 +34,7 @@ namespace DetectiveDesk.Progression
     {
         public const string Statue1 = "unlock_statue_1", Statue2 = "unlock_statue_2", Statue3 = "unlock_statue_3";
         public const string PressCoverage = "unlock_press_coverage";
+        public const string Whiskey = "unlock_whiskey";
         public const string KeptLedger = "start_ledger", SparePin = "start_pin", WoundClockwork = "start_motor", SeedMoney = "start_money";
         public const string Reputation = "agency_reputation";
 
@@ -71,6 +72,8 @@ namespace DetectiveDesk.Progression
                 });
 
             // Unlocks
+            Add(Whiskey, "Whiskey Set", "Unlock the glass, bottle and drink upgrades. Permanent.",
+                GoldShopCategory.Unlock, 1, 10, 1, null);
             Add(Statue1, "First Pedestal", "Statue 1 can be built: lootboxes start dropping statue pieces, and a finished statue fills with gold.",
                 GoldShopCategory.Unlock, 1, 25, 1, null);
             Add(Statue2, "Second Pedestal", "Statue 2 can be built. It needs more pieces and pays twice the gold.",
@@ -96,7 +99,7 @@ namespace DetectiveDesk.Progression
             Add("double_box", "Double Box", "15% chance a lootbox gives two rewards.",
                 GoldShopCategory.Permanent, 1, 100, 1, null, StatModifier.Add(StatId.LootDoubleChance, 0.15));
             Add("bottomless_glass", "Bottomless Glass", "The whiskey glass refills itself after the cooldown.",
-                GoldShopCategory.Permanent, 1, 200, 1, null, StatModifier.Add(StatId.WhiskeyAutoRefill, 1));
+                GoldShopCategory.Permanent, 1, 200, 1, Whiskey, StatModifier.Add(StatId.WhiskeyAutoRefill, 1));
             Add("fast_casting", "Fast Casting", "Statues need 2 fewer pieces.",
                 GoldShopCategory.Permanent, 1, 250, 1, Statue1, StatModifier.Add(StatId.StatuePieceReduction, 2));
 
@@ -116,6 +119,7 @@ namespace DetectiveDesk.Progression
     /// <summary>Owned Gold shop ranks plus the purchase rules. Plain C#: unit-testable and saveable.</summary>
     public sealed class GoldShopState
     {
+        public GameBalance Balance { get; set; }
         readonly Dictionary<string, int> ranks = new Dictionary<string, int>(StringComparer.Ordinal);
 
         public event Action<GoldShopItem, int> Purchased;
@@ -123,7 +127,9 @@ namespace DetectiveDesk.Progression
         public int Rank(string id) => id != null && ranks.TryGetValue(id, out var r) ? r : 0;
         public bool Owns(string id) => Rank(id) > 0;
 
-        public double NextCost(GoldShopItem item) => item == null ? double.PositiveInfinity : item.cost.Cost(Rank(item.id));
+        public double NextCost(GoldShopItem item) => item == null ? double.PositiveInfinity :
+            item.id == GoldShopCatalog.Whiskey && Balance != null
+                ? Math.Ceiling(Math.Max(1, Balance.whiskeyUnlockGoldCost)) : item.cost.Cost(Rank(item.id));
 
         public bool IsMaxed(GoldShopItem item) => item != null && Rank(item.id) >= item.maxRank;
         public bool IsLocked(GoldShopItem item) => item != null && !string.IsNullOrEmpty(item.requires) && !Owns(item.requires);

@@ -44,12 +44,14 @@ namespace DetectiveDesk.Progression
         [Header("Start")]
         [Min(0)] public double startingMoney = 0;
         [Min(0)] public double startingGold = 0;
+        [Tooltip("One-time permanent Gold purchase for the glass, bottle and drink skill branch.")]
+        [Min(1)] public double whiskeyUnlockGoldCost = 10;
         [Tooltip("Seconds between automatic saves.")]
         [Min(5)] public float autosaveInterval = 30;
 
         [Header("Prestige (Retire the agency)")]
         [Tooltip("Money that must be earned in a run before retiring is possible.")]
-        [Min(1)] public double prestigeThreshold = 57_500_000;
+        [Min(1)] public double prestigeThreshold = 15_000;
         [Tooltip("Gold for retiring = floor(scale × (earned this run ÷ threshold)^exponent).")]
         [Min(0)] public double prestigeGoldScale = 25;
         [Range(0.1f, 1f)] public double prestigeExponent = 0.5;
@@ -69,6 +71,41 @@ namespace DetectiveDesk.Progression
         [Header("Base stats (before upgrades)")]
         public List<StatBase> baseStats = new List<StatBase>(Defaults());
 
+        [Header("Pin Strength appearance (level 0 through 20)")]
+        public Color[] pinStrengthColors = DefaultPinStrengthColors();
+        [Range(0, 1)] public float pinEnamelMetallic = .15f;
+        [Range(0, 1)] public float pinMaxStrengthMetallic = .85f;
+
+        public static Color[] DefaultPinStrengthColors() => new[]
+        {
+            new Color(.48f, .53f, .58f), // 0: slate
+            new Color(.35f, .49f, .69f),
+            new Color(.24f, .43f, .82f),
+            new Color(.16f, .34f, .92f),
+            new Color(.10f, .51f, .87f),
+            new Color(.08f, .66f, .78f),
+            new Color(.08f, .76f, .65f),
+            new Color(.10f, .68f, .46f),
+            new Color(.18f, .59f, .29f),
+            new Color(.40f, .69f, .23f),
+            new Color(.62f, .76f, .24f),
+            new Color(.70f, .49f, .82f),
+            new Color(.58f, .31f, .83f),
+            new Color(.76f, .24f, .68f),
+            new Color(.87f, .23f, .46f),
+            new Color(.85f, .16f, .22f),
+            new Color(.92f, .30f, .16f),
+            new Color(.91f, .43f, .20f),
+            new Color(.76f, .38f, .23f),
+            new Color(.87f, .58f, .38f),
+            new Color(1f, .76f, .24f), // 20: gold
+        };
+
+        [Header("Player guidance")]
+        [Tooltip("Material for first-use white surface prompts.")]
+        public Material guidanceOverlayMaterial;
+        [Min(1)] public float guidancePulseSeconds = 2.8f;
+        [Range(0, 1)] public float guidanceOverlayOpacity = .75f;
         [Header("Globe")]
         [Range(0.5f, 1)] public float frictionAt60Hz = 0.9875f;
         [Tooltip("°/s gained per pixel dragged (× Drag Power).")]
@@ -77,14 +114,20 @@ namespace DetectiveDesk.Progression
         [Min(1)] public float dragReferencePixelsPerSecond = 900f;
         [Tooltip("Maximum multiplier from a very fast flick.")]
         [Min(1)] public float dragMaxSpeedFactor = 1.5f;
+        [Tooltip("Width used to normalize drag distance across window sizes. Distances below use these reference pixels.")]
+        [Min(1)] public float dragReferenceScreenWidth = 1920f;
+        [Tooltip("Minimum net forward distance for a drag boost. Smaller movements give no drag boost.")]
+        [Min(0)] public float dragMinPixels = 32f;
+        [Tooltip("Net forward distance that uses the full distance contribution. Longer drags cannot add more distance power.")]
+        [Min(1)] public float dragFullPixels = 200f;
+        [Tooltip("Maximum speed added by one released swipe, as a share of the current speed limit.")]
+        [Range(0, 1)] public float dragMaxBoostFraction = 0.5f;
         [Tooltip("Drag and click impulses scale with max speed ÷ this, so spinning by hand stays useful as the globe gets faster.")]
         [Min(1)] public float impulseReferenceSpeed = 135f;
         [Tooltip("Payouts per revolution. 1 = only when the globe crosses the red payout line (the rule). Higher values pay in steps between crossings.")]
         [Min(1)] public int globeTicksPerRevolution = 1;
         [Tooltip("°/s gained per click on the globe (× Click Power). Smaller than a good drag.")]
         [Min(0)] public float clickImpulse = 3f;
-        [Tooltip("A drag always gives at least this many clicks' worth of speed (with drag power), so dragging beats clicking.")]
-        [Min(1)] public float dragOverClick = 2.25f;
         [Tooltip("Money for each full revolution past the start line (× Globe Multiplier).")]
         [Min(0)] public double revolutionReward = 1;
 
@@ -163,12 +206,13 @@ namespace DetectiveDesk.Progression
             new StatBase(StatId.GlobeAutoSpeed, 0),
             new StatBase(StatId.GlobeAutoShare, 0),
             new StatBase(StatId.GlobeDragPower, 1),
+            new StatBase(StatId.GlobeSpeedDecay, 1),
             new StatBase(StatId.GlobeClickPower, 1),
             new StatBase(StatId.GlobeMultiplier, 1),
             new StatBase(StatId.IncomeMultiplier, 1),
 
             new StatBase(StatId.PinSlots, 0),              // start with no pins
-            new StatBase(StatId.ShooterCooldown, 1.8),     // seconds; 40 reload ranks reach ~0.027 s
+            new StatBase(StatId.ShooterCooldown, 4.5),     // seconds; 40 reload ranks reach ~0.027 s
             new StatBase(StatId.PinLandChance, 0.3),       // ≈ Earth's land fraction
             new StatBase(StatId.PinCityChance, 0.05),
             new StatBase(StatId.PinDurability, 1),         // passes before falling off
@@ -177,6 +221,7 @@ namespace DetectiveDesk.Progression
             new StatBase(StatId.PinDoubleShotChance, 0),
 
             new StatBase(StatId.CasePayout, 1),
+            new StatBase(StatId.CaseUnlocked, 0),
             new StatBase(StatId.CaseCooldown, 30),
             new StatBase(StatId.CaseAutoStampChance, 0),
             new StatBase(StatId.CaseEvidenceReduction, 0),

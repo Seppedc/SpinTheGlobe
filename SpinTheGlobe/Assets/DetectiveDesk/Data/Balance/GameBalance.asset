@@ -14,49 +14,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: DetectiveDesk.Runtime::DetectiveDesk.Progression.GameBalance
   startingMoney: 0
   startingGold: 0
-  lootboxCost:
-    baseCost: 150
-    growth: 1.12
-    explicitCosts: []
-  lootTable:
-  - kind: 2
-    weight: 30
-  - kind: 4
-    weight: 25
-  - kind: 0
-    weight: 20
-  - kind: 1
-    weight: 15
-  - kind: 3
-    weight: 10
+  whiskeyUnlockGoldCost: 10
   autosaveInterval: 30
-  revolutionReward: 1
-  pinBasePayout: 0.5
-  globeTicksPerRevolution: 1
-  impulseReferenceSpeed: 135
-  frictionAt60Hz: 0.9875
-  dragAcceleration: 0.25
-  dragReferencePixelsPerSecond: 900
-  dragMaxSpeedFactor: 1.5
-  clickImpulse: 3
-  dragOverClick: 2.25
-  prestigeThreshold: 57500000
+  prestigeThreshold: 15000
   prestigeGoldScale: 25
   prestigeExponent: 0.5
-  caseBaseEvidence: 3
-  caseRepeatCount: 5
-  caseEvidencePerGroup: 1
-  caseBaseTierLength: 15
-  caseMaxDurabilityRequirement: 5
-  caseBaseReward: 5
-  caseRewardGrowthPerLevel: 0.02
-  caseIncomeSeconds: 1.5
+  ranks:
+  - title: Rookie
+    retirements: 0
+    incomeBonus: 0
+  - title: Detective
+    retirements: 1
+    incomeBonus: 0.1
+  - title: Senior Detective
+    retirements: 3
+    incomeBonus: 0.25
+  - title: Inspector
+    retirements: 5
+    incomeBonus: 0.5
+  - title: Chief Inspector
+    retirements: 8
+    incomeBonus: 1
+  - title: Commissioner
+    retirements: 12
+    incomeBonus: 2
+  - title: Legend of the Bureau
+    retirements: 20
+    incomeBonus: 4
   baseStats:
   - stat: 100
     value: 90
   - stat: 101
     value: 0
   - stat: 102
+    value: 1
+  - stat: 107
     value: 1
   - stat: 103
     value: 1
@@ -65,7 +57,7 @@ MonoBehaviour:
   - stat: 200
     value: 0
   - stat: 201
-    value: 1.8
+    value: 4.5
   - stat: 202
     value: 0.3
   - stat: 203
@@ -90,3 +82,91 @@ MonoBehaviour:
     value: 1
   - stat: 501
     value: 1
+  - stat: 306
+    value: 0
+  pinStrengthColors:
+  - {r: 0.48, g: 0.53, b: 0.58, a: 1}
+  - {r: 0.35, g: 0.49, b: 0.69, a: 1}
+  - {r: 0.24, g: 0.43, b: 0.82, a: 1}
+  - {r: 0.16, g: 0.34, b: 0.92, a: 1}
+  - {r: 0.1, g: 0.51, b: 0.87, a: 1}
+  - {r: 0.08, g: 0.66, b: 0.78, a: 1}
+  - {r: 0.08, g: 0.76, b: 0.65, a: 1}
+  - {r: 0.1, g: 0.68, b: 0.46, a: 1}
+  - {r: 0.18, g: 0.59, b: 0.29, a: 1}
+  - {r: 0.4, g: 0.69, b: 0.23, a: 1}
+  - {r: 0.62, g: 0.76, b: 0.24, a: 1}
+  - {r: 0.7, g: 0.49, b: 0.82, a: 1}
+  - {r: 0.58, g: 0.31, b: 0.83, a: 1}
+  - {r: 0.76, g: 0.24, b: 0.68, a: 1}
+  - {r: 0.87, g: 0.23, b: 0.46, a: 1}
+  - {r: 0.85, g: 0.16, b: 0.22, a: 1}
+  - {r: 0.92, g: 0.3, b: 0.16, a: 1}
+  - {r: 0.91, g: 0.43, b: 0.2, a: 1}
+  - {r: 0.76, g: 0.38, b: 0.23, a: 1}
+  - {r: 0.87, g: 0.58, b: 0.38, a: 1}
+  - {r: 1, g: 0.76, b: 0.24, a: 1}
+  pinEnamelMetallic: 0.15
+  pinMaxStrengthMetallic: 0.85
+  guidanceOverlayMaterial: {fileID: 2100000, guid: 0e915cb3a3ee3734f964c14402a98b1d, type: 2}
+  guidancePulseSeconds: 2.8
+  guidanceOverlayOpacity: 0.75
+  frictionAt60Hz: 0.9875
+  dragAcceleration: 0.25
+  dragReferencePixelsPerSecond: 900
+  dragMaxSpeedFactor: 1.5
+  dragReferenceScreenWidth: 1920
+  dragMinPixels: 32
+  dragFullPixels: 200
+  dragMaxBoostFraction: 0.5
+  impulseReferenceSpeed: 135
+  globeTicksPerRevolution: 1
+  clickImpulse: 3
+  revolutionReward: 1
+  pinBasePayout: 0.5
+  cityRadiusDegrees: 4
+  pinFlightSeconds: 0.32
+  caseBaseEvidence: 3
+  caseRepeatCount: 5
+  caseEvidencePerGroup: 1
+  caseBaseTierLength: 15
+  caseMaxDurabilityRequirement: 5
+  caseBaseReward: 5
+  caseRewardGrowthPerLevel: 0.02
+  caseIncomeSeconds: 1.5
+  caseGoldLevelDivisor: 10
+  caseGoldChanceCap: 0.1
+  whiskeyFillPerClick: 0.1
+  iceCubeFillMultiplier: 2
+  statueBasePieces: 5
+  statuePiecesPerIndex: 2
+  statueGoldFillPerRevolution: 0.04
+  statueBaseGold: 10
+  statueTierNames:
+  - Bronze
+  - Silver
+  - Gold
+  statueTierGoldMultipliers:
+  - 1
+  - 2.5
+  - 6
+  statueTierExtraPieces: 1
+  lootboxCost:
+    baseCost: 150
+    growth: 1.12
+    explicitCosts: []
+  lootTable:
+  - kind: 2
+    weight: 30
+  - kind: 4
+    weight: 25
+  - kind: 0
+    weight: 20
+  - kind: 1
+    weight: 15
+  - kind: 3
+    weight: 10
+  lootGoldMin: 2
+  lootGoldMax: 8
+  moneyJackpotChance: 0.25
+  paperBallReward: 25

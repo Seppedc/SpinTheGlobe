@@ -17,12 +17,12 @@ namespace DetectiveDesk.Gameplay
     public sealed class GameHUD : MonoBehaviour
     {
         GameManager game;
-        Canvas canvas;
-        TextMeshProUGUI moneyText, incomeText, goldText, upgradesHint, toastText;
-        TextMeshProUGUI lootLabel, paperLabel, iceLabel;
-        Button lootButton, paperButton;
-        GameObject iceChip;
-        CanvasGroup toastGroup;
+        [SerializeField] Canvas canvas;
+        [SerializeField] TextMeshProUGUI moneyText, incomeText, goldText, upgradesHint, toastText;
+        [SerializeField] TextMeshProUGUI lootLabel, paperLabel, iceLabel;
+        [SerializeField] Button lootButton, paperButton;
+        [SerializeField] GameObject iceChip;
+        [SerializeField] CanvasGroup toastGroup;
         float toastTimer, incomeRefresh;
         double shownIncome = -1;
 
@@ -31,10 +31,40 @@ namespace DetectiveDesk.Gameplay
         public void Initialize(GameManager owner)
         {
             game = owner;
-            Build();
+            CreateLayout(owner);
+            BindActions();
+            HideLegacyHud();
         }
 
-        void OnDestroy() { if (canvas) Destroy(canvas.gameObject); }
+        public Canvas CreateLayout(GameManager owner)
+        {
+            game = owner;
+            if (!canvas) Build();
+            return canvas;
+        }
+
+        void BindActions()
+        {
+            SceneViewBindings.Button(canvas.transform, "Top bar/Button gear", () => game.Settings.Toggle());
+            SceneViewBindings.Button(canvas.transform, "Items/Chip box", () => game.Lootbox.TryOpen());
+            SceneViewBindings.Button(canvas.transform, "Items/Chip paper", () => game.PaperBalls.Use());
+            SceneViewBindings.Button(canvas.transform, "Upgrades", () => game.TreeView.Toggle());
+        }
+
+        public void PreviewInitialState()
+        {
+            moneyText.text = NumberFormatter.Money(game.Balance.startingMoney);
+            goldText.text = NumberFormatter.Format(game.Balance.startingGold);
+            incomeText.text = "+" + NumberFormatter.Money(0) + " / min";
+            lootLabel.text = "Lootbox  " + UIFactory.Money(game.Balance.lootboxCost.Cost(0));
+            upgradesHint.text = "Unlock for " + UIFactory.Money(game.Tree.Find(DefaultSkillTreeFactory.RootId).cost.Cost(0)) + "  [T]";
+            paperButton.gameObject.SetActive(false);
+            iceChip.SetActive(false);
+            toastGroup.gameObject.SetActive(false);
+            HideLegacyHud();
+        }
+
+        void OnDestroy() { if (Application.isPlaying && canvas) Destroy(canvas.gameObject); }
 
         // ------------------------------------------------------------------ build
         void Build()
@@ -54,7 +84,6 @@ namespace DetectiveDesk.Gameplay
             toastText.rectTransform.Stretch(12);
             toast.gameObject.SetActive(false);
 
-            HideLegacyHud();
         }
 
         static HorizontalLayoutGroup Row(RectTransform rt, int left, int right, int vertical, float spacing)

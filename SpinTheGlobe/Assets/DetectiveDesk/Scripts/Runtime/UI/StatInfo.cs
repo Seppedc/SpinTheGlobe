@@ -13,15 +13,17 @@ namespace DetectiveDesk.Gameplay
                 case StatId.GlobeAutoSpeed: return "Auto Spin";
                 case StatId.GlobeAutoShare: return "Auto-rotate (share of max speed)";
                 case StatId.GlobeDragPower: return "Drag power";
+                case StatId.GlobeSpeedDecay: return "Speed loss";
                 case StatId.GlobeClickPower: return "Click power";
                 case StatId.GlobeMultiplier: return "Spin pay";
                 case StatId.PinSlots: return "Pins";
                 case StatId.ShooterCooldown: return "Reload";
                 case StatId.PinLandChance: return "Land chance";
                 case StatId.PinCityChance: return "City chance";
-                case StatId.PinDurability: return "Payouts per pin";
+                case StatId.PinDurability: return "Strength";
                 case StatId.PinPayout: return "Pin payout";
                 case StatId.CasePayout: return "Case reward";
+                case StatId.CaseUnlocked: return "Case files";
                 case StatId.CaseCooldown: return "Case wait";
                 case StatId.CaseAutoStampChance: return "Auto-stamp chance";
                 case StatId.WhiskeyBoostDuration: return "Boost duration";
@@ -53,6 +55,8 @@ namespace DetectiveDesk.Gameplay
                     return (v / 6.0).ToString("0.#") + " RPM";
                 case StatId.GlobeAutoShare:
                     return System.Math.Round(System.Math.Min(1, v) * 100) + "%";
+                case StatId.GlobeSpeedDecay:
+                    return (v * 100).ToString("0.#") + "%";
                 case StatId.PinSlots:
                 case StatId.PinDurability:
                 case StatId.CaseEvidenceReduction:
@@ -60,6 +64,7 @@ namespace DetectiveDesk.Gameplay
                 case StatId.StatuePieceReduction:
                     return System.Math.Round(v).ToString("0");
                 case StatId.PinAutoFire:
+                case StatId.CaseUnlocked:
                 case StatId.WhiskeyAutoRefill:
                     return v >= 1 ? "On" : "Off";
                 case StatId.PinDoubleShotChance:

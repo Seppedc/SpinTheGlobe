@@ -28,6 +28,7 @@ namespace DetectiveDesk.Gameplay
                     illumination.EnableKeyword("_EMISSION"); slots[i] = illumination;
                     head.sharedMaterials = slots; break;
                 }
+            pin.SetIlluminated(true);
         }
         void OnDestroy() { if (illumination) Destroy(illumination); }
     }

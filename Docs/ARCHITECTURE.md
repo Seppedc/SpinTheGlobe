@@ -73,6 +73,11 @@ Assets/
   - Per-pin stats take a pin index. A modifier with pin index −1 applies to every pin.
 - **Events:** systems talk through `EventBus` (`PinFellOff`, `CurrencyChanged`, `SkillPurchased`, …), not through direct references.
 - **Logic and views are separate:** `Wallet`, `StatSheet`, `SkillTreeState` and `SaveStore` are plain C# and unit-tested. MonoBehaviours only connect them to the scene.
+- **First-use guidance:** `PlayerGuidanceState` stores lifetime completion ids in `SaveData.completedGuidance`; `FirstUseGuidance` drives the globe prompt and `ObjectPulseOverlay` draws the surface pass without replacing materials. Appearance lives in GameBalance. See [FIRST_USE_GUIDANCE.md](FIRST_USE_GUIDANCE.md).
+- **Purchase presentation:** `PurchasePalette` defines grey/unavailable, brown/available and gold/maxed colours for skill nodes, tooltip cards and Gold shop rows. Purchase buttons opt in through `ThemedButton.SetPurchaseState`. See [PURCHASE_COLOURS.md](PURCHASE_COLOURS.md).
+- **Authored presentation:** HUD, brass plates and menu layouts live under `DetectiveOffice/Scene presentation`. Runtime code binds to serialized views; the GameManager inspector offers editor previews. See [SCENE_PRESENTATION.md](SCENE_PRESENTATION.md).
+- **Tree sections:** `SkillSectionData` in `SkillTreeAsset` defines free headings and shared connectors. Sections organize the view; only `SkillNodeData` represents purchasable, saved skills. See [SKILL_TREE_SECTIONS.md](SKILL_TREE_SECTIONS.md).
+- **Bulk skill purchases:** `SkillTreeState.QuotePurchase` previews the affordable quantity and sum of rank prices. Its batch `TryPurchase` commits one wallet transaction and publishes the final rank once; single purchases use the same path. `SkillTreeView.Purchases.cs` owns the authored amount controls.
 - **Currency uses `double`** and is shown with `NumberFormatter` (1.23K, 4.50M, … aa, ab).
 - **Saves:** JSON in `Application.persistentDataPath`. Writes are atomic and keep a `.bak` file. The file is versioned and has a migration hook. Skill ranks are saved by node **id**, so a shipped id must never be renamed.
 

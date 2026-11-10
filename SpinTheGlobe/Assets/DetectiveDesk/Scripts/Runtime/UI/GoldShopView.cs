@@ -16,20 +16,22 @@ namespace DetectiveDesk.Gameplay
     {
         const float PanelWidth = 960, PanelHeight = 900;
 
+        [System.Serializable]
         sealed class Row
         {
-            public GoldShopItem item;
+            public string id;
+            [System.NonSerialized] public GoldShopItem item;
             public TextMeshProUGUI title, description, buttonLabel;
             public Button button;
             public Image background;
         }
 
         GameManager game;
-        Canvas canvas;
-        RectTransform dialog;
-        Button hudButton, retireButton;
-        TextMeshProUGUI goldText, retireInfo, retireLabel, prestigeText, dialogText, hudRank;
-        readonly List<Row> rows = new List<Row>();
+        [SerializeField] Canvas canvas;
+        [SerializeField] RectTransform dialog;
+        [SerializeField] Button hudButton, retireButton;
+        [SerializeField] TextMeshProUGUI goldText, retireInfo, retireLabel, prestigeText, dialogText, hudRank;
+        [SerializeField] List<Row> rows = new List<Row>();
         float refreshTimer;
         int closedFrame = -1;
 
@@ -39,12 +41,47 @@ namespace DetectiveDesk.Gameplay
         public void Initialize(GameManager owner)
         {
             game = owner;
-            Build();
-            BuildHudButton();
+            CreateLayout(owner);
+            BindActions();
             canvas.gameObject.SetActive(false);
         }
 
-        void OnDestroy() { if (canvas) Destroy(canvas.gameObject); }
+        public Canvas CreateLayout(GameManager owner)
+        {
+            game = owner;
+            if (!canvas) Build();
+            if (!hudButton) BuildHudButton();
+            foreach (var row in rows) row.item = GoldShopCatalog.Find(row.id);
+            // Authored canvases can predate a new catalog item. Add missing rows in their section.
+            foreach (var item in GoldShopCatalog.Items)
+            {
+                if (rows.Exists(r => r.id == item.id)) continue;
+                var anchor = rows.FindLast(r => r.item != null && r.item.category == item.category);
+                if (anchor == null) continue;
+                var added = BuildRow((RectTransform)anchor.background.transform.parent, item);
+                added.background.transform.SetSiblingIndex(anchor.background.transform.GetSiblingIndex() + 1);
+                rows.Add(added);
+            }
+            return canvas;
+        }
+
+        void BindActions()
+        {
+            SceneViewBindings.Bind(hudButton, Toggle);
+            SceneViewBindings.Bind(retireButton, AskRetire);
+            SceneViewBindings.Button(canvas.transform, "Gold shop panel/Header/Close", Close);
+            SceneViewBindings.Button(dialog, "Box/Buttons/Cancel", HideDialog);
+            SceneViewBindings.Button(dialog, "Box/Buttons/Confirm", () => { HideDialog(); game.Retire(); });
+            foreach (var row in rows)
+            {
+                string id = row.id;
+                SceneViewBindings.Bind(row.button, () => { if (game.PurchaseShopItem(id)) Refresh(); });
+            }
+        }
+
+        public void PreviewLayout() => Refresh();
+
+        void OnDestroy() { if (Application.isPlaying && canvas) Destroy(canvas.gameObject); }
 
         public void Toggle() { if (IsOpen) Close(); else Open(); }
 
@@ -191,7 +228,7 @@ namespace DetectiveDesk.Gameplay
 
         Row BuildRow(RectTransform content, GoldShopItem item)
         {
-            var row = new Row { item = item };
+            var row = new Row { id = item.id, item = item };
             row.background = UIFactory.NewImage(item.id, content, new Color(1, 1, 1, 0.035f));
             var rt = row.background.rectTransform;
             rt.gameObject.AddComponent<LayoutElement>().minHeight = 76;
@@ -304,7 +341,7 @@ namespace DetectiveDesk.Gameplay
                 bool maxed = shop.IsMaxed(item), locked = shop.IsLocked(item);
                 r.title.text = item.title + (item.maxRank > 1 ? "  <size=75%><color=#a89a80>" + rank + " / " + item.maxRank + "</color></size>" : "");
                 string requires = locked ? GoldShopCatalog.Find(item.requires)?.title : null;
-                r.description.text = item.description + (requires != null ? "  <color=#c0643c>Requires " + requires + ".</color>" : "");
+                r.description.text = item.description + (requires != null ? "  Requires " + requires + "." : "");
                 if (maxed)
                 {
                     r.buttonLabel.text = item.maxRank > 1 ? "MAXED" : "OWNED";
@@ -321,9 +358,14 @@ namespace DetectiveDesk.Gameplay
                     r.buttonLabel.text = NumberFormatter.Format(cost) + " GOLD";
                     r.button.interactable = game.Wallet.CanAfford(Currency.Gold, cost);
                 }
-                r.title.color = maxed ? UITheme.Gold : locked ? UITheme.CreamDim : UITheme.Cream;
-                r.background.color = maxed ? new Color(0.85f, 0.65f, 0.25f, 0.07f) : new Color(1, 1, 1, 0.035f);
+                var visualState = PurchasePalette.State(maxed, r.button.interactable);
+                var colors = PurchasePalette.For(visualState);
+                r.title.color = colors.text;
+                r.description.color = colors.text;
+                r.background.color = colors.fill;
+                r.button.GetComponent<ThemedButton>().SetPurchaseState(visualState);
             }
+            retireButton.GetComponent<ThemedButton>().SetPurchaseState(PurchasePalette.State(false, game.CanRetire));
         }
 
         // ------------------------------------------------------------------ retire confirmation

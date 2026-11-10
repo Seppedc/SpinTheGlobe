@@ -1,6 +1,7 @@
 using System.Linq;
 using DetectiveDesk.Core;
 using DetectiveDesk.Economy;
+using DetectiveDesk.Gameplay;
 using DetectiveDesk.Progression;
 using NUnit.Framework;
 using UnityEngine;
@@ -21,6 +22,7 @@ namespace DetectiveDesk.Tests
             EventBus.Clear();
             tree = ScriptableObject.CreateInstance<SkillTreeAsset>();
             tree.SetNodes(DefaultSkillTreeFactory.Create());
+            tree.SetSections(DefaultSkillTreeFactory.CreateSections());
             balance = ScriptableObject.CreateInstance<GameBalance>();
             stats = new StatSheet();
             balance.ApplyTo(stats);
@@ -36,6 +38,224 @@ namespace DetectiveDesk.Tests
         }
 
         bool Buy(string id) => state.TryPurchase(tree, id, wallet, stats, out _);
+
+        [Test]
+        public void WhiskeySet_IsTenGoldOnce_AndPersistsAcrossRetirementSave()
+        {
+            var shop = new GoldShopState { Balance = balance };
+            var item = GoldShopCatalog.Find(GoldShopCatalog.Whiskey);
+            balance.whiskeyUnlockGoldCost = 11;
+            Assert.AreEqual(11, shop.NextCost(item), "Gold price comes from balance data");
+            balance.whiskeyUnlockGoldCost = 10;
+            Assert.AreEqual(10, shop.NextCost(item));
+            Assert.AreEqual(1, item.maxRank);
+            wallet.Add(Currency.Gold, 9);
+            Assert.IsFalse(shop.TryBuy(item.id, wallet, out _));
+            wallet.Add(Currency.Gold, 1);
+            Assert.IsTrue(shop.TryBuy(item.id, wallet, out _));
+            Assert.AreEqual(0, wallet.Gold);
+            var data = new Save.SaveData { goldShop = shop.ToSave(), prestiges = 1 };
+            var restored = new GoldShopState();
+            restored.Load(JsonUtility.FromJson<Save.SaveData>(JsonUtility.ToJson(data)).goldShop);
+            Assert.IsTrue(restored.Owns(item.id));
+            wallet.Add(Currency.Gold, 10);
+            Assert.IsFalse(restored.TryBuy(item.id, wallet, out _));
+            Assert.AreEqual(10, wallet.Gold, "owned unlock cannot charge again");
+            Assert.AreEqual(GoldShopCatalog.Whiskey, GoldShopCatalog.Find("bottomless_glass").requires);
+        }
+
+        [Test]
+        public void WhiskeySkills_AreHiddenUntilGoldUnlock_EvenForPreviouslyMaxedSkills()
+        {
+            var shop = new GoldShopState();
+            state.UnlockCheck = shop.Owns;
+            wallet.Add(Currency.Money, 1e6);
+            Assert.IsTrue(Buy("root"));
+            foreach (var node in tree.Nodes.Where(n => n.branch == SkillBranch.Whiskey))
+            {
+                Assert.AreEqual(GoldShopCatalog.Whiskey, node.requiresUnlock);
+                Assert.AreEqual(NodeStatus.Hidden, state.Status(node, wallet, stats, out _));
+            }
+            Assert.IsFalse(Buy("whiskey_duration"));
+            wallet.Add(Currency.Gold, 10);
+            Assert.IsTrue(shop.TryBuy(GoldShopCatalog.Whiskey, wallet, out _));
+            Assert.AreEqual(NodeStatus.Available, state.Status(tree.Find("whiskey_duration"), wallet, stats, out _));
+            Assert.IsTrue(Buy("whiskey_duration"));
+            state.Load(tree, new[] { new Save.SkillRank { id = "whiskey_duration", rank = 10 } });
+            shop.Load(null);
+            Assert.AreEqual(NodeStatus.Hidden, state.Status(tree.Find("whiskey_duration"), wallet, stats, out _));
+        }
+
+        [Test]
+        public void ExistingDragRanks_BecomeLessFriction_WithoutIncreasingSwipePower()
+        {
+            state.Load(tree, new[] { new DetectiveDesk.Save.SkillRank { id = "globe_drag", rank = 5 } });
+            stats.Rebuild(tree, state);
+            Assert.AreEqual(5, state.Rank("globe_drag"));
+            Assert.AreEqual(10, tree.Find("globe_drag").maxRank);
+            Assert.AreEqual(System.Math.Pow(.85, 5), stats.Get(StatId.GlobeSpeedDecay), 1e-9);
+            Assert.AreEqual(1, stats.Get(StatId.GlobeDragPower));
+        }
+
+        [Test]
+        public void PinUpgradeTracks_SupportTwentyLevels_AndRestoreHighRanks()
+        {
+            for (int pin = 1; pin <= DefaultSkillTreeFactory.MaxPins; pin++)
+            {
+                Assert.AreEqual(20, tree.Find(DefaultSkillTreeFactory.PinDurabilityId(pin)).maxRank);
+                Assert.AreEqual(20, tree.Find(DefaultSkillTreeFactory.PinPayoutId(pin)).maxRank);
+            }
+            state.Load(tree, new[]
+            {
+                new DetectiveDesk.Save.SkillRank { id = "root", rank = 1 },
+                new DetectiveDesk.Save.SkillRank { id = "pin_01", rank = 1 },
+                new DetectiveDesk.Save.SkillRank { id = "pin_01_durability", rank = 20 },
+                new DetectiveDesk.Save.SkillRank { id = "pin_01_payout", rank = 21 },
+            });
+            stats.Rebuild(tree, state);
+            Assert.AreEqual(20, state.Rank("pin_01_durability"));
+            Assert.AreEqual(20, state.Rank("pin_01_payout"), "saved ranks clamp to the new limit");
+            Assert.AreEqual(21, stats.Get(StatId.PinDurability, 0));
+            Assert.AreEqual(11, stats.Get(StatId.PinPayout, 0));
+        }
+
+        [Test]
+        public void BulkPurchase_ChargesEachRank_AndPublishesOneFinalRank()
+        {
+            wallet.Add(Currency.Money, 1000);
+            Assert.IsTrue(Buy("root"));
+            Assert.IsTrue(Buy("pin_01"));
+            wallet = new Wallet();
+            wallet.Add(Currency.Money, 25);
+            var node = tree.Find("shooter_cooldown");
+            Assert.AreEqual(2, state.QuotePurchase(node, wallet, stats, 10, out double quote));
+            Assert.AreEqual(25, quote);
+            Assert.AreEqual(0, state.Rank(node.id), "a quote must not spend or change ranks");
+            int callbacks = 0, notifiedRank = 0;
+            state.Purchased += (_, rank) => { callbacks++; notifiedRank = rank; };
+            Assert.IsTrue(state.TryPurchase(tree, node.id, wallet, stats, 10, out int purchased, out _));
+            Assert.AreEqual(2, purchased);
+            Assert.AreEqual(2, notifiedRank);
+            Assert.AreEqual(1, callbacks);
+            Assert.AreEqual(0, wallet.Money);
+            Assert.AreEqual(25, wallet.LifetimeMoney, "spending does not change total earned");
+            Assert.AreEqual(balance.baseStats.Find(x => x.stat == StatId.ShooterCooldown).value * .88 * .88,
+                stats.Get(StatId.ShooterCooldown), 1e-8);
+        }
+
+        [Test]
+        public void BulkMotorPurchase_StopsAtPermanentSpinLimit()
+        {
+            wallet.Add(Currency.Money, 10000);
+            Assert.IsTrue(Buy("root"));
+            double before = wallet.Money;
+            Assert.IsTrue(state.TryPurchase(tree, "globe_auto", wallet, stats, 10, out int purchased, out _));
+            Assert.AreEqual(3, purchased, "three motor ranks fill the starting 15 RPM limit");
+            Assert.AreEqual(stats.Permanent(StatId.GlobeMaxSpeed), stats.Get(StatId.GlobeAutoSpeed));
+            Assert.AreEqual(tree.Find("globe_auto").cost.Cost(0) + tree.Find("globe_auto").cost.Cost(1)
+                + tree.Find("globe_auto").cost.Cost(2), before - wallet.Money);
+            Assert.IsFalse(state.TryPurchase(tree, "globe_auto", wallet, stats, 10, out purchased, out _));
+            Assert.AreEqual(0, purchased);
+        }
+
+        [Test]
+        public void BulkPurchase_StopsAtMaxRank_AndRetainsRanksInSave()
+        {
+            wallet.Add(Currency.Money, 10000);
+            Assert.IsTrue(state.TryPurchase(tree, "root", wallet, stats, 10, out int rootRanks, out _));
+            Assert.AreEqual(1, rootRanks);
+            Assert.IsTrue(state.TryPurchase(tree, "globe_drag", wallet, stats, 10, out int purchased, out _));
+            Assert.AreEqual(10, purchased);
+            var restored = new SkillTreeState();
+            restored.Load(tree, state.ToSave());
+            Assert.AreEqual(10, restored.Rank("globe_drag"));
+            Assert.AreEqual(1, restored.Rank("root"));
+        }
+
+        [Test]
+        public void BulkPurchase_CannotBypassLocks_OrSpendForZeroQuantity()
+        {
+            wallet.Add(Currency.Money, 10000);
+            Assert.IsTrue(Buy("root"));
+            double before = wallet.Money;
+            Assert.IsFalse(state.TryPurchase(tree, "case_unlock", wallet, stats, 10, out _, out _));
+            Assert.IsFalse(state.TryPurchase(tree, "globe_drag", wallet, stats, 0, out _, out _));
+            Assert.AreEqual(before, wallet.Money);
+            Assert.AreEqual(0, state.Rank("globe_drag"));
+        }
+
+        [Test]
+        public void SectionHeadings_AreFreePresentation_NotPurchasableSkills()
+        {
+            wallet.Add(Currency.Money, 1000);
+            double money = wallet.Money;
+            Assert.AreEqual(4, tree.Sections.Count);
+            foreach (var section in tree.Sections)
+            {
+                Assert.IsNull(tree.Find(section.id));
+                Assert.IsFalse(Buy(section.id));
+                Assert.AreEqual(0, state.Rank(section.id));
+            }
+            Assert.AreEqual(money, wallet.Money);
+            Assert.AreEqual(0, state.ToSave().Count);
+            Assert.IsTrue(Buy(DefaultSkillTreeFactory.RootId));
+            Assert.IsTrue(Buy("globe_drag"), "the Globe heading adds no extra unlock requirement");
+        }
+
+        [Test]
+        public void ManualGlobeUpgrades_AreAvailableFromRootWithoutAutoSpin()
+        {
+            wallet.Add(Currency.Money, 10000);
+            foreach (var id in new[] { "globe_max_speed", "globe_drag", "globe_click" })
+                Assert.AreEqual(NodeStatus.Hidden, state.Status(tree.Find(id), wallet, stats, out _));
+            Assert.IsTrue(Buy(DefaultSkillTreeFactory.RootId));
+            foreach (var id in new[] { "globe_drag", "globe_click", "globe_max_speed" })
+            {
+                CollectionAssert.AreEqual(new[] { DefaultSkillTreeFactory.RootId }, tree.Find(id).prerequisites);
+                Assert.AreEqual(NodeStatus.Available, state.Status(tree.Find(id), wallet, stats, out _));
+                Assert.IsTrue(Buy(id), id);
+            }
+            Assert.AreEqual(0, state.Rank("globe_auto"));
+            Assert.AreEqual(0, stats.Get(StatId.GlobeAutoSpeed), "manual upgrades do not start the motor");
+        }
+
+        [Test]
+        public void ShooterUpgrades_RequirePinOne_AndAutoFireFollowsReload()
+        {
+            wallet.Add(Currency.Money, 100000);
+            Assert.IsTrue(Buy(DefaultSkillTreeFactory.RootId));
+            var reload = tree.Find("shooter_cooldown");
+            Assert.AreEqual(NodeStatus.Locked, state.Status(reload, wallet, stats, out _));
+            Assert.IsFalse(Buy(reload.id));
+            Assert.AreEqual(NodeStatus.Hidden, state.Status(tree.Find("pin_autoloader"), wallet, stats, out _));
+            Assert.IsTrue(Buy(DefaultSkillTreeFactory.PinId(1)));
+            Assert.IsTrue(Buy(reload.id));
+            Assert.IsTrue(Buy("pin_autoloader"));
+            Assert.AreEqual(1, stats.Get(StatId.PinAutoFire));
+        }
+
+        [Test]
+        public void CaseFiles_RequirePinOne_AndUnlockBeforeCaseUpgrades()
+        {
+            wallet.Add(Currency.Money, 10000);
+            Assert.AreEqual(0, stats.Get(StatId.CaseUnlocked));
+            Assert.IsTrue(Buy(DefaultSkillTreeFactory.RootId));
+            var unlock = tree.Find(DefaultSkillTreeFactory.CaseUnlockId);
+            Assert.AreEqual(30, unlock.cost.Cost(0));
+            Assert.AreEqual(NodeStatus.Locked, state.Status(unlock, wallet, stats, out _));
+            Assert.IsFalse(Buy(unlock.id));
+            Assert.AreEqual(NodeStatus.Hidden, state.Status(tree.Find("case_payout"), wallet, stats, out _));
+            Assert.IsTrue(Buy(DefaultSkillTreeFactory.PinId(1)));
+            Assert.IsTrue(Buy(unlock.id));
+            Assert.AreEqual(1, stats.Get(StatId.CaseUnlocked));
+            foreach (var id in new[] { "case_payout", "case_cooldown", "case_autostamp" })
+            {
+                CollectionAssert.AreEqual(new[] { unlock.id }, tree.Find(id).prerequisites);
+                Assert.AreEqual(NodeStatus.Available, state.Status(tree.Find(id), wallet, stats, out _));
+            }
+            Assert.IsTrue(Buy("case_payout"));
+            Assert.AreEqual(1, unlock.maxRank);
+        }
 
         [Test]
         public void SpinPayUpgrades_DoNotIncreasePinIncome()
@@ -139,14 +359,13 @@ namespace DetectiveDesk.Tests
         }
 
         [Test]
-        public void AutoRotate_ManyCheapLevels_NeverAboveMaxSpeed()
+        public void AutoRotate_ManyLevels_NeverAboveMaxSpeed()
         {
             wallet.Add(Currency.Money, 1e15);
             Buy(DefaultSkillTreeFactory.RootId);
             var auto = tree.Find("globe_auto");
             CollectionAssert.Contains(auto.prerequisites, DefaultSkillTreeFactory.RootId, "Clockwork Motor is the first upgrade after the root");
             Assert.GreaterOrEqual(auto.maxRank, 30, "lots of levels");
-            Assert.LessOrEqual(auto.cost.Cost(1) / auto.cost.Cost(0), 1.3, "cheap steps, bought one after another");
             double step = auto.modifiers[0].valuePerRank;
             int bought = 0;
             while (stats.Get(StatId.GlobeAutoSpeed) + step <= stats.Get(StatId.GlobeMaxSpeed) && bought < auto.maxRank) { Assert.IsTrue(Buy("globe_auto")); bought++; }
@@ -208,20 +427,17 @@ namespace DetectiveDesk.Tests
         }
 
         [Test]
-        public void Dragging_AlwaysBeatsClicking_AtEveryEqualUpgradeLevel()
+        public void DeliberateSwipes_BeatClicks_AtEveryEqualUpgradeLevel()
         {
             var drag = tree.Find("globe_drag");
             var click = tree.Find("globe_click");
-            Assert.AreEqual(drag.maxRank, click.maxRank);
             for (int level = 0; level <= drag.maxRank; level++)
             {
                 double dragPower = stats.Preview(StatId.GlobeDragPower, drag.modifiers, level);
-                double clickPower = stats.Preview(StatId.GlobeClickPower, click.modifiers, level);
-                // The weakest drag gets dragOverClick clicks' worth with drag power; a click gets one with click power.
-                double weakestDrag = balance.clickImpulse * balance.dragOverClick * dragPower;
-                double click1 = balance.clickImpulse * clickPower;
-                Assert.Greater(weakestDrag, click1, "level " + level);
-                Assert.GreaterOrEqual(dragPower, clickPower, "level " + level);
+                double clickPower = stats.Preview(StatId.GlobeClickPower, click.modifiers, System.Math.Min(level, click.maxRank));
+                double swipe = GameplayMath.DragImpulse(200, .2, balance, dragPower, 90);
+                double click1 = GameplayMath.SpinImpulse(balance.clickImpulse, clickPower, 90, balance.impulseReferenceSpeed);
+                Assert.Greater(swipe, click1, "level " + level);
             }
         }
 

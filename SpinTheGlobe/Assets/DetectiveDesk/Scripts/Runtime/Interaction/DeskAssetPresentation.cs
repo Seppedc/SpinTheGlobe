@@ -92,8 +92,8 @@ namespace DetectiveDesk
                 var slot = slots.FirstOrDefault(s => s && s.SlotNumber == PinPage * 4 + i + 1);
                 var pin = slot ? slot.Occupant : null;
                 pinNumbers[i].text = (PinPage * 4 + i + 1).ToString("00");
-                pinNames[i].text = pin ? PinSkin.SkinNames[pin.SkinIndex].ToUpperInvariant() : "EMPTY SOCKET";
-                pinHeads[i].color = pin && pin.SkinMaterials[pin.SkinIndex] ? pin.SkinMaterials[pin.SkinIndex].GetColor("_BaseColor") : new Color(.23f, .26f, .23f);
+                pinNames[i].text = pin ? (pin.StrengthRank >= 0 ? "STRENGTH " + pin.StrengthRank : PinSkin.SkinNames[pin.SkinIndex].ToUpperInvariant()) : "EMPTY SOCKET";
+                pinHeads[i].color = pin ? pin.DisplayColor : new Color(.23f, .26f, .23f);
             }
         }
         void SlotSelected(PinCofferSlot slot) { SetPinPage((slot.SlotNumber - 1) / 4); }

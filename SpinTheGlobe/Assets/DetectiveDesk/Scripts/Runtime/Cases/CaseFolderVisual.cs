@@ -20,7 +20,7 @@ namespace DetectiveDesk.Gameplay
         /// <summary>World-space height each clue adds to the stack.</summary>
         public float itemThickness = 0.008f;
         /// <summary>The stack stops growing after this many clues (later clues still slide in, on top).</summary>
-        public int maxVisualItems = 24;
+        [Min(1)] public int maxVisualItems = 5;
         public float slideSeconds = 0.35f;
         public bool logLayout;
 
@@ -33,6 +33,7 @@ namespace DetectiveDesk.Gameplay
         Bounds backBounds;
         float coverLift, coverTarget, emptyDrop;
         int level;
+        int evidenceCount;
         Coroutine clearing;
 
         public Transform Folder => folder;
@@ -108,6 +109,7 @@ namespace DetectiveDesk.Gameplay
         {
             foreach (var t in FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
             {
+                if (t.gameObject.scene != folder.gameObject.scene) continue;
                 string n = t.name;
                 if (n.StartsWith("EvidencePhoto_")) { photoTemplates.Add(t.gameObject); t.gameObject.SetActive(false); }
                 else if (n.StartsWith("EvidenceMemo_")) { memoTemplates.Add(t.gameObject); t.gameObject.SetActive(false); }
@@ -132,13 +134,18 @@ namespace DetectiveDesk.Gameplay
         }
 
         // ------------------------------------------------------------------ public API
-        /// <summary>Shows exactly <paramref name="count"/> clues for case <paramref name="caseLevel"/>; new ones slide in when animated.</summary>
+        /// <summary>Tracks every clue, with a capped visible stack; new clues still slide in when animated.</summary>
         public void SetCount(int count, int caseLevel, bool animate)
         {
             if (!folder) return;
-            if (caseLevel != level || count < items.Count) { ClearImmediate(); level = caseLevel; }
-            while (items.Count < count) AddItem(items.Count, animate && items.Count == count - 1);
-            coverTarget = StackHeight(items.Count);
+            count = Mathf.Max(0, count);
+            if (caseLevel != level || count < evidenceCount) { ClearImmediate(); level = caseLevel; }
+            while (evidenceCount < count)
+            {
+                AddItem(evidenceCount, animate && evidenceCount == count - 1);
+                evidenceCount++;
+            }
+            coverTarget = StackHeight(evidenceCount);
             if (!animate) ApplyCover(coverTarget);
             if (clip) clip.gameObject.SetActive(items.Count > 0);
         }
@@ -266,7 +273,7 @@ namespace DetectiveDesk.Gameplay
         }
 
         // ------------------------------------------------------------------ items
-        float StackHeight(int count) => Mathf.Min(count, maxVisualItems) * itemThickness;
+        float StackHeight(int count) => Mathf.Clamp(count, 0, Mathf.Max(1, maxVisualItems)) * itemThickness;
 
         void AddItem(int index, bool animate)
         {
@@ -299,7 +306,8 @@ namespace DetectiveDesk.Gameplay
 
             var b = ClickRouter.RendererBounds(t, t.position);
             Vector3 centerOffset = t.position - b.center;
-            float layer = StackHeight(index) + Mathf.Min(index, maxVisualItems) * 0.0001f;
+            int visualIndex = Mathf.Min(index, Mathf.Max(1, maxVisualItems) - 1);
+            float layer = StackHeight(visualIndex) + visualIndex * 0.0001f;
             float along = sz * exposeExtent, side = sx * lateralExtent;
             if (kind != Kind.Paper)
             {
@@ -311,6 +319,14 @@ namespace DetectiveDesk.Gameplay
             }
             Vector3 targetCenter = stackBase + up * (layer + b.extents.y) + lateral * side + expose * along;
             Vector3 target = targetCenter + centerOffset;
+            // Later clues replace the top sheet at the same height, retaining the arrival animation
+            // without accumulating coincident meshes or lifting the cover further.
+            if (items.Count >= Mathf.Max(1, maxVisualItems))
+            {
+                var oldTop = items[items.Count - 1];
+                items.RemoveAt(items.Count - 1);
+                RemoveItem(oldTop);
+            }
             items.Add(t);
             if (logLayout) Debug.Log($"[CaseFolder] {go.name} from {template.name}: size {b.size:F2} → {target:F2}");
 
@@ -348,6 +364,7 @@ namespace DetectiveDesk.Gameplay
         {
             var leaving = new List<Transform>(items);
             items.Clear();
+            evidenceCount = 0;
             var starts = new List<Vector3>();
             foreach (var t in leaving) starts.Add(t ? t.position : Vector3.zero);
             float lift = coverLift;
@@ -359,7 +376,7 @@ namespace DetectiveDesk.Gameplay
                 ApplyCover(Mathf.Lerp(lift, 0, e));
                 yield return null;
             }
-            foreach (var t in leaving) if (t) Destroy(t.gameObject);
+            foreach (var t in leaving) RemoveItem(t);
             coverTarget = 0;
             ApplyCover(0);
             if (clip) clip.gameObject.SetActive(false);
@@ -369,8 +386,9 @@ namespace DetectiveDesk.Gameplay
         void ClearImmediate()
         {
             if (clearing != null) { StopCoroutine(clearing); clearing = null; }
-            foreach (var t in items) if (t) Destroy(t.gameObject);
+            foreach (var t in items) RemoveItem(t);
             items.Clear();
+            evidenceCount = 0;
             coverTarget = 0;
             ApplyCover(0);
         }
@@ -382,6 +400,14 @@ namespace DetectiveDesk.Gameplay
             foreach (var (t, baseLocal) in cover) if (t) t.position = folder.TransformPoint(baseLocal) + delta;
             if (clip) clip.position = folder.TransformPoint(clipBase) + delta;
             if (solvedMark && solvedMark.gameObject.activeSelf) PlaceSolvedMark();
+        }
+
+        static void RemoveItem(Transform item)
+        {
+            if (!item) return;
+            item.gameObject.SetActive(false);
+            if (Application.isPlaying) Destroy(item.gameObject);
+            else DestroyImmediate(item.gameObject);
         }
 
         static float Hash(int a, int b)

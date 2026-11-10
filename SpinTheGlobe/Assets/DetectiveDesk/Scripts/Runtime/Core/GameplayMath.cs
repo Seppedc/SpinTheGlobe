@@ -12,13 +12,19 @@ namespace DetectiveDesk.Gameplay
         /// <summary>Scale manual impulses with the globe while retaining the drag/click strength difference.</summary>
         public static double SpinImpulse(double amount, double power, double maxSpeed, double referenceSpeed) =>
             amount * power * Math.Max(1, maxSpeed / Math.Max(1, referenceSpeed));
-        /// <summary>Equal distances moved slowly and quickly give different impulses.</summary>
+        /// <summary>One released swipe: net distance sets power, average speed weights it, and a per-gesture cap limits it.</summary>
         public static double DragImpulse(double pixels, double seconds, GameBalance balance, double power, double maxSpeed)
         {
-            if (!Finite(pixels) || !Finite(seconds) || pixels <= 0 || seconds <= 0) return 0;
+            if (!balance || !Finite(pixels) || !Finite(seconds) || !Finite(power) || !Finite(maxSpeed)
+                || pixels <= 0 || seconds <= 0 || power <= 0 || maxSpeed <= 0) return 0;
+            double minimum = Math.Max(0, balance.dragMinPixels);
+            if (pixels < minimum) return 0;
+            double distance = Math.Min(pixels, Math.Max(minimum, balance.dragFullPixels));
             double speedFactor = Math.Min(balance.dragMaxSpeedFactor,
                 pixels / seconds / Math.Max(1, balance.dragReferencePixelsPerSecond));
-            return SpinImpulse(pixels * balance.dragAcceleration * speedFactor, power, maxSpeed, balance.impulseReferenceSpeed);
+            double impulse = SpinImpulse(distance * balance.dragAcceleration * speedFactor, power, maxSpeed, balance.impulseReferenceSpeed);
+            double cap = maxSpeed * Math.Max(0, Math.Min(1, balance.dragMaxBoostFraction));
+            return Finite(impulse) ? Math.Max(0, Math.Min(impulse, cap)) : 0;
         }
         public static Vector3 Spherical(float latitude, float longitude, float radius)
         {
@@ -26,6 +32,11 @@ namespace DetectiveDesk.Gameplay
             return new Vector3((float)(radius * Math.Cos(lat) * Math.Sin(lon)),
                 (float)(radius * Math.Sin(lat)), (float)(-radius * Math.Cos(lat) * Math.Cos(lon)));
         }
+
+        /// <summary>Scale the exponential decay rate, rather than subtracting from per-frame retention.</summary>
+        public static double SpinFriction(double baseRetention, double decayMultiplier) =>
+            Math.Pow(Math.Max(.000001, Math.Min(1, baseRetention)),
+                Finite(decayMultiplier) ? Math.Max(0, decayMultiplier) : 1);
 
         // The motor maintains its baseline; friction decays only the manual speed above it.
         // Integrate the baseline and exponential excess exactly, independent of frame rate.

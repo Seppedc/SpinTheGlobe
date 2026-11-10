@@ -17,6 +17,7 @@ namespace DetectiveDesk.Progression
         GlobeMultiplier = 104,      // multiplier on spin earnings only
         IncomeMultiplier = 105,     // multiplier on every income source (golden nodes)
         GlobeAutoShare = 106,       // auto-rotate floor as a share of the max speed (0..1), Clockwork Motor
+        GlobeSpeedDecay = 107,      // multiplier on the exponential speed-loss rate (lower retains momentum)
 
         // Pins & shooter
         PinSlots = 200,             // number of pins unlocked (0..12)
@@ -35,6 +36,7 @@ namespace DetectiveDesk.Progression
         CaseEvidenceReduction = 303,// fewer evidence needed per case
         CaseGold = 304,             // gold paid when an approved case drops gold
         CaseGoldChance = 305,       // chance (0..1) an approved case drops gold, capped at GameBalance.caseGoldChanceCap
+        CaseUnlocked = 306,         // >=1: fallen pins can supply evidence and cases can be stamped
 
         // Whiskey glass
         WhiskeyBoostDuration = 400, // seconds

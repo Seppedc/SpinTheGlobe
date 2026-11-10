@@ -28,45 +28,71 @@ namespace DetectiveDesk.Gameplay
         /// <summary>Top of the folder's current stack (moves up as clues arrive).</summary>
         public Vector3 FolderLabelAnchor => visual && visual.IsValid ? visual.LabelAnchor : folder ? folder.position : Vector3.zero;
         bool stamping;
+        bool wasUnlocked;
         readonly System.Random rng = new System.Random();
 
         GameBalance B => game.Balance;
+        public bool Unlocked => game && game.Stats.Get(StatId.CaseUnlocked) >= 1;
         public int Required => game ? CaseProgression.RequiredEvidence(B, Level,
             Mathf.RoundToInt((float)game.Stats.Get(StatId.CaseEvidenceReduction))) : 3;
         public int RequiredDurability => game ? CaseProgression.RequiredStrength(B, Level) : 0;
         public string EvidenceLabel => CaseProgression.EvidenceLabel(Evidence, Required, OnCooldown);
-        public bool IsFull => Evidence >= Required;
+        public string StatusLabel => !Unlocked ? "Unlock Case Files" : OnCooldown
+            ? "NEXT CASE " + UIFactory.Seconds(Cooldown) : EvidenceLabel;
+        public bool IsFull => Unlocked && Evidence >= Required;
         public bool OnCooldown => Cooldown > 0;
+        public bool CanClaim => IsFull && !OnCooldown && !stamping;
         /// <summary>Small base-reward increases, with an income-scaled minimum; upgrades apply on top.</summary>
-        public double Reward => game
+        public double Reward => Unlocked
             ? CaseProgression.Reward(B, Level, game.IncomeRate,
                 game.Stats.Get(StatId.IncomeMultiplier), game.Stats.Get(StatId.CasePayout))
             : 0;
         /// <summary>Chance an approved case also drops gold (Press Coverage), never above the balance cap (10%).</summary>
-        public double GoldChance => game ? System.Math.Min(B.caseGoldChanceCap, game.Stats.Get(StatId.CaseGoldChance)) : 0;
+        public double GoldChance => Unlocked ? System.Math.Min(B.caseGoldChanceCap, game.Stats.Get(StatId.CaseGoldChance)) : 0;
         /// <summary>Gold paid when a case drops gold.</summary>
-        public double GoldReward => game ? System.Math.Round(game.Stats.Get(StatId.CaseGold) * (1 + Level / (double)B.caseGoldLevelDivisor)) : 0;
+        public double GoldReward => Unlocked ? System.Math.Round(game.Stats.Get(StatId.CaseGold) * (1 + Level / (double)B.caseGoldLevelDivisor)) : 0;
 
-        public void Initialize(GameManager owner)
+        /// <summary>Connect the case rules without creating scene visuals or loading a save.</summary>
+        public void Bind(GameManager owner)
         {
             game = owner;
             Evidence = Mathf.Min(Evidence, Required);
+            wasUnlocked = Unlocked;
+            EventBus.Unsubscribe<PinFellOff>(OnPinFell);
+            EventBus.Unsubscribe<StatsChanged>(OnStatsChanged);
+            EventBus.Subscribe<PinFellOff>(OnPinFell);
+            EventBus.Subscribe<StatsChanged>(OnStatsChanged);
+        }
+
+        public void Initialize(GameManager owner)
+        {
+            Bind(owner);
             stamp = ClickRouter.FindByName("SOLVED Stamp", "Stamp body");
             folder = ClickRouter.FindByName("CaseFiles", "Case file");
             visual = gameObject.AddComponent<CaseFolderVisual>();
             visual.Initialize(ClickRouter.FindByName("Generated_CaseFiles", "CaseFiles_Review"));
             if (!folder) folder = visual.Folder;
             else visual.FitClickCollider(folder);
-            EventBus.Subscribe<PinFellOff>(OnPinFell);
             if (game.legacy) game.legacy.ResetCaseVisual();
-            if (visual) visual.SetCount(Evidence, Level, false);
+            if (visual) visual.SetCount(Unlocked ? Evidence : 0, Level, false);
         }
 
-        void OnDestroy() { EventBus.Unsubscribe<PinFellOff>(OnPinFell); }
+        void OnDestroy()
+        {
+            EventBus.Unsubscribe<PinFellOff>(OnPinFell);
+            EventBus.Unsubscribe<StatsChanged>(OnStatsChanged);
+        }
+
+        void OnStatsChanged(StatsChanged e)
+        {
+            if (wasUnlocked == Unlocked) return;
+            wasUnlocked = Unlocked;
+            if (visual) visual.SetCount(Unlocked ? Evidence : 0, Level, false);
+        }
 
         void Update()
         {
-            if (!game || Cooldown <= 0) return;
+            if (!Unlocked || Cooldown <= 0) return;
             Cooldown = Mathf.Max(0, Cooldown - Time.deltaTime);
             if (Cooldown <= 0)
             {
@@ -77,7 +103,7 @@ namespace DetectiveDesk.Gameplay
 
         void OnPinFell(PinFellOff e)
         {
-            if (!game) return;
+            if (!Unlocked) return;
             if (OnCooldown || IsFull) return;
             if (e.DurabilityLevel < RequiredDurability)
             {
@@ -93,13 +119,13 @@ namespace DetectiveDesk.Gameplay
         /// <summary>Stamp button / clicking the stamp on the desk.</summary>
         public void TryStamp()
         {
-            if (!game || stamping || OnCooldown || !IsFull) return;
+            if (!CanClaim) return;
             Stamp(false);
         }
 
         void Stamp(bool automatic)
         {
-            if (stamping) return;
+            if (!Unlocked || stamping) return;
             stamping = true;
             StartCoroutine(StampSequence(automatic));
         }
@@ -180,7 +206,7 @@ namespace DetectiveDesk.Gameplay
         /// <summary>Testing only: fills the open case so it can be stamped.</summary>
         public void DevFill()
         {
-            if (!game || OnCooldown) return;
+            if (!Unlocked || OnCooldown) return;
             Evidence = Required;
             if (visual) visual.SetCount(Evidence, Level, true);
             game.Notify();

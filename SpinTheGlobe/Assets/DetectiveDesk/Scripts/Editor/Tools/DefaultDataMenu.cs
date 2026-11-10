@@ -26,6 +26,7 @@ namespace DetectiveDesk.Editor
             {
                 Undo.RecordObject(tree, "Default skill tree");
                 tree.SetNodes(DefaultSkillTreeFactory.Create());
+                tree.SetSections(DefaultSkillTreeFactory.CreateSections());
                 EditorUtility.SetDirty(tree);
             }
 
