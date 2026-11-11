@@ -68,11 +68,25 @@ namespace DetectiveDesk.Core
         public StatueSmashed(int index, double gold) { Index = index; Gold = gold; }
     }
 
+    /// <summary>A successful paper shot, ready for future achievement listeners.</summary>
+    public readonly struct PaperShotScored
+    {
+        public readonly long LifetimeCount;
+        public PaperShotScored(long lifetimeCount) { LifetimeCount = lifetimeCount; }
+    }
+
     public readonly struct LootOpened
     {
         public readonly LootKind Kind;
         public readonly double Amount;
         public readonly string Description;
-        public LootOpened(LootKind kind, double amount, string description) { Kind = kind; Amount = amount; Description = description; }
+        public readonly int Tier;
+        public LootOpened(LootKind kind, double amount, string description, int tier = 0)
+        {
+            Kind = kind;
+            Amount = amount;
+            Description = description;
+            Tier = tier;
+        }
     }
 }

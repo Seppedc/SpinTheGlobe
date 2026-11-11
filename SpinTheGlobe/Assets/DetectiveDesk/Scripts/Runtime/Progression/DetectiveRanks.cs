@@ -4,7 +4,7 @@ namespace DetectiveDesk.Progression
 {
     /// <summary>
     /// Detective ranks: earned by retiring the agency. The list lives in <see cref="GameBalance.ranks"/> so more ranks
-    /// can be added in the inspector without code changes. Each rank has a title and a permanent income bonus.
+    /// can be added in the inspector without code changes. Rank titles are separate from the permanent bonus granted for each retirement.
     /// </summary>
     public static class DetectiveRanks
     {
@@ -37,11 +37,11 @@ namespace DetectiveDesk.Progression
             return false;
         }
 
-        /// <summary>The income modifier of the current rank, for the stat sheet.</summary>
+        /// <summary>Each retirement adds the same income bonus; rank milestones do not add a second bonus.</summary>
         public static IEnumerable<(StatModifier modifier, int rank)> Modifiers(GameBalance balance, int retirements)
         {
-            var r = For(balance, retirements);
-            if (r.incomeBonus > 0) yield return (StatModifier.Percent(StatId.IncomeMultiplier, r.incomeBonus), 1);
+            double bonus = Prestige.IncomeBonusFor(retirements, balance);
+            if (bonus > 0) yield return (StatModifier.Percent(StatId.IncomeMultiplier, bonus), 1);
         }
     }
 }

@@ -14,33 +14,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: DetectiveDesk.Runtime::DetectiveDesk.Progression.GameBalance
   startingMoney: 0
   startingGold: 0
-  whiskeyUnlockGoldCost: 10
+  whiskeyUnlockGoldCost: 5
   autosaveInterval: 30
   prestigeThreshold: 15000
   prestigeGoldScale: 25
   prestigeExponent: 0.5
+  prestigeIncomeBonusPerRetirement: 0.1
+  prestigeRequirementIncrease: 5000
+  maxPrestiges: 5
+  finalRunGoal: 50000
   ranks:
   - title: Rookie
     retirements: 0
     incomeBonus: 0
   - title: Detective
     retirements: 1
-    incomeBonus: 0.1
-  - title: Senior Detective
-    retirements: 3
-    incomeBonus: 0.25
+    incomeBonus: 0
   - title: Inspector
-    retirements: 5
-    incomeBonus: 0.5
+    retirements: 2
+    incomeBonus: 0
   - title: Chief Inspector
-    retirements: 8
-    incomeBonus: 1
+    retirements: 3
+    incomeBonus: 0
   - title: Commissioner
-    retirements: 12
-    incomeBonus: 2
+    retirements: 4
+    incomeBonus: 0
   - title: Legend of the Bureau
-    retirements: 20
-    incomeBonus: 4
+    retirements: 5
+    incomeBonus: 0
   baseStats:
   - stat: 100
     value: 90
@@ -138,35 +139,315 @@ MonoBehaviour:
   caseGoldChanceCap: 0.1
   whiskeyFillPerClick: 0.1
   iceCubeFillMultiplier: 2
-  statueBasePieces: 5
-  statuePiecesPerIndex: 2
+  goldShopItems:
+  - id: start_ledger
+    title: Keep the Skill Tree
+    description: Unlock the skill tree now and in every future run.
+    category: 2
+    maxRank: 1
+    cost:
+      baseCost: 10
+      growth: 1
+      explicitCosts: []
+      roundingStep: 1
+    requires: 
+    modifiers: []
+  - id: start_pin
+    title: Keep Pin 1
+    description: Unlock Pin 1 now and in every future run.
+    category: 2
+    maxRank: 1
+    cost:
+      baseCost: 30
+      growth: 1
+      explicitCosts: []
+      roundingStep: 1
+    requires: start_ledger
+    modifiers: []
+  - id: start_cases
+    title: Keep Case Files
+    description: Unlock Case Files now and in every future run.
+    category: 2
+    maxRank: 1
+    cost:
+      baseCost: 30
+      growth: 1
+      explicitCosts: []
+      roundingStep: 1
+    requires: start_ledger
+    modifiers: []
+  - id: start_motor
+    title: Start Auto Spin
+    description: Get Auto Spin level 1 now and in every future run.
+    category: 2
+    maxRank: 1
+    cost:
+      baseCost: 20
+      growth: 1
+      explicitCosts: []
+      roundingStep: 1
+    requires: start_ledger
+    modifiers: []
+  - id: start_spin_limit
+    title: Start Spin Limit
+    description: Get Spin Limit level 1 now and in every future run.
+    category: 2
+    maxRank: 1
+    cost:
+      baseCost: 25
+      growth: 1
+      explicitCosts: []
+      roundingStep: 1
+    requires: start_ledger
+    modifiers: []
+  - id: unlock_statue_1
+    title: Unlock Statues
+    description: Unlock all statues and statue pieces in lootboxes.
+    category: 0
+    maxRank: 1
+    cost:
+      baseCost: 10
+      growth: 1
+      explicitCosts: []
+      roundingStep: 1
+    requires: 
+    modifiers: []
+  - id: unlock_whiskey
+    title: Unlock Whiskey
+    description: Unlock the glass, bottle and drink upgrades.
+    category: 0
+    maxRank: 1
+    cost:
+      baseCost: 5
+      growth: 1
+      explicitCosts: []
+      roundingStep: 1
+    requires: 
+    modifiers: []
+  - id: statue_gold_chance
+    title: More Statue Gold
+    description: +10% chance of double Gold from any statue per level.
+    category: 0
+    maxRank: 10
+    cost:
+      baseCost: 20
+      growth: 1
+      explicitCosts:
+      - 20
+      - 25
+      - 30
+      - 35
+      - 40
+      - 45
+      - 50
+      - 55
+      - 60
+      - 65
+      roundingStep: 1
+    requires: unlock_statue_1
+    modifiers:
+    - stat: 503
+      kind: 0
+      valuePerRank: 0.1
+      pinIndex: -1
+  - id: unlock_press_coverage
+    title: Press Coverage
+    description: Cases gain a 2% chance to drop Gold. Unlocks more chance upgrades.
+    category: 0
+    maxRank: 1
+    cost:
+      baseCost: 30
+      growth: 1
+      explicitCosts: []
+      roundingStep: 1
+    requires: 
+    modifiers:
+    - stat: 305
+      kind: 0
+      valuePerRank: 0.02
+      pinIndex: -1
+    - stat: 304
+      kind: 0
+      valuePerRank: 5
+      pinIndex: -1
+  - id: agency_reputation
+    title: Agency Reputation
+    description: +5% global money income per level. Adds to your prestige bonus.
+    category: 1
+    maxRank: 50
+    cost:
+      baseCost: 5
+      growth: 1
+      explicitCosts:
+      - 5
+      - 10
+      - 15
+      - 20
+      - 25
+      - 30
+      - 35
+      - 40
+      - 45
+      - 50
+      - 55
+      - 60
+      - 65
+      - 70
+      - 75
+      - 80
+      - 85
+      - 90
+      - 95
+      - 100
+      - 105
+      - 110
+      - 115
+      - 120
+      - 125
+      - 130
+      - 135
+      - 140
+      - 145
+      - 150
+      - 155
+      - 160
+      - 165
+      - 170
+      - 175
+      - 180
+      - 185
+      - 190
+      - 195
+      - 200
+      - 205
+      - 210
+      - 215
+      - 220
+      - 225
+      - 230
+      - 235
+      - 240
+      - 245
+      - 250
+      roundingStep: 1
+    requires: 
+    modifiers:
+    - stat: 105
+      kind: 1
+      valuePerRank: 0.05
+      pinIndex: -1
+  - id: steel_tips
+    title: Steel Tips
+    description: +1 durability for every pin.
+    category: 1
+    maxRank: 1
+    cost:
+      baseCost: 50
+      growth: 1
+      explicitCosts: []
+      roundingStep: 1
+    requires: 
+    modifiers:
+    - stat: 210
+      kind: 0
+      valuePerRank: 1
+      pinIndex: -1
+  - id: twin_barrel
+    title: Twin Barrel
+    description: 20% chance a shot fires two pins.
+    category: 1
+    maxRank: 1
+    cost:
+      baseCost: 50
+      growth: 1
+      explicitCosts: []
+      roundingStep: 1
+    requires: 
+    modifiers:
+    - stat: 221
+      kind: 0
+      valuePerRank: 0.2
+      pinIndex: -1
+  - id: double_box
+    title: Double Box
+    description: 15% chance a lootbox gives two rewards.
+    category: 1
+    maxRank: 1
+    cost:
+      baseCost: 50
+      growth: 1
+      explicitCosts: []
+      roundingStep: 1
+    requires: 
+    modifiers:
+    - stat: 602
+      kind: 0
+      valuePerRank: 0.15
+      pinIndex: -1
+  - id: bottomless_glass
+    title: Bottomless Glass
+    description: The whiskey glass refills itself after the cooldown.
+    category: 1
+    maxRank: 1
+    cost:
+      baseCost: 50
+      growth: 1
+      explicitCosts: []
+      roundingStep: 1
+    requires: unlock_whiskey
+    modifiers:
+    - stat: 403
+      kind: 0
+      valuePerRank: 1
+      pinIndex: -1
+  - id: fast_casting
+    title: Fast Casting
+    description: Statues need 1 fewer piece per level. Two levels.
+    category: 1
+    maxRank: 2
+    cost:
+      baseCost: 50
+      growth: 1.5
+      explicitCosts: []
+      roundingStep: 1
+    requires: unlock_statue_1
+    modifiers:
+    - stat: 502
+      kind: 0
+      valuePerRank: 1
+      pinIndex: -1
+  statueBasePieces: 7
+  statuePiecesPerIndex: 0
   statueGoldFillPerRevolution: 0.04
-  statueBaseGold: 10
-  statueTierNames:
-  - Bronze
-  - Silver
-  - Gold
-  statueTierGoldMultipliers:
-  - 1
-  - 2.5
-  - 6
-  statueTierExtraPieces: 1
+  statueBaseGold: 1
+  lootboxOpeningSeconds: 4.5
   lootboxCost:
-    baseCost: 150
-    growth: 1.12
+    baseCost: 50
+    growth: 1
+    linearStep: 5
     explicitCosts: []
+    roundingStep: 1
   lootTable:
-  - kind: 2
-    weight: 30
-  - kind: 4
-    weight: 25
+  - kind: 3
+    weight: 20
   - kind: 0
     weight: 20
+  - kind: 2
+    weight: 4
+  - kind: 5
+    weight: 4
+  - kind: 6
+    weight: 4
   - kind: 1
-    weight: 15
-  - kind: 3
-    weight: 10
-  lootGoldMin: 2
-  lootGoldMax: 8
+    weight: 1
+  - kind: 4
+    weight: 47
+  lootGoldMin: 1
+  lootGoldMax: 1
   moneyJackpotChance: 0.25
-  paperBallReward: 25
+  paperBallFlightSeconds: 1.1
+  paperBallArcHeight: 1.3
+  paperBallBasketRadius: 0.2
+  paperBallMaxAimDistance: 15
+  paperBallDropSeconds: 0.25
+  paperBallResultSeconds: 1.5

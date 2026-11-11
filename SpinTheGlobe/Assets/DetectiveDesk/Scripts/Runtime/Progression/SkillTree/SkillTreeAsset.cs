@@ -73,7 +73,7 @@ namespace DetectiveDesk.Progression
     public sealed class SkillTreeAsset : ScriptableObject
     {
         [Tooltip("Increase when a new authored layout should replace older saved canvas positions.")]
-        [Min(1)] public int layoutRevision = 2;
+        [Min(1)] public int layoutRevision = 4;
         [SerializeField] List<SkillNodeData> nodes = new List<SkillNodeData>();
         [SerializeField] List<SkillSectionData> sections = new List<SkillSectionData>();
 

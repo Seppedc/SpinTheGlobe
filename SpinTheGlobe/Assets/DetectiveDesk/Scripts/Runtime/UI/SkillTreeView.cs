@@ -69,10 +69,22 @@ namespace DetectiveDesk.Gameplay
             else
             {
                 views.Clear();
-                foreach (var node in authoredNodes)
+                for (int i = authoredNodes.Count - 1; i >= 0; i--)
                 {
+                    var node = authoredNodes[i];
                     node.data = game.Tree.Find(node.id);
-                    if (node.data != null) views[node.id] = node;
+                    if (node.data != null) { views[node.id] = node; continue; }
+                    if (hovered == node) HideTooltip();
+                    var obsolete = new List<Component> { node.rect, node.label };
+                    foreach (var link in node.links) obsolete.Add(link);
+                    foreach (var component in obsolete)
+                    {
+                        if (!component) continue;
+                        component.gameObject.SetActive(false);
+                        if (Application.isPlaying) Destroy(component.gameObject);
+                        else DestroyImmediate(component.gameObject);
+                    }
+                    authoredNodes.RemoveAt(i);
                 }
             }
             RestoreSections();
@@ -175,6 +187,9 @@ namespace DetectiveDesk.Gameplay
 
         public void Open()
         {
+            if (game && game.PaperBalls && game.PaperBalls.IsThrowing) return;
+            if (game && game.PaperBalls) game.PaperBalls.CancelAim();
+            if (game && game.LootboxView && game.LootboxView.IsOpen) return;
             if (!canvas) return;
             if (game.legacy && game.legacy.upgradesPanel) game.legacy.upgradesPanel.SetActive(false);
             if (game.ShopView && game.ShopView.IsOpen) game.ShopView.Close();

@@ -28,14 +28,12 @@ namespace DetectiveDesk.Gameplay
         public int Pieces { get; private set; }
         public float GoldFill { get; private set; }
         public int PiecesRequired => game
-            ? Mathf.Max(2, game.Balance.statueBasePieces + game.Balance.statuePiecesPerIndex * Index + Tier * game.Balance.statueTierExtraPieces
+            ? Mathf.Max(2, game.Balance.statueBasePieces + game.Balance.statuePiecesPerIndex * Index
                            - Mathf.RoundToInt((float)game.Stats.Get(StatId.StatuePieceReduction)))
-            : 5;
-        /// <summary>0 = bronze, 1 = silver, 2 = gold (Gold shop upgrade per statue).</summary>
-        public int Tier => game ? Mathf.Clamp(game.Shop.Rank(GoldShopCatalog.StatueTierId(Index)), 0, GoldShopCatalog.StatueTierCount) : 0;
-        public string TierName => game && game.Balance.statueTierNames != null && Tier < game.Balance.statueTierNames.Length ? game.Balance.statueTierNames[Tier] : "Bronze";
-        float TierGoldMultiplier => game && game.Balance.statueTierGoldMultipliers != null && Tier < game.Balance.statueTierGoldMultipliers.Length
-            ? Mathf.Max(0, game.Balance.statueTierGoldMultipliers[Tier]) : 1f;
+            : 7;
+        public int Tier => 0;
+        public string TierName => "Bronze";
+        public double BonusGoldChance => game ? System.Math.Clamp(game.Stats.Get(StatId.StatueBonusGoldChance), 0, 1) : 0;
         public bool IsComplete => Pieces >= PiecesRequired;
         /// <summary>Statues are bought in the Gold shop before lootboxes drop pieces for them.</summary>
         public bool Unlocked => !game || game.Shop.Owns(DetectiveDesk.Progression.GoldShopCatalog.StatueUnlockId(Index));
@@ -113,7 +111,7 @@ namespace DetectiveDesk.Gameplay
             if (!wasReady && IsReadyToSmash && game) game.ShowHint("Statue " + (Index + 1) + " is solid gold. Smash it with the hammer!");
         }
 
-        public double GoldReward => game ? game.Balance.statueBaseGold * (Index + 1) * TierGoldMultiplier * game.Stats.Get(StatId.StatuePayout) : 0;
+        public double GoldReward => game ? game.Balance.statueBaseGold * game.Stats.Get(StatId.StatuePayout) : 0;
 
         /// <summary>Redraws the statue (after a tier upgrade changes its material or piece count).</summary>
         public void RefreshVisual() => Apply();
@@ -121,7 +119,8 @@ namespace DetectiveDesk.Gameplay
         /// <summary>Resets the pedestal after smashing and returns the gold earned.</summary>
         public double Shatter()
         {
-            double reward = GoldReward;
+            if (!Unlocked || !IsReadyToSmash) return 0;
+            double reward = GameplayMath.StatueGoldReward(GoldReward, BonusGoldChance, Random.value);
             Pieces = 0;
             GoldFill = 0;
             Apply();

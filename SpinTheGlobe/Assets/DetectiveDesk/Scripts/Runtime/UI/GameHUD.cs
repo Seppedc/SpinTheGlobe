@@ -19,6 +19,8 @@ namespace DetectiveDesk.Gameplay
         GameManager game;
         [SerializeField] Canvas canvas;
         [SerializeField] TextMeshProUGUI moneyText, incomeText, goldText, upgradesHint, toastText;
+        [SerializeField] TextMeshProUGUI globalMultiplierText;
+        [SerializeField] Image globalMultiplierDivider;
         [SerializeField] TextMeshProUGUI lootLabel, paperLabel, iceLabel;
         [SerializeField] Button lootButton, paperButton;
         [SerializeField] GameObject iceChip;
@@ -40,7 +42,43 @@ namespace DetectiveDesk.Gameplay
         {
             game = owner;
             if (!canvas) Build();
+            EnsureGlobalMultiplier();
+            RefreshGlobalMultiplier();
             return canvas;
+        }
+
+        void EnsureGlobalMultiplier()
+        {
+            if (globalMultiplierText)
+            {
+                if (!globalMultiplierDivider)
+                {
+                    int index = globalMultiplierText.transform.GetSiblingIndex();
+                    if (index > 0)
+                    {
+                        var previous = globalMultiplierText.transform.parent.GetChild(index - 1);
+                        if (previous.name == "Divider") globalMultiplierDivider = previous.GetComponent<Image>();
+                    }
+                }
+                return;
+            }
+            var bar = (RectTransform)canvas.transform.Find("Top bar");
+            globalMultiplierDivider = UIFactory.NewDivider(bar, 46);
+            globalMultiplierText = Value(bar, 20, UITheme.GoldBright, false, 160);
+            globalMultiplierText.name = "Global multiplier";
+            if (incomeText) globalMultiplierText.font = incomeText.font;
+            globalMultiplierText.raycastTarget = false;
+            RefreshGlobalMultiplier();
+        }
+
+        public void RefreshGlobalMultiplier()
+        {
+            if (!globalMultiplierText) return;
+            double multiplier = game.GlobalIncomeMultiplier;
+            bool visible = System.Math.Abs(multiplier - 1) > 1e-9;
+            globalMultiplierText.gameObject.SetActive(visible);
+            if (globalMultiplierDivider) globalMultiplierDivider.gameObject.SetActive(visible);
+            SetValue(globalMultiplierText, "Global ×" + multiplier.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture));
         }
 
         void BindActions()
@@ -53,6 +91,7 @@ namespace DetectiveDesk.Gameplay
 
         public void PreviewInitialState()
         {
+            RefreshGlobalMultiplier();
             moneyText.text = NumberFormatter.Money(game.Balance.startingMoney);
             goldText.text = NumberFormatter.Format(game.Balance.startingGold);
             incomeText.text = "+" + NumberFormatter.Money(0) + " / min";
@@ -218,6 +257,7 @@ namespace DetectiveDesk.Gameplay
 
             SetValue(moneyText, NumberFormatter.Money(game.Wallet.Money));
             SetValue(goldText, NumberFormatter.Format(game.Wallet.Gold));
+            RefreshGlobalMultiplier();
 
             // Income per minute follows the globe's speed, which changes every frame: smooth it and
             // refresh the number a few times per second so it reads calmly instead of flickering.
@@ -235,8 +275,9 @@ namespace DetectiveDesk.Gameplay
 
             var inv = game.Inventory;
             lootLabel.text = "Lootbox  " + UIFactory.Money(game.Lootbox.Price);
-            lootButton.interactable = game.Wallet.CanAfford(Currency.Money, game.Lootbox.Price);
+            lootButton.interactable = !(game.LootboxView && game.LootboxView.IsOpen) && game.Wallet.CanAfford(Currency.Money, game.Lootbox.Price);
             paperLabel.text = "× " + inv.PaperBalls;
+            paperButton.interactable = game.PaperBalls && !game.PaperBalls.IsThrowing;
             paperButton.gameObject.SetActive(inv.PaperBalls > 0);
             iceLabel.text = "× " + inv.IceCubes;
             iceChip.SetActive(inv.IceCubes > 0);

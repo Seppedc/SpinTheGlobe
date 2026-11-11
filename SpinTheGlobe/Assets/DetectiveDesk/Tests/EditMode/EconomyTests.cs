@@ -75,6 +75,17 @@ namespace DetectiveDesk.Tests
             Assert.AreEqual(40, c.Cost(2));
         }
 
+        [Test]
+        public void CostCurve_GrowsLinearlyWhenLinearStepIsConfigured()
+        {
+            var c = new CostCurve(50, 1, 5);
+            Assert.AreEqual(50, c.Cost(0));
+            Assert.AreEqual(55, c.Cost(1));
+            Assert.AreEqual(60, c.Cost(2));
+            Assert.AreEqual(75, c.Cost(5));
+            Assert.AreEqual(100, c.Cost(10));
+        }
+
         [TestCase(11, 10)]
         [TestCase(12, 10)]
         [TestCase(13, 15)]

@@ -37,7 +37,7 @@ namespace DetectiveDesk.Progression
             [Tooltip("Retirements needed to reach this rank.")]
             [Min(0)] public int retirements;
             [Tooltip("Permanent bonus on every source of income while at this rank (0.25 = +25%). Not cumulative: the rank's own value.")]
-            [Min(0)] public float incomeBonus;
+            [HideInInspector] public float incomeBonus; // Legacy serialized field; prestige count now determines income.
             public DetectiveRank(string title, int retirements, float incomeBonus) { this.title = title; this.retirements = retirements; this.incomeBonus = incomeBonus; }
         }
 
@@ -45,7 +45,7 @@ namespace DetectiveDesk.Progression
         [Min(0)] public double startingMoney = 0;
         [Min(0)] public double startingGold = 0;
         [Tooltip("One-time permanent Gold purchase for the glass, bottle and drink skill branch.")]
-        [Min(1)] public double whiskeyUnlockGoldCost = 10;
+        [Min(1)] public double whiskeyUnlockGoldCost = 5;
         [Tooltip("Seconds between automatic saves.")]
         [Min(5)] public float autosaveInterval = 30;
 
@@ -56,16 +56,22 @@ namespace DetectiveDesk.Progression
         [Min(0)] public double prestigeGoldScale = 25;
         [Range(0.1f, 1f)] public double prestigeExponent = 0.5;
 
+        [Tooltip("Permanent additive money-income bonus for each completed retirement.")]
+        [Min(0)] public double prestigeIncomeBonusPerRetirement = 0.10;
+
+        [Min(0)] public double prestigeRequirementIncrease = 5_000;
+        [Min(0)] public int maxPrestiges = 5;
+        [Min(1)] public double finalRunGoal = 50_000;
+
         [Header("Detective ranks (earned by retiring; add more any time)")]
         public List<DetectiveRank> ranks = new List<DetectiveRank>
         {
             new DetectiveRank("Rookie", 0, 0f),
-            new DetectiveRank("Detective", 1, 0.10f),
-            new DetectiveRank("Senior Detective", 3, 0.25f),
-            new DetectiveRank("Inspector", 5, 0.50f),
-            new DetectiveRank("Chief Inspector", 8, 1.00f),
-            new DetectiveRank("Commissioner", 12, 2.00f),
-            new DetectiveRank("Legend of the Bureau", 20, 4.00f),
+            new DetectiveRank("Detective", 1, 0f),
+            new DetectiveRank("Inspector", 2, 0f),
+            new DetectiveRank("Chief Inspector", 3, 0f),
+            new DetectiveRank("Commissioner", 4, 0f),
+            new DetectiveRank("Legend of the Bureau", 5, 0f),
         };
 
         [Header("Base stats (before upgrades)")]
@@ -162,35 +168,42 @@ namespace DetectiveDesk.Progression
         [Tooltip("Fill speed multiplier while an ice cube is in the glass.")]
         [Min(1)] public float iceCubeFillMultiplier = 2f;
 
+        [Header("Gold shop")]
+        public List<GoldShopItem> goldShopItems = GoldShopCatalog.CreateDefaults();
+
         [Header("Statues")]
-        [Min(1)] public int statueBasePieces = 5;
+        [Min(1)] public int statueBasePieces = 7;
         [Tooltip("Extra pieces needed for each further pedestal.")]
-        [Min(0)] public int statuePiecesPerIndex = 2;
+        [Min(0)] public int statuePiecesPerIndex = 0;
         [Tooltip("Gold fill (0..1) added per globe revolution (× Gold Fill Rate).")]
         [Range(0.001f, 1)] public float statueGoldFillPerRevolution = 0.04f;
-        [Min(0)] public double statueBaseGold = 10;
-        [Tooltip("Statue tiers, bought per statue in the Gold shop: names, gold multipliers and extra pieces per tier.")]
-        public string[] statueTierNames = { "Bronze", "Silver", "Gold" };
-        public float[] statueTierGoldMultipliers = { 1f, 2.5f, 6f };
-        [Min(0)] public int statueTierExtraPieces = 1;
+        [Min(0)] public double statueBaseGold = 1;
 
         [Header("Lootbox")]
-        public CostCurve lootboxCost = new CostCurve(150, 1.12);
+        [Min(0.1f)] public float lootboxOpeningSeconds = 4.5f;
+        public CostCurve lootboxCost = new CostCurve(50, 1, 5);
         public List<LootEntry> lootTable = new List<LootEntry>
         {
-            new LootEntry(LootKind.StatuePiece, 30),
-            new LootEntry(LootKind.Money, 25),
+            new LootEntry(LootKind.PaperBall, 20),
             new LootEntry(LootKind.IceCube, 20),
-            new LootEntry(LootKind.Gold, 15),
-            new LootEntry(LootKind.PaperBall, 10),
+            new LootEntry(LootKind.StatuePiece, 4),
+            new LootEntry(LootKind.StatuePiece2, 4),
+            new LootEntry(LootKind.StatuePiece3, 4),
+            new LootEntry(LootKind.Gold, 1),
+            new LootEntry(LootKind.Money, 47),
         };
-        [Min(0)] public double lootGoldMin = 2;
-        [Min(0)] public double lootGoldMax = 8;
+        [Min(0)] public double lootGoldMin = 1;
+        [Min(0)] public double lootGoldMax = 1;
         [Tooltip("Chance a money drop is a jackpot (2–4× the price) instead of a partial refund (30–80%).")]
         [Range(0, 1)] public float moneyJackpotChance = 0.25f;
 
         [Header("Paper ball (placeholder reward)")]
-        [Min(0)] public double paperBallReward = 25;
+        [Min(.1f)] public float paperBallFlightSeconds = 1.1f;
+        [Min(0)] public float paperBallArcHeight = 1.3f;
+        [Min(0)] public float paperBallBasketRadius = .20f;
+        [Min(1)] public float paperBallMaxAimDistance = 15;
+        [Min(.1f)] public float paperBallDropSeconds = .25f;
+        [Min(.1f)] public float paperBallResultSeconds = 1.5f;
 
         /// <summary>Code defaults first, then the asset's list on top, so stats added later never start at 0.</summary>
         public void ApplyTo(StatSheet sheet)
@@ -236,6 +249,7 @@ namespace DetectiveDesk.Progression
             new StatBase(StatId.StatueGoldFillRate, 1),
             new StatBase(StatId.StatuePayout, 1),
             new StatBase(StatId.StatuePieceReduction, 0),
+            new StatBase(StatId.StatueBonusGoldChance, 0),
 
             new StatBase(StatId.LootboxPrice, 1),
             new StatBase(StatId.LootLuck, 0),

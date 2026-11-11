@@ -46,8 +46,8 @@ Globe revolutions ─► gold fill in completed statues ─► smash with hammer
 - **Location-neutral payout:** sea, land and city locations pay the same. Pin Pay and global income bonuses apply. Spin Pay upgrades affect spins only.
 - **Upgrades:** shooter cooldown, auto-fire, per-pin Strength and Pay. Location-chance skills are removed.
 - **Reload progression:** start at 4.5 seconds; each Faster Reload rank cuts that time by 12%. The first upgrade takes it to 3.96 seconds, while 40 ranks still reach roughly 0.027 seconds.
-- **Shooter branch:** Faster Reload sits below-right of Unlock Upgrades, with Auto Fire directly below it. Faster Reload is revealed by the root but stays locked until Pin 1 is bought; Auto Fire requires Faster Reload.
-- **Pins:** the player starts with 0. They are unlocked one at a time up to 12. Each pin has 20 **Strength** levels and 20 **Pay** levels. Added levels keep the same per-level effects. Strength prices grow by 80% through level 10, then 25%; Pay prices grow by 60%, then 15%.
+- **Shooter branch:** Faster Reload sits above the Pins hub, with Auto Fire directly above it. Faster Reload is revealed by the root but stays locked until Pin 1 is bought; Auto Fire requires Faster Reload.
+- **Pins:** the player starts with 0. They are unlocked one at a time up to 12. Each pin has 10 **Strength** levels and 20 **Pay** levels. All pins use Pin 1's price curve for each upgrade track. Strength prices grow by 80% per level; Pay prices grow by 60% through level 10, then 15%. New-pin purchase prices are unchanged.
 
 ### 3.3 Case file (second income)
 - The folder stays on the desk from the start, with an **Unlock Case Files** plate. Buy Pin 1, then the **Case Files** skill (EUR 30) to enable evidence collection and case rewards. Pin falls before unlocking are not banked.
@@ -62,27 +62,28 @@ Globe revolutions ─► gold fill in completed statues ─► smash with hammer
 - **Upgrades:** payout, cooldown, auto-stamp chance, and ★ Press Coverage (gold-drop chance, hard cap 10%).
 
 ### 3.4 Whiskey glass (power-up)
-- **Whiskey Set:** a permanent, one-time 10-Gold purchase reveals the glass, bottle and drink skill branch. They are hidden and unusable until purchased. The unlock survives retirement. See [WHISKEY_GOLD_UNLOCK.md](WHISKEY_GOLD_UNLOCK.md).
+- **Whiskey Set:** a permanent, one-time 5-Gold purchase reveals the glass, bottle and drink skill branch. They are hidden and unusable until purchased. The unlock survives retirement. See [GOLD_SHOP_REWORK.md](GOLD_SHOP_REWORK.md).
 - Each click fills the unlocked glass a step. When full, the glass is lifted and drunk, then the boost (payout and spin speed) starts, followed by a cooldown.
 - **Upgrades:** boost duration, cooldown and boost strength. Lootbox ice cubes make the glass fill faster.
 
 ### 3.5 Statues
 - The pedestals start empty. Statue pieces come **only from lootboxes** and rebuild a statue bottom to top.
 - A completed statue fills with gold, driven by globe revolutions. When full, the player smashes it with the hammer and earns **gold**.
-- **Upgrades:** gold fill rate and gold payout.
-- Planned: statues locked behind gold (section 5).
+- **Upgrades:** gold fill rate and gold payout. The separate Statue Gold Bonus mastery node is removed.
+- One Gold purchase unlocks all statues. Each starts at 1 Gold per smash; a shared ten-level Gold upgrade adds a 10% double-Gold chance per level. Fast Casting has two levels, each removing one piece. Individual statue metal-tier purchases are removed. See [GOLD_SHOP_REWORK.md](GOLD_SHOP_REWORK.md).
 
 ### 3.6 Lootbox
-- Bought with money. Loot: ice cube, gold, statue piece, paper ball (pays out instantly for now), money (a fraction of the price or a jackpot).
+- Bought with money. Loot: ice cube, gold, statue piece, paper ball (no money: aim at the basketball hoop to increase a saved lifetime score), money (a fraction of the price or a jackpot).
 
 ### 3.7 Skill tree
 - **Purchase colours:** grey means unavailable, brown means another level can be bought now, and gold means fully owned/maxed. The same palette applies to the Gold shop and tooltips. See [PURCHASE_COLOURS.md](PURCHASE_COLOURS.md).
-- One root node, **Skill Tree Unlock**, with 64 purchasable skills and four free information hubs: Globe above, Pins right, Case Files left and Desk Items below.
-- Hover or click a hub for a short explanation. Hubs have no cost, rank or purchase action. Globe and Desk Items use shared straight connectors; Pins groups the pin chain and reload branch, while Case Files leads into the case upgrades. Purchase prerequisites remain unchanged. Drinks and statues retain their Gold unlock requirements. See [SKILL_TREE_SECTIONS.md](SKILL_TREE_SECTIONS.md).
-- Case File remains its own branch to the left: Case Files unlock → three choices: Case Pay, Case Wait or Auto Stamp. The later upgrades follow Wait and Auto Stamp. The unlock requires both the root and Pin 1. Cross-branch requirements appear in the tooltip; branch links stay local for readability.
+- One root node, **Skill Tree Unlock**, with 63 purchasable skills and four free information hubs: Globe above, Pins right, Case Files left and Desk Items below.
+- Hover or click a hub for a short explanation. Hubs have no cost, rank or purchase action. Globe uses a shared straight connector. Desk Items branches left to statues, right to drinks and down to boxes. Pins groups the pin chain and upper reload branch, while Case Files leads into the case upgrades. Drinks and statues retain their Gold unlock requirements. See [SKILL_TREE_SECTIONS.md](SKILL_TREE_SECTIONS.md).
+- Case File remains its own branch to the left: Case Files unlock → Case Pay, Case Wait, Auto Stamp or Case Gold. Case Gold sits directly below Case Files and still requires the Press Coverage Gold unlock. The normal Case Files purchase requires both the root and Pin 1. Cross-branch requirements appear in the tooltip; branch links stay local for readability.
 - Nodes appear as soon as one of their prerequisites is owned. Pins branch: Pin 1 → Pin 12 chain, each pin with Durability and Payout side nodes.
 - **Bulk purchases:** Buy 1 / Buy 5 / Buy 10 selects up to that many affordable levels, stopping at level limits and permanent speed caps. The tooltip previews the actual total price and result.
-- **Retirement:** available at EUR 15,000 total earned this run, without an additional wallet payment. The first retirement awards 25 gold; see [ECONOMY_REBALANCE.md](ECONOMY_REBALANCE.md).
+- **Retirement:** five resets advance one rank each: Rookie → Detective → Inspector → Chief Inspector → Commissioner → Legend of the Bureau. Required earnings in the current run are EUR 15,000, 20,000, 25,000, 30,000 and 35,000. No wallet payment is required. At Legend, earning EUR 50,000 in that final run completes the game; further retirement is disabled. The completion state is saved, and the player can continue playing. See [FINAL_PRESTIGE_PROGRESSION.md](FINAL_PRESTIGE_PROGRESSION.md).
+- Each completed retirement adds **+10% permanent global money income**, capped at five resets. Agency Reputation stays at **+5% per level**, costing 5, 10, 15 Gold and so on. These bonuses add together: one retirement plus one Agency level gives ×1.15. The HUD shows the global multiplier; retirement information shows its sources and the next-run result. Detective ranks provide titles without an additional income bonus. See [AGENCY_PRESTIGE_MULTIPLIER.md](AGENCY_PRESTIGE_MULTIPLIER.md).
 - The data is in `Data/SkillTree/SkillTree.asset`. To generate it, use **Tools ▸ Spin The Globe ▸ Create Default Data**.
 
 ### 3.8 Settings
@@ -118,6 +119,7 @@ Goal: stretch the game from ~5½ h (ideal) to ~15–25 h without making any sing
 - Run 1 lootboxes can't drop statue pieces (statues are locked); they drop money, ice, paper balls and a little gold instead.
 
 ### 5.4 Menus
+- Current shop revision: **Fresh Start** appears first (skill tree, Pin 1, Case Files, Auto Spin and Spin Limit), followed by **Unlocks** and **Permanent**. Statues use one combined unlock and one shared Gold-chance upgrade. Seed Money and Golden Meridian are removed. Full current items, prices and migration details: [GOLD_SHOP_REWORK.md](GOLD_SHOP_REWORK.md). The older proposals below are historical where they conflict with this revision.
 - **Skill tree:** money only; resets on prestige.
 - **Gold shop:** a normal list menu (not a tree), never resets. Ideally opened from a physical desk object (a small safe or leather ledger). Tabs:
   - **Unlocks:** statue 1, 2, 3 (pieces only drop once a statue is unlocked), more pedestals, whiskey glass, Press Coverage.

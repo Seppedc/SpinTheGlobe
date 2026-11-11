@@ -56,6 +56,7 @@ namespace DetectiveDesk.Gameplay
         public SettingsMenu Settings { get; private set; }
         public MusicPlayer Music { get; private set; }
         public GoldShopView ShopView { get; private set; }
+        public LootboxOpeningView LootboxView { get; private set; }
         public FirstUseGuidance GuidanceView { get; private set; }
 
         // ------------------------------------------------------------------ prestige state
@@ -64,13 +65,36 @@ namespace DetectiveDesk.Gameplay
         /// <summary>How many times the agency has been retired.</summary>
         public int Prestiges { get; private set; }
         /// <summary>Gold the player would get for retiring right now.</summary>
-        public double PrestigeGold => Prestige.GoldFor(RunEarnings, Balance);
-        public bool CanRetire => PrestigeGold >= 1;
+        public double PrestigeGold => Prestige.GoldFor(RunEarnings, Balance, Prestiges);
+        public double PrestigeRequirement => Prestige.RequirementFor(Prestiges, Balance);
+        public bool IsFinalRank => Prestige.IsFinalRank(Prestiges, Balance);
+        public bool GameCompleted { get; private set; }
+        public bool CanRetire => !GameCompleted && PrestigeGold >= 1;
+        public double PrestigeIncomeBonus => Prestige.IncomeBonusFor(Prestiges, Balance);
+        public double GlobalIncomeMultiplier => Stats.Permanent(StatId.IncomeMultiplier);
+        public double NextRunIncomeMultiplier => Prestige.IncomeMultiplierFor(Prestiges + 1, Balance, Shop);
+        public double AgencyIncomeBonus
+        {
+            get
+            {
+                double bonus = 0;
+                var item = Shop.Find(GoldShopCatalog.Reputation);
+                if (item != null) foreach (var modifier in item.modifiers)
+                    if (modifier.stat == StatId.IncomeMultiplier && modifier.kind == ModifierKind.Percent)
+                        bonus += modifier.valuePerRank * Shop.Rank(item.id);
+                return bonus;
+            }
+        }
+        public string GlobalIncomeSummary => "Global money ×" + GlobalIncomeMultiplier.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)
+            + "  ·  Prestige +" + (PrestigeIncomeBonus * 100).ToString("0.#") + "%"
+            + "  ·  Agency +" + (AgencyIncomeBonus * 100).ToString("0.#") + "%";
+        public string RetirementIncomeSummary => "+" + (Balance.prestigeIncomeBonusPerRetirement * 100).ToString("0.#")
+            + "% permanent money income. Next run: ×" + NextRunIncomeMultiplier.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture) + ".";
         bool retiring;
         /// <summary>Message shown once the new run has loaded after retiring (survives the scene reload).</summary>
         static string pendingHint;
 
-        /// <summary>The detective rank earned by retiring (title + permanent income bonus, see GameBalance.ranks).</summary>
+        /// <summary>The detective rank earned by retiring (title, see GameBalance.ranks).</summary>
         public GameBalance.DetectiveRank Rank => DetectiveRanks.For(Balance, Prestiges);
         public bool TryNextRank(out GameBalance.DetectiveRank next) => DetectiveRanks.TryNext(Balance, Prestiges, out next);
 
@@ -79,7 +103,7 @@ namespace DetectiveDesk.Gameplay
         public Camera GameCamera => globe && globe.gameCamera ? globe.gameCamera : Camera.main;
 
         public bool WorldInputBlocked =>
-            (archive && archive.IsArchiveOpen) || (TreeView && TreeView.IsOpen) || (Settings && Settings.IsOpen) || (ShopView && ShopView.IsOpen) || (PaperBalls && PaperBalls.IsAiming) ||
+            (LootboxView && LootboxView.IsOpen) || (archive && archive.IsArchiveOpen) || (TreeView && TreeView.IsOpen) || (Settings && Settings.IsOpen) || (ShopView && ShopView.IsOpen) || (PaperBalls && (PaperBalls.IsAiming || PaperBalls.IsThrowing)) ||
             (legacy && legacy.settingsPanel && legacy.settingsPanel.activeInHierarchy);
 
         public event Action Changed;
@@ -118,6 +142,7 @@ namespace DetectiveDesk.Gameplay
             DeskInfo = Ensure<DeskInfoSystem>();
             Settings = Ensure<SettingsMenu>();
             ShopView = Ensure<GoldShopView>();
+            LootboxView = Ensure<LootboxOpeningView>();
         }
 
         // ------------------------------------------------------------------ lifecycle
@@ -154,6 +179,7 @@ namespace DetectiveDesk.Gameplay
             Settings = Ensure<SettingsMenu>();
             Music = Ensure<MusicPlayer>();
             ShopView = Ensure<GoldShopView>();
+            LootboxView = Ensure<LootboxOpeningView>();
             Popups = Ensure<PayoutPopups>();
             GuidanceView = Ensure<FirstUseGuidance>();
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
@@ -211,10 +237,12 @@ namespace DetectiveDesk.Gameplay
             Settings.Initialize(this);
             Music.Initialize(this);
             ShopView.Initialize(this);
+            LootboxView.Initialize(this);
             Popups.Initialize(this);
             GuidanceView.Initialize(this);
 
             loaded = true;
+            CheckCompletion();
             EventBus.Publish(new GameLoaded());
             Notify();
             if (!string.IsNullOrEmpty(pendingHint)) { ShowHint(pendingHint); pendingHint = null; }
@@ -226,6 +254,7 @@ namespace DetectiveDesk.Gameplay
         void Update()
         {
             if (!loaded) return;
+            CheckCompletion();
             PlayTime += Time.unscaledDeltaTime;
             incomeSampleTimer += Time.deltaTime;
             if (incomeSampleTimer >= 1f)
@@ -396,14 +425,17 @@ namespace DetectiveDesk.Gameplay
                 Wallet.Load(data.money, data.gold, data.lifetimeMoney, data.lifetimeGold);
                 Guidance.Load(data);
                 Shop.Load(data.goldShop);
-                Prestiges = Mathf.Max(0, data.prestiges);
+                Prestiges = Mathf.Clamp(data.prestiges, 0, Mathf.Max(0, Balance.maxPrestiges));
+                GameCompleted = data.gameCompleted;
                 // Saves from before prestige existed: the whole history counts as this run.
                 RunEarnings = data.runMoney > 0 || Prestiges > 0 ? data.runMoney : data.lifetimeMoney;
                 MigrateGoldNodes(data);
                 Skills.Load(Tree, data.skills);
+                ApplyGoldShopSkills();
                 Inventory.Load(data.iceCubes, data.paperBalls, data.sparePieces);
                 PlayTime = data.playTimeSeconds;
                 Lootbox.LoadState(data);
+                PaperBalls.LoadState(data);
                 Cases.LoadState(data);
                 Whiskey.LoadState(data);
                 Lamp.LoadState(data);
@@ -425,13 +457,14 @@ namespace DetectiveDesk.Gameplay
                 var data = new SaveData
                 {
                     money = Wallet.Money, gold = Wallet.Gold, lifetimeMoney = Wallet.LifetimeMoney, lifetimeGold = Wallet.LifetimeGold,
-                    runMoney = RunEarnings, prestiges = Prestiges, goldShop = Shop.ToSave(),
+                    runMoney = RunEarnings, prestiges = Prestiges, gameCompleted = GameCompleted, goldShop = Shop.ToSave(),
                     skills = Skills.ToSave(), playTimeSeconds = PlayTime,
                     completedGuidance = Guidance.ToSave(),
                     iceCubes = Inventory.IceCubes, paperBalls = Inventory.PaperBalls, sparePieces = Inventory.SparePieces,
                     statues = new List<StatueState>(),
                 };
                 Lootbox.SaveState(data);
+                if (PaperBalls) PaperBalls.SaveState(data);
                 Cases.SaveState(data);
                 Whiskey.SaveState(data);
                 Lamp.SaveState(data);
@@ -471,14 +504,30 @@ namespace DetectiveDesk.Gameplay
         /// glass, lootbox prices and items reset; gold, the Gold shop, statues, settings and the lamp are kept.
         /// Fresh-start items from the Gold shop give the new run its head start.
         /// </summary>
+        public bool CheckCompletion()
+        {
+            if ((LootboxView && LootboxView.IsOpen) || GameCompleted || !Prestige.HasCompleted(Prestiges, RunEarnings, Balance)) return false;
+            GameCompleted = true;
+            Notify();
+            if (ShopView) ShopView.ShowEnding();
+            if (loaded && useSaveFile) SaveGame();
+            return true;
+        }
+
         public void Retire()
         {
-            if (!CanRetire) { ShowHint("Earn " + NumberFormatter.Money(Balance.prestigeThreshold) + " in this run to retire."); return; }
+            if (!CanRetire)
+            {
+                ShowHint(GameCompleted ? "Your agency is complete." : IsFinalRank
+                    ? "Earn " + NumberFormatter.Money(PrestigeRequirement) + " in this final run to complete the game."
+                    : "Earn " + NumberFormatter.Money(PrestigeRequirement) + " in this run to retire.");
+                return;
+            }
             if (!useSaveFile) { ShowHint("Retiring needs the save file (useSaveFile is off)."); return; }
             double gain = PrestigeGold;
             var data = new SaveData
             {
-                money = Balance.startingMoney + GoldShopCatalog.SeedMoneyAmounts[Mathf.Clamp(Shop.Rank(GoldShopCatalog.SeedMoney), 0, GoldShopCatalog.SeedMoneyAmounts.Length - 1)],
+                money = Balance.startingMoney,
                 gold = Wallet.Gold + gain,
                 lifetimeMoney = Wallet.LifetimeMoney,
                 lifetimeGold = Wallet.LifetimeGold + gain,
@@ -491,6 +540,7 @@ namespace DetectiveDesk.Gameplay
                 sparePieces = Inventory.SparePieces,
                 statues = new List<StatueState>(),
             };
+            if (PaperBalls) PaperBalls.SaveState(data);
             Lamp.SaveState(data);
             if (figurines != null) foreach (var f in figurines) data.statues.Add(f ? f.SaveState() : default);
             try { Store.Save(data); }
@@ -499,21 +549,13 @@ namespace DetectiveDesk.Gameplay
             var before = Rank;
             var after = DetectiveRanks.For(Balance, Prestiges + 1);
             pendingHint = "Agency retired: +" + NumberFormatter.Format(gain) + " gold." +
-                (after.title != before.title ? " Promoted to " + after.title + (after.incomeBonus > 0 ? " (+" + Mathf.RoundToInt(after.incomeBonus * 100) + "% all income)." : ".") : "");
+                " " + RetirementIncomeSummary + (after.title != before.title ? " Promoted to " + after.title + "." : "");
             Time.timeScale = 1;
             UnityEngine.SceneManagement.SceneManager.LoadScene(gameObject.scene.buildIndex >= 0 ? gameObject.scene.buildIndex : 0);
         }
 
         /// <summary>Skill ranks a new run starts with, from the Gold shop's fresh-start items.</summary>
-        List<SkillRank> FreshStartSkills()
-        {
-            var list = new List<SkillRank>();
-            if (!Shop.Owns(GoldShopCatalog.KeptLedger)) return list;
-            list.Add(new SkillRank { id = DefaultSkillTreeFactory.RootId, rank = 1 });
-            if (Shop.Owns(GoldShopCatalog.WoundClockwork)) list.Add(new SkillRank { id = "globe_auto", rank = GoldShopCatalog.WoundClockworkRanks });
-            if (Shop.Owns(GoldShopCatalog.SparePin)) list.Add(new SkillRank { id = DefaultSkillTreeFactory.PinId(1), rank = 1 });
-            return list;
-        }
+        List<SkillRank> FreshStartSkills() => Shop.FreshStartSkills();
 
         /// <summary>Permanent modifiers outside the skill tree: Gold shop items and the detective rank bonus.</summary>
         IEnumerable<(StatModifier modifier, int rank)> ExtraModifiers()
@@ -526,6 +568,7 @@ namespace DetectiveDesk.Gameplay
         public bool PurchaseShopItem(string id)
         {
             if (!Shop.TryBuy(id, Wallet, out string reason)) { ShowHint(reason); return false; }
+            ApplyGoldShopSkills();
             Stats.Rebuild(Tree, Skills);
             if (globe) globe.EnforceLimits();
             if (PinBox) PinBox.Refresh();
@@ -534,6 +577,14 @@ namespace DetectiveDesk.Gameplay
             if (audioManager) audioManager.Click();
             Notify();
             return true;
+        }
+
+        void ApplyGoldShopSkills()
+        {
+            bool hadPins = UnlockedPins > 0;
+            foreach (var grant in Shop.FreshStartSkills())
+                Skills.GrantMinimum(Tree, grant.id, grant.rank, Stats);
+            if (!hadPins && UnlockedPins > 0) Guidance.Complete(PlayerGuidanceState.PinIntroStarted);
         }
 
         /// <summary>Deletes the save file and reloads the scene (debug / settings).</summary>

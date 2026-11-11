@@ -71,6 +71,12 @@ namespace DetectiveDesk.Gameplay
             return phase + (distance < .00001 ? 360 : distance);
         }
 
+        public static double StatueGoldReward(double baseGold, double bonusChance, double roll)
+        {
+            double chance = Math.Clamp(bonusChance, 0, 1);
+            return Math.Max(0, baseGold) * (chance >= 1 || roll < chance ? 2 : 1);
+        }
+
         public static bool PointInRing(Vector2 point, Vector2[] ring)
         {
             bool inside = false;

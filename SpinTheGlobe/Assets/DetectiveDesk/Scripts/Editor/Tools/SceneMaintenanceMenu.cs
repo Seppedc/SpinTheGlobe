@@ -5,12 +5,14 @@ using UnityEngine;
 
 namespace DetectiveDesk.Editor
 {
-    /// <summary>The three everyday developer controls, sharing grants with the F-key shortcuts.</summary>
+    /// <summary>Everyday developer controls, sharing grants with the F-key shortcuts.</summary>
     public static class SceneMaintenanceMenu
     {
         const string ResetMenu = "Tools/Spin The Globe/Reset Progress (Delete Save)";
         const string MoneyMenu = "Tools/Spin The Globe/Add EUR 10";
         const string GoldMenu = "Tools/Spin The Globe/Add 1 Gold";
+        const string LargeMoneyMenu = "Tools/Spin The Globe/Add EUR 10,000";
+        const string LargeGoldMenu = "Tools/Spin The Globe/Add 10 Gold";
 
         [MenuItem(ResetMenu, false, 0)]
         public static void DeleteSave()
@@ -39,8 +41,16 @@ namespace DetectiveDesk.Editor
         [MenuItem(GoldMenu, false, 2)]
         static void AddGold() => Cheats()?.GiveGold();
 
+        [MenuItem(LargeMoneyMenu, false, 3)]
+        static void AddLargeMoney() => Cheats()?.GiveLargeMoney();
+
+        [MenuItem(LargeGoldMenu, false, 4)]
+        static void AddLargeGold() => Cheats()?.GiveLargeGold();
+
         [MenuItem(MoneyMenu, true)]
         [MenuItem(GoldMenu, true)]
+        [MenuItem(LargeMoneyMenu, true)]
+        [MenuItem(LargeGoldMenu, true)]
         static bool CanGrant() => EditorApplication.isPlaying && Cheats();
 
         static DevCheats Cheats()

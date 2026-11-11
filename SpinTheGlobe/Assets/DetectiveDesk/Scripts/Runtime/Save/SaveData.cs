@@ -12,7 +12,7 @@ namespace DetectiveDesk.Save
     [Serializable]
     public sealed class SaveData
     {
-        public const int CurrentVersion = 1;
+        public const int CurrentVersion = 2;
 
         public int version = CurrentVersion;
         public long savedAtUnixSeconds;
@@ -28,6 +28,7 @@ namespace DetectiveDesk.Save
         // Prestige ("Retire the agency"): money earned in the current run, retirements so far, Gold shop ranks.
         public double runMoney;
         public int prestiges;
+        public bool gameCompleted;
         public List<SkillRank> goldShop = new List<SkillRank>();
 
         // Progression
@@ -36,6 +37,8 @@ namespace DetectiveDesk.Save
         // Inventory & lootbox
         public int iceCubes;
         public int paperBalls;
+        // Lifetime side-game progress; kept through retirement for future achievements.
+        public long paperShotsScored;
         public int sparePieces;
         public int lootboxesOpened;
 
@@ -47,6 +50,8 @@ namespace DetectiveDesk.Save
         // Whiskey glass
         public float whiskeyFill;
         public float whiskeyCooldown;
+        public int whiskeyIceCount;
+        public float whiskeyIceMeltTimer;
 
         // Desk
         public bool lampOff;

@@ -63,6 +63,9 @@ namespace DetectiveDesk.Gameplay
 
         public void Open()
         {
+            if (game && game.PaperBalls && game.PaperBalls.IsThrowing) return;
+            if (game && game.PaperBalls) game.PaperBalls.CancelAim();
+            if (game && game.LootboxView && game.LootboxView.IsOpen) return;
             if (!canvas) return;
             if (game.TreeView && game.TreeView.IsOpen) game.TreeView.Close();
             foreach (var r in refreshers) r();

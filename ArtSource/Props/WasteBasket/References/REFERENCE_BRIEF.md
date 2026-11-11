@@ -1,0 +1,1 @@
+Original game prop. Match the existing dark bronze and brass detective desk. Waste basket sits to the right of the lamp, in the corner marked by the user. Open wire weave and a clearly visible rim. Paper ball is irregular, faceted warm ivory paper.

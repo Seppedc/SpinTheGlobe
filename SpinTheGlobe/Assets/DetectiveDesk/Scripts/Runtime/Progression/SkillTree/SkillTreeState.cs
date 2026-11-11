@@ -116,6 +116,21 @@ namespace DetectiveDesk.Progression
             return true;
         }
 
+        /// <summary>Grant a minimum owned rank without spending, preserving any higher rank already earned.</summary>
+        public bool GrantMinimum(SkillTreeAsset tree, string id, int minimumRank, StatSheet stats = null)
+        {
+            var node = tree != null ? tree.Find(id) : null;
+            if (node == null) return false;
+            int granted = Math.Min(Math.Max(0, minimumRank), node.maxRank);
+            if (granted <= Rank(id)) return false;
+            ranks[id] = granted;
+            stats?.Rebuild(tree, this);
+            Purchased?.Invoke(node, granted);
+            EventBus.Publish(new SkillPurchased(node.id, granted));
+            EventBus.Publish(new StatsChanged());
+            return true;
+        }
+
         public List<SkillRank> ToSave()
         {
             var list = new List<SkillRank>(ranks.Count);

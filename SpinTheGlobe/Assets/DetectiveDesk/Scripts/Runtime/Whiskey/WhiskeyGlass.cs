@@ -16,11 +16,18 @@ namespace DetectiveDesk.Gameplay
     [DisallowMultipleComponent]
     public sealed class WhiskeyGlass : MonoBehaviour
     {
+        public const int MaxIce = 3;
         public float Fill { get; private set; }
         public float BoostRemaining { get; private set; }
         public float Cooldown { get; private set; }
         public bool Boosting => BoostRemaining > 0;
-        public bool IceInGlass { get; private set; }
+        public int IceCount { get; private set; }
+        public bool IceInGlass => IceCount > 0;
+        public float MeltRemaining => IceCount > 0 ? meltTimer : 0f;
+        [Tooltip("Seconds before an ice cube melts in the glass.")]
+        public float meltDuration = 60f;
+        float meltTimer;
+        readonly List<Vector3> iceScales = new List<Vector3>();
         /// <summary>The drinking animation is playing (clicks are ignored).</summary>
         public bool Drinking { get; private set; }
         public bool Unlocked => game && game.Shop.Owns(GoldShopCatalog.Whiskey);
@@ -73,11 +80,15 @@ namespace DetectiveDesk.Gameplay
             foreach (var t in new[] { glass, placeholder, rim })
                 if (t && !carried.Contains(t)) { carried.Add(t); if (game.Clicks) game.Clicks.Register(t, Sip); }
             var glow = new List<Renderer>();
+            ice.Clear();
+            iceScales.Clear();
             foreach (var t in glass.GetComponentsInChildren<Transform>(true))
             {
                 if (t.name.Contains("AmberWhiskey") && t.GetComponent<MeshFilter>()) liquid = t;
                 else if (t.name.StartsWith("IceCube")) ice.Add(t.gameObject);
             }
+            ice.Sort((a, b) => string.CompareOrdinal(a.name, b.name));
+            foreach (var cube in ice) iceScales.Add(cube.transform.localScale);
             foreach (var r in glass.GetComponentsInChildren<Renderer>(true)) if (!liquid || r.transform != liquid) glow.Add(r);
             renderers = glow.ToArray();
 
@@ -108,31 +119,94 @@ namespace DetectiveDesk.Gameplay
 
         public void RefreshUnlock()
         {
-            bool visible = Unlocked;
-            foreach (var t in new[] { glassModel, glassInteraction, glassRim, bottleModel, bottleInteraction, bottleCap })
-                if (t && t.gameObject.activeSelf != visible) t.gameObject.SetActive(visible);
-            if (!visible)
+            bool unlocked = Unlocked;
+            // The bottle and glass models remain visible on the desk even before unlocking
+            // so the player knows what is available to unlock.
+            if (glassModel && !glassModel.gameObject.activeSelf) glassModel.gameObject.SetActive(true);
+            if (bottleModel && !bottleModel.gameObject.activeSelf) bottleModel.gameObject.SetActive(true);
+            if (glassInteraction && !glassInteraction.gameObject.activeSelf) glassInteraction.gameObject.SetActive(true);
+            if (bottleInteraction && !bottleInteraction.gameObject.activeSelf) bottleInteraction.gameObject.SetActive(true);
+            if (glassRim && !glassRim.gameObject.activeSelf) glassRim.gameObject.SetActive(true);
+            if (bottleCap && !bottleCap.gameObject.activeSelf) bottleCap.gameObject.SetActive(true);
+
+            if (!unlocked)
             {
                 if (Drinking) StopAllCoroutines();
                 if (Boosting) foreach (var stat in Boosted) game.Stats.SetTemporaryMultiplier(stat, 1);
                 Fill = BoostRemaining = Cooldown = 0;
                 Drinking = false;
-                IceInGlass = false;
+                IceCount = 0;
+                meltTimer = 0;
                 shownLevel = 0;
                 ApplyLiquid(0);
-                foreach (var cube in ice) if (cube) cube.SetActive(false);
+                UpdateIceVisuals();
                 if (game && game.globe) game.globe.EnforceLimits();
+            }
+            else
+            {
+                // If the player has spare ice cubes in inventory, pull them into the glass up to MaxIce (3)
+                while (IceCount < MaxIce && game != null && game.Inventory != null && game.Inventory.IceCubes > 0)
+                {
+                    if (game.Inventory.TryUseIce())
+                    {
+                        IceCount++;
+                        if (meltTimer <= 0f) meltTimer = meltDuration;
+                    }
+                    else break;
+                }
+                UpdateIceVisuals();
+            }
+        }
+
+        /// <summary>Adds one ice cube directly to the glass (up to 3 total).</summary>
+        public bool TryAddIce()
+        {
+            if (!Unlocked || IceCount >= MaxIce) return false;
+            IceCount++;
+            if (meltTimer <= 0f) meltTimer = meltDuration;
+            UpdateIceVisuals();
+            if (game) game.Notify();
+            return true;
+        }
+
+        public void UpdateIceVisuals()
+        {
+            for (int i = 0; i < ice.Count; i++)
+            {
+                if (!ice[i]) continue;
+                bool show = Unlocked && (IceCount > i);
+                if (ice[i].activeSelf != show) ice[i].SetActive(show);
+                if (show && i < iceScales.Count)
+                {
+                    float scale = 1f;
+                    // The topmost cube (currently melting) shrinks from 100% to 35% as meltTimer counts down
+                    if (i == IceCount - 1 && meltDuration > 0f)
+                    {
+                        scale = Mathf.Lerp(0.35f, 1.0f, Mathf.Clamp01(meltTimer / meltDuration));
+                    }
+                    ice[i].transform.localScale = iceScales[i] * scale;
+                }
             }
         }
 
         /// <summary>Click on the glass: pour one step.</summary>
         public void Sip()
         {
-            if (!Unlocked || Drinking) return;
+            if (!Unlocked)
+            {
+                if (game) game.ShowHint("Locked. Unlock Whiskey in the Gold shop.");
+                return;
+            }
+            if (Drinking) return;
             if (Boosting) { game.ShowHint("Boost active: " + UIFactory.Seconds(BoostRemaining) + " left."); return; }
             if (Cooldown > 0) { game.ShowHint("The glass is empty. Refill in " + UIFactory.Seconds(Cooldown) + "."); return; }
-            if (Fill <= 0 && !IceInGlass && game.Inventory.TryUseIce()) { IceInGlass = true; game.ShowHint("Ice cube added: the glass fills faster."); }
-            Fill = Mathf.Min(1, Fill + game.Balance.whiskeyFillPerClick * (IceInGlass ? game.Balance.iceCubeFillMultiplier : 1));
+            if (IceCount < MaxIce && game.Inventory != null && game.Inventory.TryUseIce())
+            {
+                TryAddIce();
+                game.ShowHint("Ice cube added (" + IceCount + "/3): the glass fills faster.");
+            }
+            float iceMultiplier = 1f + IceCount * (game.Balance.iceCubeFillMultiplier - 1f);
+            Fill = Mathf.Min(1, Fill + game.Balance.whiskeyFillPerClick * iceMultiplier);
             if (game.audioManager) game.audioManager.Click();
             if (Fill >= 1) StartCoroutine(DrinkThenBoost());
             game.Notify();
@@ -222,7 +296,7 @@ namespace DetectiveDesk.Gameplay
         {
             foreach (var s in Boosted) game.Stats.SetTemporaryMultiplier(s, 1);
             if (game.globe) game.globe.EnforceLimits();
-            Fill = 0; IceInGlass = false;
+            Fill = 0;
             Cooldown = (float)game.Stats.Get(StatId.WhiskeyCooldown);
             game.ShowHint("The boost wore off. The glass can be refilled in " + UIFactory.Seconds(Cooldown) + ".");
             EventBus.Publish(new WhiskeyBoostChanged(false));
@@ -250,8 +324,56 @@ namespace DetectiveDesk.Gameplay
                     ApplyLiquid(shownLevel);
                 }
             }
-            foreach (var cube in ice) if (cube) { bool show = IceInGlass && (shownLevel > 0.02f || Drinking); if (cube.activeSelf != show) cube.SetActive(show); }
+
+            // Ice cubes slowly melt every minute
+            if (IceCount > 0 && !Drinking)
+            {
+                AdvanceMelt(Time.deltaTime);
+            }
+            else if (IceCount < MaxIce && game.Inventory != null && game.Inventory.IceCubes > 0)
+            {
+                if (game.Inventory.TryUseIce())
+                {
+                    IceCount++;
+                    if (meltTimer <= 0f) meltTimer = meltDuration;
+                    if (game) game.Notify();
+                }
+            }
+
+            UpdateIceVisuals();
             Glow();
+        }
+
+        /// <summary>Advances the melting timer of the ice cubes in the glass.</summary>
+        public void AdvanceMelt(float dt)
+        {
+            if (IceCount <= 0 || Drinking) return;
+            meltTimer -= dt;
+            while (meltTimer <= 0f && IceCount > 0)
+            {
+                IceCount--;
+                if (IceCount > 0)
+                {
+                    meltTimer += meltDuration;
+                    if (game) game.ShowHint("An ice cube melted (" + IceCount + "/3 left).");
+                }
+                else
+                {
+                    meltTimer = 0f;
+                    if (game) game.ShowHint("The last ice cube melted.");
+                }
+                if (IceCount < MaxIce && game != null && game.Inventory != null && game.Inventory.IceCubes > 0)
+                {
+                    if (game.Inventory.TryUseIce())
+                    {
+                        IceCount++;
+                        if (meltTimer <= 0f) meltTimer = meltDuration;
+                        if (game) game.ShowHint("Replenished ice cube from inventory (" + IceCount + "/3).");
+                    }
+                }
+                if (game) game.Notify();
+            }
+            UpdateIceVisuals();
         }
 
         void ApplyLiquid(float level)
@@ -300,8 +422,23 @@ namespace DetectiveDesk.Gameplay
 
         // Every session starts with the glass ready to pour: a saved refill cooldown is not carried over
         // (could later become an unlock bought with gold).
-        public void LoadState(SaveData d) { Fill = Mathf.Clamp01(d.whiskeyFill); Cooldown = 0; if (Fill >= 1) Fill = 0.99f; }
+        public void LoadState(SaveData d)
+        {
+            Fill = Mathf.Clamp01(d.whiskeyFill);
+            Cooldown = 0;
+            if (Fill >= 1) Fill = 0.99f;
+            IceCount = Mathf.Clamp(d.whiskeyIceCount, 0, MaxIce);
+            meltTimer = IceCount > 0 ? (d.whiskeyIceMeltTimer > 0f ? d.whiskeyIceMeltTimer : meltDuration) : 0f;
+            UpdateIceVisuals();
+        }
+
         // A boost in progress is not saved; it ends as if it had run out.
-        public void SaveState(SaveData d) { d.whiskeyFill = Boosting || Drinking ? 0 : Fill; d.whiskeyCooldown = Boosting || Drinking ? (float)game.Stats.Get(StatId.WhiskeyCooldown) : Cooldown; }
+        public void SaveState(SaveData d)
+        {
+            d.whiskeyFill = Boosting || Drinking ? 0 : Fill;
+            d.whiskeyCooldown = Boosting || Drinking ? (float)game.Stats.Get(StatId.WhiskeyCooldown) : Cooldown;
+            d.whiskeyIceCount = IceCount;
+            d.whiskeyIceMeltTimer = meltTimer;
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace DetectiveDesk.Editor
                 var game = (GameManager)target;
                 if (GUILayout.Button("Create missing scene layouts")) ScenePresentationAuthoring.EnsureLayout(game);
                 using (new EditorGUILayout.HorizontalScope())
-                    foreach (var panel in new[] { "Desk", "Skill Tree", "Settings", "Gold Shop" })
+                    foreach (var panel in new[] { "Desk", "Skill Tree", "Settings", "Gold Shop", "Lootbox Opening" })
                         if (GUILayout.Button(panel)) ScenePresentationAuthoring.Preview(game, panel);
             }
         }

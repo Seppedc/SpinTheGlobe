@@ -32,6 +32,7 @@ namespace DetectiveDesk.Gameplay
         [SerializeField] Button hudButton, retireButton;
         [SerializeField] TextMeshProUGUI goldText, retireInfo, retireLabel, prestigeText, dialogText, hudRank;
         [SerializeField] List<Row> rows = new List<Row>();
+        bool endingDialog;
         float refreshTimer;
         int closedFrame = -1;
 
@@ -51,17 +52,26 @@ namespace DetectiveDesk.Gameplay
             game = owner;
             if (!canvas) Build();
             if (!hudButton) BuildHudButton();
-            foreach (var row in rows) row.item = GoldShopCatalog.Find(row.id);
-            // Authored canvases can predate a new catalog item. Add missing rows in their section.
-            foreach (var item in GoldShopCatalog.Items)
+            foreach (var row in rows) row.item = game.Shop.Find(row.id);
+            bool mismatch = rows.Count != game.Shop.Items.Count;
+            int index = 0;
+            foreach (var item in game.Shop.Items)
+                if (index >= rows.Count || rows[index++].id != item.id) { mismatch = true; break; }
+            if (mismatch)
             {
-                if (rows.Exists(r => r.id == item.id)) continue;
-                var anchor = rows.FindLast(r => r.item != null && r.item.category == item.category);
-                if (anchor == null) continue;
-                var added = BuildRow((RectTransform)anchor.background.transform.parent, item);
-                added.background.transform.SetSiblingIndex(anchor.background.transform.GetSiblingIndex() + 1);
-                rows.Add(added);
+                var content = (RectTransform)canvas.transform.Find("Gold shop panel/List/Viewport/Content");
+                for (int i = content.childCount - 1; i >= 0; i--)
+                {
+                    var child = content.GetChild(i).gameObject;
+                    child.SetActive(false);
+                    if (Application.isPlaying) Destroy(child); else DestroyImmediate(child);
+                }
+                rows.Clear();
+                BuildSections(content);
+                BindActions();
             }
+            var retireCard = canvas.transform.Find("Gold shop panel/Retire").GetComponent<LayoutElement>();
+            retireCard.preferredHeight = 155;
             return canvas;
         }
 
@@ -71,7 +81,7 @@ namespace DetectiveDesk.Gameplay
             SceneViewBindings.Bind(retireButton, AskRetire);
             SceneViewBindings.Button(canvas.transform, "Gold shop panel/Header/Close", Close);
             SceneViewBindings.Button(dialog, "Box/Buttons/Cancel", HideDialog);
-            SceneViewBindings.Button(dialog, "Box/Buttons/Confirm", () => { HideDialog(); game.Retire(); });
+            SceneViewBindings.Button(dialog, "Box/Buttons/Confirm", ConfirmDialog);
             foreach (var row in rows)
             {
                 string id = row.id;
@@ -87,6 +97,9 @@ namespace DetectiveDesk.Gameplay
 
         public void Open()
         {
+            if (game && game.PaperBalls && game.PaperBalls.IsThrowing) return;
+            if (game && game.PaperBalls) game.PaperBalls.CancelAim();
+            if (game && game.LootboxView && game.LootboxView.IsOpen) return;
             if (!canvas) return;
             if (game.TreeView && game.TreeView.IsOpen) game.TreeView.Close();
             if (game.Settings && game.Settings.IsOpen) game.Settings.Close();
@@ -166,9 +179,7 @@ namespace DetectiveDesk.Gameplay
             scroll.verticalScrollbar = BuildScrollbar(scrollRoot);
             scroll.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHide;
 
-            Section(content, "UNLOCKS", "New things for the desk.", GoldShopCategory.Unlock);
-            Section(content, "PERMANENT", "Bonuses that are always active.", GoldShopCategory.Permanent);
-            Section(content, "FRESH START", "Head starts for every new run after retiring.", GoldShopCategory.FreshStart);
+            BuildSections(content);
 
             BuildDialog();
         }
@@ -211,6 +222,13 @@ namespace DetectiveDesk.Gameplay
             Fixed(retireButton.gameObject, 250, 60);
         }
 
+        void BuildSections(RectTransform content)
+        {
+            Section(content, "FRESH START", "Head starts for every new run after retiring.", GoldShopCategory.FreshStart);
+            Section(content, "UNLOCKS", "New things for the desk.", GoldShopCategory.Unlock);
+            Section(content, "PERMANENT", "Bonuses that are always active.", GoldShopCategory.Permanent);
+        }
+
         void Section(RectTransform content, string title, string subtitle, GoldShopCategory category)
         {
             var head = UIFactory.NewRect(title, content);
@@ -222,7 +240,7 @@ namespace DetectiveDesk.Gameplay
             rule.raycastTarget = false;
             rule.rectTransform.Place(new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0), Vector2.zero, new Vector2(0, 1));
 
-            foreach (var item in GoldShopCatalog.Items)
+            foreach (var item in game.Shop.Items)
                 if (item.category == category) rows.Add(BuildRow(content, item));
         }
 
@@ -287,11 +305,10 @@ namespace DetectiveDesk.Gameplay
             hudRank.gameObject.SetActive(false);
         }
 
-        /// <summary>"Inspector · +50% income" (the rank bonus is left out while it is zero).</summary>
+        /// <summary>Rank titles are independent of the global income bonus.</summary>
         string RankLine()
         {
-            var r = game.Rank;
-            return r.title + (r.incomeBonus > 0 ? "  ·  +" + Mathf.RoundToInt(r.incomeBonus * 100) + "% income" : "");
+            return game.Rank.title;
         }
 
         /// <summary>The button appears once the shop matters: the skill tree is open, or there is gold or a retirement.</summary>
@@ -320,19 +337,29 @@ namespace DetectiveDesk.Gameplay
             double gain = game.PrestigeGold;
             if (game.CanRetire)
             {
-                retireInfo.text = "Earned this run: " + NumberFormatter.Money(game.RunEarnings) + ". Money, the skill tree, pins, cases and items reset. " +
-                                  "Gold, the Gold shop and your statues are kept.";
+                retireInfo.text = "Earned this run: " + NumberFormatter.Money(game.RunEarnings) + ". Retire when you're ready.";
                 retireLabel.text = "RETIRE  +" + NumberFormatter.Format(gain);
                 retireButton.interactable = true;
             }
             else
             {
-                retireInfo.text = "Earn " + NumberFormatter.Money(game.Balance.prestigeThreshold) + " in one run to retire for gold. " +
+                retireInfo.text = "Earn " + NumberFormatter.Money(game.PrestigeRequirement) + " in one run to retire for gold. " +
                                   "This run: " + NumberFormatter.Money(game.RunEarnings) + ".";
                 retireLabel.text = "NOT YET";
                 retireButton.interactable = false;
             }
 
+            var title = canvas.transform.Find("Gold shop panel/Retire/Text/Title").GetComponent<TextMeshProUGUI>();
+            title.text = game.IsFinalRank ? "FINAL GOAL" : "RETIRE THE AGENCY";
+            if (game.IsFinalRank)
+            {
+                retireInfo.text = game.GlobalIncomeSummary + "\nFinal run: " + NumberFormatter.Money(game.RunEarnings)
+                    + " / " + NumberFormatter.Money(game.PrestigeRequirement) + "."
+                    + (game.GameCompleted ? " Game complete!" : " Reach the goal to complete the game.");
+                retireLabel.text = game.GameCompleted ? "VIEW ENDING" : "FINAL GOAL";
+                retireButton.interactable = game.GameCompleted;
+            }
+            else retireInfo.text = game.GlobalIncomeSummary + "\nRetire: " + game.RetirementIncomeSummary + "\n" + retireInfo.text;
             var shop = game.Shop;
             foreach (var r in rows)
             {
@@ -340,7 +367,7 @@ namespace DetectiveDesk.Gameplay
                 int rank = shop.Rank(item.id);
                 bool maxed = shop.IsMaxed(item), locked = shop.IsLocked(item);
                 r.title.text = item.title + (item.maxRank > 1 ? "  <size=75%><color=#a89a80>" + rank + " / " + item.maxRank + "</color></size>" : "");
-                string requires = locked ? GoldShopCatalog.Find(item.requires)?.title : null;
+                string requires = locked ? game.Shop.Find(item.requires)?.title : null;
                 r.description.text = item.description + (requires != null ? "  Requires " + requires + "." : "");
                 if (maxed)
                 {
@@ -365,7 +392,7 @@ namespace DetectiveDesk.Gameplay
                 r.background.color = colors.fill;
                 r.button.GetComponent<ThemedButton>().SetPurchaseState(visualState);
             }
-            retireButton.GetComponent<ThemedButton>().SetPurchaseState(PurchasePalette.State(false, game.CanRetire));
+            retireButton.GetComponent<ThemedButton>().SetPurchaseState(PurchasePalette.State(game.GameCompleted, game.CanRetire || game.GameCompleted));
         }
 
         // ------------------------------------------------------------------ retire confirmation
@@ -394,16 +421,44 @@ namespace DetectiveDesk.Gameplay
             h.childForceExpandWidth = true; h.childForceExpandHeight = true;
             row.gameObject.AddComponent<LayoutElement>().preferredHeight = 48;
             UIFactory.NewButton("Cancel", row, "CANCEL", 18, HideDialog, out _);
-            UIFactory.NewButton("Confirm", row, "RETIRE", 18, () => { HideDialog(); game.Retire(); }, out _);
+            UIFactory.NewButton("Confirm", row, "RETIRE", 18, ConfirmDialog, out _);
             dialog.gameObject.SetActive(false);
         }
 
         void AskRetire()
         {
+            if (game.GameCompleted) { ShowEnding(); return; }
             if (!game.CanRetire) return;
+            ConfigureDialog(false);
             dialogText.text = "You receive <color=#f2c75c>+" + NumberFormatter.Format(game.PrestigeGold) + " gold</color>.\n" +
+                              game.RetirementIncomeSummary + "\n" +
                               "Money, the skill tree, pins, cases, the whiskey glass and your items start over.\n" +
                               "Gold, the Gold shop, statues and settings are kept.";
+            dialog.gameObject.SetActive(true);
+        }
+
+        void ConfirmDialog()
+        {
+            bool completed = endingDialog;
+            HideDialog();
+            if (!completed) game.Retire();
+        }
+
+        void ConfigureDialog(bool ending)
+        {
+            endingDialog = ending;
+            dialog.Find("Box/Title").GetComponent<TextMeshProUGUI>().text = ending ? "LEGEND OF THE BUREAU" : "RETIRE THE AGENCY?";
+            dialog.Find("Box/Buttons/Cancel").gameObject.SetActive(!ending);
+            dialog.Find("Box/Buttons/Confirm").GetComponentInChildren<TextMeshProUGUI>(true).text = ending ? "CONTINUE PLAYING" : "RETIRE";
+        }
+
+        public void ShowEnding()
+        {
+            if (!game || !game.GameCompleted) return;
+            Open();
+            ConfigureDialog(true);
+            dialogText.text = "You reached Legend of the Bureau and earned " + NumberFormatter.Money(game.PrestigeRequirement)
+                + " in your final run.\nYour agency is complete. Thank you for playing!\nYou can keep playing with your current progress.";
             dialog.gameObject.SetActive(true);
         }
 

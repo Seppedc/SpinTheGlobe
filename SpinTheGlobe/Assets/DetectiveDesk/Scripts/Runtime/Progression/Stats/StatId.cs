@@ -48,6 +48,7 @@ namespace DetectiveDesk.Progression
         StatueGoldFillRate = 500,   // multiplier on gold fill per globe revolution
         StatuePayout = 501,         // multiplier on gold from smashing
         StatuePieceReduction = 502, // fewer pieces needed per statue
+        StatueBonusGoldChance = 503,// chance a smashed statue pays double Gold
 
         // Lootbox
         LootboxPrice = 600,         // multiplier on the lootbox price

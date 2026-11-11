@@ -98,7 +98,9 @@ namespace DetectiveDesk.Gameplay
             var stamp = cases && cases.StampTransform ? cases.StampTransform : ClickRouter.FindByName("SOLVED Stamp", "Stamp body");
             if (stamp) Add("stamp", "Stamp", InFront(stamp), () => cases && cases.IsFull && !cases.OnCooldown ? "STAMP!" : null);
 
-            // The whiskey glass shows its state itself: the whiskey level inside the glass.
+            var whiskey = game.Whiskey;
+            var glass = whiskey && whiskey.GlassTransform ? whiskey.GlassTransform : ClickRouter.FindByName("Generated_WhiskeyGlass", "Whiskey glass");
+            if (glass) Add("whiskey", "Whiskey", InFront(glass), () => whiskey && !whiskey.Unlocked ? "LOCKED" : null);
 
             if (game.figurines != null)
                 for (int i = 0; i < game.figurines.Length; i++)
@@ -273,7 +275,7 @@ namespace DetectiveDesk.Gameplay
             RefreshTags();
         }
 
-        void RefreshTags()
+        public void RefreshTags()
         {
             foreach (var tag in tags)
             {

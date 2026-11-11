@@ -1,5 +1,9 @@
 # Case Files unlock — 2026-11-06
 
+Current branch update (2026-11-10): Case Gold (`case_headlines`) now requires Case Files directly and sits one cell below it. Auto Stamp is no longer required. The Press Coverage Gold unlock, price curve, eight levels and 10% total chance cap are retained. Existing saved skill ids and ranks are preserved. The scene and layout revision were updated through Unity.
+
+Changed paths for this update: Scripts/Runtime/Progression/SkillTree/DefaultSkillTreeFactory.cs and SkillTreeAsset.cs, Data/SkillTree/SkillTree.asset, Scenes/DetectiveOffice.unity and Tests/EditMode/ProgressionTests.cs (under Assets/DetectiveDesk); repository Tools/economy_snapshot.json, layout.json, Docs/GAME_DESIGN.md and this document. Regression coverage verifies that Case Gold can be bought after Case Files and Press Coverage without buying Auto Stamp. Earlier layout descriptions below are historical.
+
 Case Files remains a separate branch to the left of the tree. A new EUR 30,
 one-rank `case_unlock` skill comes first and requires the root and Pin 1.
 Case Pay, Case Wait and Auto Stamp each require it directly; the later case

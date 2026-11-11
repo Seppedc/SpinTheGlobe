@@ -30,11 +30,19 @@ namespace DetectiveDesk.Editor
             Parent(game.TreeView.CreateLayout(game).transform, root);
             Parent(game.Settings.CreateLayout(game).transform, root);
             Parent(game.ShopView.CreateLayout(game).transform, root);
+            Parent(game.LootboxView.CreateLayout(game).transform, root);
+            var paper = game.GetComponent<PaperBallThrower>();
+            if (paper)
+            {
+                Parent(paper.CreateLayout(game).transform, root);
+                if (paper.ScoreCanvas) Parent(paper.ScoreCanvas.transform, root);
+            }
             Parent(game.DeskInfo.CreateLayout(game), root);
             if (game.DeskInfo.ReloadCanvas) Parent(game.DeskInfo.ReloadCanvas.transform, root);
             game.Hud.PreviewInitialState();
             game.TreeView.PreviewLayout();
             game.ShopView.PreviewLayout();
+            game.LootboxView.PreviewLayout();
             game.DeskInfo.PreviewLayout();
             Preview(game, "Desk");
             PersistResources(root);
@@ -53,7 +61,7 @@ namespace DetectiveDesk.Editor
             if (!root) return;
             foreach (var canvas in root.GetComponentsInChildren<Canvas>(true))
             {
-                bool menu = canvas.name == "Skill Tree" || canvas.name == "Settings" || canvas.name == "Gold Shop";
+                bool menu = canvas.name == "Skill Tree" || canvas.name == "Settings" || canvas.name == "Gold Shop" || canvas.name == "Lootbox Opening" || canvas.name == "Paper Ball Aim";
                 canvas.gameObject.SetActive(!menu || canvas.name == panel);
             }
             Canvas.ForceUpdateCanvases();

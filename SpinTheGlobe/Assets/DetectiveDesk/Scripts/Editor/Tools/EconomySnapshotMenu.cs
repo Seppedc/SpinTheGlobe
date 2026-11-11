@@ -28,7 +28,7 @@ namespace DetectiveDesk.Editor
             public SkillNodeData[] skills;
             public SkillSectionData[] sections;
             public ShopEntry[] shop;
-            public double[] seedMoney;
+            public int startingSpinLimitRanks;
             public int startingMotorRanks;
             public GameBalance.StatBase[] bases;
         }
@@ -45,13 +45,13 @@ namespace DetectiveDesk.Editor
                 layoutRevision = tree.layoutRevision,
                 skills = tree.Nodes.ToArray(),
                 sections = tree.Sections.ToArray(),
-                shop = GoldShopCatalog.Items.Select(i => new ShopEntry
+                shop = balance.goldShopItems.Select(i => new ShopEntry
                 {
                     id = i.id, requires = i.requires, maxRank = i.maxRank,
                     cost = i.id == GoldShopCatalog.Whiskey ? new CostCurve(balance.whiskeyUnlockGoldCost, 1) : i.cost,
                     modifiers = i.modifiers,
                 }).ToArray(),
-                seedMoney = GoldShopCatalog.SeedMoneyAmounts, startingMotorRanks = GoldShopCatalog.WoundClockworkRanks,
+                startingSpinLimitRanks = GoldShopCatalog.StartingSpinLimitRanks, startingMotorRanks = GoldShopCatalog.WoundClockworkRanks,
                 bases = Enum.GetValues(typeof(StatId)).Cast<StatId>().Where(s => s != StatId.None)
                     .Select(s => new GameBalance.StatBase(s, stats.GetBase(s))).ToArray(),
             };

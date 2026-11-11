@@ -14,8 +14,12 @@ SNAPSHOT = Path(__file__).with_name('economy_snapshot.json')
 
 def cost(curve, rank):
     explicit = curve.get('explicitCosts') or []
-    price = math.ceil(explicit[rank] if rank < len(explicit)
-                      else curve['baseCost'] * curve['growth'] ** rank)
+    if rank < len(explicit):
+        price = math.ceil(explicit[rank])
+    elif curve.get('linearStep', 0) > 0:
+        price = math.ceil(curve['baseCost'] + curve['linearStep'] * rank)
+    else:
+        price = math.ceil(curve['baseCost'] * curve['growth'] ** rank)
     step = curve.get('roundingStep', 1)
     if price <= 0 or step <= 1:
         return price
@@ -49,7 +53,7 @@ class Economy:
         for key, rank in shop_ranks:
             for m in self.shop[key]['modifiers'] or []:
                 apply(m, rank)
-        bonus = max((r['incomeBonus'] for r in self.b['ranks'] if r['retirements'] <= prestiges), default=0)
+        bonus = min(max(0, prestiges), self.b.get('maxPrestiges', 5)) * self.b.get('prestigeIncomeBonusPerRetirement', .10)
         pct[105, -1] = pct.get((105, -1), 0) + bonus
         def stat(s, pin=-1):
             keys = [(s, -1)] + ([(s, pin)] if pin >= 0 else [])
@@ -118,10 +122,16 @@ class Economy:
                 ranks[self.index['globe_auto']] = self.data['startingMotorRanks']
             if shop.get('start_pin'):
                 ranks[self.index['pin_01']] = 1
-        money = self.b['startingMoney'] + self.data['seedMoney'][shop.get('start_money', 0)]
+            if shop.get('start_cases'):
+                ranks[self.index['case_unlock']] = 1
+            if shop.get('start_spin_limit'):
+                ranks[self.index['globe_max_speed']] = self.data['startingSpinLimitRanks']
+        money = self.b['startingMoney']
         earned = gold = evidence = cooldown = loot_timer = 0.
         level = opened = 0
         statues = [dict(pieces=s['pieces'], fill=s['fill']) for s in (statues or [dict(pieces=0, fill=0.) for _ in range(3)])]
+        final_run = prestiges >= self.b['maxPrestiges']
+        goal = self.b['finalRunGoal'] if final_run else self.b['prestigeThreshold'] + prestiges * self.b['prestigeRequirementIncrease']
         milestones = {}
         rng = random.Random(seed)
         for elapsed in range(0, int(cap_minutes * 60), dt):
@@ -142,18 +152,17 @@ class Economy:
                     cooldown = max(s[301], 2.8) + 1.5 * (1 - min(1, s[302]))
             requirements, incomplete = [], []
             for i, statue in enumerate(statues):
-                tier = shop.get(f'statue_tier_{i+1}', 0)
                 required = max(2, self.b['statueBasePieces'] + i * self.b['statuePiecesPerIndex']
-                               + tier * self.b['statueTierExtraPieces'] - round(s[502]))
+                               - round(s[502]))
                 requirements.append(required)
-                if not shop.get(f'unlock_statue_{i+1}'):
+                if not shop.get('unlock_statue_1'):
                     continue
                 if statue['pieces'] < required:
                     incomplete.append(i)
                 else:
                     statue['fill'] += turns * dt * self.b['statueGoldFillPerRevolution'] * s[500]
                     if statue['fill'] >= 1:
-                        gold += self.b['statueBaseGold'] * (i + 1) * self.b['statueTierGoldMultipliers'][tier] * s[501]
+                        gold += self.b['statueBaseGold'] * s[501] * (1 + int(rng.random() < min(1, max(0, s.get(503, 0)))))
                         statue.update(pieces=0, fill=0.)
             loot_timer -= dt
             price = math.ceil(cost(self.b['lootboxCost'], opened) * s[600])
@@ -173,19 +182,25 @@ class Economy:
                         if statues[index]['pieces'] >= requirements[index]:
                             incomplete.pop(0)
                     elif kind in (2, 4):
-                        amount = math.ceil(price * (rng.uniform(2, 4) if rng.random() < self.b['moneyJackpotChance'] else rng.uniform(.3, .8)))
+                        r = rng.uniform(0, 49)
+                        if r < 1.0:
+                            mult = rng.uniform(5.0, 8.0)
+                        elif r < 4.0:
+                            mult = rng.uniform(2.5, 3.5)
+                        elif r < 19.0:
+                            mult = rng.uniform(1.5, 2.0)
+                        else:
+                            mult = rng.uniform(1.1, 1.3)
+                        amount = math.ceil(price * mult)
                         money += amount
                         earned += amount
-                    elif kind == 3:
-                        amount = self.b['paperBallReward'] * s[104] * s[105]
-                        money += amount
-                        earned += amount
-            if earned >= self.b['prestigeThreshold']:
+                    # Paper balls are score-only side-game items, with no income.
+            if not final_run and earned >= goal:
                 milestones.setdefault('retire_available', elapsed + dt)
-            if earned >= self.b['prestigeThreshold'] * retire_multiple:
-                prestige_gold = math.floor(self.b['prestigeGoldScale'] * (earned / self.b['prestigeThreshold']) ** self.b['prestigeExponent'])
+            if earned >= goal * (1 if final_run else retire_multiple):
+                prestige_gold = 0 if final_run else math.floor(self.b['prestigeGoldScale'] * (earned / self.b['prestigeThreshold']) ** self.b['prestigeExponent'])
                 return dict(seconds=elapsed+dt, earned=earned, gold=gold+prestige_gold,
-                            milestones=milestones, statues=statues, reached=True, ranks=ranks)
+                            milestones=milestones, statues=statues, reached=True, completed=final_run, ranks=ranks)
             best, best_value = None, -1
             for i, price in self.candidates(ranks, shop, s):
                 if price > money:

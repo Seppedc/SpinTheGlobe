@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0bdd8a3fd2e41edb362762135aa54c7, type: 3}
   m_Name: SkillTree
   m_EditorClassIdentifier: DetectiveDesk.Runtime::DetectiveDesk.Progression.SkillTreeAsset
-  layoutRevision: 2
+  layoutRevision: 4
   nodes:
   - id: root
     title: Unlock Upgrades
@@ -152,7 +152,7 @@ MonoBehaviour:
     requiresUnlock:
     capStat: 101
     capByStat: 100
-    position: {x: -240, y: 480}
+    position: {x: -240, y: 640}
   - id: globe_max_speed
     title: Spin Limit
     description: Raise the top spin speed.
@@ -275,7 +275,7 @@ MonoBehaviour:
     requiresUnlock:
     capStat: 0
     capByStat: 0
-    position: {x: -80, y: 480}
+    position: {x: -80, y: 640}
   - id: globe_drag
     title: Less Friction
     description: Lose spin speed 15% slower per level.
@@ -297,7 +297,7 @@ MonoBehaviour:
     requiresUnlock:
     capStat: 0
     capByStat: 0
-    position: {x: 80, y: 480}
+    position: {x: 80, y: 640}
   - id: globe_click
     title: Stronger Click
     description: Gain more speed from clicking.
@@ -319,7 +319,7 @@ MonoBehaviour:
     requiresUnlock:
     capStat: 0
     capByStat: 0
-    position: {x: 240, y: 480}
+    position: {x: 240, y: 640}
   - id: globe_multiplier
     title: Spin Pay
     description: Earn more from spins.
@@ -366,7 +366,7 @@ MonoBehaviour:
     requiresUnlock:
     capStat: 0
     capByStat: 0
-    position: {x: -80, y: 640}
+    position: {x: -80, y: 800}
   - id: globe_gilded_axis
     title: Double Spin Pay
     description: Double spin earnings.
@@ -388,7 +388,7 @@ MonoBehaviour:
     requiresUnlock:
     capStat: 0
     capByStat: 0
-    position: {x: -80, y: 800}
+    position: {x: -80, y: 960}
   - id: globe_mastery
     title: Spin Bonus
     description: Earn 5% more from spins.
@@ -410,7 +410,7 @@ MonoBehaviour:
     requiresUnlock:
     capStat: 0
     capByStat: 0
-    position: {x: -80, y: 960}
+    position: {x: -80, y: 1120}
   - id: pin_01
     title: Pin 1
     description: Unlock pin 1 for the shooter.
@@ -437,7 +437,7 @@ MonoBehaviour:
     title: "Pin 1 \xB7 Strength"
     description: Lasts one extra turn.
     branch: 2
-    maxRank: 20
+    maxRank: 10
     currency: 0
     cost:
       baseCost: 14.25
@@ -453,16 +453,6 @@ MonoBehaviour:
       - 874
       - 1571
       - 2828
-      - 3534
-      - 4418
-      - 5522
-      - 6902
-      - 8627
-      - 10784
-      - 13479
-      - 16849
-      - 21061
-      - 26326
       roundingStep: 5
     prerequisites:
     - pin_01
@@ -543,32 +533,22 @@ MonoBehaviour:
     title: "Pin 2 \xB7 Strength"
     description: Lasts one extra turn.
     branch: 2
-    maxRank: 20
+    maxRank: 10
     currency: 0
     cost:
-      baseCost: 21.375
+      baseCost: 14.25
       growth: 1.8
       explicitCosts:
-      - 22
-      - 39
-      - 70
-      - 126
-      - 226
-      - 405
-      - 728
-      - 1310
-      - 2356
-      - 4241
-      - 5301
-      - 6626
-      - 8282
-      - 10353
-      - 12940
-      - 16175
-      - 20218
-      - 25273
-      - 31591
-      - 39488
+      - 15
+      - 26
+      - 47
+      - 84
+      - 151
+      - 270
+      - 486
+      - 874
+      - 1571
+      - 2828
       roundingStep: 5
     prerequisites:
     - pin_02
@@ -588,29 +568,29 @@ MonoBehaviour:
     maxRank: 20
     currency: 0
     cost:
-      baseCost: 21.375
+      baseCost: 14.25
       growth: 1.6
       explicitCosts:
-      - 22
-      - 35
-      - 56
-      - 89
-      - 141
-      - 225
-      - 360
-      - 574
-      - 919
-      - 1470
-      - 1691
-      - 1943
-      - 2235
-      - 2570
-      - 2955
-      - 3399
-      - 3908
-      - 4494
-      - 5168
-      - 5944
+      - 15
+      - 23
+      - 38
+      - 59
+      - 95
+      - 151
+      - 240
+      - 383
+      - 613
+      - 980
+      - 1127
+      - 1296
+      - 1490
+      - 1713
+      - 1971
+      - 2266
+      - 2605
+      - 2997
+      - 3446
+      - 3963
       roundingStep: 5
     prerequisites:
     - pin_02
@@ -649,32 +629,22 @@ MonoBehaviour:
     title: "Pin 3 \xB7 Strength"
     description: Lasts one extra turn.
     branch: 2
-    maxRank: 20
+    maxRank: 10
     currency: 0
     cost:
-      baseCost: 32.0625
+      baseCost: 14.25
       growth: 1.8
       explicitCosts:
-      - 33
-      - 58
-      - 105
-      - 188
-      - 338
-      - 607
-      - 1091
-      - 1964
-      - 3534
-      - 6361
-      - 7951
-      - 9938
-      - 12423
-      - 15528
-      - 19410
-      - 24262
-      - 30327
-      - 37909
-      - 47386
-      - 59232
+      - 15
+      - 26
+      - 47
+      - 84
+      - 151
+      - 270
+      - 486
+      - 874
+      - 1571
+      - 2828
       roundingStep: 5
     prerequisites:
     - pin_03
@@ -694,29 +664,29 @@ MonoBehaviour:
     maxRank: 20
     currency: 0
     cost:
-      baseCost: 32.0625
+      baseCost: 14.25
       growth: 1.6
       explicitCosts:
-      - 33
-      - 52
-      - 83
-      - 133
-      - 211
-      - 337
-      - 539
-      - 861
-      - 1378
-      - 2204
-      - 2535
-      - 2915
-      - 3352
-      - 3855
-      - 4432
-      - 5097
-      - 5862
-      - 6741
-      - 7752
-      - 8914
+      - 15
+      - 23
+      - 38
+      - 59
+      - 95
+      - 151
+      - 240
+      - 383
+      - 613
+      - 980
+      - 1127
+      - 1296
+      - 1490
+      - 1713
+      - 1971
+      - 2266
+      - 2605
+      - 2997
+      - 3446
+      - 3963
       roundingStep: 5
     prerequisites:
     - pin_03
@@ -755,32 +725,22 @@ MonoBehaviour:
     title: "Pin 4 \xB7 Strength"
     description: Lasts one extra turn.
     branch: 2
-    maxRank: 20
+    maxRank: 10
     currency: 0
     cost:
-      baseCost: 48.09375
+      baseCost: 14.25
       growth: 1.8
       explicitCosts:
-      - 49
-      - 88
-      - 157
-      - 282
-      - 506
-      - 910
-      - 1636
-      - 2945
-      - 5301
-      - 9540
-      - 11926
-      - 14907
-      - 18634
-      - 23292
-      - 29114
-      - 36392
-      - 45490
-      - 56863
-      - 71079
-      - 88847
+      - 15
+      - 26
+      - 47
+      - 84
+      - 151
+      - 270
+      - 486
+      - 874
+      - 1571
+      - 2828
       roundingStep: 5
     prerequisites:
     - pin_04
@@ -800,29 +760,29 @@ MonoBehaviour:
     maxRank: 20
     currency: 0
     cost:
-      baseCost: 48.09375
+      baseCost: 14.25
       growth: 1.6
       explicitCosts:
-      - 49
-      - 77
-      - 124
-      - 198
-      - 316
-      - 505
-      - 808
-      - 1292
-      - 2067
-      - 3306
-      - 3801
-      - 4371
-      - 5028
-      - 5781
-      - 6649
-      - 7645
-      - 8793
-      - 10111
-      - 11628
-      - 13372
+      - 15
+      - 23
+      - 38
+      - 59
+      - 95
+      - 151
+      - 240
+      - 383
+      - 613
+      - 980
+      - 1127
+      - 1296
+      - 1490
+      - 1713
+      - 1971
+      - 2266
+      - 2605
+      - 2997
+      - 3446
+      - 3963
       roundingStep: 5
     prerequisites:
     - pin_04
@@ -861,32 +821,22 @@ MonoBehaviour:
     title: "Pin 5 \xB7 Strength"
     description: Lasts one extra turn.
     branch: 2
-    maxRank: 20
+    maxRank: 10
     currency: 0
     cost:
-      baseCost: 72.140625
+      baseCost: 14.25
       growth: 1.8
       explicitCosts:
-      - 73
-      - 131
-      - 235
-      - 421
-      - 759
-      - 1364
-      - 2454
-      - 4418
-      - 7951
-      - 14310
-      - 17888
-      - 22360
-      - 27949
-      - 34937
-      - 43671
-      - 54588
-      - 68235
-      - 85293
-      - 106617
-      - 133271
+      - 15
+      - 26
+      - 47
+      - 84
+      - 151
+      - 270
+      - 486
+      - 874
+      - 1571
+      - 2828
       roundingStep: 5
     prerequisites:
     - pin_05
@@ -906,29 +856,29 @@ MonoBehaviour:
     maxRank: 20
     currency: 0
     cost:
-      baseCost: 72.140625
+      baseCost: 14.25
       growth: 1.6
       explicitCosts:
-      - 73
-      - 116
-      - 186
-      - 297
-      - 474
-      - 758
-      - 1212
-      - 1938
-      - 3099
-      - 4959
-      - 5702
-      - 6557
-      - 7541
-      - 8671
-      - 9973
-      - 11468
-      - 13188
-      - 15166
-      - 17441
-      - 20057
+      - 15
+      - 23
+      - 38
+      - 59
+      - 95
+      - 151
+      - 240
+      - 383
+      - 613
+      - 980
+      - 1127
+      - 1296
+      - 1490
+      - 1713
+      - 1971
+      - 2266
+      - 2605
+      - 2997
+      - 3446
+      - 3963
       roundingStep: 5
     prerequisites:
     - pin_05
@@ -967,32 +917,22 @@ MonoBehaviour:
     title: "Pin 6 \xB7 Strength"
     description: Lasts one extra turn.
     branch: 2
-    maxRank: 20
+    maxRank: 10
     currency: 0
     cost:
-      baseCost: 108.2109375
+      baseCost: 14.25
       growth: 1.8
       explicitCosts:
-      - 109
-      - 196
-      - 352
-      - 632
-      - 1137
-      - 2046
-      - 3682
-      - 6626
-      - 11926
-      - 21466
-      - 26831
-      - 33539
-      - 41924
-      - 52405
-      - 65506
-      - 81882
-      - 102353
-      - 127940
-      - 159925
-      - 199906
+      - 15
+      - 26
+      - 47
+      - 84
+      - 151
+      - 270
+      - 486
+      - 874
+      - 1571
+      - 2828
       roundingStep: 5
     prerequisites:
     - pin_06
@@ -1012,29 +952,29 @@ MonoBehaviour:
     maxRank: 20
     currency: 0
     cost:
-      baseCost: 108.2109375
+      baseCost: 14.25
       growth: 1.6
       explicitCosts:
-      - 109
-      - 174
-      - 278
-      - 444
-      - 710
-      - 1136
-      - 1817
-      - 2906
-      - 4649
-      - 7437
-      - 8552
-      - 9835
-      - 11310
-      - 13007
-      - 14958
-      - 17201
-      - 19781
-      - 22748
-      - 26161
-      - 30084
+      - 15
+      - 23
+      - 38
+      - 59
+      - 95
+      - 151
+      - 240
+      - 383
+      - 613
+      - 980
+      - 1127
+      - 1296
+      - 1490
+      - 1713
+      - 1971
+      - 2266
+      - 2605
+      - 2997
+      - 3446
+      - 3963
       roundingStep: 5
     prerequisites:
     - pin_06
@@ -1073,32 +1013,22 @@ MonoBehaviour:
     title: "Pin 7 \xB7 Strength"
     description: Lasts one extra turn.
     branch: 2
-    maxRank: 20
+    maxRank: 10
     currency: 0
     cost:
-      baseCost: 162.31640625
+      baseCost: 14.25
       growth: 1.8
       explicitCosts:
-      - 163
-      - 293
-      - 527
-      - 948
-      - 1705
-      - 3068
-      - 5522
-      - 9938
-      - 17888
-      - 32198
-      - 40247
-      - 50309
-      - 62886
-      - 78607
-      - 98258
-      - 122822
-      - 153528
-      - 191910
-      - 239887
-      - 299858
+      - 15
+      - 26
+      - 47
+      - 84
+      - 151
+      - 270
+      - 486
+      - 874
+      - 1571
+      - 2828
       roundingStep: 5
     prerequisites:
     - pin_07
@@ -1118,29 +1048,29 @@ MonoBehaviour:
     maxRank: 20
     currency: 0
     cost:
-      baseCost: 162.31640625
+      baseCost: 14.25
       growth: 1.6
       explicitCosts:
-      - 163
-      - 261
-      - 417
-      - 665
-      - 1064
-      - 1703
-      - 2724
-      - 4358
-      - 6973
-      - 11155
-      - 12828
-      - 14752
-      - 16966
-      - 19510
-      - 22437
-      - 25802
-      - 29672
-      - 34123
-      - 39240
-      - 45126
+      - 15
+      - 23
+      - 38
+      - 59
+      - 95
+      - 151
+      - 240
+      - 383
+      - 613
+      - 980
+      - 1127
+      - 1296
+      - 1490
+      - 1713
+      - 1971
+      - 2266
+      - 2605
+      - 2997
+      - 3446
+      - 3963
       roundingStep: 5
     prerequisites:
     - pin_07
@@ -1179,32 +1109,22 @@ MonoBehaviour:
     title: "Pin 8 \xB7 Strength"
     description: Lasts one extra turn.
     branch: 2
-    maxRank: 20
+    maxRank: 10
     currency: 0
     cost:
-      baseCost: 243.474609375
+      baseCost: 14.25
       growth: 1.8
       explicitCosts:
-      - 245
-      - 439
-      - 790
-      - 1421
-      - 2557
-      - 4601
-      - 8282
-      - 14907
-      - 26831
-      - 48297
-      - 60370
-      - 75463
-      - 94328
-      - 117910
-      - 147387
-      - 184233
-      - 230292
-      - 287865
-      - 359830
-      - 449787
+      - 15
+      - 26
+      - 47
+      - 84
+      - 151
+      - 270
+      - 486
+      - 874
+      - 1571
+      - 2828
       roundingStep: 5
     prerequisites:
     - pin_08
@@ -1224,29 +1144,29 @@ MonoBehaviour:
     maxRank: 20
     currency: 0
     cost:
-      baseCost: 243.474609375
+      baseCost: 14.25
       growth: 1.6
       explicitCosts:
-      - 245
-      - 391
-      - 625
-      - 998
-      - 1596
-      - 2554
-      - 4085
-      - 6536
-      - 10458
-      - 16733
-      - 19242
-      - 22128
-      - 25447
-      - 29264
-      - 33654
-      - 38702
-      - 44507
-      - 51183
-      - 58861
-      - 67689
+      - 15
+      - 23
+      - 38
+      - 59
+      - 95
+      - 151
+      - 240
+      - 383
+      - 613
+      - 980
+      - 1127
+      - 1296
+      - 1490
+      - 1713
+      - 1971
+      - 2266
+      - 2605
+      - 2997
+      - 3446
+      - 3963
       roundingStep: 5
     prerequisites:
     - pin_08
@@ -1285,32 +1205,22 @@ MonoBehaviour:
     title: "Pin 9 \xB7 Strength"
     description: Lasts one extra turn.
     branch: 2
-    maxRank: 20
+    maxRank: 10
     currency: 0
     cost:
-      baseCost: 365.2119140625
+      baseCost: 14.25
       growth: 1.8
       explicitCosts:
-      - 366
-      - 658
-      - 1184
-      - 2131
-      - 3835
-      - 6902
-      - 12423
-      - 22360
-      - 40247
-      - 72444
-      - 90554
-      - 113193
-      - 141492
-      - 176864
-      - 221080
-      - 276350
-      - 345437
-      - 431796
-      - 539745
-      - 674681
+      - 15
+      - 26
+      - 47
+      - 84
+      - 151
+      - 270
+      - 486
+      - 874
+      - 1571
+      - 2828
       roundingStep: 5
     prerequisites:
     - pin_09
@@ -1330,29 +1240,29 @@ MonoBehaviour:
     maxRank: 20
     currency: 0
     cost:
-      baseCost: 365.2119140625
+      baseCost: 14.25
       growth: 1.6
       explicitCosts:
-      - 366
-      - 586
-      - 936
-      - 1497
-      - 2394
-      - 3831
-      - 6128
-      - 9804
-      - 15687
-      - 25099
-      - 28862
-      - 33192
-      - 38171
-      - 43896
-      - 50481
-      - 58052
-      - 66760
-      - 76774
-      - 88290
-      - 101533
+      - 15
+      - 23
+      - 38
+      - 59
+      - 95
+      - 151
+      - 240
+      - 383
+      - 613
+      - 980
+      - 1127
+      - 1296
+      - 1490
+      - 1713
+      - 1971
+      - 2266
+      - 2605
+      - 2997
+      - 3446
+      - 3963
       roundingStep: 5
     prerequisites:
     - pin_09
@@ -1391,32 +1301,22 @@ MonoBehaviour:
     title: "Pin 10 \xB7 Strength"
     description: Lasts one extra turn.
     branch: 2
-    maxRank: 20
+    maxRank: 10
     currency: 0
     cost:
-      baseCost: 547.81787109375
+      baseCost: 14.25
       growth: 1.8
       explicitCosts:
-      - 549
-      - 987
-      - 1776
-      - 3196
-      - 5752
-      - 10353
-      - 18634
-      - 33539
-      - 60370
-      - 108665
-      - 135831
-      - 169789
-      - 212237
-      - 265296
-      - 331620
-      - 414524
-      - 518155
-      - 647693
-      - 809616
-      - 1012020
+      - 15
+      - 26
+      - 47
+      - 84
+      - 151
+      - 270
+      - 486
+      - 874
+      - 1571
+      - 2828
       roundingStep: 5
     prerequisites:
     - pin_10
@@ -1436,29 +1336,29 @@ MonoBehaviour:
     maxRank: 20
     currency: 0
     cost:
-      baseCost: 547.81787109375
+      baseCost: 14.25
       growth: 1.6
       explicitCosts:
-      - 549
-      - 877
-      - 1404
-      - 2244
-      - 3591
-      - 5745
-      - 9192
-      - 14706
-      - 23529
-      - 37647
-      - 43294
-      - 49787
-      - 57255
-      - 65844
-      - 75720
-      - 87077
-      - 100139
-      - 115160
-      - 132434
-      - 152299
+      - 15
+      - 23
+      - 38
+      - 59
+      - 95
+      - 151
+      - 240
+      - 383
+      - 613
+      - 980
+      - 1127
+      - 1296
+      - 1490
+      - 1713
+      - 1971
+      - 2266
+      - 2605
+      - 2997
+      - 3446
+      - 3963
       roundingStep: 5
     prerequisites:
     - pin_10
@@ -1497,32 +1397,22 @@ MonoBehaviour:
     title: "Pin 11 \xB7 Strength"
     description: Lasts one extra turn.
     branch: 2
-    maxRank: 20
+    maxRank: 10
     currency: 0
     cost:
-      baseCost: 821.726806640625
+      baseCost: 14.25
       growth: 1.8
       explicitCosts:
-      - 822
-      - 1480
-      - 2663
-      - 4793
-      - 8627
-      - 15528
-      - 27949
-      - 50309
-      - 90554
-      - 162998
-      - 203747
-      - 254684
-      - 318355
-      - 397943
-      - 497429
-      - 621786
-      - 777232
-      - 971540
-      - 1214424
-      - 1518030
+      - 15
+      - 26
+      - 47
+      - 84
+      - 151
+      - 270
+      - 486
+      - 874
+      - 1571
+      - 2828
       roundingStep: 5
     prerequisites:
     - pin_11
@@ -1542,29 +1432,29 @@ MonoBehaviour:
     maxRank: 20
     currency: 0
     cost:
-      baseCost: 821.726806640625
+      baseCost: 14.25
       growth: 1.6
       explicitCosts:
-      - 822
-      - 1315
-      - 2105
-      - 3366
-      - 5386
-      - 8617
-      - 13787
-      - 22059
-      - 35294
-      - 56469
-      - 64940
-      - 74681
-      - 85882
-      - 98765
-      - 113580
-      - 130616
-      - 150209
-      - 172740
-      - 198650
-      - 228448
+      - 15
+      - 23
+      - 38
+      - 59
+      - 95
+      - 151
+      - 240
+      - 383
+      - 613
+      - 980
+      - 1127
+      - 1296
+      - 1490
+      - 1713
+      - 1971
+      - 2266
+      - 2605
+      - 2997
+      - 3446
+      - 3963
       roundingStep: 5
     prerequisites:
     - pin_11
@@ -1603,32 +1493,22 @@ MonoBehaviour:
     title: "Pin 12 \xB7 Strength"
     description: Lasts one extra turn.
     branch: 2
-    maxRank: 20
+    maxRank: 10
     currency: 0
     cost:
-      baseCost: 1232.5902099609375
+      baseCost: 14.25
       growth: 1.8
       explicitCosts:
-      - 1234
-      - 2220
-      - 3994
-      - 7189
-      - 12940
-      - 23292
-      - 41924
-      - 75463
-      - 135831
-      - 244496
-      - 305620
-      - 382026
-      - 477531
-      - 596914
-      - 746143
-      - 932678
-      - 1165847
-      - 1457309
-      - 1821636
-      - 2277045
+      - 15
+      - 26
+      - 47
+      - 84
+      - 151
+      - 270
+      - 486
+      - 874
+      - 1571
+      - 2828
       roundingStep: 5
     prerequisites:
     - pin_12
@@ -1648,29 +1528,29 @@ MonoBehaviour:
     maxRank: 20
     currency: 0
     cost:
-      baseCost: 1232.5902099609375
+      baseCost: 14.25
       growth: 1.6
       explicitCosts:
-      - 1234
-      - 1973
-      - 3156
-      - 5050
-      - 8079
-      - 12925
-      - 20680
-      - 33088
-      - 52940
-      - 84704
-      - 97410
-      - 112021
-      - 128823
-      - 148147
-      - 170369
-      - 195924
-      - 225313
-      - 259109
-      - 297976
-      - 342671
+      - 15
+      - 23
+      - 38
+      - 59
+      - 95
+      - 151
+      - 240
+      - 383
+      - 613
+      - 980
+      - 1127
+      - 1296
+      - 1490
+      - 1713
+      - 1971
+      - 2266
+      - 2605
+      - 2997
+      - 3446
+      - 3963
       roundingStep: 5
     prerequisites:
     - pin_12
@@ -1745,7 +1625,7 @@ MonoBehaviour:
     requiresUnlock:
     capStat: 0
     capByStat: 0
-    position: {x: 240, y: -240}
+    position: {x: 240, y: 240}
   - id: pin_autoloader
     title: Auto Fire
     description: Shoot ready pins automatically.
@@ -1767,7 +1647,7 @@ MonoBehaviour:
     requiresUnlock:
     capStat: 0
     capByStat: 0
-    position: {x: 240, y: -480}
+    position: {x: 240, y: 400}
   - id: pin_mastery
     title: All Pin Pay
     description: Multiply every pin payout by 1.05.
@@ -1913,7 +1793,7 @@ MonoBehaviour:
       explicitCosts: []
       roundingStep: 5
     prerequisites:
-    - case_autostamp
+    - case_unlock
     modifiers:
     - stat: 305
       kind: 0
@@ -1922,7 +1802,7 @@ MonoBehaviour:
     requiresUnlock: unlock_press_coverage
     capStat: 0
     capByStat: 0
-    position: {x: -800, y: 320}
+    position: {x: -480, y: -160}
   - id: case_mastery
     title: Case Pay Bonus
     description: Multiply case rewards by 1.05.
@@ -1966,7 +1846,7 @@ MonoBehaviour:
     requiresUnlock: unlock_statue_1
     capStat: 0
     capByStat: 0
-    position: {x: -480, y: -480}
+    position: {x: -240, y: -240}
   - id: statue_payout
     title: Statue Gold
     description: Earn more gold when smashing statues.
@@ -1988,29 +1868,7 @@ MonoBehaviour:
     requiresUnlock: unlock_statue_1
     capStat: 0
     capByStat: 0
-    position: {x: -480, y: -720}
-  - id: statue_mastery
-    title: Statue Gold Bonus
-    description: Multiply statue gold rewards by 1.05.
-    branch: 5
-    maxRank: 999
-    currency: 0
-    cost:
-      baseCost: 950000
-      growth: 1.25
-      explicitCosts: []
-      roundingStep: 5
-    prerequisites:
-    - statue_payout
-    modifiers:
-    - stat: 501
-      kind: 2
-      valuePerRank: 1.05
-      pinIndex: -1
-    requiresUnlock: unlock_statue_1
-    capStat: 0
-    capByStat: 0
-    position: {x: -480, y: -960}
+    position: {x: -240, y: -480}
   - id: loot_bulk
     title: Cheaper Boxes
     description: Pay less for each lootbox.
@@ -2098,7 +1956,7 @@ MonoBehaviour:
     requiresUnlock: unlock_whiskey
     capStat: 0
     capByStat: 0
-    position: {x: -240, y: -480}
+    position: {x: 240, y: -240}
   - id: whiskey_cooldown
     title: Drink Wait
     description: Use the glass again sooner.
@@ -2120,7 +1978,7 @@ MonoBehaviour:
     requiresUnlock: unlock_whiskey
     capStat: 0
     capByStat: 0
-    position: {x: -320, y: -720}
+    position: {x: 160, y: -480}
   - id: whiskey_strength
     title: Stronger Boost
     description: Boost spin speed and earnings further.
@@ -2142,7 +2000,7 @@ MonoBehaviour:
     requiresUnlock: unlock_whiskey
     capStat: 0
     capByStat: 0
-    position: {x: -160, y: -720}
+    position: {x: 320, y: -480}
   - id: whiskey_mastery
     title: Extra Boost Time
     description: Add more time to the drink boost.
@@ -2164,13 +2022,13 @@ MonoBehaviour:
     requiresUnlock: unlock_whiskey
     capStat: 0
     capByStat: 0
-    position: {x: -160, y: -960}
+    position: {x: 320, y: -720}
   sections:
   - id: globe_section
     title: Globe
     icon: globe
     description: Spin to earn. Improve speed and keep your momentum.
-    position: {x: 0, y: 240}
+    position: {x: 0, y: 400}
     upward: 1
     sharedConnector: 1
     connectorOffset: 120
@@ -2199,6 +2057,6 @@ MonoBehaviour:
     description: Open boxes. Unlock drinks and statues with Gold.
     position: {x: 0, y: -240}
     upward: 0
-    sharedConnector: 1
+    sharedConnector: 0
     connectorOffset: 120
     branches: 060000000400000005000000

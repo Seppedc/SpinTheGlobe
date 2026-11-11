@@ -1,0 +1,1 @@
+User requested a basketball hoop instead of the wastebasket in the right corner, with a score counter above. Match the brass/wood detective office, red metal basketball rim and ivory rope net. Original geometry, no external source art.

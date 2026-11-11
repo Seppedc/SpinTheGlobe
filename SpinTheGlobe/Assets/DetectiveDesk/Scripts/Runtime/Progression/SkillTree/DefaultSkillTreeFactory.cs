@@ -6,7 +6,7 @@ namespace DetectiveDesk.Progression
 {
     /// <summary>
     /// Builds the default skill tree: one root ("Skill Tree Unlock") with six branches radiating outward
-    /// (Globe, Pins, Case File, Statues, Lootbox, Whiskey). Each branch ends in an endless Mastery node.
+    /// (Globe, Pins, Case File, Statues, Lootbox, Whiskey). All branches except Statues have a Mastery node.
     /// The tree is money only: everything bought with gold lives in the Gold shop (<see cref="GoldShopCatalog"/>).
     /// Numbers come from the economy simulation (Docs/ECONOMY.md); tune them in the asset afterwards.
     /// </summary>
@@ -46,7 +46,7 @@ namespace DetectiveDesk.Progression
 
         public static List<SkillSectionData> CreateSections() => new List<SkillSectionData>
         {
-            new SkillSectionData { id = "globe_section", title = "Globe", icon = "globe", position = new Vector2(0, Cell * 1.5f),
+            new SkillSectionData { id = "globe_section", title = "Globe", icon = "globe", position = new Vector2(0, Cell * 2.5f),
                 description = "Spin to earn. Improve speed and keep your momentum.",
                 upward = true, connectorOffset = Cell * .75f, branches = new[] { SkillBranch.Globe } },
             new SkillSectionData { id = "pins_section", title = "Pins", icon = "pin", position = new Vector2(Cell * 1.5f, 0),
@@ -57,14 +57,14 @@ namespace DetectiveDesk.Progression
                 sharedConnector = false, branches = new[] { SkillBranch.CaseFile } },
             new SkillSectionData { id = "desk_section", title = "Desk Items", icon = "gift", position = new Vector2(0, -Cell * 1.5f),
                 description = "Open boxes. Unlock drinks and statues with Gold.",
-                connectorOffset = Cell * .75f, branches = new[] { SkillBranch.Lootbox, SkillBranch.Whiskey, SkillBranch.Statues } },
+                sharedConnector = false, connectorOffset = Cell * .75f, branches = new[] { SkillBranch.Lootbox, SkillBranch.Whiskey, SkillBranch.Statues } },
         };
 
         /// <summary>
         /// Clean grid layout (cell coordinates; x right, y up). Every node sits at least one cell from every other
         /// node and no link runs through a node (checked with Tools/skilltree_layout.py).
         /// Root in the middle; Globe up, Pins to the right (pin chain with durability above and payout below,
-        /// shooter upgrades underneath), Case File left, and Whiskey/Lootbox/Statues grouped below.
+        /// shooter upgrades above), Case File left, and statues/boxes/drinks to the left/below/right of Desk Items.
         /// </summary>
         static void ApplyLayout(List<SkillNodeData> nodes)
         {
@@ -72,25 +72,24 @@ namespace DetectiveDesk.Progression
             {
                 [RootId] = new Vector2(0, 0),
                 // Globe
-                ["globe_auto"] = new Vector2(-1.5f, 3),
-                ["globe_max_speed"] = new Vector2(-.5f, 3), ["globe_drag"] = new Vector2(.5f, 3), ["globe_click"] = new Vector2(1.5f, 3),
-                ["globe_multiplier"] = new Vector2(-.5f, 4), ["globe_gilded_axis"] = new Vector2(-.5f, 5),
-                ["globe_mastery"] = new Vector2(-.5f, 6),
+                ["globe_auto"] = new Vector2(-1.5f, 4),
+                ["globe_max_speed"] = new Vector2(-.5f, 4), ["globe_drag"] = new Vector2(.5f, 4), ["globe_click"] = new Vector2(1.5f, 4),
+                ["globe_multiplier"] = new Vector2(-.5f, 5), ["globe_gilded_axis"] = new Vector2(-.5f, 6),
+                ["globe_mastery"] = new Vector2(-.5f, 7),
                 // Pins: shooter track
-                ["shooter_cooldown"] = new Vector2(1.5f, -1.5f), ["pin_autoloader"] = new Vector2(1.5f, -3),
+                ["shooter_cooldown"] = new Vector2(1.5f, 1.5f), ["pin_autoloader"] = new Vector2(1.5f, 2.5f),
                 ["pin_mastery"] = new Vector2(MaxPins + 3, 0),
                 // Case file
                 [CaseUnlockId] = new Vector2(-3, 0), ["case_payout"] = new Vector2(-4, 0),
                 ["case_cooldown"] = new Vector2(-4, 1), ["case_autostamp"] = new Vector2(-3, 1),
                 ["case_cold_cases"] = new Vector2(-5, 1), ["case_mastery"] = new Vector2(-6, 1),
-                ["case_headlines"] = new Vector2(-5, 2),
+                ["case_headlines"] = new Vector2(-3, -1),
                 // Whiskey
-                ["whiskey_duration"] = new Vector2(-1.5f, -3),
-                ["whiskey_cooldown"] = new Vector2(-2, -4.5f), ["whiskey_strength"] = new Vector2(-1, -4.5f),
-                ["whiskey_mastery"] = new Vector2(-1, -6),
+                ["whiskey_duration"] = new Vector2(1.5f, -1.5f),
+                ["whiskey_cooldown"] = new Vector2(1, -3), ["whiskey_strength"] = new Vector2(2, -3),
+                ["whiskey_mastery"] = new Vector2(2, -4.5f),
                 // Statues
-                ["statue_gold_fill"] = new Vector2(-3, -3), ["statue_payout"] = new Vector2(-3, -4.5f),
-                ["statue_mastery"] = new Vector2(-3, -6),
+                ["statue_gold_fill"] = new Vector2(-1.5f, -1.5f), ["statue_payout"] = new Vector2(-1.5f, -3),
                 // Lootbox
                 ["loot_bulk"] = new Vector2(0, -3), ["loot_luck"] = new Vector2(0, -4.5f),
                 ["loot_mastery"] = new Vector2(0, -6),
@@ -143,9 +142,9 @@ namespace DetectiveDesk.Progression
                 Add(n, PinId(pin), $"Pin {pin}", $"Unlock pin {pin} for the shooter.",
                     SkillBranch.Pins, 1, Money(price, 1), at, new[] { previous }, StatModifier.Add(StatId.PinSlots, 1));
                 Add(n, PinDurabilityId(pin), $"Pin {pin} · Strength", "Lasts one extra turn.",
-                    SkillBranch.Pins, 20, PinUpgradePrices(index, true), at + side * Step * 0.55f, new[] { PinId(pin) }, StatModifier.Add(StatId.PinDurability, 1, index));
+                    SkillBranch.Pins, 10, PinUpgradePrices(true), at + side * Step * 0.55f, new[] { PinId(pin) }, StatModifier.Add(StatId.PinDurability, 1, index));
                 Add(n, PinPayoutId(pin), $"Pin {pin} · Pay", "Earn more from this pin.",
-                    SkillBranch.Pins, 20, PinUpgradePrices(index), at - side * Step * 0.55f, new[] { PinId(pin) }, StatModifier.Percent(StatId.PinPayout, 0.5, index));
+                    SkillBranch.Pins, 20, PinUpgradePrices(), at - side * Step * 0.55f, new[] { PinId(pin) }, StatModifier.Percent(StatId.PinPayout, 0.5, index));
                 previous = PinId(pin);
             }
             // Shooter upgrades run on a parallel track beside the pin chain.
@@ -175,7 +174,7 @@ namespace DetectiveDesk.Progression
             Add(n, "case_cold_cases", "Less Evidence", "Solve each case with fewer clues.",
                 SkillBranch.CaseFile, 3, Money(500, 2), dir * Step * 3 + side * Step * 0.6f, new[] { "case_cooldown" }, StatModifier.Add(StatId.CaseEvidenceReduction, 1));
             Add(n, "case_headlines", "Case Gold", "More chance of gold from solved cases. Max 10%.",
-                SkillBranch.CaseFile, 8, Money(500, 1.6), dir * Step * 3 - side * Step * 0.6f, new[] { "case_autostamp" }, StatModifier.Add(StatId.CaseGoldChance, 0.01)).requiresUnlock = GoldShopCatalog.PressCoverage;
+                SkillBranch.CaseFile, 8, Money(500, 1.6), dir * Step * 3 - side * Step * 0.6f, new[] { CaseUnlockId }, StatModifier.Add(StatId.CaseGoldChance, 0.01)).requiresUnlock = GoldShopCatalog.PressCoverage;
             Add(n, "case_mastery", "Case Pay Bonus", "Multiply case rewards by 1.05.",
                 SkillBranch.CaseFile, MasteryRanks, Money(1e6, 1.25), dir * Step * 4, new[] { "case_cold_cases" }, StatModifier.Multiply(StatId.CasePayout, 1.05));
         }
@@ -187,8 +186,6 @@ namespace DetectiveDesk.Progression
                 SkillBranch.Statues, 10, Money(150, 1.6), dir * Step, new[] { RootId }, StatModifier.Percent(StatId.StatueGoldFillRate, 0.2)).requiresUnlock = GoldShopCatalog.Statue1;
             Add(n, "statue_payout", "Statue Gold", "Earn more gold when smashing statues.",
                 SkillBranch.Statues, 10, Money(250, 1.6), dir * Step * 2, new[] { "statue_gold_fill" }, StatModifier.Percent(StatId.StatuePayout, 0.25)).requiresUnlock = GoldShopCatalog.Statue1;
-            Add(n, "statue_mastery", "Statue Gold Bonus", "Multiply statue gold rewards by 1.05.",
-                SkillBranch.Statues, MasteryRanks, Money(1e6, 1.25), dir * Step * 3, new[] { "statue_payout" }, StatModifier.Multiply(StatId.StatuePayout, 1.05)).requiresUnlock = GoldShopCatalog.Statue1;
         }
 
         static void BuildLootbox(List<SkillNodeData> n, Vector2 dir)
@@ -240,12 +237,12 @@ namespace DetectiveDesk.Progression
             return new CostCurve(opening[0], 1) { explicitCosts = prices };
         }
 
-        static CostCurve PinUpgradePrices(int index, bool strength = false)
+        static CostCurve PinUpgradePrices(bool strength = false)
         {
-            double first = 15 * System.Math.Pow(1.5, index);
+            const double first = 15;
             double earlyGrowth = strength ? 1.8 : 1.6;
             double lateGrowth = strength ? 1.25 : 1.15;
-            var prices = new double[20];
+            var prices = new double[strength ? 10 : 20];
             for (int rank = 0; rank < prices.Length; rank++)
                 prices[rank] = System.Math.Ceiling(first * System.Math.Pow(earlyGrowth, System.Math.Min(rank, 9))
                     * System.Math.Pow(lateGrowth, System.Math.Max(0, rank - 9)));

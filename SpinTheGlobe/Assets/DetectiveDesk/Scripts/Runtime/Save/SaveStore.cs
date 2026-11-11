@@ -75,7 +75,23 @@ namespace DetectiveDesk.Save
 
         static void Migrate(SaveData data)
         {
-            // Future: if (data.version == 1) { ...convert...; data.version = 2; }
+            if (data.version < 2 && data.goldShop != null)
+            {
+                int statueUnlock = 0, bonusRanks = 0;
+                for (int i = data.goldShop.Count - 1; i >= 0; i--)
+                {
+                    var rank = data.goldShop[i];
+                    if (rank.id == "unlock_statue_1" || rank.id == "unlock_statue_2" || rank.id == "unlock_statue_3")
+                    { statueUnlock = Math.Max(statueUnlock, rank.rank); data.goldShop.RemoveAt(i); }
+                    else if (rank.id != null && rank.id.StartsWith("statue_tier_", StringComparison.Ordinal))
+                    { bonusRanks += Math.Max(0, rank.rank); data.goldShop.RemoveAt(i); }
+                    else if (rank.id == "fast_casting")
+                    { rank.rank = Math.Min(2, rank.rank * 2); data.goldShop[i] = rank; }
+                    else if (rank.id == "golden_meridian" || rank.id == "start_money") data.goldShop.RemoveAt(i);
+                }
+                if (statueUnlock > 0) data.goldShop.Add(new SkillRank { id = "unlock_statue_1", rank = 1 });
+                if (bonusRanks > 0) data.goldShop.Add(new SkillRank { id = "statue_gold_chance", rank = Math.Min(10, bonusRanks) });
+            }
             data.version = SaveData.CurrentVersion;
         }
     }

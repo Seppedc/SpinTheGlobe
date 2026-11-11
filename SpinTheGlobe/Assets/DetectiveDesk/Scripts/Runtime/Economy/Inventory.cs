@@ -11,6 +11,18 @@ namespace DetectiveDesk.Economy
         StatuePiece = 2,
         PaperBall = 3,
         Money = 4,
+        StatuePiece2 = 5,
+        StatuePiece3 = 6,
+        StatuePiece1 = 2,
+    }
+
+    public static class LootKindExtensions
+    {
+        public static bool IsStatuePiece(this LootKind kind) =>
+            kind == LootKind.StatuePiece || kind == LootKind.StatuePiece2 || kind == LootKind.StatuePiece3;
+
+        public static int StatueIndex(this LootKind kind) =>
+            kind == LootKind.StatuePiece3 ? 2 : kind == LootKind.StatuePiece2 ? 1 : (kind == LootKind.StatuePiece ? 0 : -1);
     }
 
     /// <summary>Consumable items the player holds. Plain C#, saved with the game.</summary>

@@ -64,8 +64,7 @@ namespace DetectiveDesk.Tests
                 foreach (var prop in new[] { drink.glassModel, drink.glassInteraction, drink.glassRim,
                     drink.bottleModel, drink.bottleInteraction, drink.bottleCap })
                 {
-                    Assert.IsNotNull(prop, "hidden objects must retain their serialized unlock binding");
-                    Assert.IsFalse(prop.gameObject.activeSelf);
+                    Assert.IsNotNull(prop, "drink objects must retain their serialized unlock binding");
                 }
                 Assert.IsNotNull(shop);
                 var rows = new SerializedObject(shop).FindProperty("rows");
@@ -98,7 +97,8 @@ namespace DetectiveDesk.Tests
                 drink.bottleModel, drink.bottleInteraction, drink.bottleCap };
             drink.Initialize(game);
             Assert.IsFalse(drink.Unlocked);
-            foreach (var prop in props) Assert.IsFalse(prop.gameObject.activeSelf);
+            Assert.IsTrue(drink.glassModel.gameObject.activeSelf);
+            Assert.IsTrue(drink.bottleModel.gameObject.activeSelf);
             drink.Sip();
             drink.DevAlmostFull();
             Assert.AreEqual(0, drink.Fill);
@@ -110,6 +110,39 @@ namespace DetectiveDesk.Tests
             Assert.IsTrue(drink.Unlocked);
             drink.Sip();
             Assert.Greater(drink.Fill, 0);
+        }
+
+        [Test]
+        public void DeskInfoSystem_WhiskeyHasLockedTag_UntilPurchased()
+        {
+            var drink = root.AddComponent<WhiskeyGlass>();
+            Transform Prop(string name)
+            {
+                var prop = new GameObject(name).transform;
+                prop.SetParent(root.transform, false);
+                prop.gameObject.AddComponent<BoxCollider>();
+                return prop;
+            }
+            drink.glassModel = Prop("Generated_WhiskeyGlass");
+            drink.bottleModel = Prop("Generated_WhiskeyBottle");
+            typeof(GameManager).GetProperty("Whiskey").SetValue(game, drink);
+            drink.Initialize(game);
+            var layout = game.DeskInfo.CreateLayout(game);
+            Assert.IsNotNull(layout);
+
+            var whiskeyTag = layout.Find("Brass tag · Whiskey");
+            Assert.IsNotNull(whiskeyTag, "Brass tag · Whiskey should be created for the whiskey glass");
+            var label = whiskeyTag.GetComponentInChildren<TMPro.TextMeshPro>();
+            Assert.IsNotNull(label);
+            game.DeskInfo.RefreshTags();
+            Assert.IsTrue(whiskeyTag.gameObject.activeSelf);
+            Assert.AreEqual("LOCKED", label.text);
+
+            game.Wallet.Add(DetectiveDesk.Economy.Currency.Gold, 10);
+            Assert.IsTrue(game.PurchaseShopItem(GoldShopCatalog.Whiskey));
+            drink.RefreshUnlock();
+            game.DeskInfo.RefreshTags();
+            Assert.IsFalse(whiskeyTag.gameObject.activeSelf, "Brass tag · Whiskey should hide when whiskey is unlocked");
         }
 
         [Test]
@@ -253,7 +286,8 @@ namespace DetectiveDesk.Tests
             var second = Object.Instantiate(prefab, root.transform);
             var original = prefab.SkinMaterials[0].GetColor("_BaseColor");
             var seen = new System.Collections.Generic.HashSet<Color>();
-            for (int rank = 0; rank <= 20; rank++)
+            int maximum = tree.Find(DefaultSkillTreeFactory.PinDurabilityId(1)).maxRank;
+            for (int rank = 0; rank <= maximum; rank++)
             {
                 game.Skills.Load(tree, new System.Collections.Generic.List<DetectiveDesk.Save.SkillRank>
                 {
@@ -265,15 +299,15 @@ namespace DetectiveDesk.Tests
                 game.ApplyPinAppearance(first, 0);
                 game.ApplyPinAppearance(second, 1);
                 Assert.AreEqual(first.DisplayColor, second.DisplayColor, "same Strength, different slot");
-                Assert.AreEqual(balance.pinStrengthColors[rank], first.DisplayColor);
                 Assert.IsTrue(seen.Add(first.DisplayColor), "every Strength level has a distinct colour");
-                if (rank < 20) Assert.AreNotEqual(balance.pinStrengthColors[20], first.DisplayColor);
+                if (rank < maximum) Assert.AreNotEqual(balance.pinStrengthColors[balance.pinStrengthColors.Length - 1], first.DisplayColor);
+                else Assert.AreEqual(balance.pinStrengthColors[balance.pinStrengthColors.Length - 1], first.DisplayColor);
                 var properties = new MaterialPropertyBlock();
                 var serialized = new SerializedObject(first);
                 int slot = serialized.FindProperty("enamelMaterialSlot").intValue;
                 first.EnamelHeadRenderer.GetPropertyBlock(properties, slot);
                 Assert.Less(Vector4.Distance(first.DisplayColor, properties.GetColor("_BaseColor")), 1e-5f);
-                Assert.AreEqual(rank == 20 ? balance.pinMaxStrengthMetallic : balance.pinEnamelMetallic, properties.GetFloat("_Metallic"));
+                Assert.AreEqual(rank == maximum ? balance.pinMaxStrengthMetallic : balance.pinEnamelMetallic, properties.GetFloat("_Metallic"));
                 first.SetIlluminated(true);
                 first.EnamelHeadRenderer.GetPropertyBlock(properties, slot);
                 Assert.Less(Vector4.Distance(first.DisplayColor * .65f, properties.GetColor("_EmissionColor")), 1e-5f);
@@ -302,7 +336,8 @@ namespace DetectiveDesk.Tests
             Assert.IsTrue(game.PurchaseSkill("pin_01_durability"));
             box.Refresh();
             Assert.AreSame(occupant, slot.Occupant);
-            Assert.AreEqual(balance.pinStrengthColors[1], occupant.DisplayColor);
+            Assert.AreNotEqual(balance.pinStrengthColors[0], occupant.DisplayColor, "Strength purchase must change the starting colour");
+            Assert.AreEqual(1, occupant.StrengthRank);
         }
 
         [Test]
@@ -345,6 +380,174 @@ namespace DetectiveDesk.Tests
             Assert.IsTrue(game.PurchaseSkill("globe_drag", 10));
             game.TreeView.Open();
             AssertStyle("globe_drag", PurchaseVisualState.Maxed);
+        }
+
+        [Test]
+        public void FreshStartPurchases_GrantCurrentRunSkillsWithoutSpendingMoneyOrDowngrading()
+        {
+            game.Stats.ExtraSource = game.Shop.Modifiers;
+            game.Wallet.Add(DetectiveDesk.Economy.Currency.Gold, 1e6);
+            double money = game.Wallet.Money;
+            string[] items = { GoldShopCatalog.KeptLedger, GoldShopCatalog.StartCases, GoldShopCatalog.StartSpinLimit,
+                GoldShopCatalog.WoundClockwork, GoldShopCatalog.SparePin };
+            string[] skills = { "root", "case_unlock", "globe_max_speed", "globe_auto", "pin_01" };
+            for (int i = 0; i < items.Length; i++)
+            {
+                Assert.IsTrue(game.PurchaseShopItem(items[i]), items[i]);
+                Assert.AreEqual(1, game.Skills.Rank(skills[i]), skills[i]);
+                if (i == 1) Assert.AreEqual(0, game.UnlockedPins, "Case Files can be granted before buying Pin 1");
+                Assert.AreEqual(money, game.Wallet.Money, "Gold unlocks must not charge money");
+            }
+            Assert.AreEqual(1, game.UnlockedPins);
+            Assert.Greater(game.Stats.Get(StatId.CaseUnlocked), 0);
+            Assert.Greater(game.Stats.Get(StatId.GlobeAutoSpeed), 0);
+            game.Skills.GrantMinimum(tree, "globe_max_speed", 5, game.Stats);
+            game.Skills.GrantMinimum(tree, "pin_01_durability", 3, game.Stats);
+            Assert.IsTrue(game.PurchaseShopItem(GoldShopCatalog.Reputation));
+            Assert.AreEqual(5, game.Skills.Rank("globe_max_speed"));
+            Assert.AreEqual(3, game.Skills.Rank("pin_01_durability"));
+            double gold = game.Wallet.Gold;
+            Assert.IsFalse(game.PurchaseShopItem(GoldShopCatalog.KeptLedger));
+            Assert.AreEqual(gold, game.Wallet.Gold);
+        }
+
+        [Test]
+        public void RestoringTree_RemovesDeletedSkillsAndTheirAuthoredGraphics()
+        {
+            CreateLayouts();
+            var canvas = game.TreeView.CreateLayout(game);
+            var node = canvas.transform.Find("Backdrop/Viewport/Content/Nodes/statue_payout");
+            Assert.IsNotNull(node);
+            var nodes = new System.Collections.Generic.List<SkillNodeData>(tree.Nodes);
+            nodes.RemoveAll(n => n.id == "statue_payout");
+            tree.SetNodes(nodes);
+            game.TreeView.CreateLayout(game);
+            Assert.IsFalse(node, "Deleted skill graphics must be removed from authored canvases");
+            Assert.AreEqual(tree.Nodes.Count, canvas.transform.Find("Backdrop/Viewport/Content/Nodes").childCount);
+            Assert.IsNull(tree.Find("statue_mastery"));
+        }
+
+        [Test]
+        public void LegendFinalGoal_CompletesOnce_AndEndingDoesNotRetireOrResetProgress()
+        {
+            CreateLayouts();
+            typeof(GameManager).GetProperty("Prestiges").SetValue(game, 5);
+            typeof(GameManager).GetProperty("RunEarnings").SetValue(game, 49999d);
+            Assert.IsTrue(game.IsFinalRank);
+            Assert.AreEqual(50000, game.PrestigeRequirement);
+            Assert.IsFalse(game.CanRetire);
+            Assert.IsFalse(game.CheckCompletion());
+            game.ShopView.Open();
+            var serialized = new SerializedObject(game.ShopView);
+            var info = (TMPro.TextMeshProUGUI)serialized.FindProperty("retireInfo").objectReferenceValue;
+            StringAssert.Contains("Final run:", info.text);
+            var retire = (Button)serialized.FindProperty("retireButton").objectReferenceValue;
+            Assert.IsFalse(retire.interactable);
+            typeof(GameManager).GetProperty("RunEarnings").SetValue(game, 50000d);
+            Assert.IsTrue(game.CheckCompletion());
+            Assert.IsTrue(game.GameCompleted);
+            Assert.IsFalse(game.CanRetire);
+            Assert.IsFalse(game.CheckCompletion(), "completion is not announced repeatedly");
+            var dialog = (RectTransform)serialized.FindProperty("dialog").objectReferenceValue;
+            Assert.IsTrue(dialog.gameObject.activeSelf);
+            StringAssert.Contains("Your agency is complete", dialog.Find("Box/Text").GetComponent<TMPro.TextMeshProUGUI>().text);
+            Assert.IsFalse(dialog.Find("Box/Buttons/Cancel").gameObject.activeSelf);
+            dialog.Find("Box/Buttons/Confirm").GetComponent<Button>().onClick.Invoke();
+            Assert.IsFalse(dialog.gameObject.activeSelf);
+            Assert.AreEqual(5, game.Prestiges);
+            Assert.AreEqual(50000, game.RunEarnings);
+            game.ShopView.Open();
+            Assert.IsTrue(retire.interactable);
+        }
+
+        [Test]
+        public void GlobalMultiplier_IsVisibleAndRetirementExplainsTheNextBonus()
+        {
+            game.Stats.ExtraSource = game.Shop.Modifiers;
+            CreateLayouts();
+            game.Hud.RefreshGlobalMultiplier();
+            var display = game.Hud.Canvas.transform.Find("Top bar/Global multiplier").GetComponent<TMPro.TextMeshProUGUI>();
+            Assert.AreEqual("Global ×1.00", display.text);
+            Assert.IsFalse(display.gameObject.activeSelf);
+            var divider = display.transform.parent.GetChild(display.transform.GetSiblingIndex() - 1);
+            Assert.IsFalse(divider.gameObject.activeSelf);
+            game.Wallet.Add(DetectiveDesk.Economy.Currency.Gold, 5);
+            Assert.IsTrue(game.PurchaseShopItem(GoldShopCatalog.Reputation));
+            game.Hud.RefreshGlobalMultiplier();
+            Assert.AreEqual("Global ×1.05", display.text);
+            Assert.IsTrue(display.gameObject.activeSelf);
+            Assert.IsTrue(divider.gameObject.activeSelf);
+            game.Hud.CreateLayout(game);
+            Assert.AreEqual(1, System.Array.FindAll(game.Hud.Canvas.GetComponentsInChildren<TMPro.TextMeshProUGUI>(true), t => t.name == "Global multiplier").Length);
+            typeof(GameManager).GetProperty("RunEarnings").SetValue(game, balance.prestigeThreshold);
+            game.ShopView.Open();
+            var serialized = new SerializedObject(game.ShopView);
+            var info = (TMPro.TextMeshProUGUI)serialized.FindProperty("retireInfo").objectReferenceValue;
+            StringAssert.Contains("Agency +5%", info.text);
+            StringAssert.Contains("Prestige +0%", info.text);
+            StringAssert.Contains("Next run: ×1.15", info.text);
+            var retire = (Button)serialized.FindProperty("retireButton").objectReferenceValue;
+            retire.onClick.Invoke();
+            var confirmation = (TMPro.TextMeshProUGUI)serialized.FindProperty("dialogText").objectReferenceValue;
+            StringAssert.Contains("+10% permanent money income", confirmation.text);
+            StringAssert.Contains("Next run: ×1.15", confirmation.text);
+            game.Shop.Load(null);
+            game.Stats.Rebuild(tree, game.Skills);
+            game.Hud.RefreshGlobalMultiplier();
+            Assert.IsFalse(display.gameObject.activeSelf, "Returning to x1 hides the indicator again");
+            Assert.IsFalse(divider.gameObject.activeSelf);
+        }
+
+        [Test]
+        public void GoldShop_SavedLayout_MatchesCatalogAndStartsWithFreshStarts()
+        {
+            var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenPreviewScene("Assets/DetectiveDesk/Scenes/DetectiveOffice.unity");
+            try
+            {
+                GoldShopView view = null;
+                foreach (var sceneRoot in scene.GetRootGameObjects())
+                    if (!view) view = sceneRoot.GetComponentInChildren<GoldShopView>(true);
+                Assert.IsNotNull(view);
+                var rows = new SerializedObject(view).FindProperty("rows");
+                Assert.AreEqual(balance.goldShopItems.Count, rows.arraySize);
+                for (int i = 0; i < rows.arraySize; i++)
+                    Assert.AreEqual(balance.goldShopItems[i].id, rows.GetArrayElementAtIndex(i).FindPropertyRelative("id").stringValue);
+                var canvas = (Canvas)new SerializedObject(view).FindProperty("canvas").objectReferenceValue;
+                Assert.AreEqual("FRESH START", canvas.transform.Find("Gold shop panel/List/Viewport/Content").GetChild(0).name);
+            }
+            finally { UnityEditor.SceneManagement.EditorSceneManager.ClosePreviewScene(scene); }
+        }
+
+        [Test]
+        public void CombinedStatueUnlock_EnablesEveryPedestal_AndBonusAppliesWhenSmashed()
+        {
+            game.Stats.ExtraSource = game.Shop.Modifiers; // The authoring fixture does not run GameManager.Awake.
+            game.Wallet.Add(DetectiveDesk.Economy.Currency.Gold, 1e6);
+            var statues = new FigurinePedestal[3];
+            for (int i = 0; i < statues.Length; i++)
+            {
+                var obj = new GameObject("Test statue");
+                obj.transform.SetParent(root.transform);
+                statues[i] = obj.AddComponent<FigurinePedestal>();
+                statues[i].Bind(game, i);
+                Assert.IsFalse(statues[i].Unlocked);
+            }
+            Assert.IsTrue(game.PurchaseShopItem(GoldShopCatalog.Statue1));
+            foreach (var statue in statues)
+            {
+                Assert.IsTrue(statue.Unlocked);
+                Assert.AreEqual(1, statue.GoldReward);
+                Assert.AreEqual(0, statue.Shatter(), "unfinished statues cannot pay");
+            }
+            for (int i = 0; i < 10; i++) Assert.IsTrue(game.PurchaseShopItem(GoldShopCatalog.StatueGoldChance));
+            foreach (var statue in statues)
+            {
+                Assert.AreEqual(1, statue.BonusGoldChance, 1e-9);
+                statue.LoadState(new DetectiveDesk.Save.StatueState { pieces = statue.PiecesRequired, goldFill = 1 });
+                Assert.AreEqual(2, statue.Shatter());
+                Assert.AreEqual(0, statue.Pieces);
+                Assert.AreEqual(0, statue.GoldFill);
+            }
         }
 
         [Test]

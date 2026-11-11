@@ -40,16 +40,17 @@ namespace DetectiveDesk.Tests
         bool Buy(string id) => state.TryPurchase(tree, id, wallet, stats, out _);
 
         [Test]
-        public void WhiskeySet_IsTenGoldOnce_AndPersistsAcrossRetirementSave()
+        public void WhiskeySet_IsFiveGoldOnce_AndPersistsAcrossRetirementSave()
         {
             var shop = new GoldShopState { Balance = balance };
             var item = GoldShopCatalog.Find(GoldShopCatalog.Whiskey);
+            Assert.AreEqual(5, balance.whiskeyUnlockGoldCost);
             balance.whiskeyUnlockGoldCost = 11;
             Assert.AreEqual(11, shop.NextCost(item), "Gold price comes from balance data");
-            balance.whiskeyUnlockGoldCost = 10;
-            Assert.AreEqual(10, shop.NextCost(item));
+            balance.whiskeyUnlockGoldCost = 5;
+            Assert.AreEqual(5, shop.NextCost(item));
             Assert.AreEqual(1, item.maxRank);
-            wallet.Add(Currency.Gold, 9);
+            wallet.Add(Currency.Gold, 4);
             Assert.IsFalse(shop.TryBuy(item.id, wallet, out _));
             wallet.Add(Currency.Gold, 1);
             Assert.IsTrue(shop.TryBuy(item.id, wallet, out _));
@@ -98,12 +99,21 @@ namespace DetectiveDesk.Tests
         }
 
         [Test]
-        public void PinUpgradeTracks_SupportTwentyLevels_AndRestoreHighRanks()
+        public void PinUpgrades_SharePinOnePrices_WithTenStrengthAndTwentyPayLevels()
         {
+            var strengthPrices = tree.Find(DefaultSkillTreeFactory.PinDurabilityId(1)).cost;
+            var payPrices = tree.Find(DefaultSkillTreeFactory.PinPayoutId(1)).cost;
             for (int pin = 1; pin <= DefaultSkillTreeFactory.MaxPins; pin++)
             {
-                Assert.AreEqual(20, tree.Find(DefaultSkillTreeFactory.PinDurabilityId(pin)).maxRank);
-                Assert.AreEqual(20, tree.Find(DefaultSkillTreeFactory.PinPayoutId(pin)).maxRank);
+                var strength = tree.Find(DefaultSkillTreeFactory.PinDurabilityId(pin));
+                var pay = tree.Find(DefaultSkillTreeFactory.PinPayoutId(pin));
+                Assert.AreEqual(10, strength.maxRank);
+                Assert.AreEqual(20, pay.maxRank);
+                for (int rank = 0; rank < strength.maxRank; rank++) Assert.AreEqual(strengthPrices.Cost(rank), strength.cost.Cost(rank), $"Pin {pin} Strength {rank + 1}");
+                for (int rank = 0; rank < pay.maxRank; rank++) Assert.AreEqual(payPrices.Cost(rank), pay.cost.Cost(rank), $"Pin {pin} Pay {rank + 1}");
+                var unlock = tree.Find(DefaultSkillTreeFactory.PinId(pin));
+                double expectedUnlock = System.Math.Max(5, System.Math.Floor(System.Math.Ceiling(DefaultSkillTreeFactory.PinPrice(pin) * .95) / 5 + .5) * 5);
+                Assert.AreEqual(expectedUnlock, unlock.cost.Cost(0));
             }
             state.Load(tree, new[]
             {
@@ -113,9 +123,9 @@ namespace DetectiveDesk.Tests
                 new DetectiveDesk.Save.SkillRank { id = "pin_01_payout", rank = 21 },
             });
             stats.Rebuild(tree, state);
-            Assert.AreEqual(20, state.Rank("pin_01_durability"));
+            Assert.AreEqual(10, state.Rank("pin_01_durability"), "old Strength ranks clamp to the lower limit");
             Assert.AreEqual(20, state.Rank("pin_01_payout"), "saved ranks clamp to the new limit");
-            Assert.AreEqual(21, stats.Get(StatId.PinDurability, 0));
+            Assert.AreEqual(11, stats.Get(StatId.PinDurability, 0));
             Assert.AreEqual(11, stats.Get(StatId.PinPayout, 0));
         }
 
@@ -418,12 +428,15 @@ namespace DetectiveDesk.Tests
         }
 
         [Test]
-        public void SkillTree_IsMoneyOnly_AndEveryBranchHasMastery()
+        public void SkillTree_IsMoneyOnly_AndStatuesHaveNoMastery()
         {
             Assert.IsTrue(tree.Nodes.All(n => n.currency == Currency.Money), "everything bought with gold lives in the Gold shop");
             Assert.IsNull(tree.Find("pin_steel_tips"));
             Assert.IsTrue(tree.Nodes.Any(n => n.branch == SkillBranch.Lootbox));
-            Assert.AreEqual(6, tree.Nodes.Count(n => n.maxRank >= DefaultSkillTreeFactory.MasteryRanks));
+            Assert.AreEqual(5, tree.Nodes.Count(n => n.maxRank >= DefaultSkillTreeFactory.MasteryRanks));
+            Assert.IsNull(tree.Find("statue_mastery"));
+            Assert.IsTrue(tree.Nodes.Where(n => n.branch == SkillBranch.Statues)
+                .All(n => n.maxRank < DefaultSkillTreeFactory.MasteryRanks));
         }
 
         [Test]
@@ -439,6 +452,31 @@ namespace DetectiveDesk.Tests
                 double click1 = GameplayMath.SpinImpulse(balance.clickImpulse, clickPower, 90, balance.impulseReferenceSpeed);
                 Assert.Greater(swipe, click1, "level " + level);
             }
+        }
+
+        [Test]
+        public void CaseGold_FollowsCaseFiles_WithoutAutoStamp_AndStillRequiresPressCoverage()
+        {
+            var shop = new GoldShopState { Balance = balance };
+            state.UnlockCheck = shop.Owns;
+            stats.ExtraSource = shop.Modifiers;
+            wallet.Add(Currency.Money, 1e6);
+            wallet.Add(Currency.Gold, 1e6);
+            Assert.IsTrue(Buy(DefaultSkillTreeFactory.RootId));
+            Assert.IsTrue(Buy(DefaultSkillTreeFactory.PinId(1)));
+            Assert.IsTrue(Buy(DefaultSkillTreeFactory.CaseUnlockId));
+            var gold = tree.Find("case_headlines");
+            var cases = tree.Find(DefaultSkillTreeFactory.CaseUnlockId);
+            CollectionAssert.AreEqual(new[] { cases.id }, gold.prerequisites);
+            Assert.AreEqual(cases.position.x, gold.position.x);
+            Assert.Less(gold.position.y, cases.position.y);
+            Assert.AreEqual(NodeStatus.Hidden, state.Status(gold, wallet, stats, out _));
+            Assert.IsTrue(shop.TryBuy(GoldShopCatalog.PressCoverage, wallet, out _));
+            stats.Rebuild(tree, state);
+            Assert.AreEqual(NodeStatus.Available, state.Status(gold, wallet, stats, out _));
+            Assert.IsTrue(Buy(gold.id));
+            Assert.AreEqual(0, state.Rank("case_autostamp"));
+            Assert.AreEqual(.03, stats.Get(StatId.CaseGoldChance), 1e-9);
         }
 
         [Test]
@@ -490,18 +528,46 @@ namespace DetectiveDesk.Tests
         public void GoldShop_SpendsGold_RespectsRequirementsAndMaxRank()
         {
             var shop = new GoldShopState();
-            Assert.IsFalse(shop.TryBuy(GoldShopCatalog.Statue2, wallet, out _), "needs the first pedestal");
+            Assert.IsFalse(shop.TryBuy(GoldShopCatalog.StatueGoldChance, wallet, out _), "needs statues");
             var first = GoldShopCatalog.Find(GoldShopCatalog.Statue1);
             wallet.Add(Currency.Gold, first.cost.Cost(0));
             Assert.IsTrue(shop.TryBuy(GoldShopCatalog.Statue1, wallet, out _));
             Assert.AreEqual(0, wallet.Gold, 1e-9);
             wallet.Add(Currency.Gold, 1e6);
             Assert.IsFalse(shop.TryBuy(GoldShopCatalog.Statue1, wallet, out _), "single rank");
-            Assert.IsTrue(shop.TryBuy(GoldShopCatalog.Statue2, wallet, out _));
+            Assert.IsTrue(shop.TryBuy(GoldShopCatalog.StatueGoldChance, wallet, out _));
+            Assert.IsTrue(shop.TryBuy("twin_barrel", wallet, out _), "Twin Barrel no longer requires Steel Tips");
+            Assert.IsFalse(shop.Owns("steel_tips"));
 
             var restored = new GoldShopState();
             restored.Load(shop.ToSave());
-            Assert.IsTrue(restored.Owns(GoldShopCatalog.Statue1) && restored.Owns(GoldShopCatalog.Statue2));
+            Assert.IsTrue(restored.Owns(GoldShopCatalog.Statue1) && restored.Owns(GoldShopCatalog.StatueGoldChance));
+        }
+
+        [Test]
+        public void PrestigeAddsTenPercent_AndReputationAddsFive_WithLinearGoldPrices()
+        {
+            var shop = new GoldShopState { Balance = balance };
+            Assert.AreEqual(1, Prestige.IncomeMultiplierFor(0, balance, shop), 1e-9);
+            Assert.AreEqual(1.10, Prestige.IncomeMultiplierFor(1, balance, shop), 1e-9);
+            Assert.AreEqual(1.20, Prestige.IncomeMultiplierFor(2, balance, shop), 1e-9);
+            wallet.Add(Currency.Gold, 25);
+            var reputation = shop.Find(GoldShopCatalog.Reputation);
+            Assert.AreEqual(5, shop.NextCost(reputation));
+            Assert.IsTrue(shop.TryBuy(reputation.id, wallet, out _));
+            Assert.AreEqual(20, wallet.Gold);
+            Assert.AreEqual(1.15, Prestige.IncomeMultiplierFor(1, balance, shop), 1e-9);
+            Assert.AreEqual(10, shop.NextCost(reputation));
+            Assert.IsTrue(shop.TryBuy(reputation.id, wallet, out _));
+            Assert.AreEqual(10, wallet.Gold);
+            Assert.AreEqual(1.20, Prestige.IncomeMultiplierFor(1, balance, shop), 1e-9);
+            Assert.AreEqual(15, shop.NextCost(reputation));
+            for (int rank = 0; rank < reputation.maxRank; rank++) Assert.AreEqual(5 * (rank + 1), reputation.cost.Cost(rank));
+            var restored = new GoldShopState { Balance = balance };
+            restored.Load(shop.ToSave());
+            Assert.AreEqual(1.20, Prestige.IncomeMultiplierFor(1, balance, restored), 1e-9);
+            balance.ranks.Add(new GameBalance.DetectiveRank("No double bonus", 1, 100));
+            Assert.AreEqual(1.20, Prestige.IncomeMultiplierFor(1, balance, restored), 1e-9, "rank titles must not add the legacy income bonus");
         }
 
         [Test]
@@ -514,7 +580,7 @@ namespace DetectiveDesk.Tests
             wallet.Add(Currency.Gold, 1e6);
             Assert.IsTrue(shop.TryBuy(GoldShopCatalog.Reputation, wallet, out _));
             stats.Rebuild(tree, state);
-            Assert.AreEqual(before * 1.10, stats.Get(StatId.IncomeMultiplier), 1e-9);
+            Assert.AreEqual(before * 1.05, stats.Get(StatId.IncomeMultiplier), 1e-9);
         }
 
         [Test]
@@ -529,6 +595,36 @@ namespace DetectiveDesk.Tests
             wallet.Add(Currency.Gold, 1e6);
             shop.TryBuy(GoldShopCatalog.Statue1, wallet, out _);
             Assert.AreEqual(NodeStatus.Available, state.Status(fill, wallet, stats, out _));
+        }
+
+        [Test]
+        public void PrestigeGoals_IncreaseByFiveThousand_AndLegendEndsAtFiftyThousand()
+        {
+            string[] titles = { "Rookie", "Detective", "Inspector", "Chief Inspector", "Commissioner", "Legend of the Bureau" };
+            double[] goals = { 15000, 20000, 25000, 30000, 35000, 50000 };
+            Assert.AreEqual(5, balance.maxPrestiges);
+            Assert.AreEqual(6, balance.ranks.Count);
+            for (int count = 0; count < titles.Length; count++)
+            {
+                Assert.AreEqual(titles[count], DetectiveRanks.For(balance, count).title);
+                Assert.AreEqual(goals[count], Prestige.RequirementFor(count, balance));
+                Assert.AreEqual(0, Prestige.GoldFor(goals[count] - 1, balance, count));
+                Assert.AreEqual(count == 5, Prestige.IsFinalRank(count, balance));
+                Assert.IsFalse(Prestige.HasCompleted(count, goals[count] - 1, balance));
+                if (count < 5)
+                {
+                    Assert.IsTrue(DetectiveRanks.TryNext(balance, count, out var next));
+                    Assert.AreEqual(count + 1, next.retirements);
+                    Assert.AreEqual(System.Math.Floor(25 * System.Math.Sqrt(goals[count] / 15000)), Prestige.GoldFor(goals[count], balance, count));
+                }
+                else
+                {
+                    Assert.IsFalse(DetectiveRanks.TryNext(balance, count, out _));
+                    Assert.IsTrue(Prestige.HasCompleted(count, goals[count], balance));
+                    Assert.AreEqual(0, Prestige.GoldFor(1e9, balance, count), "final rank cannot prestige again");
+                }
+            }
+            Assert.AreEqual(.50, Prestige.IncomeBonusFor(100, balance), 1e-9, "bonus stops at the five-reset cap");
         }
 
         [Test]
@@ -547,7 +643,7 @@ namespace DetectiveDesk.Tests
         {
             Assert.AreEqual("Rookie", DetectiveRanks.For(balance, 0).title);
             Assert.AreEqual("Detective", DetectiveRanks.For(balance, 1).title);
-            Assert.AreEqual("Detective", DetectiveRanks.For(balance, 2).title);
+            Assert.AreEqual("Inspector", DetectiveRanks.For(balance, 2).title);
             Assert.IsTrue(DetectiveRanks.TryNext(balance, 1, out var next));
             Assert.Greater(next.retirements, 1);
             // A rank added at the end of the list (any order) is picked up without code changes.
@@ -560,19 +656,80 @@ namespace DetectiveDesk.Tests
         }
 
         [Test]
-        public void StatueTiers_NeedThePedestal_AndHaveTwoRanks()
+        public void SharedStatueBonus_RequiresUnlock_AndReachesGuaranteedDoubleGold()
         {
-            var shop = new GoldShopState();
+            var shop = new GoldShopState { Balance = balance };
             wallet.Add(Currency.Gold, 1e6);
-            string tier = GoldShopCatalog.StatueTierId(0);
-            Assert.IsFalse(shop.TryBuy(tier, wallet, out _), "needs the first pedestal");
+            Assert.IsFalse(shop.TryBuy(GoldShopCatalog.StatueGoldChance, wallet, out _));
             Assert.IsTrue(shop.TryBuy(GoldShopCatalog.Statue1, wallet, out _));
-            Assert.IsTrue(shop.TryBuy(tier, wallet, out _));
-            Assert.IsTrue(shop.TryBuy(tier, wallet, out _));
-            Assert.IsFalse(shop.TryBuy(tier, wallet, out _), "bronze → silver → gold, then maxed");
-            Assert.AreEqual(GoldShopCatalog.StatueTierCount, shop.Rank(tier));
-            Assert.AreEqual(GoldShopCatalog.StatueTierCount + 1, balance.statueTierNames.Length);
-            Assert.AreEqual(GoldShopCatalog.StatueTierCount + 1, balance.statueTierGoldMultipliers.Length);
+            for (int index = 0; index < 3; index++)
+                Assert.IsTrue(shop.Owns(GoldShopCatalog.StatueUnlockId(index)));
+            for (int rank = 0; rank < 10; rank++)
+            {
+                Assert.AreEqual(20 + rank * 5, shop.NextCost(shop.Find(GoldShopCatalog.StatueGoldChance)));
+                Assert.IsTrue(shop.TryBuy(GoldShopCatalog.StatueGoldChance, wallet, out _));
+            }
+            Assert.IsFalse(shop.TryBuy(GoldShopCatalog.StatueGoldChance, wallet, out _));
+            stats.ExtraSource = shop.Modifiers;
+            stats.Rebuild(tree, state);
+            Assert.AreEqual(1, stats.Get(StatId.StatueBonusGoldChance), 1e-9);
+            Assert.AreEqual(1, DetectiveDesk.Gameplay.GameplayMath.StatueGoldReward(1, 0, 0));
+            Assert.AreEqual(2, DetectiveDesk.Gameplay.GameplayMath.StatueGoldReward(1, .1, .05));
+            Assert.AreEqual(1, DetectiveDesk.Gameplay.GameplayMath.StatueGoldReward(1, .1, .5));
+            Assert.AreEqual(2, DetectiveDesk.Gameplay.GameplayMath.StatueGoldReward(1, 1, 1));
+        }
+
+        [Test]
+        public void FastCasting_TwoPurchases_RemoveOnePieceEach()
+        {
+            var shop = new GoldShopState { Balance = balance };
+            wallet.Add(Currency.Gold, 1e6);
+            shop.TryBuy(GoldShopCatalog.Statue1, wallet, out _);
+            stats.ExtraSource = shop.Modifiers;
+            for (int level = 1; level <= 2; level++)
+            {
+                Assert.AreEqual(level == 1 ? 50 : 75, shop.NextCost(shop.Find("fast_casting")));
+                Assert.IsTrue(shop.TryBuy("fast_casting", wallet, out _));
+                stats.Rebuild(tree, state);
+                Assert.AreEqual(level, stats.Get(StatId.StatuePieceReduction));
+            }
+            Assert.IsFalse(shop.TryBuy("fast_casting", wallet, out _));
+        }
+
+        [Test]
+        public void FreshStarts_OnlyRequireLedger_AndRestoreAllFiveSkills()
+        {
+            var shop = new GoldShopState { Balance = balance };
+            wallet.Add(Currency.Gold, 1e6);
+            Assert.IsFalse(shop.TryBuy(GoldShopCatalog.StartCases, wallet, out _));
+            Assert.IsTrue(shop.TryBuy(GoldShopCatalog.KeptLedger, wallet, out _));
+            string[] ids = { GoldShopCatalog.StartSpinLimit, GoldShopCatalog.WoundClockwork,
+                GoldShopCatalog.StartCases, GoldShopCatalog.SparePin };
+            foreach (var id in ids) Assert.IsFalse(shop.IsLocked(shop.Find(id)), id);
+            foreach (var id in ids) Assert.IsTrue(shop.TryBuy(id, wallet, out _), id);
+            var restored = new SkillTreeState();
+            restored.Load(tree, shop.FreshStartSkills());
+            foreach (var id in new[] { "root", "pin_01", "case_unlock", "globe_auto", "globe_max_speed" })
+                Assert.AreEqual(1, restored.Rank(id), id);
+            Assert.IsNull(shop.Find("start_money"));
+            Assert.IsNull(shop.Find("golden_meridian"));
+            Assert.IsNull(shop.Find("unlock_statue_2"));
+            Assert.IsNull(shop.Find("statue_tier_1"));
+        }
+
+        [Test]
+        public void GoldShop_UsesAuthoredBalanceCostsAndModifiers()
+        {
+            var item = balance.goldShopItems.Find(i => i.id == GoldShopCatalog.Reputation);
+            item.cost = new CostCurve(7, 1);
+            item.modifiers = new[] { StatModifier.Percent(StatId.IncomeMultiplier, .25) };
+            var shop = new GoldShopState { Balance = balance };
+            wallet.Add(Currency.Gold, 7);
+            Assert.IsTrue(shop.TryBuy(item.id, wallet, out _));
+            Assert.AreEqual(0, wallet.Gold);
+            stats.ExtraSource = shop.Modifiers;
+            stats.Rebuild(tree, state);
+            Assert.AreEqual(1.25, stats.Get(StatId.IncomeMultiplier), 1e-9);
         }
     }
 }
